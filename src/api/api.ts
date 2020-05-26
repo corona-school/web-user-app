@@ -3,9 +3,7 @@ import { Credentials, User, Subject } from '../types';
 
 const dev = process.env.NODE_ENV === 'development';
 
-const apiURL = dev
-  ? `http://${window.location.hostname}:5000/api`
-  : '/api';
+const apiURL = `https://dashboard.corona-school.de/api`;
 
 export const redeemVerificationToken = (
   verificationToken: string

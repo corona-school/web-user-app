@@ -1,15 +1,8 @@
-import React, { useState, useContext } from 'react';
-import axios from 'axios';
+import React, { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import { UserContext } from './UserContext';
-import { Credentials, User, Subject } from '../types';
+import { User, Subject } from '../types';
 import * as api from '../api/api';
-
-const dev = process.env.NODE_ENV === 'development';
-
-const apiURL = dev
-  ? `http://${window.location.hostname}:5000/api`
-  : '/api';
 
 export const ApiContext = React.createContext<{
   getUserData: () => Promise<User>;
