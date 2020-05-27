@@ -3,7 +3,7 @@ import { Credentials, User, Subject } from '../types';
 
 const dev = process.env.NODE_ENV === 'development';
 
-const apiURL = `https://dashboard.corona-school.de/api`;
+const apiURL = `https://api.corona-school.de/api`;
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -54,7 +54,7 @@ export const putUser = (
       .put(`${apiURL}/user/${credentials.id}`, user, {
         headers: { token: credentials.token },
       })
-      .then((response) => resolve())
+      .then(() => resolve())
       .catch((reason) => {
         reject(reason);
         if (dev) console.error('putUser failed:', reason);
@@ -64,17 +64,8 @@ export const putUser = (
 // ========================================================================
 
 export const axiosGetUser = (id: string, token: string): Promise<User> => {
-  const url = `${apiURL}/user/${id}`;
-  return new Promise((resolve, reject) => {
-    axios
-      .get(url, {
-        headers: { token },
-      })
-      .then((response) => resolve(response.data))
-      .catch((error) => {
-        reject();
-        if (dev) console.error('getUser failed', error);
-      });
+  return axios.get(`${apiURL}/user/${id}`, {
+    headers: { Token: token },
   });
 };
 

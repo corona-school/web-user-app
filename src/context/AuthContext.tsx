@@ -63,8 +63,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const stored = readStoredCredentials();
-    if (stored) setCredentials(stored);
-    else setStatus('missing');
+    if (stored) {
+      setCredentials(stored);
+    } else setStatus('missing');
   }, []);
 
   return (

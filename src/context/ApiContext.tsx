@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { AuthContext } from './AuthContext';
-import { UserContext } from './UserContext';
 import { User, Subject } from '../types';
 import * as api from '../api/api';
 
@@ -20,7 +19,6 @@ export const ApiContext = React.createContext<{
 
 export const ApiProvider: React.FC = ({ children }) => {
   const authContext = useContext(AuthContext);
-  const userContext = useContext(UserContext);
 
   const {
     credentials: { id, token },
