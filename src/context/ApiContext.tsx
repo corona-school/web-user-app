@@ -4,7 +4,7 @@ import { User, Subject } from '../types';
 import * as api from '../api/api';
 
 export const ApiContext = React.createContext<{
-  getUserData: () => Promise<User>;
+  getUserData: () => Promise<any>;
   dissolveMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;

@@ -49,15 +49,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const apiContext = useContext(ApiContext);
 
   const fetchUserData = () => {
-    console.log('here');
-
     if (authContext.credentials.id && authContext.credentials.token) {
-      console.log('here2');
       apiContext
         .getUserData()
         .then((response) => {
-          setUser(response);
-          console.log('here', response);
+          setUser(response.data);
           authContext.setStatus('authorized');
         })
         .catch((error) => {
