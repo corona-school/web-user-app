@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import StyledReactModal from 'styled-react-modal';
 import PageComponent from '../components/PageComponent';
@@ -6,8 +6,9 @@ import Article from '../components/Article';
 import Context from '../context';
 import SettingsPersonalCard from '../components/cards/SettingsPersonalCard';
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
-import { ButtonDestructive } from '../components/Button';
+import { ButtonDestructive, LinkButton } from '../components/Button';
 import Icons from '../assets/icons';
+import { ScreeningStatus } from '../types';
 
 const Wrapper = styled.div`
   display: flex;
@@ -63,6 +64,12 @@ const Settings: React.FC = () => {
   const modalContext = useContext(Context.Modal);
   const userContext = useContext(Context.User);
 
+  useEffect(() => {
+    if (userContext.user.screeningStatus === ScreeningStatus.Unscreened) {
+      modalContext.setOpenedModal('accountNotScreened');
+    }
+  }, [userContext.user.screeningStatus]);
+
   return (
     <PageComponent>
       <Article title="Deine Informationen" cardDirection="row">
@@ -83,6 +90,26 @@ const Settings: React.FC = () => {
           />
         </Wrapper>
       </Article>
+      <StyledReactModal
+        isOpen={modalContext.openedModal === 'accountNotScreened'}
+      >
+        <ModalDeactivateWrapper>
+          <span>Lern uns kennen!</span>
+          <small>
+            Wir möchten dich gerne persönlich kennenlernen und zu einem
+            digitalen Gespräch einladen, in welchem du auch deine Frage
+            loswerden kannst.
+          </small>
+          <LinkButton
+            target="_blank"
+            text="Authentifizieren"
+            href="https://authentication.corona-school.de"
+          />
+          <CloseButtonStyle onClick={() => modalContext.setOpenedModal(null)}>
+            <Icons.Close />
+          </CloseButtonStyle>
+        </ModalDeactivateWrapper>
+      </StyledReactModal>
       <StyledReactModal
         isOpen={modalContext.openedModal === 'deactivateAccount'}
       >

@@ -3,7 +3,9 @@ import { Credentials, User, Subject } from '../types';
 
 const dev = process.env.NODE_ENV === 'development';
 
-const apiURL = `https://api.corona-school.de/api`;
+const apiURL = dev
+  ? 'http://localhost:5000/api'
+  : `https://api.corona-school.de/api`;
 
 export const redeemVerificationToken = (
   verificationToken: string
