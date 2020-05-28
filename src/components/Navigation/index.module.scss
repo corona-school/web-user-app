@@ -1,5 +1,9 @@
 @import '../../theme.scss';
 
+.overlayContainer {
+  display: flex;
+  flex-direction: column;
+}
 .navigationContainer {
   min-width: 300px;
   max-width: 300px;
@@ -51,6 +55,19 @@
 
 @media only screen and (max-width: 1020px) {
   .navigationContainer {
-    display: none;
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    top: 0px;
+    z-index: 300;
+    overflow: auto;
+    left: 0;
+    transition: transform 0.2s ease-in-out;
+    transform: translate(-100%);
+
+    &.menuOpen {
+      transform: translate(0%);
+      left: 0;
+    }
   }
 }

@@ -1,0 +1,20 @@
+.header {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  background: white;
+  align-items: center;
+  max-width: 100vw;
+  border-bottom: 1px solid #d8ddd9;
+
+  .mobileNav {
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+}
+
+@media only screen and (min-width: 1020px) {
+  .mobileNav {
+    display: none;
+  }
+}

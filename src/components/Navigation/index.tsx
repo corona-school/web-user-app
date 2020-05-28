@@ -8,8 +8,14 @@ import { NavButton, NavActionButton } from './NavButton';
 import { useHistory } from 'react-router-dom';
 import Welcome from './Welcome';
 import { SocialMediaButton } from '../buttons/IconButton';
+import classnames from 'classnames';
 
-const Navigation: React.FC = () => {
+interface Props {
+  isMenuOpen: boolean;
+  setMenuOpen: (isMenuOpen: boolean) => void;
+}
+
+const Navigation: React.FC<Props> = (props) => {
   const authContext = useContext(AuthContext);
   const {
     user: { firstname, type, screeningStatus },
@@ -24,7 +30,11 @@ const Navigation: React.FC = () => {
   };
 
   return (
-    <div className={classes.navigationContainer}>
+    <div
+      className={classnames(classes.navigationContainer, {
+        [classes.menuOpen]: props.isMenuOpen,
+      })}
+    >
       <div className={classes.header}>
         <Icons.Logo />
         Corona School
