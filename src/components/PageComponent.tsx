@@ -114,7 +114,9 @@ const PageComponent: React.FC<{ hasNavigation?: boolean }> = ({
           <span>
             ©2020 Corona School e.V.
             {' - '}
-            <a target="_blank" href="https://www.corona-school.de/impressum">Impressum</a>
+            <a target="_blank" href="https://www.corona-school.de/impressum">
+              Impressum
+            </a>
             {' - '}
             <a target="_blank" href="https://www.corona-school.de/datenschutz">
               Datenschutzerklärung

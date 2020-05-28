@@ -1,0 +1,45 @@
+@import '../../theme.scss';
+
+.navigationContainer {
+  min-width: 300px;
+  overflow-y: scroll;
+  background-color: $navigationBackground;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .header {
+    svg {
+      margin-right: 8px;
+      path {
+        fill: $white;
+      }
+    }
+    padding: 12px 8px;
+    color: $white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    border-bottom: 1px solid #d8ddd9;
+  }
+
+  .navigationGroup {
+    @media only screen and (max-height: 800px) {
+      margin: 0px 24px 0px 24px;
+    }
+
+    margin: -100px 24px 0px 24px;
+
+    .section {
+      margin: 16px 0px 4px 0px;
+      color: $white;
+      font-size: 12px;
+    }
+
+    .socialMediaButtons {
+      display: flex;
+      margin: 16px;
+    }
+  }
+}

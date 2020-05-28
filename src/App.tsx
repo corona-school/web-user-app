@@ -1,9 +1,8 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { UserContext } from './context/UserContext';
-import { AuthContext } from './context/AuthContext';
-import storedCredentials from './api/storedCredentials';
+
 import PrivateRoute from './components/PrivateRoute';
 
 import Dashboard from './routes/Dashboard';
@@ -51,7 +50,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App: React.FC = () => {
-  const authContext = useContext(AuthContext);
   const userContext = useContext(UserContext);
 
   return (
@@ -61,9 +59,9 @@ const App: React.FC = () => {
         <Route exact path="/">
           <Redirect to="/settings" />
         </Route>
-        {/* <PrivateRoute path="/dashboard">
+        <PrivateRoute path="/dashboard">
           <Dashboard />
-        </PrivateRoute> */}
+        </PrivateRoute>
         <PrivateRoute
           path="/matches"
           active={
@@ -76,12 +74,12 @@ const App: React.FC = () => {
         <PrivateRoute path="/settings">
           <Settings />
         </PrivateRoute>
-        {/* <PrivateRoute path="/feedback">
+        <PrivateRoute path="/feedback">
           <Feedback />
-        </PrivateRoute> */}
-        {/* <PrivateRoute path="/help">
+        </PrivateRoute>
+        <PrivateRoute path="/help">
           <Help />
-        </PrivateRoute> */}
+        </PrivateRoute>
         <Route path="/login">
           <Login />
         </Route>
@@ -95,55 +93,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-/*
-<AuthButton />
-
-<nav>
-<Link to="/dashboard">Dashboard</Link>
-</nav>
-
-
-
-<PrivateRoute path="/dashboard">
-<Dashboard />
-</PrivateRoute>
-<PrivateRoute path="/matches">
-<Matches />
-</PrivateRoute>
-
-<PrivateRoute path="/account">
-<Account />
-</PrivateRoute>
-
-<PrivateRoute path="/feedback">
-<Feedback />
-</PrivateRoute>
-
-<PrivateRoute path="/help">
-<Help />
-</PrivateRoute>
-
-redirect...
-<Route path="/">
-</Route>
-*/
-
-// function AuthButton() {
-//   let history = useHistory();
-
-//   return authentication.isAuthenticated ? (
-//     <p>
-//       Welcome!{" "}
-//       <button
-//         onClick={() => {
-//           authentication.signout(() => history.push("/"));
-//         }}
-//       >
-//         Sign out
-//       </button>
-//     </p>
-//   ) : (
-//       <p>You are not logged in.</p>
-//     );
-// }

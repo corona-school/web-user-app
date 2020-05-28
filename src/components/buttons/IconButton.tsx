@@ -38,15 +38,13 @@ const IconStyle = styled.div`
   margin-right: 5px;
 `;
 
-type IconsKeys = keyof typeof Icons;
-let myString: IconsKeys;
+interface Props {
+  icon: keyof typeof Icons;
+  label?: string;
+}
 
 const IconButton: React.FC<
-  {
-    // icon?: keyof typeof Icons | React.ReactNode;
-    icon: keyof typeof Icons;
-    label: string;
-  } & React.ButtonHTMLAttributes<HTMLButtonElement>
+  Props & React.ButtonHTMLAttributes<HTMLButtonElement>
 > = ({ icon, label, ...props }) => {
   const Icon = typeof icon === 'string' ? Icons[icon] : icon;
 
@@ -60,4 +58,36 @@ const IconButton: React.FC<
   );
 };
 
+const SocialStyled = styled.a`
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  object-fit: cover;
+  margin: 0px 6px;
+
+  :active {
+    background: ${(props) =>
+      props.theme.color.iconButton_backgroundColor_active};
+  }
+`;
+
+interface SocialMediaButtonProps {
+  icon: keyof typeof Icons;
+}
+
+export const SocialMediaButton: React.FC<
+  SocialMediaButtonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
+> = ({ icon, ...props }) => {
+  const Icon = typeof icon === 'string' ? Icons[icon] : icon;
+
+  return (
+    <SocialStyled {...props}>
+      <Icon />
+    </SocialStyled>
+  );
+};
 export default IconButton;

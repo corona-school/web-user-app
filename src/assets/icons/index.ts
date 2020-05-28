@@ -1,4 +1,3 @@
-import React from 'react';
 import { ReactComponent as Edit } from './edit.svg';
 import { ReactComponent as Add } from './ico-add.svg';
 import { ReactComponent as Close } from './ico-close.svg';
@@ -24,6 +23,10 @@ import { ReactComponent as Pending } from './pending.svg';
 import { ReactComponent as CheckboxChecked } from './checkbox--checked.svg';
 import { ReactComponent as CheckboxUnchecked } from './checkbox--unchecked.svg';
 import { ReactComponent as Mouse } from './mouse.svg';
+import { ReactComponent as DefaultProfile } from './default_profile.svg';
+import { ReactComponent as FacebookIcon } from './facebook.svg';
+import { ReactComponent as TwitterIcon } from './twitter.svg';
+import { ReactComponent as InstagramIcon } from './instagram.svg';
 
 const IconsList = {
   Edit,
@@ -51,6 +54,10 @@ const IconsList = {
   CheckboxChecked,
   CheckboxUnchecked,
   Mouse,
+  DefaultProfile,
+  FacebookIcon,
+  InstagramIcon,
+  TwitterIcon,
 };
 
 const Icons: { [I in keyof typeof IconsList]: any } = IconsList;
