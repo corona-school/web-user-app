@@ -1,14 +1,12 @@
-import React, { useState, useEffect, ReactChildren, ReactElement } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Navigation from './Navigation';
-import { ReactComponent as LogoSVG } from '../icons/logo.svg';
 
 const PageWrapper = styled.div<{ opacity: number }>`
   align-items: center;
   background-color: ${(props) => props.theme.color.pageBackground};
   display: flex;
   font-size: 18px;
-  height: 100vh;
+  min-height: 100vh;
   justify-content: center;
 
   p {

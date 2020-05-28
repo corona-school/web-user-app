@@ -7,7 +7,7 @@ import classes from './index.module.scss';
 import { NavButton, NavActionButton } from './NavButton';
 import { useHistory } from 'react-router-dom';
 import Welcome from './Welcome';
-import IconButton, { SocialMediaButton } from '../buttons/IconButton';
+import { SocialMediaButton } from '../buttons/IconButton';
 
 const Navigation: React.FC = () => {
   const authContext = useContext(AuthContext);

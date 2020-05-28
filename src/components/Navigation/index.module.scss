@@ -2,11 +2,15 @@
 
 .navigationContainer {
   min-width: 300px;
+  max-width: 300px;
+  max-height: 100vh;
   overflow-y: scroll;
-  background-color: $navigationBackground;
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   justify-content: space-between;
+
+  background-color: $navigationBackground;
 
   .header {
     svg {
@@ -25,6 +29,7 @@
   }
 
   .navigationGroup {
+    min-height: 500px;
     @media only screen and (max-height: 800px) {
       margin: 0px 24px 0px 24px;
     }
@@ -41,5 +46,11 @@
       display: flex;
       margin: 16px;
     }
+  }
+}
+
+@media only screen and (max-width: 1020px) {
+  .navigationContainer {
+    display: none;
   }
 }

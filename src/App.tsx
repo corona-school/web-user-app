@@ -38,8 +38,9 @@ const GlobalStyle = createGlobalStyle`
   html {
     font-family: Poppins, sans-serif;
     font-size: 14px;
-    overflow-y: hidden;
+    overflow: hidden;
   }
+
 
   button {
     background-color: unset;
