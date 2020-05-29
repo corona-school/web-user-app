@@ -29,6 +29,8 @@ import { ReactComponent as TwitterIcon } from './twitter.svg';
 import { ReactComponent as InstagramIcon } from './instagram.svg';
 import { ReactComponent as WirVsVirusLogo } from './wir_vs_virus.svg';
 import { ReactComponent as MenuIcon } from './menu.svg';
+import { ReactComponent as NotebookBlue } from './NotebookBlue.svg';
+import { ReactComponent as BackgroundTriangleYellow } from './background_triangle_yellow.svg';
 
 const IconsList = {
   Edit,
@@ -62,6 +64,8 @@ const IconsList = {
   TwitterIcon,
   WirVsVirusLogo,
   MenuIcon,
+  NotebookBlue,
+  BackgroundTriangleYellow,
 };
 
 const Icons: { [I in keyof typeof IconsList]: any } = IconsList;

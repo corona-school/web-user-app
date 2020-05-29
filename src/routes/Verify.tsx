@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
-import PageComponent from '../components/PageComponent';
 import { redeemVerificationToken, getUserId } from '../api/api';
 import { AuthContext } from '../context/AuthContext';
 import storedCredentials from '../api/storedCredentials';

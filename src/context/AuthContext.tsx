@@ -7,7 +7,7 @@ const readStoredCredentials = (): { id: string; token: string } | null => {
   try {
     const unsafe = window.localStorage.getItem('credentials');
     if (unsafe === null) return null;
-    const safe = unsafe.replace(/[^a-zA-Z0-9{":,}\_\-]/g, '');
+    const safe = unsafe.replace(/[^a-zA-Z0-9{":,}_-]/g, '');
     const parsed = JSON.parse(safe);
     if (parsed && parsed.id && parsed.token) return parsed;
     else return null;

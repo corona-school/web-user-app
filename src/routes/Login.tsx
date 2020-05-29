@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Redirect, useLocation, useHistory } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import StyledReactModal from 'styled-react-modal';
-import PageComponent from '../components/PageComponent';
+
 import { getUserId } from '../api/api';
 import Context from '../context';
 import storedCredentials from '../api/storedCredentials';
@@ -10,7 +10,7 @@ import Icons from '../assets/icons';
 import loginGraphic1 from '../assets/images/loginGraphic1.svg';
 import messageSent1 from '../assets/images/messageSent1.svg';
 import notFound1 from '../assets/images/notFound1.svg';
-import Button from '../components/Button';
+import { OldButton } from '../components/button';
 
 const SpacerDiv = styled.div<{ flexGrow: string }>`
   flex-grow: ${(props) => props.flexGrow};
@@ -119,8 +119,6 @@ const Text = styled.p`
   margin: 12px 0;
 `;
 
-const Small = styled.p``;
-
 const Step = styled.div`
   font-size: 18px;
   line-height: 27px;
@@ -211,7 +209,6 @@ const ModalSuccessWrapper = styled.div`
     left: 37px;
     top: 44px;
 
-    font-family: Poppins;
     font-style: normal;
     font-weight: normal;
     font-size: 36px;
@@ -231,7 +228,6 @@ const ModalSuccessWrapper = styled.div`
     left: 37px;
     top: 118px;
 
-    font-family: Poppins;
     font-style: normal;
     font-weight: normal;
     font-size: 24px;
@@ -281,7 +277,6 @@ const ModalFailWrapper = styled.div`
     left: 37px;
     top: 39px;
 
-    font-family: Poppins;
     font-style: normal;
     font-weight: normal;
     font-size: 36px;
@@ -301,7 +296,6 @@ const ModalFailWrapper = styled.div`
     left: 37px;
     top: 118px;
 
-    font-family: Poppins;
     font-style: normal;
     font-weight: normal;
     font-size: 24px;
@@ -331,7 +325,6 @@ const ModalFailWrapper = styled.div`
     left: 37px;
     top: 505px;
 
-    font-family: Poppins;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
@@ -427,7 +420,7 @@ const Login: React.FC = () => {
               autoComplete="on"
               onChange={(e) => setEmail(e.target.value)}
             />
-            <Button
+            <OldButton
               text="Zugang anfordern"
               onClick={() =>
                 apiContext
@@ -495,7 +488,7 @@ const Login: React.FC = () => {
               autoComplete="on"
               onChange={(e) => setEmail(e.target.value)}
             />
-            <Button
+            <OldButton
               text="Erneut versuchen"
               onClick={() =>
                 apiContext

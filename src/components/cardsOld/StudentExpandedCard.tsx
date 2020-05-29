@@ -1,7 +1,7 @@
 import React from 'react';
 import { Match } from '../../types';
 import styled from 'styled-components';
-import Button, { LinkButton } from '../Button';
+import { OldButton, LinkButton } from '../button';
 import media from '../../media';
 import Icons from '../../assets/icons';
 import MatchInfo from '../cards/MatchInfo';
@@ -58,7 +58,7 @@ const UserCard: React.FC<Props> = ({ match, type, handleDissolveMatch }) => {
             text="Kontaktieren"
             href={'mailto:' + match.email}
           />
-          <Button
+          <OldButton
             icon={<Icons.Delete />}
             text="Entfernen"
             onClick={handleDissolveMatch}

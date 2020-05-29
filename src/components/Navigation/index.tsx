@@ -7,7 +7,7 @@ import classes from './index.module.scss';
 import { NavButton, NavActionButton } from './NavButton';
 import { useHistory } from 'react-router-dom';
 import Welcome from './Welcome';
-import { SocialMediaButton } from '../buttons/IconButton';
+import { SocialMediaButton } from '../button/IconButton';
 import classnames from 'classnames';
 
 interface Props {
@@ -42,7 +42,7 @@ const Navigation: React.FC<Props> = (props) => {
       <div className={classes.navigationGroup}>
         <Welcome firstname={firstname} type={type} />
         <div className={classes.section}>Menü</div>
-        <NavButton to="/dashboard" icon={<Icons.Home />} active={false}>
+        <NavButton to="/dashboard" icon={<Icons.Home />}>
           Startseite
         </NavButton>
         <NavButton

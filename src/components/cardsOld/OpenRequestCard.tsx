@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import CardBase from '../base/CardBase';
-import Button from '../Button';
+import { OldButton } from '../button';
 import Icons from '../../assets/icons';
 import theme from '../../theme';
 import Context from '../../context';
@@ -36,7 +36,7 @@ const CardTitle = styled.h3`
   margin: 5px 0;
 `;
 
-const CustomButton = styled(Button)`
+const CustomButton = styled(OldButton)`
   margin: 15px auto;
 `;
 
@@ -50,7 +50,7 @@ const OpenRequestCard: React.FC<{ type: 'pending' | 'new' }> = ({ type }) => {
       firstname: user.firstname,
       lastname: user.lastname,
       matchesRequested: f(user.matchesRequested),
-      grade: user.grade
+      grade: user.grade,
     }).then(fetchUserData);
   };
 

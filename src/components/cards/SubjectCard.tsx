@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import { Subject, SubjectName } from '../../types';
-import IconButtonComponent, { IconButtonWrapper } from '../buttons/IconButton';
+import IconButtonComponent, { IconButtonWrapper } from '../button/IconButton';
 import Context from '../../context';
 import { subjectOptions } from '../../assets/subjects';
 import Icons from '../../assets/icons';
@@ -69,7 +69,7 @@ const SubjectCard: React.FC<{
   const [edit, setEdit] = useState(false);
   const [editMinGrade, setEditMinGrade] = useState(subject.minGrade || 1);
   const [editMaxGrade, setEditMaxGrade] = useState(subject.maxGrade || 13);
-  const [editName, setEditName] = useState(subject.name);
+
   const apiContext = useContext(Context.Api);
   const userContext = useContext(Context.User);
   const isStudent = type === 'student';

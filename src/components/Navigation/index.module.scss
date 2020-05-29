@@ -41,7 +41,7 @@
     margin: -100px 24px 0px 24px;
 
     .section {
-      margin: 16px 0px 4px 0px;
+      margin: 16px 0px 8px 0px;
       color: $white;
       font-size: 12px;
     }
@@ -53,7 +53,7 @@
   }
 }
 
-@media only screen and (max-width: 1020px) {
+@media only screen and (max-width: 1200px) {
   .navigationContainer {
     position: fixed;
     width: 300px;

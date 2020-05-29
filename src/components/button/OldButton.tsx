@@ -83,7 +83,12 @@ interface IButtonProps {
   className?: string;
 }
 
-const Button: React.FC<IButtonProps> = ({ onClick, icon, text, className }) => {
+export const OldButton: React.FC<IButtonProps> = ({
+  onClick,
+  icon,
+  text,
+  className,
+}) => {
   return (
     <Container className={className} onClick={onClick}>
       {icon}
@@ -91,8 +96,6 @@ const Button: React.FC<IButtonProps> = ({ onClick, icon, text, className }) => {
     </Container>
   );
 };
-
-export default Button;
 
 const ButtonDestructiveStyle = styled.button`
   /* display: flex; */

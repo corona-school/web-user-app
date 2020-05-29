@@ -6,7 +6,7 @@ import Article from '../components/Article';
 import Context from '../context';
 import SettingsPersonalCard from '../components/cards/SettingsPersonalCard';
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
-import { ButtonDestructive, LinkButton } from '../components/Button';
+import { ButtonDestructive, LinkButton } from '../components/button';
 import Icons from '../assets/icons';
 import { ScreeningStatus } from '../types';
 

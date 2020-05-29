@@ -1,0 +1,113 @@
+.topGrid {
+  display: grid;
+  grid-template-columns: 2fr 400px;
+  width: 100%;
+
+  @media only screen and (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .statusContainer {
+    background-image: url(/background_triangle_yellow.svg);
+    background-size: 700px;
+    // because background is somehow angled
+    margin-top: -4px;
+    background-repeat: no-repeat;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+
+    .text {
+      max-width: 600px;
+    }
+  }
+
+  .newsContainer {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    background: #f4f6ff;
+    width: 100%;
+
+    padding: 40px 16px 16px 16px;
+    border-radius: 0px 0px 0px 40px;
+
+    @media only screen and (max-width: 768px) {
+      border-radius: 0px 0px 0px 0px;
+      margin-top: 16px;
+
+      .newsContentContainer {
+        display: flex;
+        flex-direction: row;
+      }
+      .bookIcon {
+        transform: translate(20px, -60px);
+      }
+    }
+
+    @media only screen and (max-width: 600px) {
+      border-radius: 0px 0px 0px 0px;
+      justify-content: center;
+      align-items: center;
+
+      .newsContentContainer {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    .bookIcon {
+      position: absolute;
+      top: 20px;
+      right: 50px;
+    }
+
+    .newsContent {
+      max-width: 320px;
+      margin-bottom: 8px;
+
+      .newsHeadline {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
+
+.bottomContainer {
+  margin-top: 40px;
+  padding: 0px 32px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-image: url(/background_full_red.svg);
+  background-position-y: 10px;
+  background-repeat: no-repeat;
+
+  @media only screen and (max-width: 768px) {
+    padding: 0px;
+    h3 {
+      margin-left: 32px;
+    }
+  }
+
+  .bottomGrid {
+    padding: 8px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    @media only screen and (max-width: 1200px) {
+      grid-template-columns: 1fr 1fr;
+      grid-row-gap: 30px;
+      grid-template-rows: 1fr 1fr;
+    }
+    @media only screen and (max-width: 768px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      align-items: center;
+      justify-items: center;
+      padding: 8px 0px;
+    }
+  }
+}

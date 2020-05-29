@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../components/Button';
+import { OldButton } from '../components/button';
 import { useHistory } from 'react-router-dom';
 
 const PageWrapper = styled.div<{ opacity: number }>`
@@ -24,7 +24,7 @@ const NotFound = () => {
     <PageWrapper opacity={1}>
       <h1>404 Seite nicht gefunden</h1>
 
-      <Button
+      <OldButton
         text={'zurück'}
         onClick={() => {
           history.goBack();

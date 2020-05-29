@@ -13,32 +13,21 @@ import Help from './routes/Help';
 import Login from './routes/Login';
 import Verify from './routes/Verify';
 
-import poppinsRegular from './assets/fonts/Poppins-Regular.ttf';
-import poppinsBold from './assets/fonts/Poppins-Bold.ttf';
-import poppinsItalic from './assets/fonts/Poppins-Italic.ttf';
 import { ScreeningStatus } from './types';
 import NotFound from './routes/NotFound';
 
 const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: Poppins;
-    src: url(${poppinsRegular}) format('truetype');
-  }
-  @font-face {
-    font-family: Poppins;
-    src: url(${poppinsBold}) format('truetype');
-    font-weight: bold;
-  }
-  @font-face {
-    font-family: Poppins;
-    src: url(${poppinsItalic}) format('truetype');
-    font-style: italic;
-  }
+
 
   html {
-    font-family: Poppins, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 14px;
     overflow: hidden;
+
+  }
+
+  *{
+    box-sizing: border-box;
   }
 
 

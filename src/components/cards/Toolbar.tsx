@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import Button, { LinkButton } from '../Button';
+import { OldButton, LinkButton } from '../button';
 import Icons from '../../assets/icons';
 import Context from '../../context';
 import { ScreeningStatus } from '../../types';
@@ -37,7 +37,7 @@ const Toolbar = () => {
             href="https://authentication.corona-school.de"
           ></LinkButton>
         )}
-        <Button
+        <OldButton
           icon={<Icons.Delete />}
           text="Deaktivieren"
           onClick={() => modalContext.setOpenedModal('deactivateAccount')}

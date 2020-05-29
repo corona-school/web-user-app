@@ -6,7 +6,7 @@ import {
   pupilReasonOptions,
   studentReasonOptions,
 } from '../../assets/dissolveMatchReasons';
-import { ButtonDestructive, ButtonNonDestructive } from '../Button';
+import { ButtonDestructive, ButtonNonDestructive } from '../button';
 import Context from '../../context';
 // import { putUser, dissolveMatch } from '../../api/api';
 import { putUser } from '../../api/api';
@@ -181,8 +181,10 @@ const DissolveMatchModal: React.FC<{
                 übernommen hast!
                 <br />
                 <br />
-                Sobald du die Zusammenarbeit endgültig beendest, werden wir {matchFirstname} darüber per E-Mail informieren. {matchFirstname} hat dann
-                die Möglichkeit sich bei Bedarf neu verbinden zu lassen.
+                Sobald du die Zusammenarbeit endgültig beendest, werden wir{' '}
+                {matchFirstname} darüber per E-Mail informieren.{' '}
+                {matchFirstname} hat dann die Möglichkeit sich bei Bedarf neu
+                verbinden zu lassen.
               </Message>
               <ButtonDestructive
                 onClick={() =>
@@ -215,9 +217,10 @@ const DissolveMatchModal: React.FC<{
                     Vielen Dank für deine Rückmeldung.
                     <br />
                     <br />
-                    Sobald du die Zusammenarbeit endgültig beendest, werden wir {matchFirstname} darüber per E-Mail informieren. {matchFirstname} hat
-                    dann die Möglichkeit sich bei Bedarf neu verbinden zu
-                    lassen.
+                    Sobald du die Zusammenarbeit endgültig beendest, werden wir{' '}
+                    {matchFirstname} darüber per E-Mail informieren.{' '}
+                    {matchFirstname} hat dann die Möglichkeit sich bei Bedarf
+                    neu verbinden zu lassen.
                   </Message>
                   <ButtonDestructive
                     onClick={() =>

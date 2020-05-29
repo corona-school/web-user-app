@@ -5,9 +5,7 @@ import Header from './Header';
 
 const PageWrapper = styled.div`
   display: flex;
-
   overflow-x: hidden;
-  background-color: ${(props) => props.theme.color.pageBackground};
 `;
 interface MenuProps {
   readonly isMenuOpen: boolean;
@@ -36,24 +34,18 @@ const ContentWrapper = styled.div`
 
   .content {
     max-height: 100vh;
-
     overflow-y: scroll;
-    box-sizing: border-box;
     align-items: center;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding-top: 20px;
     z-index: 1;
+    padding-bottom: 40px;
 
     ::after {
       content: 'spacer';
       visibility: hidden;
     }
-  }
-
-  .content > * {
-    margin-bottom: 20px;
   }
 `;
 
