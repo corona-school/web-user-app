@@ -1,4 +1,4 @@
-# Corona School - Frontend
+# web-user-app
 
 The frontend for the Corona School user dashboard.
 
