@@ -13,7 +13,7 @@ Installs the dependencies into the /node_modules/ directory. This must be run af
 
 `yarn run dev`
 
-Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page will reload if you make edits. If the server won't start, make sure you are in the /frontend/ directory and have ran `npm install`.
+Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page will reload if you make edits. If the server won't start, make sure you have ran `yarn install`.
 
 `yarn run build`
 
