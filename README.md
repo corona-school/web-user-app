@@ -28,14 +28,10 @@ Builds the app for production to the `build` folder. It correctly bundles React 
 - We use [styled components](https://styled-components.com/) and SASS for styling.
 - We use [Normalize.css](https://necolas.github.io/normalize.css) for cross-browser consistency in the default styling of HTML elements.
 
-## Recommended setup
+### Recommended setup
 
 If you do not prefer another setup, it is recommended to use [VS Code](https://code.visualstudio.com/) with the following extensions:
-
-[Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting. It will read the .prettierrc file for unified formatting among contributers.
-
-[vscode-styled-components](https://marketplace.visualstudio.com/items?itemName=jpoissonnier.vscode-styled-components) for syntax highlighting and auto completion in styled-components template literals.
-
-[ES7 React/Redux/GraphQL/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets) to avoid typing common patterns.
-
-In the VS Code settings, the _Format On Save_ (editor.formatOnSave) option may be used.
+- [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting. It will read the .prettierrc file for unified formatting among contributers.
+- [vscode-styled-components](https://marketplace.visualstudio.com/items?itemName=jpoissonnier.vscode-styled-components) for syntax highlighting and auto completion in styled-components template literals.
+- [ES7 React/Redux/GraphQL/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets) to avoid typing common patterns.
+- In the VS Code settings, the _Format On Save_ (editor.formatOnSave) option may be used.
