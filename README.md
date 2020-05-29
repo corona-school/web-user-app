@@ -1,3 +1,5 @@
+![GitHub License](https://img.shields.io/github/license/corona-school/web-user-app)
+
 # web-user-app
 
 The frontend for the Corona School user dashboard.
