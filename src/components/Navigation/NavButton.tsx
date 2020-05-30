@@ -52,9 +52,10 @@ export const NavButton: React.FC<{
   icon?: ReactElement;
   center?: boolean;
   active?: boolean;
-}> = ({ to, icon, children, center = false, active = true }) => {
+  onClick?: () => void;
+}> = ({ to, icon, children, center = false, active = true, onClick }) => {
   return (
-    <StyledNavLink to={to} active={active}>
+    <StyledNavLink to={to} active={active} onClick={onClick}>
       {icon}
       {children}
     </StyledNavLink>

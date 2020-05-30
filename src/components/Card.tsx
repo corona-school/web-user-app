@@ -9,7 +9,7 @@ const Hightlight = styled.div<HightlightProps>`
   min-height: 11px;
   max-height: 11px;
   width: 100%;
-  background: #ffe8f0;
+  background: #f4486d;
 `;
 
 interface Props {

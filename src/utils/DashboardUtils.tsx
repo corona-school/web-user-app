@@ -1,7 +1,7 @@
 import React from 'react';
 import { User, ScreeningStatus } from '../types';
 import Images from '../assets/images';
-import Button from '../components/button';
+import Button, { LinkButton } from '../components/button';
 
 const StatusTexts = new Map([
   [
@@ -87,90 +87,122 @@ interface Step {
 
 const CheckInformationStep: Step = {
   title: 'Informationen überprüfen',
-  image: <Images.StepsCheckInformation />,
+  image: <Images.StepsCheckInformation width="160px" height="160px" />,
   texts: [
     'Damit wir dich mit einem/einer passende*n Lernpartner*in verbinden können, überprüfe bitte deine persönlichen Informationen.',
     'Achte darauf, dass deine Fächer korrekt im System hinterlegt sind. ',
     'Sollte es dir nicht möglich sein ein bestimmtes Feld zu ändern, melde dich bei support@corona-school.de.',
   ],
-  action: <Button>Überprüfen</Button>,
+  action: <LinkButton href="/settings">Überprüfen</LinkButton>,
 };
 
 const MeetUsStep: Step = {
   title: 'Unser Team kennenlernen',
-  image: <Images.StepsMeetUs />,
+  image: <Images.StepsMeetUs width="160px" height="160px" />,
   texts: [
     'Wir möchten dich gerne persönlich kennenlernen und zu einem digitalen Gespräch einladen, in welchem du auch deine Frage loswerden kannst.',
     'Du benötigst etwa 10 Minuten, einen Computer mit Kamera und einen Studierendenausweis.',
     'Für einen reibungslosen Ablauf benutze bitte Google Chrome.',
   ],
-  action: <Button>Kennenlernen</Button>,
+  action: (
+    <LinkButton
+      rel="noopener noreferrer"
+      href="https://authentication.corona-school.de/"
+      target="_blank"
+    >
+      Kennenlernen
+    </LinkButton>
+  ),
 };
 
 const MatchedStep: Step = {
   title: 'Zuordnung erhalten',
-  image: <Images.StepsMatched />,
+  image: <Images.StepsMatched width="160px" height="160px" />,
   texts: [
     'Sobald wir eine*n geeignete*n Lernpartner*in für dich gefunden haben, werden wir dich schnellst- möglich per E-Mail informieren.',
     'Bitte überprüfe dafür auch regelmäßig deinen Spam-Ordner.',
     'Solltest du innerhalb einer Woche nichts von uns hören, melde dich bitte bei support@corona-school.de.',
   ],
-  action: <Button>Abwarten</Button>,
+  action: (
+    <LinkButton href="/matches" local>
+      Abwarten
+    </LinkButton>
+  ),
 };
 
 const ContactMatchStep: Step = {
   title: 'Lernpartner*in kontaktieren',
-  image: <div>No Image yet</div>,
+  image: <Images.StepsContact width="160px" height="160px" />,
   texts: [
     'Überlege dir zunächst, wie viel Zeit du in das gemeinsame Lernen investieren möchtest und zu welchen Uhrzeiten du verfügbar bist.',
     'Kontaktiere anschließend deine*n Lernpartner*in und schlag ihm/ihr einen Termin per E-Mail vor.',
     ' Gerne könnt ihr genaue Inhalte schon vor dem ersten Gespräch abstimmen.',
   ],
-  action: <Button>Kontaktieren</Button>,
+  action: (
+    <LinkButton href="/matches" local>
+      Kontaktieren
+    </LinkButton>
+  ),
 };
 
 const PrepareLessonStep: Step = {
   title: 'Gespräch vorbereiten',
-  image: <div>No Image yet</div>,
+  image: <Images.StepsReadMore width="160px" height="160px" />,
   texts: [
     'Zur Vorbereitung auf dein erstes Kennenlerngespräch haben wir verschiedene Leitfäden entwickelt, an welchen du dich orientieren kannst.',
     'Bitte lese unsere Dokumente sorgfältig durch und mache dich mit unseren ethischen Standards vertraut.',
     'Profitiere von unseren Empfehlungen für gute, digitale Lernunterstützung.',
   ],
-  action: <Button>Vorbereiten</Button>,
+  action: (
+    <LinkButton
+      href="https://www.corona-school.de/vorbereitung"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      Vorbereiten
+    </LinkButton>
+  ),
 };
 
 const LessonStep: Step = {
   title: 'Gemeinsamen lernen',
-  image: <div>No Image yet</div>,
+  image: <Images.StepsLearnTogether width="160px" height="160px" />,
   texts: [
     'In einem ersten digitalen Gespräch könnt ihr euch besser kennenlernen und das gemeinsame Lernen starten.',
     'Ganz unkompliziert könnt ihr direkt im Browser oder mit dem Handy zur vereinbarten Uhrzeit in einen gemeinsamen Video-Chat eintreten.',
     'Bei Schwierigkeiten kannst du dich an support@corona-school.de wenden.',
   ],
-  action: <Button>Lernen</Button>,
+  action: (
+    <LinkButton href="/matches" local>
+      Lernen
+    </LinkButton>
+  ),
 };
 
 const FeedbackStep: Step = {
   title: 'Feedback geben',
-  image: <div>No Image yet</div>,
+  image: <Images.StepsFeedback width="160px" height="160px" />,
   texts: [
     'Wir würden uns sehr freuen, wenn du unseren Fragebogen ausfüllst, damit wir unsere Plattform für euch weiter verbessern können.',
     'Der Fragebogen ist anonymisiert und dauert nicht länger als 5 Minuten.',
     'Falls du differenziertes Feedback an uns richten möchtest, schreibe eine Mail an feedback@corona-school.de',
   ],
-  action: <Button>Feedback</Button>,
+  action: <LinkButton>Feedback</LinkButton>,
 };
 
 const RequestMatchStep: Step = {
   title: 'Mehr Schüler*innen helfen',
-  image: <div>No Image yet</div>,
+  image: <Images.StepsRequest width="160px" height="160px" />,
   texts: [
     'Durch die Schulschließungen benötigen immer mehr Schüler*innen Unterstützung beim Lernen.',
     'Wir würden uns wahnsinnig freuen, wenn du weiteren Schüler*innen unter die Arme greifen möchtest.',
     'Ganz nach deinen zeitlichen Kapazitäten kannst du jederzeit mehr oder auch weniger helfen.',
   ],
-  action: <Button>Anfordern</Button>,
+  action: (
+    <LinkButton href="/matches" local>
+      Anfordern
+    </LinkButton>
+  ),
 };
 
 const NextSteps = new Map([
@@ -191,4 +223,37 @@ export const getNextSteps = (user: User) => {
   if (user.matches.length > 0) {
     return NextSteps.get('hasMatch');
   }
+};
+
+const StudentNews = [
+  {
+    headline: 'Campus Representative',
+    text:
+      'Du möchtest die Corona School an deiner Universität/Hochschule vertreten? Schreibe eine Mail an campus@corona-school.de.',
+  },
+  {
+    headline: 'Mentoring Programm',
+    text:
+      'Du möchtest dich mit anderen Studierenden oder unseren Mentor*innen austauschen? facebook.com/groups/coronaschoolgermany',
+  },
+];
+
+const PupilNews = [
+  {
+    headline: 'Außerschulische Angebote',
+    text:
+      'Wir möchten euch fördern und Möglichkeiten zur Weiterbildung wie Orientierung bieten. Weitere Informationen erhaltet ihr per E-Mail.',
+  },
+  {
+    headline: 'Prioritäten vergeben',
+    text:
+      'In Kürze könnt ihr eure Fächer priorisieren. So erhaltet ihr in den Fächern Unterstützung, in denen ihr es am dringendsten benötigt.',
+  },
+];
+
+export const getNews = (user: User) => {
+  if (user.type === 'pupil') {
+    return PupilNews;
+  }
+  return StudentNews;
 };

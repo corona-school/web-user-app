@@ -1,7 +1,7 @@
 import React from 'react';
 import { Match } from '../../types';
 import styled from 'styled-components';
-import { OldButton, LinkButton } from '../button';
+import { OldButton, OldLinkButton } from '../button';
 import media from '../../media';
 import Icons from '../../assets/icons';
 import MatchInfo from '../cards/MatchInfo';
@@ -47,13 +47,13 @@ const UserCard: React.FC<Props> = ({ match, type, handleDissolveMatch }) => {
       <CardContainer>
         <MatchInfo match={match} type={type} />
         <ButtonContainer>
-          <LinkButton
+          <OldLinkButton
             icon={<Icons.VideoChat />}
             text="Video-Chat"
             href={match.jitsilink}
             target={'_blank'}
           />
-          <LinkButton
+          <OldLinkButton
             icon={<Icons.Contact />}
             text="Kontaktieren"
             href={'mailto:' + match.email}

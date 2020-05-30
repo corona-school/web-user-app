@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import StyledReactModal from 'styled-react-modal';
-import PageComponent from '../components/PageComponent';
 import Article from '../components/Article';
 import Context from '../context';
 import SettingsPersonalCard from '../components/cards/SettingsPersonalCard';
@@ -71,7 +70,7 @@ const Settings: React.FC = () => {
   }, [userContext.user.screeningStatus]);
 
   return (
-    <PageComponent>
+    <>
       <Article title="Deine Informationen" cardDirection="row">
         <SettingsPersonalCard user={userContext.user} />
       </Article>
@@ -102,9 +101,10 @@ const Settings: React.FC = () => {
           </small>
           <LinkButton
             target="_blank"
-            text="Authentifizieren"
             href="https://authentication.corona-school.de"
-          />
+          >
+            Authentifizieren
+          </LinkButton>
           <CloseButtonStyle onClick={() => modalContext.setOpenedModal(null)}>
             <Icons.Close />
           </CloseButtonStyle>
@@ -138,7 +138,7 @@ const Settings: React.FC = () => {
           </CloseButtonStyle>
         </ModalDeactivateWrapper>
       </StyledReactModal>
-    </PageComponent>
+    </>
   );
 };
 

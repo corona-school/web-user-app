@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { OldButton, LinkButton } from '../button';
+import { OldButton, OldLinkButton } from '../button';
 import Icons from '../../assets/icons';
 import Context from '../../context';
 import { ScreeningStatus } from '../../types';
@@ -31,11 +31,11 @@ const Toolbar = () => {
       <InnerWrapper>
         {/* <Button icon={<Icons.Edit />} label="Bearbeiten" /> */}
         {userContext.user.screeningStatus === ScreeningStatus.Unscreened && (
-          <LinkButton
+          <OldLinkButton
             target="_blank"
             text="Authentifizieren"
             href="https://authentication.corona-school.de"
-          ></LinkButton>
+          ></OldLinkButton>
         )}
         <OldButton
           icon={<Icons.Delete />}

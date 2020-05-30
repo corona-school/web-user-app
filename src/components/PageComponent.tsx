@@ -34,17 +34,19 @@ const ContentWrapper = styled.div`
 
   .content {
     max-height: 100vh;
+    height: 100%;
     overflow-y: scroll;
     align-items: center;
+
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+
     z-index: 1;
-    padding-bottom: 60px;
 
     ::after {
-      content: 'spacer';
+      flex: 0 0 40px;
       visibility: hidden;
+      content: 'spacer';
     }
   }
 `;

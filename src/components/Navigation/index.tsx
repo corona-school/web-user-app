@@ -42,7 +42,11 @@ const Navigation: React.FC<Props> = (props) => {
       <div className={classes.navigationGroup}>
         <Welcome firstname={firstname} type={type} />
         <div className={classes.section}>Menü</div>
-        <NavButton to="/dashboard" icon={<Icons.Home />}>
+        <NavButton
+          to="/dashboard"
+          icon={<Icons.Home />}
+          onClick={() => props.setMenuOpen(false)}
+        >
           Startseite
         </NavButton>
         <NavButton
@@ -51,10 +55,15 @@ const Navigation: React.FC<Props> = (props) => {
           active={
             type === 'pupil' || screeningStatus === ScreeningStatus.Accepted
           }
+          onClick={() => props.setMenuOpen(false)}
         >
           Zuordnung
         </NavButton>
-        <NavButton to="/settings" icon={<Icons.Settings />}>
+        <NavButton
+          to="/settings"
+          icon={<Icons.Settings />}
+          onClick={() => props.setMenuOpen(false)}
+        >
           Verwaltung
         </NavButton>
         {/* <NavButton to="/feedback" icon={<Icons.Feedback />}>
@@ -70,18 +79,21 @@ const Navigation: React.FC<Props> = (props) => {
             rel="noopener noreferrer"
             href="https://www.facebook.com/coronaschoolgermany"
             target="_blank"
+            onClick={() => props.setMenuOpen(false)}
           />
           <SocialMediaButton
             icon="TwitterIcon"
             rel="noopener noreferrer"
             href="https://twitter.com/_CoronaSchool"
             target="_blank"
+            onClick={() => props.setMenuOpen(false)}
           />
           <SocialMediaButton
             icon="InstagramIcon"
             rel="noopener noreferrer"
             href="https://www.instagram.com/coronaschoolgermany/"
             target="_blank"
+            onClick={() => props.setMenuOpen(false)}
           />
         </div>
       </div>

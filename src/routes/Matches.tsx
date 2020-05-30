@@ -64,15 +64,13 @@ const Matches: React.FC = () => {
 
   return (
     <>
-      <PageComponent>
-        {/* <Wrapper> */}
-        <Article title="Deine Anfragen" cardDirection="row">
-          {openRequests}
-        </Article>
-        <Article title="Deine Zuordnungen">{currentMatches}</Article>
-        <Article title="Entfernte Zuordnungen"></Article>
-        {/* </Wrapper> */}
-      </PageComponent>
+      {/* <Wrapper> */}
+      <Article title="Deine Anfragen" cardDirection="row">
+        {openRequests}
+      </Article>
+      <Article title="Deine Zuordnungen">{currentMatches}</Article>
+      <Article title="Entfernte Zuordnungen"></Article>
+      {/* </Wrapper> */}
     </>
   );
 };

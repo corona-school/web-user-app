@@ -61,7 +61,7 @@ interface ILinkButtonProps {
   target?: string;
 }
 
-export const LinkButton: React.FC<ILinkButtonProps> = ({
+export const OldLinkButton: React.FC<ILinkButtonProps> = ({
   href,
   icon,
   text,

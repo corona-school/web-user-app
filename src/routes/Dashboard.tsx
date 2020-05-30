@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
-import PageComponent from '../components/PageComponent';
 import { Title, Text } from '../components/Typography';
 import classes from './Dashboard.module.scss';
 import { Tag } from '../components/Tag';
 import Icons from '../assets/icons';
-import { getStatus, getNextSteps } from '../utils/DashboardUtils';
+import { getStatus, getNextSteps, getNews } from '../utils/DashboardUtils';
 import { UserContext } from '../context/UserContext';
 import { ColumnCard } from '../components/Card';
 
@@ -61,8 +60,26 @@ const Dashboard: React.FC = () => {
     });
   };
 
+  const renderNews = () => {
+    const news = getNews(user);
+
+    return news.map((n) => {
+      return (
+        <div className={classes.newsContent}>
+          <div className={classes.newsHeadline}>
+            <Tag>NEU</Tag>
+            <Title bold size="h5">
+              {n.headline}
+            </Title>
+          </div>
+          <Text>{n.text}</Text>
+        </div>
+      );
+    });
+  };
+
   return (
-    <PageComponent>
+    <div className={classes.container}>
       <div className={classes.topGrid}>
         {renderStatusText()}
 
@@ -73,39 +90,14 @@ const Dashboard: React.FC = () => {
           <Title size="h3" bold>
             Neuigkeiten
           </Title>
-          <div className={classes.newsContentContainer}>
-            <div className={classes.newsContent}>
-              <div className={classes.newsHeadline}>
-                <Tag>NEU</Tag>
-                <Title bold size="h5">
-                  Campus Representative
-                </Title>
-              </div>
-              <Text>
-                Du möchtest die Corona School an deiner Universität/Hochschule
-                vertreten? Schreibe eine Mail an campus@corona-school.de
-              </Text>
-            </div>
-            <div className={classes.newsContent}>
-              <div className={classes.newsHeadline}>
-                <Tag>NEU</Tag>
-                <Title bold size="h5">
-                  Mentoring Programm
-                </Title>
-              </div>
-              <Text>
-                Du möchtest dich mit anderen Studierenden oder unseren
-                Mentor*innen austauschen? facebook.com/groups/coronaschoolge
-              </Text>
-            </div>
-          </div>
+          <div className={classes.newsContentContainer}>{renderNews()}</div>
         </div>
       </div>
       <div className={classes.bottomContainer}>
         <Title size="h3">Deine nächsten Schritte</Title>
         <div className={classes.bottomGrid}>{renderNextSteps()}</div>
       </div>
-    </PageComponent>
+    </div>
   );
 };
 

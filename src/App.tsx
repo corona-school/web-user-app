@@ -15,6 +15,7 @@ import Verify from './routes/Verify';
 
 import { ScreeningStatus } from './types';
 import NotFound from './routes/NotFound';
+import PageComponent from './components/PageComponent';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -46,36 +47,38 @@ const App: React.FC = () => {
     <>
       <GlobalStyle />
       <Switch>
-        <Route exact path="/">
-          <Redirect to="/settings" />
-        </Route>
-        <PrivateRoute path="/dashboard">
-          <Dashboard />
-        </PrivateRoute>
-        <PrivateRoute
-          path="/matches"
-          active={
-            userContext.user.type === 'pupil' ||
-            userContext.user.screeningStatus === ScreeningStatus.Accepted
-          }
-        >
-          <Matches />
-        </PrivateRoute>
-        <PrivateRoute path="/settings">
-          <Settings />
-        </PrivateRoute>
-        <PrivateRoute path="/feedback">
-          <Feedback />
-        </PrivateRoute>
-        <PrivateRoute path="/help">
-          <Help />
-        </PrivateRoute>
         <Route path="/login">
           <Login />
         </Route>
         <Route path="/verify">
           <Verify />
         </Route>
+        <PageComponent>
+          <Route exact path="/">
+            <Redirect to="/settings" />
+          </Route>
+          <PrivateRoute path="/dashboard">
+            <Dashboard />
+          </PrivateRoute>
+          <PrivateRoute
+            path="/matches"
+            active={
+              userContext.user.type === 'pupil' ||
+              userContext.user.screeningStatus === ScreeningStatus.Accepted
+            }
+          >
+            <Matches />
+          </PrivateRoute>
+          <PrivateRoute path="/settings">
+            <Settings />
+          </PrivateRoute>
+          <PrivateRoute path="/feedback">
+            <Feedback />
+          </PrivateRoute>
+          <PrivateRoute path="/help">
+            <Help />
+          </PrivateRoute>
+        </PageComponent>
         <Route component={NotFound} />
       </Switch>
     </>

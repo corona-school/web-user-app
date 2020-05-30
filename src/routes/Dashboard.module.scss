@@ -1,3 +1,14 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  &::after {
+    flex: 0 0 20px;
+    visibility: hidden;
+    content: 'spacer';
+  }
+}
+
 .topGrid {
   display: grid;
   grid-template-columns: 2fr 400px;
@@ -60,7 +71,7 @@
     .bookIcon {
       position: absolute;
       top: 20px;
-      right: 50px;
+      right: 40px;
     }
 
     .newsContent {
@@ -98,8 +109,11 @@
     grid-template-columns: 1fr 1fr 1fr;
 
     @media only screen and (max-width: 1200px) {
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr;
+    }
+    @media only screen and (max-width: 992px) {
       grid-template-columns: 1fr 1fr;
-      grid-row-gap: 30px;
       grid-template-rows: 1fr 1fr;
     }
     @media only screen and (max-width: 768px) {
