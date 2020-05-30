@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Title } from './Typography';
 import classes from './Card.module.scss';
-import Button from './button';
 
 interface HightlightProps {}
 

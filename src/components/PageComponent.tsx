@@ -40,7 +40,7 @@ const ContentWrapper = styled.div`
     flex-direction: column;
     flex-grow: 1;
     z-index: 1;
-    padding-bottom: 40px;
+    padding-bottom: 60px;
 
     ::after {
       content: 'spacer';

@@ -1,36 +1,71 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PageComponent from '../components/PageComponent';
 import { Title, Text } from '../components/Typography';
 import classes from './Dashboard.module.scss';
 import { Tag } from '../components/Tag';
 import Icons from '../assets/icons';
+import { getStatus, getNextSteps } from '../utils/DashboardUtils';
+import { UserContext } from '../context/UserContext';
 import { ColumnCard } from '../components/Card';
-import Images from '../assets/images';
-import Button from '../components/button';
 
 const Dashboard: React.FC = () => {
-  return (
-    <PageComponent>
-      <div className={classes.topGrid}>
+  const { user } = useContext(UserContext);
+
+  const renderStatusText = () => {
+    const status = getStatus(user);
+
+    if (!status) {
+      return (
         <div className={classes.statusContainer}>
           <Title size="h1">Dein aktueller Status</Title>
-          <Title size="h4">Wir haben deine E-Mail-Adresse verifiziert!</Title>
+          <Title size="h4">Etwas ist schief gelaufen</Title>
           <div className={classes.content}>
             <Text large className={classes.text}>
-              Nun möchten wir dich gerne persönlich kennenlernen und dich zu
-              einem digitalen Gespräch eingeladen. Unsere tagesaktuellen
-              Verfügbarkeitszeiten findest du unter{' '}
-              <a
-                href="https://authentication.corona-school.de/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                authentication.corona-school.de
-              </a>
-              . Dort wartet eine Person aus unserem Team auf dich!
+              Leider können wir Dir dein Status nicht laden. Komme später vorbei
+              oder schreibe uns eine E-Mail.
             </Text>
           </div>
         </div>
+      );
+    }
+
+    return (
+      <div className={classes.statusContainer}>
+        <Title size="h1">Dein aktueller Status</Title>
+        <Title size="h4">{status?.title}</Title>
+        <div className={classes.content}>
+          <Text large className={classes.text}>
+            {status?.description}
+          </Text>
+        </div>
+      </div>
+    );
+  };
+
+  const renderNextSteps = () => {
+    const steps = getNextSteps(user);
+    console.log(steps);
+
+    if (!steps) {
+      return <div>bla</div>;
+    }
+
+    return steps.map((s) => {
+      return (
+        <ColumnCard title={s.title} image={s.image} button={s.action}>
+          {s.texts.map((text) => {
+            return <Text>{text}</Text>;
+          })}
+        </ColumnCard>
+      );
+    });
+  };
+
+  return (
+    <PageComponent>
+      <div className={classes.topGrid}>
+        {renderStatusText()}
+
         <div className={classes.newsContainer}>
           <div className={classes.bookIcon}>
             <Icons.NotebookBlue />
@@ -68,60 +103,7 @@ const Dashboard: React.FC = () => {
       </div>
       <div className={classes.bottomContainer}>
         <Title size="h3">Deine nächsten Schritte</Title>
-        <div className={classes.bottomGrid}>
-          <ColumnCard
-            title="Informationen Überprüfen"
-            image={<Images.StepsCheckInformation />}
-            button={<Button>Überprüfen</Button>}
-          >
-            <Text>
-              Damit wir dich mit einem/einer passende*n Lernpartner*in verbinden
-              können, überprüfe bitte deine persönlichen Informationen.
-            </Text>
-            <Text>
-              Achte darauf, dass deine Fächer korrekt im System hinterlegt sind.
-            </Text>
-            <Text>
-              Sollte es dir nicht möglich sein ein bestimmtes Feld zu ändern,
-              melde dich bei support@corona-school.de.
-            </Text>
-          </ColumnCard>
-          <ColumnCard
-            title="Unser Team kennenlernen"
-            image={<Images.StepsCheckInformation />}
-            button={<Button>Kennenlernen</Button>}
-          >
-            <Text>
-              Wir möchten dich gerne persönlich kennenlernen und zu einem
-              digitalen Gespräch einladen, in welchem du auch deine Frage
-              loswerden kannst.
-            </Text>
-            <Text>
-              Du benötigst etwa 10 Minuten, einen Computer mit Kamera und einen
-              Studierendenausweis.
-            </Text>
-            <Text>
-              Für einen reibungslosen Ablauf benutze bitte Google Chrome.
-            </Text>
-          </ColumnCard>
-          <ColumnCard
-            title="Zuordnung erhalten"
-            image={<Images.StepsCheckInformation />}
-            button={<Button>Abwarten</Button>}
-          >
-            <Text>
-              Sobald wir eine*n geeignete*n Lernpartner*in für dich gefunden
-              haben, werden wir dich schnellst- möglich per E-Mail informieren.
-            </Text>
-            <Text>
-              Bitte überprüfe dafür auch regelmäßig deinen Spam-Ordner.
-            </Text>
-            <Text>
-              Solltest du innerhalb einer Woche nichts von uns hören, melde dich
-              bitte bei support@corona-school.de.
-            </Text>
-          </ColumnCard>
-        </div>
+        <div className={classes.bottomGrid}>{renderNextSteps()}</div>
       </div>
     </PageComponent>
   );
