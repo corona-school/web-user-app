@@ -30,6 +30,7 @@ export const StyledNavLink = styled(NavLink).withConfig({
   }
 
   &:hover {
+    color: ${(props) => props.theme.color.navigationText};
     background-color: ${(props) => props.theme.color.navigationHover};
   }
 

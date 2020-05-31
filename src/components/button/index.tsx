@@ -59,6 +59,9 @@ const GenericLinkButton = styled.a<ButtonProps>`
   :active {
     border: none;
   }
+  :hover {
+    color: ${(props) => (props.color ? props.color : '#fa3d7f')};
+  }
   :focus {
     outline: none;
   }
@@ -116,6 +119,9 @@ const LocalLink = styled(NavLink)<ButtonProps>`
     path {
       fill: ${(props) => (props.color ? props.color : '#fa3d7f')};
     }
+  }
+  :hover {
+    color: ${(props) => (props.color ? props.color : '#fa3d7f')};
   }
 `;
 
