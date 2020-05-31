@@ -5,34 +5,50 @@ export * from './IconButton';
 export * from './OldButton';
 
 const GenericButton = styled.button`
-  padding: 10px 16px;
+  height: 38px;
+  padding: 10px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fa3d7f;
   background: #ffe8f0;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
   :focus {
     outline: none;
   }
+  svg {
+    margin: 0px 4px;
+    fill: #fa3d7f;
+    path {
+      fill: #fa3d7f;
+    }
+  }
 `;
 
 const GenericLinkButton = styled.a`
-  padding: 10px 16px;
+  height: 38px;
+  padding: 10px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fa3d7f;
   background: #ffe8f0;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
   text-decoration: none;
   border: none;
+  svg {
+    margin: 0px 4px;
+    fill: #fa3d7f;
+    path {
+      fill: #fa3d7f;
+    }
+  }
   :active {
     border: none;
   }
@@ -76,6 +92,10 @@ const LocalLink = styled(NavLink)`
   cursor: pointer;
   text-decoration: none;
   border: none;
+
+  svg {
+    fill: '#fa3d7f';
+  }
 `;
 
 export const LinkButton: React.FC<LinkPropType> = ({ image, ...props }) => {

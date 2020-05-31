@@ -55,19 +55,40 @@ interface Props {
   size?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
   bold?: boolean;
   children?: React.ReactNode;
+  className?: string;
 }
 
 export const Title: React.FC<Props> = (props) => {
   if (props.size === 'h5')
-    return <Title5 bold={props.bold}>{props.children}</Title5>;
+    return (
+      <Title5 className={props.className} bold={props.bold}>
+        {props.children}
+      </Title5>
+    );
   if (props.size === 'h4')
-    return <Title4 bold={props.bold}>{props.children}</Title4>;
+    return (
+      <Title4 className={props.className} bold={props.bold}>
+        {props.children}
+      </Title4>
+    );
   if (props.size === 'h3')
-    return <Title3 bold={props.bold}>{props.children}</Title3>;
+    return (
+      <Title3 className={props.className} bold={props.bold}>
+        {props.children}
+      </Title3>
+    );
   if (props.size === 'h2')
-    return <Title2 bold={props.bold}>{props.children}</Title2>;
+    return (
+      <Title2 className={props.className} bold={props.bold}>
+        {props.children}
+      </Title2>
+    );
 
-  return <Title1 bold={props.bold}>{props.children}</Title1>;
+  return (
+    <Title1 className={props.className} bold={props.bold}>
+      {props.children}
+    </Title1>
+  );
 };
 
 export const Text = styled.div<{ large?: boolean }>`

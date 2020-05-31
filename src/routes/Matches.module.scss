@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  padding-left: 40px;
+  width: 100%;
+
+  .containerRequests {
+    min-height: 200px;
+  }
+}

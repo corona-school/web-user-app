@@ -1,25 +1,16 @@
 import React from 'react';
 import Highlight from '../Highlight';
-import styled from 'styled-components';
+import classes from './CardBase.module.scss';
 
-const Container = styled.div`
-  background: #ffffff;
-
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
-
-  padding: 0 12px;
-  padding-bottom: 5px;
-`;
-
-const CardBase: React.FC<{
+interface Props {
   highlightColor: string;
-  className?: string;
-}> = ({ highlightColor, className, children }) => {
+}
+
+const CardBase: React.FC<Props> = ({ highlightColor, children }) => {
   return (
-    <div className={className}>
+    <div className={classes.container}>
       <Highlight color={highlightColor} />
-      <Container>{children}</Container>
+      <div className={classes.cardContent}>{children}</div>
     </div>
   );
 };

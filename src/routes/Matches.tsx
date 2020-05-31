@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
-import PageComponent from '../components/PageComponent';
-import Article from '../components/Article';
 import OpenRequestCard from '../components/cardsOld/OpenRequestCard';
 import { UserContext } from '../context/UserContext';
 import Context from '../context';
-import StudentExpandedCard from '../components/cardsOld/StudentExpandedCard';
 import DissolveMatchModal from '../components/Modals/DissolveMatchModal';
 import { Title } from '../components/Typography';
+import classes from './Matches.module.scss';
+import MatchCard from '../components/cardsOld/MatchCard';
 
 const Matches: React.FC = () => {
   const userContext = useContext(UserContext);
@@ -14,7 +13,8 @@ const Matches: React.FC = () => {
 
   const openRequests = (() => {
     if (userContext.user.type === 'pupil') {
-      if (userContext.user.matches.length === 1) return <div>Empty State</div>;
+      if (userContext.user.matches.length === 1)
+        return <div>Du hast im moment keine offenen Anfragen.</div>;
       if (userContext.user.matchesRequested === 0) {
         return <OpenRequestCard type="new" />;
       }
@@ -38,36 +38,33 @@ const Matches: React.FC = () => {
     );
   })();
 
-  const currentMatches = userContext.user.matches.length
-    ? userContext.user.matches.map((match) => (
-        <React.Fragment key={match.uuid}>
-          <StudentExpandedCard
-            type={userContext.user.type === 'student' ? 'pupil' : 'student'}
-            match={match}
-            handleDissolveMatch={() => {
-              modalContext.setOpenedModal('dissolveMatchModal' + match.uuid);
-            }}
-          />
-          <DissolveMatchModal
-            identifier={'dissolveMatchModal' + match.uuid}
-            matchUuid={match.uuid}
-            matchFirstname={match.firstname}
-            ownType={userContext.user.type}
-          />
-        </React.Fragment>
-      ))
-    : undefined;
-
+  const currentMatches = userContext.user.matches.map((match) => (
+    <React.Fragment key={match.uuid}>
+      <MatchCard
+        type={userContext.user.type === 'student' ? 'pupil' : 'student'}
+        match={match}
+        handleDissolveMatch={() => {
+          modalContext.setOpenedModal('dissolveMatchModal' + match.uuid);
+        }}
+      />
+      <DissolveMatchModal
+        identifier={'dissolveMatchModal' + match.uuid}
+        matchUuid={match.uuid}
+        matchFirstname={match.firstname}
+        ownType={userContext.user.type}
+      />
+    </React.Fragment>
+  ));
   return (
-    <>
-      <div>
+    <div className={classes.container}>
+      <div className={classes.containerRequests}>
         <Title size="h1">Deine Anfragen</Title>
         {openRequests}
-        <Title size="h2">Deine Zuordnungen</Title>
-        {currentMatches}
-        {false && <Title size="h2">Entfernte Zuordnungen</Title>}
       </div>
-    </>
+      <Title size="h2">Deine Zuordnungen</Title>
+      {currentMatches}
+      {false && <Title size="h2">Entfernte Zuordnungen</Title>}
+    </div>
   );
 };
 

@@ -4,12 +4,6 @@ import styled, { ThemeContext } from 'styled-components';
 const OuterWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  /* padding: 0px; */
-
-  /* position: relative; */
-  /* width: 960px; */
-  /* height: 176px; */
-
   background: #ffffff;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
@@ -17,36 +11,17 @@ const OuterWrapper = styled.div`
 `;
 
 const Highlight = styled.div<{ highlightColor: string }>`
-  /* width: 961px; */
   height: 10px;
-
-  /* position: relative; */
-  /* left: -0.5px; */
-
   background: ${(props) => props.highlightColor};
   margin-bottom: 5px;
 `;
 
 const Content = styled.div`
-  /* INNER WRAPPER:
-  position: static;
-  left: 0px;
-  top: 15px;
-  Inside Auto Layout
-  flex: none;
-  order: 1;
-  align-self: center;
-  margin: 0px 0px; */
-
   display: flex;
   flex-direction: row;
   padding: 7px;
-
-  /* position: absolute; */
   width: 960px;
   height: 161px;
-  /* left: 0px; */
-  /* top: 0px; */
 `;
 
 const CardWrapper: React.FC<{

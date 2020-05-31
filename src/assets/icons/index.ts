@@ -31,6 +31,7 @@ import { ReactComponent as WirVsVirusLogo } from './wir_vs_virus.svg';
 import { ReactComponent as MenuIcon } from './menu.svg';
 import { ReactComponent as NotebookBlue } from './NotebookBlue.svg';
 import { ReactComponent as BackgroundTriangleYellow } from './background_triangle_yellow.svg';
+import { ReactComponent as WriteFilled } from './write-filled.svg';
 
 const IconsList = {
   Edit,
@@ -66,6 +67,7 @@ const IconsList = {
   MenuIcon,
   NotebookBlue,
   BackgroundTriangleYellow,
+  WriteFilled,
 };
 
 const Icons: { [I in keyof typeof IconsList]: any } = IconsList;
