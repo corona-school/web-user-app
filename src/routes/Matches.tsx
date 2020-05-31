@@ -33,7 +33,7 @@ const Matches: React.FC = () => {
     return (
       <>
         <OpenRequestCard type="pending" />
-        <OpenRequestCard type="pending" />
+        <OpenRequestCard type="new" />
       </>
     );
   })();
@@ -59,7 +59,7 @@ const Matches: React.FC = () => {
     <div className={classes.container}>
       <div className={classes.containerRequests}>
         <Title size="h1">Deine Anfragen</Title>
-        {openRequests}
+        <div className={classes.openRequests}>{openRequests}</div>
       </div>
       <Title size="h2">Deine Zuordnungen</Title>
       {currentMatches}

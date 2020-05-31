@@ -5,7 +5,7 @@ export * from './IconButton';
 export * from './OldButton';
 
 const GenericButton = styled.button`
-  height: 38px;
+  height: 34px;
   padding: 10px 10px;
   display: flex;
   align-items: center;
@@ -13,7 +13,7 @@ const GenericButton = styled.button`
   color: #fa3d7f;
   background: #ffe8f0;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   cursor: pointer;
   :focus {
@@ -29,7 +29,7 @@ const GenericButton = styled.button`
 `;
 
 const GenericLinkButton = styled.a`
-  height: 38px;
+  height: 34px;
   padding: 10px 10px;
   display: flex;
   align-items: center;
@@ -37,7 +37,7 @@ const GenericLinkButton = styled.a`
   color: #fa3d7f;
   background: #ffe8f0;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   cursor: pointer;
   text-decoration: none;

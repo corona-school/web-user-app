@@ -1,6 +1,5 @@
 import React from 'react';
-import Highlight from '../Highlight';
-import classes from './CardBase.module.scss';
+import classes from './CardNewBase.module.scss';
 import classnames from 'classnames';
 
 interface Props {
@@ -8,13 +7,16 @@ interface Props {
   className?: string;
 }
 
-const CardBase: React.FC<Props> = ({ highlightColor, className, children }) => {
+const CardNewBase: React.FC<Props> = ({
+  highlightColor,
+  className,
+  children,
+}) => {
   return (
     <div className={classnames(classes.container, className)}>
-      <Highlight color={highlightColor} />
       <div className={classes.cardContent}>{children}</div>
     </div>
   );
 };
 
-export default CardBase;
+export default CardNewBase;

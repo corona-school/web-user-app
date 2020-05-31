@@ -1,31 +1,16 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import CardBase from '../base/CardBase';
-import { OldButton } from '../button';
+
+import Button from '../button';
 import Icons from '../../assets/icons';
 import theme from '../../theme';
 import Context from '../../context';
 import { putUser } from '../../api/api';
+import CardBase from '../base/CardBase';
 
-const Card = styled(CardBase)`
-  width: 300px;
-
-  > div > p {
-    line-height: 21px;
-    letter-spacing: -0.333333px;
-    color: #4f4f4f;
-    margin: 0;
-  }
-
-  > div > time {
-    line-height: 21px;
-    letter-spacing: -0.333333px;
-    color: #828282;
-    font-style: italic;
-    display: inline-block;
-    margin-top: 5px;
-  }
-`;
+import classes from './OpenRequestCard.module.scss';
+import { Text, Title } from '../Typography';
+import CardNewBase from '../base/CardNewBase';
 
 const CardTitle = styled.h3`
   color: #333333;
@@ -36,11 +21,11 @@ const CardTitle = styled.h3`
   margin: 5px 0;
 `;
 
-const CustomButton = styled(OldButton)`
-  margin: 15px auto;
-`;
+interface Props {
+  type: 'pending' | 'new';
+}
 
-const OpenRequestCard: React.FC<{ type: 'pending' | 'new' }> = ({ type }) => {
+const OpenRequestCard: React.FC<Props> = ({ type }) => {
   const { credentials } = useContext(Context.Auth);
   const { user, fetchUserData } = useContext(Context.User);
 
@@ -56,34 +41,37 @@ const OpenRequestCard: React.FC<{ type: 'pending' | 'new' }> = ({ type }) => {
 
   if (type === 'pending')
     return (
-      <Card highlightColor={theme.color.cardHighlightYellow}>
-        <CardTitle>Offene Anfrage</CardTitle>
-        <p>
+      <CardBase highlightColor={'#FCD95C'} className={classes.pendingContainer}>
+        <Title size="h4">Offene Anfrage</Title>
+        <Text>
           Wir sind auf der Suche nach einem bzw. einer Lernpartner*in für dich
           und werden uns schnellstmöglich bei dir melden.
-        </p>
-        <CustomButton
-          icon={<Icons.Undo />}
-          text="Zurücknehmen"
-          onClick={() => modifyMatchesRequested((x) => x - 1)}
-        />
-      </Card>
+        </Text>
+        <div className={classes.buttonContainer}>
+          <Button onClick={() => modifyMatchesRequested((x) => x - 1)}>
+            <Icons.Undo /> Zurücknehmen
+          </Button>
+        </div>
+      </CardBase>
     );
   else
     return (
-      <Card highlightColor={theme.color.cardHighlightBlue}>
-        <CardTitle>Neue Anfrage</CardTitle>
-        <p>
-          Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner
-          zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen
-          möchtest.
-        </p>
-        <CustomButton
-          icon={<Icons.Add />}
-          text="Anfragen"
-          onClick={() => modifyMatchesRequested((x) => x + 1)}
-        />
-      </Card>
+      <div onClick={() => modifyMatchesRequested((x) => x + 1)}>
+        <CardNewBase
+          highlightColor={theme.color.cardHighlightBlue}
+          className={classes.pendingContainer}
+        >
+          <div className={classes.titleContainer}>
+            <Icons.Add height="20px" />
+            <Title size="h4">Neue Anfrage</Title>
+          </div>
+          <Text>
+            Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner
+            zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen
+            möchtest.
+          </Text>
+        </CardNewBase>
+      </div>
     );
 };
 

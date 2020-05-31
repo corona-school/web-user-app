@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  height: 200px;
+  margin: 8px;
+  cursor: pointer;
+  border: 1px dashed #4e6ae6;
+  transition: all 0.2s ease-in-out;
+
+  * {
+    color: #4e6ae6 !important;
+  }
+  svg {
+    path {
+      fill: #4e6ae6;
+    }
+  }
+
+  .cardContent {
+    background: #ffffff;
+    width: 100%;
+    border-radius: 4px;
+    padding: 8px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &:hover {
+    -webkit-box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
+    -moz-box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
+    box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
+  }
+}
