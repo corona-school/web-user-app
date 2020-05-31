@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
 
 import Button from '../button';
 import Icons from '../../assets/icons';
@@ -11,15 +10,6 @@ import CardBase from '../base/CardBase';
 import classes from './OpenRequestCard.module.scss';
 import { Text, Title } from '../Typography';
 import CardNewBase from '../base/CardNewBase';
-
-const CardTitle = styled.h3`
-  color: #333333;
-  display: inline-block;
-  line-height: 27px;
-  font-weight: normal;
-  font-size: 18px;
-  margin: 5px 0;
-`;
 
 interface Props {
   type: 'pending' | 'new';
@@ -48,8 +38,12 @@ const OpenRequestCard: React.FC<Props> = ({ type }) => {
           und werden uns schnellstmöglich bei dir melden.
         </Text>
         <div className={classes.buttonContainer}>
-          <Button onClick={() => modifyMatchesRequested((x) => x - 1)}>
-            <Icons.Undo /> Zurücknehmen
+          <Button
+            color="#F0CE52"
+            backgroundColor="#FFF7DB"
+            onClick={() => modifyMatchesRequested((x) => x - 1)}
+          >
+            <Icons.Delete /> Zurücknehmen
           </Button>
         </div>
       </CardBase>

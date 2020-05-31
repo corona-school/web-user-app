@@ -8,13 +8,6 @@ import { Text, Title } from '../Typography';
 import classes from './MatchCard.module.scss';
 import { Tag } from '../Tag';
 
-const CardContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  align-items: center;
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   flex-grow: 1;
@@ -32,8 +25,8 @@ interface Props {
 
 const MatchCard: React.FC<Props> = ({ match, type, handleDissolveMatch }) => {
   return (
-    <CardBase highlightColor="#9FE88D">
-      <CardContainer>
+    <CardBase highlightColor="#79CFCD" className={classes.baseContainer}>
+      <div className={classes.container}>
         <div className={classes.matchInfoContainer}>
           <Title size="h4" bold>
             {match.firstname} {match.lastname}
@@ -43,7 +36,7 @@ const MatchCard: React.FC<Props> = ({ match, type, handleDissolveMatch }) => {
           </Text>
         </div>
         <div className={classes.tagContainer}>
-          <Tag>
+          <Tag background="#4E555C" color="#ffffff">
             {type === 'pupil' ? `${match.grade}. Klasse` : `Stundent*in`}
           </Tag>
         </div>
@@ -59,21 +52,33 @@ const MatchCard: React.FC<Props> = ({ match, type, handleDissolveMatch }) => {
         </div>
         <ButtonContainer>
           <LinkButton
+            color="#79CFCD"
+            backgroundColor="#ebfffe"
             href={match.jitsilink}
             target="_blank"
             style={{ margin: '4px' }}
           >
-            <Icons.WriteFilled />
+            <Icons.VideoChat />
             Video-Chat
           </LinkButton>
-          <LinkButton href={'mailto:' + match.email} style={{ margin: '4px' }}>
+          <LinkButton
+            href={'mailto:' + match.email}
+            style={{ margin: '4px' }}
+            color="#79CFCD"
+            backgroundColor="#ebfffe"
+          >
             <Icons.Contact />
           </LinkButton>
-          <Button onClick={handleDissolveMatch} style={{ margin: '4px' }}>
+          <Button
+            onClick={handleDissolveMatch}
+            style={{ margin: '4px' }}
+            color="#79CFCD"
+            backgroundColor="#ebfffe"
+          >
             <Icons.Delete />
           </Button>
         </ButtonContainer>
-      </CardContainer>
+      </div>
     </CardBase>
   );
 };

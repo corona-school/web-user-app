@@ -44,7 +44,7 @@ const ContentWrapper = styled.div`
     z-index: 1;
 
     ::after {
-      flex: 0 0 40px;
+      flex: 0 0 60px;
       visibility: hidden;
       content: 'spacer';
     }

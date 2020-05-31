@@ -7,6 +7,9 @@
   cursor: pointer;
   border: 1px dashed #4e6ae6;
   transition: all 0.2s ease-in-out;
+  @media only screen and (max-width: 600px) {
+    margin-top: 16px;
+  }
 
   * {
     color: #4e6ae6 !important;

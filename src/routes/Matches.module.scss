@@ -5,12 +5,17 @@
   padding-left: 40px;
   width: 100%;
 
+  @media only screen and (max-width: 600px) {
+    padding: 16px;
+  }
+
   .containerRequests {
     min-height: 200px;
     margin-bottom: 20px;
 
     .openRequests {
       display: flex;
+      flex-wrap: wrap;
     }
   }
 }

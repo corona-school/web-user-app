@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import OpenRequestCard from '../components/cardsOld/OpenRequestCard';
+import OpenRequestCard from '../components/cards/OpenRequestCard';
 import { UserContext } from '../context/UserContext';
 import Context from '../context';
 import DissolveMatchModal from '../components/Modals/DissolveMatchModal';
 import { Title } from '../components/Typography';
 import classes from './Matches.module.scss';
-import MatchCard from '../components/cardsOld/MatchCard';
+import MatchCard from '../components/cards/MatchCard';
 
 const Matches: React.FC = () => {
   const userContext = useContext(UserContext);

@@ -7,6 +7,10 @@
   max-width: 1000px;
   margin: 8px;
 
+  @media only screen and (max-width: 600px) {
+    margin-top: 16px;
+  }
+
   .cardContent {
     background: #ffffff;
     width: 100%;

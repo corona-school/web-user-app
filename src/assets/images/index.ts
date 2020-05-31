@@ -6,6 +6,7 @@ import { ReactComponent as StepsLearnTogether } from './steps_learn_together.svg
 import { ReactComponent as StepsReadMore } from './steps_read_more.svg';
 import { ReactComponent as StepsRequest } from './steps_request.svg';
 import { ReactComponent as StepsContact } from './steps_contact.svg';
+import { ReactComponent as LetUsMeetIllustration } from './letUsMeetIllustration.svg';
 
 const ImageList = {
   StepsMatched,
@@ -16,6 +17,7 @@ const ImageList = {
   StepsReadMore,
   StepsRequest,
   StepsContact,
+  LetUsMeetIllustration,
 };
 
 const Images: { [I in keyof typeof ImageList]: any } = ImageList;

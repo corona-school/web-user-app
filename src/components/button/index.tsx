@@ -4,14 +4,20 @@ import { NavLink } from 'react-router-dom';
 export * from './IconButton';
 export * from './OldButton';
 
-const GenericButton = styled.button`
+interface ButtonProps {
+  color?: string;
+  backgroundColor?: string;
+}
+
+const GenericButton = styled.button<ButtonProps>`
   height: 34px;
   padding: 10px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fa3d7f;
-  background: #ffe8f0;
+  color: ${(props) => (props.color ? props.color : '#fa3d7f')};
+  background: ${(props) =>
+    props.backgroundColor ? props.backgroundColor : '#ffe8f0'};
   border-radius: 4px;
   font-size: 12px;
   font-weight: bold;
@@ -21,21 +27,22 @@ const GenericButton = styled.button`
   }
   svg {
     margin: 0px 4px;
-    fill: #fa3d7f;
+    fill: ${(props) => (props.color ? props.color : '#fa3d7f')};
     path {
-      fill: #fa3d7f;
+      fill: ${(props) => (props.color ? props.color : '#fa3d7f')};
     }
   }
 `;
 
-const GenericLinkButton = styled.a`
+const GenericLinkButton = styled.a<ButtonProps>`
   height: 34px;
   padding: 10px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fa3d7f;
-  background: #ffe8f0;
+  color: ${(props) => (props.color ? props.color : '#fa3d7f')};
+  background: ${(props) =>
+    props.backgroundColor ? props.backgroundColor : '#ffe8f0'};
   border-radius: 4px;
   font-size: 12px;
   font-weight: bold;
@@ -44,9 +51,9 @@ const GenericLinkButton = styled.a`
   border: none;
   svg {
     margin: 0px 4px;
-    fill: #fa3d7f;
+    fill: ${(props) => (props.color ? props.color : '#fa3d7f')};
     path {
-      fill: #fa3d7f;
+      fill: ${(props) => (props.color ? props.color : '#fa3d7f')};
     }
   }
   :active {
@@ -58,14 +65,21 @@ const GenericLinkButton = styled.a`
 `;
 
 interface Props {
+  color?: string;
+  backgroundColor?: string;
   image?: React.ReactNode;
 }
 
 type PropType = Props & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-const Button: React.FC<PropType> = ({ image, ...props }) => {
+const Button: React.FC<PropType> = ({
+  color,
+  backgroundColor,
+  image,
+  ...props
+}) => {
   return (
-    <GenericButton {...props}>
+    <GenericButton {...props} color={color} backgroundColor={backgroundColor}>
       {image}
       {props.children}
     </GenericButton>
@@ -73,19 +87,22 @@ const Button: React.FC<PropType> = ({ image, ...props }) => {
 };
 
 interface LinkProps {
+  color?: string;
+  backgroundColor?: string;
   image?: React.ReactNode;
   local?: boolean;
 }
 
 type LinkPropType = LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-const LocalLink = styled(NavLink)`
+const LocalLink = styled(NavLink)<ButtonProps>`
   padding: 10px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fa3d7f;
-  background: #ffe8f0;
+  color: ${(props) => (props.color ? props.color : '#fa3d7f')};
+  background: ${(props) =>
+    props.backgroundColor ? props.backgroundColor : '#ffe8f0'};
   border-radius: 4px;
   font-size: 12px;
   font-weight: bold;
@@ -94,14 +111,22 @@ const LocalLink = styled(NavLink)`
   border: none;
 
   svg {
-    fill: '#fa3d7f';
+    margin: 0px 4px;
+    fill: ${(props) => (props.color ? props.color : '#fa3d7f')};
+    path {
+      fill: ${(props) => (props.color ? props.color : '#fa3d7f')};
+    }
   }
 `;
 
 export const LinkButton: React.FC<LinkPropType> = ({ image, ...props }) => {
   if (props.local) {
     return (
-      <LocalLink to={props.href || '/'}>
+      <LocalLink
+        to={props.href || '/'}
+        color={props.color}
+        backgroundColor={props.backgroundColor}
+      >
         {image}
         {props.children}
       </LocalLink>
@@ -109,7 +134,11 @@ export const LinkButton: React.FC<LinkPropType> = ({ image, ...props }) => {
   }
 
   return (
-    <GenericLinkButton {...props}>
+    <GenericLinkButton
+      {...props}
+      color={props.color}
+      backgroundColor={props.backgroundColor}
+    >
       {image}
       {props.children}
     </GenericLinkButton>

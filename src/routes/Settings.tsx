@@ -5,9 +5,13 @@ import Article from '../components/Article';
 import Context from '../context';
 import SettingsPersonalCard from '../components/cards/SettingsPersonalCard';
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
-import { ButtonDestructive, LinkButton } from '../components/button';
+import Button, { ButtonDestructive, LinkButton } from '../components/button';
 import Icons from '../assets/icons';
 import { ScreeningStatus } from '../types';
+import { Text, Title } from '../components/Typography';
+import Images from '../assets/images';
+
+import classes from './Settings.module.scss';
 
 const Wrapper = styled.div`
   display: flex;
@@ -92,23 +96,37 @@ const Settings: React.FC = () => {
       <StyledReactModal
         isOpen={modalContext.openedModal === 'accountNotScreened'}
       >
-        <ModalDeactivateWrapper>
-          <span>Lern uns kennen!</span>
-          <small>
+        <div className={classes.screeningModalContainer}>
+          <Images.LetUsMeetIllustration width="400px" height="300px" />
+          <Title size="h2" className={classes.title}>
+            Lern uns kennen!
+          </Title>
+          <Text className={classes.text}>
             Wir möchten dich gerne persönlich kennenlernen und zu einem
-            digitalen Gespräch einladen, in welchem du auch deine Frage
+            digitalen Gespräch einladen, in welchem du auch deine Fragen
             loswerden kannst.
-          </small>
-          <LinkButton
-            target="_blank"
-            href="https://authentication.corona-school.de"
-          >
-            Authentifizieren
-          </LinkButton>
+          </Text>
+          <div className={classes.buttonContainer}>
+            <Button
+              backgroundColor="#EDEDED"
+              color="#6E6E6E"
+              onClick={() => modalContext.setOpenedModal(null)}
+            >
+              Später
+            </Button>
+            <LinkButton
+              backgroundColor="#FFF7DB"
+              color="#FFCC12"
+              target="_blank"
+              href="https://authentication.corona-school.de"
+            >
+              Kennenlernen
+            </LinkButton>
+          </div>
           <CloseButtonStyle onClick={() => modalContext.setOpenedModal(null)}>
             <Icons.Close />
           </CloseButtonStyle>
-        </ModalDeactivateWrapper>
+        </div>
       </StyledReactModal>
       <StyledReactModal
         isOpen={modalContext.openedModal === 'deactivateAccount'}
