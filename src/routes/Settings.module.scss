@@ -1,3 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  padding-left: 40px;
+  width: 100%;
+
+  @media only screen and (max-width: 600px) {
+    padding: 16px;
+  }
+
+  .subjectTitle {
+    margin-top: 32px;
+  }
+}
+
 .screeningModalContainer {
   display: flex;
   flex-direction: column;

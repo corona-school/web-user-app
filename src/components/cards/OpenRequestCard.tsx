@@ -26,7 +26,11 @@ const OpenRequestCard: React.FC<Props> = ({ type }) => {
       lastname: user.lastname,
       matchesRequested: f(user.matchesRequested),
       grade: user.grade,
-    }).then(fetchUserData);
+    })
+      .then(fetchUserData)
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   if (type === 'pending')

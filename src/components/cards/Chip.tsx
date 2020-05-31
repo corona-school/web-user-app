@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
-import styled, { ThemeContext } from 'styled-components';
+import React from 'react';
+import styled from 'styled-components';
 
 const OuterWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  /* padding: 7px 15px; */
 `;
 
 const ChipWrapper = styled.div`

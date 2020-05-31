@@ -1,0 +1,51 @@
+.baseContainer {
+  max-width: 600px !important;
+  min-width: 600px;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.matchInfoContainer {
+  flex-grow: 1;
+
+  .emailText {
+    margin-top: -12px !important;
+  }
+}
+
+.tagContainer {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.subjectContainer {
+  flex-grow: 1;
+  width: 300px;
+
+  .emailText {
+    margin-top: -16px !important;
+  }
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: white;
+  max-width: 500px;
+  align-items: center;
+
+  .buttonContainer {
+    display: flex;
+    button {
+      margin: 8px;
+    }
+  }
+}
