@@ -30,7 +30,9 @@ const Dashboard: React.FC = () => {
 
     return (
       <div className={classes.statusContainer}>
-        <Title size="h1">Dein aktueller Status</Title>
+        <Title size="h1">
+          Dein aktueller <span className={classes.statusText}>Status</span>
+        </Title>
         <Title size="h4">{status?.title}</Title>
         <div className={classes.content}>
           <Text large className={classes.text}>
@@ -84,9 +86,6 @@ const Dashboard: React.FC = () => {
         {renderStatusText()}
 
         <div className={classes.newsContainer}>
-          <div className={classes.bookIcon}>
-            <Icons.NotebookBlue />
-          </div>
           <Title size="h3" bold>
             Neuigkeiten
           </Title>
@@ -94,7 +93,9 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
       <div className={classes.bottomContainer}>
-        <Title size="h3">Deine nächsten Schritte</Title>
+        <Title size="h3">
+          Deine nächsten <b>Schritte</b>
+        </Title>
         <div className={classes.bottomGrid}>{renderNextSteps()}</div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { UserContext } from '../context/UserContext';
 import Context from '../context';
 import StudentExpandedCard from '../components/cardsOld/StudentExpandedCard';
 import DissolveMatchModal from '../components/Modals/DissolveMatchModal';
+import { Title } from '../components/Typography';
 
 const Matches: React.FC = () => {
   const userContext = useContext(UserContext);
@@ -13,33 +14,28 @@ const Matches: React.FC = () => {
 
   const openRequests = (() => {
     if (userContext.user.type === 'pupil') {
-      if (userContext.user.matches.length === 1) {
-        return undefined;
-      } else if (userContext.user.matchesRequested === 0) {
+      if (userContext.user.matches.length === 1) return <div>Empty State</div>;
+      if (userContext.user.matchesRequested === 0) {
         return <OpenRequestCard type="new" />;
-      } else if (userContext.user.matchesRequested === 1) {
+      }
+      if (userContext.user.matchesRequested === 1) {
         return <OpenRequestCard type="pending" />;
       }
     }
 
-    switch (userContext.user.matchesRequested) {
-      case 0:
-        return <OpenRequestCard type="new" />;
-      case 1:
-        return (
-          <>
-            <OpenRequestCard type="pending" />
-            <OpenRequestCard type="new" />
-          </>
-        );
-      default:
-        return (
-          <>
-            <OpenRequestCard type="pending" />
-            <OpenRequestCard type="pending" />
-          </>
-        );
+    if (userContext.user.matchesRequested === 0) {
+      return <OpenRequestCard type="new" />;
     }
+    if (userContext.user.matchesRequested === 1) {
+      return <OpenRequestCard type="new" />;
+    }
+
+    return (
+      <>
+        <OpenRequestCard type="pending" />
+        <OpenRequestCard type="pending" />
+      </>
+    );
   })();
 
   const currentMatches = userContext.user.matches.length
@@ -64,13 +60,13 @@ const Matches: React.FC = () => {
 
   return (
     <>
-      {/* <Wrapper> */}
-      <Article title="Deine Anfragen" cardDirection="row">
+      <div>
+        <Title size="h1">Deine Anfragen</Title>
         {openRequests}
-      </Article>
-      <Article title="Deine Zuordnungen">{currentMatches}</Article>
-      <Article title="Entfernte Zuordnungen"></Article>
-      {/* </Wrapper> */}
+        <Title size="h2">Deine Zuordnungen</Title>
+        {currentMatches}
+        {false && <Title size="h2">Entfernte Zuordnungen</Title>}
+      </div>
     </>
   );
 };

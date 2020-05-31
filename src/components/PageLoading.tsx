@@ -1,28 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import ClipLoader from 'react-spinners/ClipLoader';
 
-const PageWrapper = styled.div<{ opacity: number }>`
+const PageWrapper = styled.div`
   align-items: center;
-  background-color: ${(props) => props.theme.color.pageBackground};
   display: flex;
   font-size: 18px;
   min-height: 100vh;
+  min-width: 100vw;
   justify-content: center;
-
-  p {
-    opacity: ${(props) => props.opacity};
-    transition: opacity 1s ease 1s;
-  }
 `;
 
 const PageLoading: React.FC = ({ children }) => {
-  const [opacity, setOpacity] = useState(0);
-
-  useEffect(() => setOpacity(1), []);
+  if (!children) {
+    return (
+      <PageWrapper>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <ClipLoader size={100} color={'#123abc'} loading={true} />
+          <p>Du wirst eingeloggt..</p>
+        </div>
+      </PageWrapper>
+    );
+  }
 
   return (
-    <PageWrapper opacity={opacity}>
-      <p>{children || 'Laden...'}</p>
+    <PageWrapper>
+      <div>{children}</div>
     </PageWrapper>
   );
 };

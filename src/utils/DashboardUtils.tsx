@@ -149,7 +149,7 @@ const PrepareLessonStep: Step = {
   title: 'Gespräch vorbereiten',
   image: <Images.StepsReadMore width="160px" height="160px" />,
   texts: [
-    'Zur Vorbereitung auf dein erstes Kennenlerngespräch haben wir verschiedene Leitfäden entwickelt, an welchen du dich orientieren kannst.',
+    'Zur Vorbereitung auf dein erstes Kennenlern-gespräch haben wir verschiedene Leitfäden entwickelt, an welchen du dich orientieren kannst.',
     'Bitte lese unsere Dokumente sorgfältig durch und mache dich mit unseren ethischen Standards vertraut.',
     'Profitiere von unseren Empfehlungen für gute, digitale Lernunterstützung.',
   ],
