@@ -103,6 +103,9 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
 
     return (
       <div className={classes.generalInformationContainer}>
+        <Text className={classes.description}>
+          1/3 Allgemeine Informationen eintragen
+        </Text>
         <Title size="h5" bold>
           Schüler
         </Title>
@@ -228,7 +231,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
 
     return (
       <div>
-        <Text>Tätigkeiten eintragen</Text>
+        <Text className={classes.description}>2/3 Tätigkeiten eintragen</Text>
         {[0, 1, 2, 3, 4].map((i) => {
           return (
             <Select
@@ -297,22 +300,28 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
 
   const renderDownloadPage = () => {
     return (
-      <div className={classes.downloadContainer}>
-        <Button
-          className={classes.downloadButton}
-          backgroundColor="#4E6AE6"
-          color="#ffffff"
-          onClick={downloadPDF}
-        >
-          {loading ? (
-            <ClipLoader size={20} color={'#ffffff'} loading={loading} />
-          ) : (
-            <>
-              <Icons.DownloadWeb />
-              Download
-            </>
-          )}
-        </Button>
+      <div>
+        <Text className={classes.description}>
+          3/3 Zertifikat herunterladen
+        </Text>
+
+        <div className={classes.downloadContainer}>
+          <Button
+            className={classes.downloadButton}
+            backgroundColor="#4E6AE6"
+            color="#ffffff"
+            onClick={downloadPDF}
+          >
+            {loading ? (
+              <ClipLoader size={20} color={'#ffffff'} loading={loading} />
+            ) : (
+              <>
+                <Icons.DownloadWeb />
+                Download
+              </>
+            )}
+          </Button>
+        </div>
       </div>
     );
   };
