@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { AuthContext } from './AuthContext';
 import { User, Subject } from '../types';
 import * as api from '../api/api';
+import { AxiosResponse } from 'axios';
+import { CertificateData } from '../components/Modals/CerificateModal';
 
 export const ApiContext = React.createContext<{
   getUserData: () => Promise<any>;
@@ -9,12 +11,16 @@ export const ApiContext = React.createContext<{
   requestNewToken: (email: string) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
   putUserActiveFalse: () => Promise<void>;
+  getCertificate: (
+    cerfiticateData: CertificateData
+  ) => Promise<AxiosResponse<any>>;
 }>({
   getUserData: () => Promise.reject(),
   dissolveMatch: (uuid, reason?) => Promise.reject(),
   requestNewToken: api.axiosRequestNewToken,
   putUserSubjects: (subjects) => Promise.reject(),
   putUserActiveFalse: () => Promise.reject(),
+  getCertificate: (cerfiticateData) => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -35,6 +41,11 @@ export const ApiProvider: React.FC = ({ children }) => {
   const putUserActiveFalse = (): Promise<void> =>
     api.axiosPutUserActive(id, token, false);
 
+  const getCertificate = (
+    certificateDate: CertificateData
+  ): Promise<AxiosResponse<any>> =>
+    api.axiosGetCertificate(id, token, certificateDate);
+
   return (
     <ApiContext.Provider
       value={{
@@ -43,6 +54,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         requestNewToken: api.axiosRequestNewToken,
         putUserSubjects,
         putUserActiveFalse,
+        getCertificate,
       }}
     >
       {children}

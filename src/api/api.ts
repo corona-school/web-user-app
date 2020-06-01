@@ -1,5 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Credentials, User, Subject } from '../types';
+import { CertificateData } from '../components/Modals/CerificateModal';
 
 const dev = process.env.NODE_ENV === 'development';
 
@@ -138,6 +139,35 @@ export const axiosPutUserActive = (
       .catch((error) => {
         reject();
         if (dev) console.error('putUserActive failed:', error);
+      });
+  });
+};
+
+export const axiosGetCertificate = (
+  id: string,
+  token: string,
+  certificateDate: CertificateData
+): Promise<AxiosResponse<any>> => {
+  const url = `${apiURL}/certificate/${id}/00000000-0000-0001-0002-1b4c4c526364`;
+  console.log(url);
+  return new Promise((resolve, reject) => {
+    const params = new URLSearchParams();
+    params.append('subjects', certificateDate.subjects.join(','));
+    params.append('endDate', certificateDate.endDate.toString());
+    params.append('hoursPerWeek', certificateDate.hoursPerWeek.toString());
+    params.append('hoursTotal', (certificateDate.hoursPerWeek * 3).toString());
+    params.append(
+      'categories',
+      certificateDate.activities.map((c) => c.text).join('\n')
+    );
+    axios
+      .get(url, { headers: { token }, responseType: 'blob', params })
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        console.log('getCertificate failed:', error);
+        reject();
       });
   });
 };

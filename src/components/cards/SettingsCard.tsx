@@ -6,6 +6,7 @@ import Button from '../button';
 import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
+import CertificateModal from '../Modals/CerificateModal';
 
 import { Tag } from '../Tag';
 import context from '../../context';
@@ -61,14 +62,16 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             </Text>
           </div>
           <ButtonContainer>
-            <Button
-              color="#FA3D7F"
-              backgroundColor="#FFE8F0"
-              style={{ margin: '4px' }}
-            >
-              Zertifikat erstellen
-            </Button>
-
+            {user.type === 'student' && (
+              <Button
+                onClick={() => modalContext.setOpenedModal('certificateModal')}
+                color="#FA3D7F"
+                backgroundColor="#FFE8F0"
+                style={{ margin: '4px' }}
+              >
+                Bescheinigung anfordern
+              </Button>
+            )}
             <Button
               onClick={() => modalContext.setOpenedModal('deactivateAccount')}
               style={{ margin: '4px' }}
@@ -80,6 +83,7 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
           </ButtonContainer>
         </div>
       </CardBase>
+      <CertificateModal user={user} />
       <StyledReactModal
         isOpen={modalContext.openedModal === 'deactivateAccount'}
       >
