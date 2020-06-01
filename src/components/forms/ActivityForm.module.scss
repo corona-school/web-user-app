@@ -1,0 +1,24 @@
+.selectContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-top: 12px;
+  .buttonStyle {
+    margin-left: 4px;
+  }
+}
+.inputContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 4px;
+
+  .inputField {
+    flex: auto;
+    height: 30px;
+  }
+  .addLink {
+    flex: none;
+    padding: 4px;
+    display: block;
+    cursor: pointer;
+  }
+}

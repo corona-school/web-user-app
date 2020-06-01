@@ -148,7 +148,7 @@ export const axiosGetCertificate = (
   token: string,
   certificateDate: CertificateData
 ): Promise<AxiosResponse<any>> => {
-  const url = `${apiURL}/certificate/${id}/00000000-0000-0001-0002-1b4c4c526364`;
+  const url = `${apiURL}/certificate/${id}/${certificateDate.student}`;
   console.log(url);
   return new Promise((resolve, reject) => {
     const params = new URLSearchParams();
@@ -156,10 +156,7 @@ export const axiosGetCertificate = (
     params.append('endDate', certificateDate.endDate.toString());
     params.append('hoursPerWeek', certificateDate.hoursPerWeek.toString());
     params.append('hoursTotal', (certificateDate.hoursPerWeek * 3).toString());
-    params.append(
-      'categories',
-      certificateDate.activities.map((c) => c.text).join('\n')
-    );
+    params.append('categories', certificateDate.activities.join('\n'));
     axios
       .get(url, { headers: { token }, responseType: 'blob', params })
       .then((response) => {

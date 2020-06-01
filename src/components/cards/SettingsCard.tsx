@@ -65,8 +65,8 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             {user.type === 'student' && (
               <Button
                 onClick={() => modalContext.setOpenedModal('certificateModal')}
-                color="#FA3D7F"
-                backgroundColor="#FFE8F0"
+                color="#ffffff"
+                backgroundColor="#4E6AE6"
                 style={{ margin: '4px' }}
               >
                 Bescheinigung anfordern

@@ -8,8 +8,9 @@ import { Title, Text } from '../Typography';
 import Button from '../button';
 import Icons from '../../assets/icons';
 import { User } from '../../types';
-import { Select, DatePicker, InputNumber } from 'antd';
+import { Select, DatePicker, InputNumber, Divider, Input, message } from 'antd';
 import moment from 'moment';
+import ActivityForm from '../forms/ActivityForm';
 
 const { Option } = Select;
 
@@ -30,13 +31,14 @@ export interface CertificateData {
   hoursPerWeek: number;
   subjects: string[];
   mediaType: string | null;
-  activities: Activity[];
+  activities: string[];
 }
 
 const CertificateModal: React.FC<Props> = ({ user }) => {
   const [loading, setLoading] = useState(false);
+
   const [certificateData, setCertificateData] = useState<CertificateData>({
-    endDate: Date.now(),
+    endDate: moment().unix(),
     hoursPerWeek: 1.0,
     subjects: [],
     mediaType: null,
@@ -104,7 +106,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     return (
       <div className={classes.generalInformationContainer}>
         <Text className={classes.description}>
-          1/3 Allgemeine Informationen eintragen
+          Schritt 1: Allgemeine Informationen eintragen
         </Text>
         <Title size="h5" bold>
           Schüler
@@ -144,10 +146,13 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           <DatePicker
             style={{ marginLeft: '4px' }}
             allowClear={false}
-            value={moment(certificateData.endDate)}
+            value={moment(certificateData.endDate * 1000)}
             onChange={(v) => {
               if (v) {
-                setCertificateData({ ...certificateData, endDate: v.unix() });
+                setCertificateData({
+                  ...certificateData,
+                  endDate: v.unix(),
+                });
               }
             }}
             disabledDate={(currentDate) => {
@@ -217,65 +222,15 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   };
 
   const renderActivityForm = () => {
-    const activities = [
-      'Vorbereitung, Planung und Gestaltung von Unterrichtsstunden',
-      'Bearbeitung und Vermittlung von Unterrichtsinhalten',
-      'Digitale Aufbereitung und Veranschaulichung von Unterrichtsinhalten',
-      'Vertiefung und Wiederholung von Unterrichtsinhalten',
-      'Gemeinsame Bearbeitung von Übungs- und Hausaufgaben',
-      'Korrektur von Übungs- und Hausaufgaben',
-      'Digitale Unterstützung bei der Prüfungsvorbereitung',
-      'Digitale Unterstützung beim Lernen',
-      'Begleitung auf dem Weg zum selbstständigen Lernen]',
-    ];
-
     return (
       <div>
-        <Text className={classes.description}>2/3 Tätigkeiten eintragen</Text>
-        {[0, 1, 2, 3, 4].map((i) => {
-          return (
-            <Select
-              allowClear
-              value={
-                certificateData.activities.find((k) => k.index === i)?.text
-              }
-              onChange={(v: string) => {
-                if (!v) {
-                  const newActivies: Activity[] = certificateData.activities.filter(
-                    (a) => a.index !== i
-                  );
-                  setCertificateData({
-                    ...certificateData,
-                    activities: newActivies,
-                  });
-                  return;
-                }
-                const newActivies: Activity[] = [
-                  ...certificateData.activities,
-                  {
-                    index: i,
-                    text: v,
-                  },
-                ];
-                setCertificateData({
-                  ...certificateData,
-                  activities: newActivies,
-                });
-              }}
-              placeholder="Wähle eine Tätigkeit aus"
-              style={{ width: '100%', marginTop: '8px' }}
-            >
-              {activities
-                .filter(
-                  (a) =>
-                    !certificateData.activities.map((a) => a.text).includes(a)
-                )
-                .map((a) => {
-                  return <Option value={a}>{a}</Option>;
-                })}
-            </Select>
-          );
-        })}
+        <Text className={classes.description}>
+          Schritt 2: Tätigkeiten eintragen
+        </Text>
+        <ActivityForm
+          certificateData={certificateData}
+          setCertificateData={(data) => setCertificateData(data)}
+        />
       </div>
     );
   };
@@ -294,7 +249,10 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        message.error(
+          'Ein Fehler ist aufgetreten. Versuche er später nochmal.'
+        );
+        setLoading(false);
       });
   };
 
@@ -302,7 +260,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     return (
       <div>
         <Text className={classes.description}>
-          3/3 Zertifikat herunterladen
+          Schritt 3: Bescheinigung herunterladen
         </Text>
 
         <div className={classes.downloadContainer}>
@@ -343,6 +301,22 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
 
   const onClick = (newStep: number) => {
     if (newStep < STEPS && newStep >= 0) {
+      if (newStep === 2 && !certificateData.student) {
+        message.info('Ein Schüler muss ausgewählt sein.');
+        return;
+      }
+      if (newStep === 2 && certificateData.subjects.length === 0) {
+        message.info('Mindestens ein Fach muss ausgewählt sein.');
+        return;
+      }
+      if (newStep === 2 && !certificateData.mediaType) {
+        message.info('Ein Medium muss ausgewählt sein.');
+        return;
+      }
+      if (newStep === 3 && certificateData.activities.length === 0) {
+        message.info('Mindestens eine Tätigkeit muss ausgewählt sein.');
+        return;
+      }
       setStep(newStep);
     }
   };
@@ -352,7 +326,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
       <div className={classes.modal}>
         <div className={classes.stepContainer}>
           <div className={classes.titleBar}>
-            <Title size="h2">Zertifikat beantragen</Title>
+            <Title size="h2">Bescheinigung beantragen</Title>
             <Button
               color="#B5B5B5"
               backgroundColor="#ffffff"

@@ -150,7 +150,7 @@ const PrepareLessonStep: Step = {
   image: <Images.StepsReadMore width="160px" height="160px" />,
   texts: [
     'Zur Vorbereitung auf dein erstes Kennenlern-gespräch haben wir verschiedene Leitfäden entwickelt, an welchen du dich orientieren kannst.',
-    'Bitte lese unsere Dokumente sorgfältig durch und mache dich mit unseren ethischen Standards vertraut.',
+    'Bitte lies unsere Dokumente sorgfältig durch und mache dich mit unseren ethischen Standards vertraut.',
     'Profitiere von unseren Empfehlungen für gute, digitale Lernunterstützung.',
   ],
   action: (
@@ -165,11 +165,11 @@ const PrepareLessonStep: Step = {
 };
 
 const LessonStep: Step = {
-  title: 'Gemeinsamen lernen',
+  title: 'Gemeinsam lernen',
   image: <Images.StepsLearnTogether width="160px" height="160px" />,
   texts: [
     'In einem ersten digitalen Gespräch könnt ihr euch besser kennenlernen und das gemeinsame Lernen starten.',
-    'Ganz unkompliziert könnt ihr direkt im Browser oder mit dem Handy zur vereinbarten Uhrzeit in einen gemeinsamen Video-Chat eintreten.',
+    'Dazu könnt ihr direkt im Browser oder mit dem Handy zur vereinbarten Uhrzeit in einen gemeinsamen Video-Chat eintreten.',
     'Bei Schwierigkeiten kannst du dich an support@corona-school.de wenden.',
   ],
   action: (
@@ -240,14 +240,14 @@ const StudentNews = [
 
 const PupilNews = [
   {
-    headline: 'Außerschulische Angebote',
+    headline: 'Sommer AGs',
     text:
-      'Wir möchten euch fördern und Möglichkeiten zur Weiterbildung wie Orientierung bieten. Weitere Informationen erhaltet ihr per E-Mail.',
+      'Der Sommerurlaub fällt aus? Wir bieten spannende digitale und kostenfreie AGs in den Sommerferien an.',
   },
   {
-    headline: 'Prioritäten vergeben',
+    headline: 'Repetitorien',
     text:
-      'In Kürze könnt ihr eure Fächer priorisieren. So erhaltet ihr in den Fächern Unterstützung, in denen ihr es am dringendsten benötigt.',
+      'Dir wurden wichtige Unterrichtsinhalte während der Corona-Krise nicht erklärt? Unsere Repetitorien sind deine Rettung!',
   },
 ];
 
