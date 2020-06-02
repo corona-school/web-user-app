@@ -49,3 +49,12 @@ export type AuthStatusOptions =
   | 'missing'
   | 'authorized'
   | 'invalid';
+
+export interface CourseOverview {
+  id: number;
+  name: string;
+  outline: string;
+  category: string;
+  startDate: number;
+  instructor: string;
+}

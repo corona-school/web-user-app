@@ -6,6 +6,7 @@ import DissolveMatchModal from '../components/Modals/DissolveMatchModal';
 import { Title } from '../components/Typography';
 import classes from './Matches.module.scss';
 import MatchCard from '../components/cards/MatchCard';
+import { Empty } from 'antd';
 
 const Matches: React.FC = () => {
   const userContext = useContext(UserContext);
@@ -14,7 +15,9 @@ const Matches: React.FC = () => {
   const openRequests = (() => {
     if (userContext.user.type === 'pupil') {
       if (userContext.user.matches.length === 1)
-        return <div>Du hast im moment keine offenen Anfragen.</div>;
+        return (
+          <Empty description="Du hast im moment keine offenen Anfragen."></Empty>
+        );
       if (userContext.user.matchesRequested === 0) {
         return <OpenRequestCard type="new" />;
       }

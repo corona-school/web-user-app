@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { AuthContext } from './AuthContext';
-import { User, Subject } from '../types';
+import { User, Subject, CourseOverview } from '../types';
 import * as api from '../api/api';
 import { AxiosResponse } from 'axios';
 import { CertificateData } from '../components/Modals/CerificateModal';
@@ -14,6 +14,7 @@ export const ApiContext = React.createContext<{
   getCertificate: (
     cerfiticateData: CertificateData
   ) => Promise<AxiosResponse<any>>;
+  getCourses: () => Promise<CourseOverview[]>;
 }>({
   getUserData: () => Promise.reject(),
   dissolveMatch: (uuid, reason?) => Promise.reject(),
@@ -21,6 +22,7 @@ export const ApiContext = React.createContext<{
   putUserSubjects: (subjects) => Promise.reject(),
   putUserActiveFalse: () => Promise.reject(),
   getCertificate: (cerfiticateData) => Promise.reject(),
+  getCourses: () => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -46,6 +48,9 @@ export const ApiProvider: React.FC = ({ children }) => {
   ): Promise<AxiosResponse<any>> =>
     api.axiosGetCertificate(id, token, certificateDate);
 
+  const getCourses = (): Promise<CourseOverview[]> =>
+    api.axiosGetCourses(token);
+
   return (
     <ApiContext.Provider
       value={{
@@ -55,6 +60,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         putUserSubjects,
         putUserActiveFalse,
         getCertificate,
+        getCourses,
       }}
     >
       {children}

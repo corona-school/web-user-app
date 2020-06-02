@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { Credentials, User, Subject } from '../types';
+import { Credentials, User, Subject, CourseOverview } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
 
 const dev = process.env.NODE_ENV === 'development';
@@ -166,6 +166,24 @@ export const axiosGetCertificate = (
       .catch((error) => {
         console.log('getCertificate failed:', error);
         reject();
+      });
+  });
+};
+
+export const axiosGetCourses = (token: string): Promise<CourseOverview[]> => {
+  const url = `${apiURL}/courses`;
+
+  return new Promise((resolve, reject) => {
+    const params = new URLSearchParams();
+    params.append('fields', 'name,outline,category,startDate,instructor');
+
+    axios
+      .get(url, { headers: { token }, params })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
       });
   });
 };

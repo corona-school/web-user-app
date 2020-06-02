@@ -16,6 +16,7 @@ import Verify from './routes/Verify';
 import { ScreeningStatus } from './types';
 import NotFound from './routes/NotFound';
 import PageComponent from './components/PageComponent';
+import Course from './routes/Course';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -59,6 +60,9 @@ const App: React.FC = () => {
           </Route>
           <PrivateRoute path="/dashboard">
             <Dashboard />
+          </PrivateRoute>
+          <PrivateRoute path="/courses">
+            <Course />
           </PrivateRoute>
           <PrivateRoute
             path="/matches"
