@@ -22,7 +22,7 @@ const initialActivities = [
   'Korrektur von Übungs- und Hausaufgaben',
   'Digitale Unterstützung bei der Prüfungsvorbereitung',
   'Digitale Unterstützung beim Lernen',
-  'Begleitung auf dem Weg zum selbstständigen Lernen]',
+  'Begleitung auf dem Weg zum selbstständigen Lernen',
 ];
 
 const ActivityForm = ({ certificateData, setCertificateData }: Props) => {

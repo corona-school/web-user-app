@@ -25,7 +25,7 @@ interface Props {
 
 const MatchCard: React.FC<Props> = ({ match, type, handleDissolveMatch }) => {
   return (
-    <CardBase highlightColor="#79CFCD" className={classes.baseContainer}>
+    <CardBase highlightColor="#71DE5A" className={classes.baseContainer}>
       <div className={classes.container}>
         <div className={classes.matchInfoContainer}>
           <Title size="h4" bold>
@@ -52,8 +52,8 @@ const MatchCard: React.FC<Props> = ({ match, type, handleDissolveMatch }) => {
         </div>
         <ButtonContainer>
           <LinkButton
-            color="#79CFCD"
-            backgroundColor="#ebfffe"
+            color="#71DE5A"
+            backgroundColor="#F4FFF2"
             href={match.jitsilink}
             target="_blank"
             style={{ margin: '4px' }}
@@ -64,16 +64,16 @@ const MatchCard: React.FC<Props> = ({ match, type, handleDissolveMatch }) => {
           <LinkButton
             href={'mailto:' + match.email}
             style={{ margin: '4px' }}
-            color="#79CFCD"
-            backgroundColor="#ebfffe"
+            color="#71DE5A"
+            backgroundColor="#F4FFF2"
           >
             <Icons.Contact />
           </LinkButton>
           <Button
             onClick={handleDissolveMatch}
             style={{ margin: '4px' }}
-            color="#79CFCD"
-            backgroundColor="#ebfffe"
+            color="#71DE5A"
+            backgroundColor="#F4FFF2"
           >
             <Icons.Delete />
           </Button>

@@ -5,11 +5,13 @@ import classes from './Course.module.scss';
 import { CourseOverview } from '../types';
 import { message, Empty } from 'antd';
 import { Title } from '../components/Typography';
+import CourseCard from '../components/cards/CourseCard';
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
   const [courses, setCourses] = useState<CourseOverview[]>([]);
   const apiContext = useContext(Context.Api);
+  const userContext = useContext(Context.User);
 
   useEffect(() => {
     setLoading(true);
@@ -29,7 +31,11 @@ const Course = () => {
     return <div>Kurse werden geladen...</div>;
   }
 
-  const myCourses = courses.filter((c) => c.instructor === 'Leon Jackson');
+  const myCourses = courses.filter(
+    (c) =>
+      c.instructor ===
+      `${userContext.user.firstname} ${userContext.user.lastname}`
+  );
 
   return (
     <div className={classes.container}>
@@ -47,7 +53,7 @@ const Course = () => {
       </div>
       <Title size="h2">Alle Kurse</Title>
       {courses.map((c) => {
-        return <div>{c.name}</div>;
+        return <CourseCard course={c} />;
       })}
     </div>
   );

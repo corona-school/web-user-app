@@ -44,7 +44,7 @@ const Settings: React.FC = () => {
     if (userContext.user.screeningStatus === ScreeningStatus.Unscreened) {
       modalContext.setOpenedModal('accountNotScreened');
     }
-  }, [userContext.user.screeningStatus, modalContext]);
+  }, [userContext.user.screeningStatus]);
 
   return (
     <div className={classes.container}>
