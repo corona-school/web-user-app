@@ -11,13 +11,13 @@ export interface User {
   matchesRequested?: number;
   subjects: Subject[];
   matches: Match[];
-  screeningStatus: ScreeningStatus
+  screeningStatus: ScreeningStatus;
 }
 
 export enum ScreeningStatus {
-  Unscreened = "UNSCREENED",
-  Accepted = "ACCEPTED",
-  Rejected = "REJECTED"
+  Unscreened = 'UNSCREENED',
+  Accepted = 'ACCEPTED',
+  Rejected = 'REJECTED',
 }
 
 export type SubjectName = typeof subjectOptions[number];
@@ -32,6 +32,7 @@ export interface Match {
   uuid: string;
   firstname: string;
   lastname: string;
+  date: number;
   grade?: number;
   subjects: string[];
   email: string;

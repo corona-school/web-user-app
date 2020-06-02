@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import ClipLoader from 'react-spinners/ClipLoader';
 
@@ -8,7 +8,7 @@ import { Title, Text } from '../Typography';
 import Button from '../button';
 import Icons from '../../assets/icons';
 import { User } from '../../types';
-import { Select, DatePicker, InputNumber, Divider, Input, message } from 'antd';
+import { Select, DatePicker, InputNumber, message } from 'antd';
 import moment from 'moment';
 import ActivityForm from '../forms/ActivityForm';
 
@@ -28,7 +28,9 @@ export interface Activity {
 export interface CertificateData {
   student?: string;
   endDate: number;
+  weekCount: number;
   hoursPerWeek: number;
+  hoursTotal: number;
   subjects: string[];
   mediaType: string | null;
   activities: string[];
@@ -39,7 +41,9 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
 
   const [certificateData, setCertificateData] = useState<CertificateData>({
     endDate: moment().unix(),
+    weekCount: 0,
     hoursPerWeek: 1.0,
+    hoursTotal: 0,
     subjects: [],
     mediaType: null,
     activities: [],
@@ -48,6 +52,28 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   const [currentStep, setStep] = useState(0);
   const modalContext = useContext(context.Modal);
   const apiContext = useContext(context.Api);
+
+  useEffect(() => {
+    const selectedPupil = user.matches.find(
+      (s) => s.uuid === certificateData.student
+    );
+    if (selectedPupil) {
+      const b = moment(new Date(selectedPupil.date), 'DD/MM/YYYY');
+      const a = moment(new Date(certificateData.endDate * 1000), 'DD/MM/YYYY');
+
+      const weekCount = a.diff(b, 'week');
+      setCertificateData({
+        ...certificateData,
+        weekCount: weekCount,
+        hoursTotal: certificateData.hoursPerWeek * weekCount,
+      });
+    }
+  }, [
+    user.matches,
+    certificateData.hoursPerWeek,
+    certificateData.endDate,
+    certificateData.student,
+  ]);
 
   const renderIntroduction = () => {
     return (
@@ -139,12 +165,13 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           <DatePicker
             disabled
             bordered={false}
+            value={moment(selectedPupil?.date)}
             defaultValue={moment(moment(Date.now()), dateFormat)}
             format={dateFormat}
           />{' '}
           bis zum{' '}
           <DatePicker
-            style={{ marginLeft: '4px' }}
+            style={{ marginLeft: '4px', marginRight: '4px' }}
             allowClear={false}
             value={moment(certificateData.endDate * 1000)}
             onChange={(v) => {
@@ -159,7 +186,8 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
               return moment().diff(currentDate) <= 0;
             }}
             format={dateFormat}
-          />
+          />{' '}
+          ({certificateData.weekCount} Wochen)
         </div>
         <Title size="h5" bold>
           Fächer
@@ -215,7 +243,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
               }
             }}
           />{' '}
-          h/Woche
+          h/Woche (insgesamt {certificateData.hoursTotal} h)
         </div>
       </div>
     );
@@ -243,7 +271,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'test.pdf');
+        link.setAttribute('download', 'certificate.pdf');
         document.body.appendChild(link);
         link.click();
         setLoading(false);

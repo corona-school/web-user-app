@@ -108,12 +108,14 @@ const ActivityForm = ({ certificateData, setCertificateData }: Props) => {
                   return <Option value={a}>{a}</Option>;
                 })}
             </Select>
-            <Button
-              className={classes.buttonStyle}
-              onClick={() => deleteItem(i)}
-            >
-              <Icons.Delete />
-            </Button>
+            {certificateData.activities[i] && (
+              <Button
+                className={classes.buttonStyle}
+                onClick={() => deleteItem(i)}
+              >
+                <Icons.Delete />
+              </Button>
+            )}
           </div>
         );
       })}

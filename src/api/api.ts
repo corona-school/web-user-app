@@ -154,8 +154,9 @@ export const axiosGetCertificate = (
     const params = new URLSearchParams();
     params.append('subjects', certificateDate.subjects.join(','));
     params.append('endDate', certificateDate.endDate.toString());
+    params.append('medium', certificateDate.mediaType || '');
     params.append('hoursPerWeek', certificateDate.hoursPerWeek.toString());
-    params.append('hoursTotal', (certificateDate.hoursPerWeek * 3).toString());
+    params.append('hoursTotal', certificateDate.hoursTotal.toString());
     params.append('categories', certificateDate.activities.join('\n'));
     axios
       .get(url, { headers: { token }, responseType: 'blob', params })

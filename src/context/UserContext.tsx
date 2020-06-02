@@ -21,6 +21,7 @@ export const defaultUser = {
       subjects: ['Mathe', 'Deutsch', 'Englisch'],
       uuid: 'defaultUuid',
       jitsilink: 'defaultJitsilink',
+      date: 120301923,
     },
   ],
   subjects: [
