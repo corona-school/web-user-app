@@ -1,42 +1,14 @@
 import React, { AnchorHTMLAttributes } from 'react';
 import styled from 'styled-components';
+import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
+import classes from './index.module.scss';
 export * from './IconButton';
 export * from './OldButton';
 
-interface ButtonProps {
-  color?: string;
-  backgroundColor?: string;
-}
-
-const GenericButton = styled.button<ButtonProps>`
-  height: 34px;
-  padding: 10px 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${(props) => (props.color ? props.color : '#fa3d7f')};
-  background: ${(props) =>
-    props.backgroundColor ? props.backgroundColor : '#ffe8f0'};
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  :focus {
-    outline: none;
-  }
-  svg {
-    margin: 0px 4px;
-    fill: ${(props) => (props.color ? props.color : '#fa3d7f')};
-    path {
-      fill: ${(props) => (props.color ? props.color : '#fa3d7f')};
-    }
-  }
-`;
-
 const GenericLinkButton = styled.a<ButtonProps>`
   height: 34px;
-  padding: 10px 10px;
+  padding: 4px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -82,12 +54,20 @@ const Button: React.FC<PropType> = ({
   ...props
 }) => {
   return (
-    <GenericButton {...props} color={color} backgroundColor={backgroundColor}>
+    <button
+      style={{ backgroundColor: backgroundColor, color: color }}
+      className={classnames(classes.baseButton, props.className)}
+    >
       {image}
       {props.children}
-    </GenericButton>
+    </button>
   );
 };
+
+interface ButtonProps {
+  color?: string;
+  backgroundColor?: string;
+}
 
 interface LinkProps {
   color?: string;
@@ -99,7 +79,7 @@ interface LinkProps {
 type LinkPropType = LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const LocalLink = styled(NavLink)<ButtonProps>`
-  padding: 10px 16px;
+  padding: 4px 16px;
   display: flex;
   align-items: center;
   justify-content: center;

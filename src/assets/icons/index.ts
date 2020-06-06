@@ -34,6 +34,13 @@ import { ReactComponent as BackgroundTriangleYellow } from './background_triangl
 import { ReactComponent as WriteFilled } from './write-filled.svg';
 import { ReactComponent as DownloadWeb } from './download-web.svg';
 
+import { ReactComponent as SignupEmailSent } from './signup/email-sent.svg';
+import { ReactComponent as SignupNumber1 } from './signup/number-1.svg';
+import { ReactComponent as SignupNumber2 } from './signup/number-2.svg';
+import { ReactComponent as SignupNumber3 } from './signup/number-3.svg';
+import { ReactComponent as SignupSchoolBag } from './signup/school-bag.svg';
+import { ReactComponent as SignupTutor } from './signup/tutor.svg';
+
 const IconsList = {
   Edit,
   Add,
@@ -70,6 +77,12 @@ const IconsList = {
   BackgroundTriangleYellow,
   WriteFilled,
   DownloadWeb,
+  SignupEmailSent,
+  SignupNumber1,
+  SignupNumber2,
+  SignupNumber3,
+  SignupSchoolBag,
+  SignupTutor,
 };
 
 const Icons: { [I in keyof typeof IconsList]: any } = IconsList;

@@ -17,6 +17,9 @@ import { ScreeningStatus } from './types';
 import NotFound from './routes/NotFound';
 import PageComponent from './components/PageComponent';
 import Course from './routes/Course';
+import Register from './routes/Register';
+import RegisterTutee from './routes/RegisterTutee';
+import RegisterTutor from './routes/RegisterTutor';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -50,6 +53,15 @@ const App: React.FC = () => {
       <Switch>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/register">
+          <Register />
+        </Route>
+        <Route path="/register/tutee">
+          <RegisterTutee />
+        </Route>
+        <Route path="/register/tutor">
+          <RegisterTutor />
         </Route>
         <Route path="/verify">
           <Verify />

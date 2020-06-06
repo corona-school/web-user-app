@@ -8,6 +8,12 @@ import { ReactComponent as StepsRequest } from './steps_request.svg';
 import { ReactComponent as StepsContact } from './steps_contact.svg';
 import { ReactComponent as LetUsMeetIllustration } from './letUsMeetIllustration.svg';
 
+import { ReactComponent as SignupBackground1 } from './signup/background-bottom-right.svg';
+import { ReactComponent as SignupBackground2 } from './signup/background-top-left.svg';
+import { ReactComponent as SignupBackgroundCircle1 } from './signup/bright-yellow-circle.svg';
+import { ReactComponent as SignupBackgroundCircle2 } from './signup/yellow-circle.svg';
+import { ReactComponent as SignupBackgroundZickZack } from './signup/zick-zack-line.svg';
+
 const ImageList = {
   StepsMatched,
   StepsCheckInformation,
@@ -18,6 +24,11 @@ const ImageList = {
   StepsRequest,
   StepsContact,
   LetUsMeetIllustration,
+  SignupBackground1,
+  SignupBackground2,
+  SignupBackgroundCircle1,
+  SignupBackgroundCircle2,
+  SignupBackgroundZickZack,
 };
 
 const Images: { [I in keyof typeof ImageList]: any } = ImageList;

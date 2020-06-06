@@ -1,0 +1,69 @@
+.signinContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .logo {
+    height: 100px;
+    width: 100px;
+    margin: 16px;
+    padding: 16px;
+    background-color: #2b2c3b;
+    border-radius: 50%;
+
+    path {
+      fill: white;
+    }
+  }
+
+  .step {
+    width: 100%;
+    display: flex;
+    max-width: 480px;
+    align-items: flex-start;
+    margin: 8px;
+
+    .stepText {
+      margin-left: 0px;
+      font-weight: 300;
+      max-width: 440px;
+    }
+
+    svg {
+      margin-top: 5px;
+      height: 36px;
+    }
+  }
+
+  .signinButton {
+    height: 46px;
+    font-size: 16px;
+    font-weight: 300;
+    width: 200px;
+    margin: 16px;
+  }
+}
+.inputContainer {
+  margin: 16px 0px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+
+  .inputField {
+    width: 100%;
+    max-width: 400px;
+    height: 40px;
+  }
+}
+
+.description {
+  color: #6c6c6c;
+  margin: 0 8px !important ;
+  font-weight: 300;
+
+  a {
+    color: #4e6ae6 !important;
+  }
+}

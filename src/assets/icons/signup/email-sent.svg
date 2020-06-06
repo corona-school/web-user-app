@@ -1,0 +1,15 @@
+<svg id="undraw_Mail_sent_qwwx" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="178.682" height="171.755" viewBox="0 0 178.682 171.755">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-opacity="0.122"/>
+      <stop offset="0.551" stop-opacity="0.09"/>
+      <stop offset="1" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+  <path id="Path_1222" data-name="Path 1222" d="M29.86,97.941,0,64.02,89.341,0l89.341,64.02L148.345,97.941Z" fill="#4e6ae6"/>
+  <path id="Path_1223" data-name="Path 1223" d="M29.86,97.941,0,64.02,89.341,0l89.341,64.02L148.345,97.941Z" fill="#514abf"/>
+  <rect id="Rectangle_185" data-name="Rectangle 185" width="174" height="76" transform="translate(0 68)" fill="#4e6ae6"/>
+  <rect id="Rectangle_186" data-name="Rectangle 186" width="174" height="76" transform="translate(0 68)" fill="url(#linear-gradient)"/>
+  <path id="Path_1224" data-name="Path 1224" d="M178.682,375.735H0V268l89.341,53.987L178.682,268Z" transform="translate(0 -203.98)" fill="#4e6ae6"/>
+  <path id="Path_1225" data-name="Path 1225" d="M297.132,70.521,278.182,55.99l-50.2,65.466L200.1,100.078l-14.531,18.95,37.352,28.6h0L232.5,154.8Z" transform="translate(-141.243 -42.615)" fill="#3ad29f"/>
+</svg>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
+import { Redirect, useLocation, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import StyledReactModal from 'styled-react-modal';
 
@@ -7,189 +7,14 @@ import { getUserId } from '../api/api';
 import Context from '../context';
 import storedCredentials from '../api/storedCredentials';
 import Icons from '../assets/icons';
-import loginGraphic1 from '../assets/images/loginGraphic1.svg';
 import messageSent1 from '../assets/images/messageSent1.svg';
 import notFound1 from '../assets/images/notFound1.svg';
-import { OldButton } from '../components/button';
+import Button, { OldButton } from '../components/button';
+import SignupContainer from '../components/signup/SignupContainer';
+import { Title, Text } from '../components/Typography';
 
-const SpacerDiv = styled.div<{ flexGrow: string }>`
-  flex-grow: ${(props) => props.flexGrow};
-`;
-
-const Header = styled.div`
-  height: 73px;
-
-  align-items: center;
-  display: flex;
-
-  width: 100%;
-
-  background: #e9bc34;
-
-  font-size: 36px;
-  line-height: 54px;
-
-  color: #ffffff;
-
-  svg {
-    margin-left: 25px;
-    margin-right: 10px;
-
-    path {
-      fill: #ffffff;
-    }
-  }
-`;
-
-const LoginPage = styled.div`
-  width: 100vw;
-  height: 100vh;
-
-  background: #f2c94c;
-
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-
-  p {
-    margin: 0;
-  }
-`;
-
-const StyledLoginCard = styled.div`
-  width: 1020px;
-  height: 468px;
-
-  background: #ffffff;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
-
-  padding: 12px 30px;
-
-  position: relative;
-
-  display: flex;
-
-  img {
-    margin: 30px;
-    justify-self: flex-end;
-    flex-grow: 1;
-  }
-
-  input {
-    /* Frame 132 */
-
-    width: 378px;
-    height: 36px;
-
-    background: #ffffff;
-
-    /* Gray 1 */
-    border: 1px solid #333333;
-    box-sizing: border-box;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-
-    font-style: italic;
-    font-size: 18px;
-    line-height: 27px;
-
-    padding: 0.5em;
-    margin: 0.5em;
-
-    ::placeholder {
-      color: #bdbdbd;
-    }
-  }
-`;
-
-const TextBox = styled.div`
-  width: 50%;
-`;
-
-const Title = styled.p`
-  font-size: 36px;
-  line-height: 54px;
-  color: #000000;
-`;
-
-const Text = styled.p`
-  font-size: 18px;
-  line-height: 27px;
-  color: #333333;
-  margin: 12px 0;
-`;
-
-const Step = styled.div`
-  font-size: 18px;
-  line-height: 27px;
-  color: #333333;
-  margin: 10px 0;
-
-  strong {
-    font-weight: bold;
-  }
-
-  > svg {
-    width: 1em;
-    height: 1em;
-    margin: -2px 10px;
-  }
-`;
-
-const BackLink = styled.a`
-  /* Frame 134 */
-
-  display: flex;
-  align-items: center;
-
-  width: 199px;
-  height: 49px;
-
-  position: absolute;
-  right: 0;
-  bottom: 0;
-
-  font-size: 18px;
-  line-height: 27px;
-
-  color: #828282;
-`;
-
-const FormWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  width: 613px;
-  position: absolute;
-  width: 613px;
-  /* height: 259px; */
-  left: 37px;
-  top: 400px;
-
-  input {
-    /* Frame 132 */
-
-    width: 378px;
-    height: 36px;
-
-    background: #ffffff;
-
-    /* Gray 1 */
-    border: 1px solid #333333;
-    box-sizing: border-box;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-
-    font-style: italic;
-    font-size: 18px;
-    line-height: 27px;
-
-    padding: 0.5em;
-    margin: 0.5em;
-
-    ::placeholder {
-      color: #bdbdbd;
-    }
-  }
-`;
+import classes from './Login.module.scss';
+import { Input } from 'antd';
 
 const ModalSuccessWrapper = styled.div`
   /* loginPage-overlay-success */
@@ -385,62 +210,66 @@ const Login: React.FC = () => {
   }, []);
 
   return (
-    <LoginPage>
-      <Header>
-        <Icons.Logo />
-        Corona School
-      </Header>
-      <SpacerDiv flexGrow="2" />
-      <StyledLoginCard>
-        <TextBox>
-          <Title>Dein persönlicher User-Bereich</Title>
-          <Text>
-            So erhältst du Zugang zu deinem persönlichen User-Bereich:
-          </Text>
-          <Step>
-            <Icons.Info />
-            <strong>Schritt 1: </strong>
+    <SignupContainer>
+      <div className={classes.signinContainer}>
+        <Icons.Logo className={classes.logo} />
+        <Title size="h2" bold>
+          Corona School
+        </Title>
+        <Title>Dein persönlicher User-Bereich</Title>
+
+        <div className={classes.step}>
+          <Icons.SignupNumber1 />
+          <Text large className={classes.stepText}>
             Trage deine E-Mail-Adresse ein und fordere einen Zugang an.
-          </Step>
-          <Step>
-            <Icons.Contact />
-            <strong>Schritt 2: </strong>
+          </Text>
+        </div>
+        <div className={classes.step}>
+          <Icons.SignupNumber2 />
+          <Text large className={classes.stepText}>
             Wir senden dir eine E-Mail mit einem personalisierten Link.
-          </Step>
-          <Step>
-            <Icons.Mouse />
-            <strong>Schritt 3: </strong>
+          </Text>
+        </div>
+        <div className={classes.step}>
+          <Icons.SignupNumber3 />
+          <Text large className={classes.stepText}>
             Öffne die E-Mail und klicke den Link, um zu deinem User-Bereich zu
             gelangen.
-          </Step>
-          <div style={{ alignItems: 'center', display: 'flex', width: '100%' }}>
-            <input
-              placeholder="E-Mail"
-              value={email}
-              autoComplete="on"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <OldButton
-              text="Zugang anfordern"
-              onClick={() =>
-                apiContext
-                  .requestNewToken(email)
-                  .then(() =>
-                    modalContext.setOpenedModal('requestLoginToken--success')
-                  )
-                  .catch(() =>
-                    modalContext.setOpenedModal('requestLoginToken--failed')
-                  )
-              }
-            />
-          </div>
-        </TextBox>
-        <img src={loginGraphic1} />
-        <BackLink href="https://www.corona-school.de/">
-          Zurück zur Startseite
-        </BackLink>
-      </StyledLoginCard>
-      <SpacerDiv flexGrow="5" />
+          </Text>
+        </div>
+        <div className={classes.inputContainer}>
+          <Text className={classes.description}>E-Mail</Text>
+          <Input
+            className={classes.inputField}
+            placeholder="E-Mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <Button
+          className={classes.signinButton}
+          color="white"
+          backgroundColor="#4E6AE6"
+          onClick={() =>
+            apiContext
+              .requestNewToken(email)
+              .then(() =>
+                modalContext.setOpenedModal('requestLoginToken--success')
+              )
+              .catch(() =>
+                modalContext.setOpenedModal('requestLoginToken--failed')
+              )
+          }
+        >
+          Anmelden
+        </Button>
+        <Text className={classes.description}>
+          Du hast noch kein Account? Hier{' '}
+          <Link to="/register">
+            <a>registrieren</a>
+          </Link>
+        </Text>
+      </div>
 
       <StyledReactModal
         isOpen={modalContext.openedModal === 'requestLoginToken--success'}
@@ -481,27 +310,27 @@ const Login: React.FC = () => {
               wenden.
             </small>
           </span>
-          <FormWrapper>
-            <input
-              placeholder="E-Mail"
-              value={email}
-              autoComplete="on"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <OldButton
-              text="Erneut versuchen"
-              onClick={() =>
-                apiContext
-                  .requestNewToken(email)
-                  .then(() =>
-                    modalContext.setOpenedModal('requestLoginToken--success')
-                  )
-                  .catch(() =>
-                    modalContext.setOpenedModal('requestLoginToken--failed')
-                  )
-              }
-            />
-          </FormWrapper>
+
+          <input
+            placeholder="E-Mail"
+            value={email}
+            autoComplete="on"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <OldButton
+            text="Erneut versuchen"
+            onClick={() =>
+              apiContext
+                .requestNewToken(email)
+                .then(() =>
+                  modalContext.setOpenedModal('requestLoginToken--success')
+                )
+                .catch(() =>
+                  modalContext.setOpenedModal('requestLoginToken--failed')
+                )
+            }
+          />
+
           <span className="hint">
             Tipp: Versuche es mit der E-Mail-Adresse, die du für die
             Registrierung verwendet hast.
@@ -510,7 +339,7 @@ const Login: React.FC = () => {
         </ModalFailWrapper>
       </StyledReactModal>
       {state === 'success' && <Redirect to="/settings" />}
-    </LoginPage>
+    </SignupContainer>
   );
 };
 
