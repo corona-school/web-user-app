@@ -96,10 +96,16 @@ const Login: React.FC = () => {
   return (
     <SignupContainer>
       <div className={classes.signinContainer}>
-        <Icons.Logo className={classes.logo} />
-        <Title size="h2" bold>
-          Corona School
-        </Title>
+        <a
+          rel="noopener noreferrer"
+          href="https://www.corona-school.de/"
+          target="_blank"
+        >
+          <Icons.Logo className={classes.logo} />
+          <Title size="h2" bold>
+            Corona School
+          </Title>
+        </a>
         <Title>Dein persönlicher User-Bereich</Title>
 
         {loginState === 'idle' && renderLoginExplanation()}

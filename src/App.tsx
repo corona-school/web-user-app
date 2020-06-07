@@ -54,14 +54,14 @@ const App: React.FC = () => {
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/register">
-          <Register />
-        </Route>
         <Route path="/register/tutee">
           <RegisterTutee />
         </Route>
         <Route path="/register/tutor">
           <RegisterTutor />
+        </Route>
+        <Route path="/register">
+          <Register />
         </Route>
         <Route path="/verify">
           <Verify />
