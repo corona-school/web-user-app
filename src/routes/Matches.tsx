@@ -21,21 +21,26 @@ const Matches: React.FC = () => {
       if (userContext.user.matchesRequested === 0) {
         return <OpenRequestCard type="new" />;
       }
-      if (userContext.user.matchesRequested === 1) {
-        return <OpenRequestCard type="pending" />;
+      if (userContext.user.matchesRequested >= 1) {
+        return (
+          <>
+            {[...Array(userContext.user.matchesRequested).keys()].map(() => (
+              <OpenRequestCard type="pending" />
+            ))}
+          </>
+        );
       }
     }
 
     if (userContext.user.matchesRequested === 0) {
       return <OpenRequestCard type="new" />;
     }
-    if (userContext.user.matchesRequested === 1) {
-      return <OpenRequestCard type="new" />;
-    }
 
     return (
       <>
-        <OpenRequestCard type="pending" />
+        {[...Array(userContext.user.matchesRequested).keys()].map(() => (
+          <OpenRequestCard type="pending" />
+        ))}
         <OpenRequestCard type="new" />
       </>
     );
