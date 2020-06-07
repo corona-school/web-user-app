@@ -56,6 +56,10 @@
     max-width: 400px;
     height: 40px;
   }
+
+  .errorInput {
+    border-color: #f0466b !important;
+  }
 }
 
 .description {
@@ -66,4 +70,23 @@
   a {
     color: #4e6ae6 !important;
   }
+}
+
+.helpText {
+  text-align: center;
+  max-width: 400px;
+  color: #6c6c6c !important;
+  margin: 16px 4px !important;
+  a {
+    color: #4e6ae6 !important;
+  }
+}
+
+.loginTitle {
+  color: #6c6c6c !important;
+}
+
+.textError {
+  margin-top: -16px !important;
+  color: #f0466b !important;
 }

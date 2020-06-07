@@ -1,6 +1,7 @@
 .baseButton {
   height: 34px;
   padding: 4px 10px;
+  margin: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,14 +11,17 @@
   font-size: 12px;
   font-weight: bold;
   cursor: pointer;
-  :focus {
-    outline: none;
+  text-decoration: none;
+  border: none;
+
+  &:active {
+    border: none;
   }
-  svg {
-    margin: 0px 4px;
-    fill: #fa3d7f;
-    path {
-      fill: #fa3d7f;
-    }
+
+  &:hover {
+    color: #fa3d7f;
+  }
+  &:focus {
+    outline: none;
   }
 }
