@@ -123,10 +123,7 @@ const RegisterTutor = () => {
             { required: true, message: 'Bitte trage dein Bundesland ein' },
           ]}
         >
-          <Select
-            placeholder="Please select a country"
-            defaultValue={formData.state}
-          >
+          <Select placeholder="Baden-Württemberg" defaultValue={formData.state}>
             <Option value="BW"> Baden-Württemberg</Option>
             <Option value="BY"> Bayern</Option>
             <Option value="BE"> Berlin</Option>
