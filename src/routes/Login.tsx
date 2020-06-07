@@ -31,7 +31,6 @@ const Login: React.FC = () => {
 
   const authContext = useContext(Context.Auth);
   const apiContext = useContext(Context.Api);
-  const modalContext = useContext(Context.Modal);
 
   useEffect(() => {
     if (!token && authContext.status === 'authorized') setState('success');
@@ -115,41 +114,57 @@ const Login: React.FC = () => {
           </Title>
         )}
         {loginState === 'success' && (
-          <Title className={classes.loginTitle} size="h4">
-            Wir haben dir eine E-Mail geschickt.
-          </Title>
+          <div className={classes.successContainer}>
+            <Title className={classes.loginTitle} size="h4">
+              Wir haben dir eine E-Mail geschickt.
+            </Title>
+            <Icons.SignupEmailSent />
+          </div>
         )}
 
-        <div className={classes.inputContainer}>
-          <Text className={classes.description}>E-Mail</Text>
-          <Input
-            onKeyUp={(e) => {
-              if (e.keyCode === 13) {
-                login();
-              }
-            }}
-            className={classnames(classes.inputField, {
-              [classes.errorInput]: loginState === 'error',
-            })}
-            placeholder="E-Mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+        {loginState !== 'success' && (
+          <div className={classes.inputContainer}>
+            <Text className={classes.description}>E-Mail</Text>
+            <Input
+              onKeyUp={(e) => {
+                if (e.keyCode === 13) {
+                  login();
+                }
+              }}
+              className={classnames(classes.inputField, {
+                [classes.errorInput]: loginState === 'error',
+              })}
+              placeholder="E-Mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+        )}
         {loginState === 'error' && (
           <Text className={classes.textError}>
             Wir konnten deine E-Mail-Adresse leider nicht in unserem System
             finden.
           </Text>
         )}
-        <Button
-          className={classes.signinButton}
-          color="white"
-          backgroundColor="#4E6AE6"
-          onClick={login}
-        >
-          Anmelden
-        </Button>
+        {loginState !== 'success' ? (
+          <Button
+            className={classes.signinButton}
+            color="white"
+            backgroundColor="#4E6AE6"
+            onClick={login}
+          >
+            Anmelden
+          </Button>
+        ) : (
+          <Button
+            className={classes.successButton}
+            color="#2B2C3B"
+            backgroundColor="white"
+            onClick={login}
+          >
+            E-Mail erneut versenden
+          </Button>
+        )}
         {loginState !== 'idle' && (
           <Text className={classes.helpText}>
             Bei technischen Schwierigkeiten kannst du dich jederzeit an{` `}
