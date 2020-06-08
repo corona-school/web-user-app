@@ -97,15 +97,27 @@ const RegisterTutor = () => {
             >
               Ich möchte persönliche Nachhilfe geben.
             </Checkbox>
+            <Checkbox value="isGroups" style={{ lineHeight: '32px' }}>
+              Ich möchte Gruppenkurse durchführen.
+            </Checkbox>
+          </Checkbox.Group>
+        </Form.Item>
+        <Form.Item
+          className={classes.formItem}
+          name="official"
+          label="Offiziel"
+          rules={[{ required: true, message: 'Bitte wähle eine Option aus' }]}
+        >
+          <Checkbox.Group className={classes.checkboxGroup}>
             <Checkbox
-              value="isOfficial"
-              style={{ lineHeight: '32px' }}
               onChange={(e) => {
                 setOfficial(!isOfficial);
               }}
+              value="isOfficial"
+              style={{ lineHeight: '32px', marginLeft: '8px' }}
               defaultChecked={formData.isOfficial}
             >
-              Ich möchte Gruppenkurse durchführen.
+              Ich möchte dies offiziell anmeleden.
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
@@ -346,7 +358,7 @@ const RegisterTutor = () => {
           firstname: formValues.firstname,
           lastname: formValues.lastname,
           email: formValues.email,
-          isOfficial: formValues.additional.includes('isOfficial'),
+          isOfficial: formValues.official.includes('isOfficial'),
           isTutor: formValues.additional.includes('isTutor'),
         });
         if (isOfficial) {
