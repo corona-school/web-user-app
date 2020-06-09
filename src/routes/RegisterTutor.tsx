@@ -1,14 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/signup/SignupContainer';
 import { Title } from '../components/Typography';
-import { Form, Input, Checkbox, Radio, InputNumber, Select } from 'antd';
+import {
+  Form,
+  Input,
+  Checkbox,
+  Radio,
+  InputNumber,
+  Select,
+  message,
+} from 'antd';
 import Button from '../components/button';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 import classes from './RegisterTutor.module.scss';
 import { Subject } from '../types';
 import { useHistory } from 'react-router-dom';
+import Context from '../context';
+import { Tutor } from '../types/Registration';
 
 const { Option } = Select;
 
@@ -41,6 +51,7 @@ const RegisterTutor = () => {
   >('start');
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
+  const apiContext = useContext(Context.Api);
 
   const renderStart = () => {
     return (
@@ -106,7 +117,6 @@ const RegisterTutor = () => {
           className={classes.formItem}
           name="official"
           label="Offiziel"
-          rules={[{ required: true, message: 'Bitte wähle eine Option aus' }]}
         >
           <Checkbox.Group className={classes.checkboxGroup}>
             <Checkbox
@@ -358,7 +368,7 @@ const RegisterTutor = () => {
           firstname: formValues.firstname,
           lastname: formValues.lastname,
           email: formValues.email,
-          isOfficial: formValues.official.includes('isOfficial'),
+          isOfficial: isOfficial,
           isTutor: formValues.additional.includes('isTutor'),
         });
         if (isOfficial) {
@@ -398,13 +408,61 @@ const RegisterTutor = () => {
     }
   };
 
+  const mapFormDataToTutor = (data: FormData): Tutor | null => {
+    if (!data.firstname || !data.lastname || !data.email) {
+      return null;
+    }
+    return {
+      firstname: data.firstname,
+      lastname: data.lastname,
+      email: data.email.toLowerCase(),
+      isTutor: data.isTutor,
+      subjects: data.subjects || [],
+      isOfficial: data.isOfficial,
+      university: data.university,
+      module: data.module,
+      hours: data.hours,
+      newsletter: !!data.newsletter,
+      msg: data.msg || '',
+    };
+  };
+
   const register = (data: FormData) => {
+    const tutor = mapFormDataToTutor(data);
+    if (!tutor) {
+      message.error('Es ein Fehler aufgetreten.');
+      return;
+    }
+    console.log(tutor);
+
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setFormState('done');
-      setFormData({});
-    }, 3000);
+    apiContext
+      .registerTutor(tutor)
+      .then(() => {
+        setLoading(false);
+        setFormState('done');
+        setFormData({
+          firstname: undefined,
+          lastname: undefined,
+          email: undefined,
+          subjects: undefined,
+          msg: undefined,
+          newsletter: undefined,
+          state: undefined,
+          hours: undefined,
+          module: undefined,
+        });
+        form.resetFields();
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          setLoading(false);
+          message.error('Du bist schon als Tutor*in bei uns eingetragen.');
+          return;
+        }
+        setLoading(false);
+        message.error('Es ein Fehler aufgetreten.');
+      });
   };
 
   return (

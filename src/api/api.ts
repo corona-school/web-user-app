@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Credentials, User, Subject, CourseOverview } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
+import { Tutee, Tutor } from '../types/Registration';
 
 const dev = process.env.NODE_ENV === 'development';
 
@@ -179,6 +180,67 @@ export const axiosGetCourses = (token: string): Promise<CourseOverview[]> => {
 
     axios
       .get(url, { headers: { token }, params })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const isValidTutee = (tutee: Tutee) => {
+  if (tutee.isTutee) {
+    return tutee.subjects !== undefined;
+  }
+  return true;
+};
+
+const isValidTutor = (tutor: Tutor) => {
+  if (tutor.isTutor) {
+    if (!tutor.subjects) {
+      return false;
+    }
+  }
+  if (tutor.isOfficial) {
+    if (!tutor.university) {
+      return false;
+    }
+    if (!tutor.module) {
+      return false;
+    }
+    if (!tutor.hours) {
+      return false;
+    }
+  }
+  return true;
+};
+
+export const axiosRegisterTutee = (tutee: Tutee): Promise<void> => {
+  if (!isValidTutee(tutee)) {
+    throw new Error('Tutee is not valid');
+  }
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${apiURL}/register/tutee`, tutee)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosRegisterTutor = (tutor: Tutor): Promise<void> => {
+  if (!isValidTutor(tutor)) {
+    throw new Error('Tutor is not valid');
+  }
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${apiURL}/register/tutor`, tutor)
       .then((response) => {
         resolve(response.data);
       })

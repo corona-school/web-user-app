@@ -4,6 +4,7 @@ import { User, Subject, CourseOverview } from '../types';
 import * as api from '../api/api';
 import { AxiosResponse } from 'axios';
 import { CertificateData } from '../components/Modals/CerificateModal';
+import { Tutee, Tutor } from '../types/Registration';
 
 export const ApiContext = React.createContext<{
   getUserData: () => Promise<any>;
@@ -15,6 +16,8 @@ export const ApiContext = React.createContext<{
     cerfiticateData: CertificateData
   ) => Promise<AxiosResponse<any>>;
   getCourses: () => Promise<CourseOverview[]>;
+  registerTutee: (tutee: Tutee) => Promise<any>;
+  registerTutor: (tutor: Tutor) => Promise<any>;
 }>({
   getUserData: () => Promise.reject(),
   dissolveMatch: (uuid, reason?) => Promise.reject(),
@@ -23,6 +26,8 @@ export const ApiContext = React.createContext<{
   putUserActiveFalse: () => Promise.reject(),
   getCertificate: (cerfiticateData) => Promise.reject(),
   getCourses: () => Promise.reject(),
+  registerTutee: (tutee) => Promise.reject(),
+  registerTutor: (tutor) => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -51,6 +56,12 @@ export const ApiProvider: React.FC = ({ children }) => {
   const getCourses = (): Promise<CourseOverview[]> =>
     api.axiosGetCourses(token);
 
+  const registerTutee = (tutee: Tutee): Promise<void> =>
+    api.axiosRegisterTutee(tutee);
+
+  const registerTutor = (tutor: Tutor): Promise<void> =>
+    api.axiosRegisterTutor(tutor);
+
   return (
     <ApiContext.Provider
       value={{
@@ -61,6 +72,8 @@ export const ApiProvider: React.FC = ({ children }) => {
         putUserActiveFalse,
         getCertificate,
         getCourses,
+        registerTutee,
+        registerTutor,
       }}
     >
       {children}
