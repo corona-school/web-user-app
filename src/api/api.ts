@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { Credentials, User, Subject, CourseOverview } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { Tutee, Tutor } from '../types/Registration';
+import { Course, SubCourse } from '../types/Course';
 
 const dev = process.env.NODE_ENV === 'development';
 
@@ -243,6 +244,45 @@ export const axiosRegisterTutor = (tutor: Tutor): Promise<void> => {
       .post(`${apiURL}/register/tutor`, tutor)
       .then((response) => {
         resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosCreateCourse = (
+  token: string,
+  course: Course
+): Promise<number> => {
+  console.log(course);
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${apiURL}/course`, course, { headers: { token } })
+      .then((response) => {
+        resolve(response.data.id);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosCreateSubCourse = (
+  token: string,
+  courseId: number,
+  subCourse: SubCourse
+): Promise<number> => {
+  console.log(subCourse);
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${apiURL}/course/${courseId}/subcourse`, subCourse, {
+        headers: { token },
+      })
+      .then((response) => {
+        resolve(response.data.id);
       })
       .catch((error) => {
         reject(error);

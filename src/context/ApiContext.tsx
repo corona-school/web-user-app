@@ -5,6 +5,7 @@ import * as api from '../api/api';
 import { AxiosResponse } from 'axios';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { Tutee, Tutor } from '../types/Registration';
+import { Course, SubCourse } from '../types/Course';
 
 export const ApiContext = React.createContext<{
   getUserData: () => Promise<any>;
@@ -16,6 +17,8 @@ export const ApiContext = React.createContext<{
     cerfiticateData: CertificateData
   ) => Promise<AxiosResponse<any>>;
   getCourses: () => Promise<CourseOverview[]>;
+  createCourse: (coure: Course) => Promise<number>;
+  createSubCourse: (courseId: number, subCoure: SubCourse) => Promise<number>;
   registerTutee: (tutee: Tutee) => Promise<any>;
   registerTutor: (tutor: Tutor) => Promise<any>;
 }>({
@@ -26,6 +29,8 @@ export const ApiContext = React.createContext<{
   putUserActiveFalse: () => Promise.reject(),
   getCertificate: (cerfiticateData) => Promise.reject(),
   getCourses: () => Promise.reject(),
+  createCourse: (course) => Promise.reject(),
+  createSubCourse: (id, subCourse) => Promise.reject(),
   registerTutee: (tutee) => Promise.reject(),
   registerTutor: (tutor) => Promise.reject(),
 });
@@ -56,6 +61,21 @@ export const ApiProvider: React.FC = ({ children }) => {
   const getCourses = (): Promise<CourseOverview[]> =>
     api.axiosGetCourses(token);
 
+  const createCourse = (course: Course): Promise<number> =>
+    api.axiosCreateCourse(token, {
+      ...course,
+      instructors: [...course.instructors, id],
+    });
+
+  const createSubCourse = (
+    courseId: number,
+    subCourse: SubCourse
+  ): Promise<number> =>
+    api.axiosCreateSubCourse(token, courseId, {
+      ...subCourse,
+      instructors: [...subCourse.instructors, id],
+    });
+
   const registerTutee = (tutee: Tutee): Promise<void> =>
     api.axiosRegisterTutee(tutee);
 
@@ -72,6 +92,8 @@ export const ApiProvider: React.FC = ({ children }) => {
         putUserActiveFalse,
         getCertificate,
         getCourses,
+        createCourse,
+        createSubCourse,
         registerTutee,
         registerTutor,
       }}

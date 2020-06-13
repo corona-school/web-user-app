@@ -1,0 +1,58 @@
+@import '../../theme.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  max-height: 100vh;
+  min-width: 100vw;
+  overflow: hidden;
+  z-index: 1;
+}
+.content {
+  background: white;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: scroll;
+  flex-grow: 1;
+  z-index: 2;
+  -webkit-box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
+  -moz-box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
+  box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
+  @media only screen and (max-width: 600px) {
+    max-height: 100vh;
+  }
+}
+.stepContainer {
+  width: 100%;
+  padding: 32px 16px;
+
+  .stepDescription {
+    min-width: 200px;
+    max-width: 200px;
+  }
+  .step {
+    min-width: 240px;
+  }
+}
+
+.background {
+  background: $navigationBackground;
+  height: 100vh;
+  width: 500px;
+  z-index: 1;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  @media only screen and (max-width: 600px) {
+    display: none;
+  }
+}

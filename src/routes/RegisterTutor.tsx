@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import Icons from '../assets/icons';
-import SignupContainer from '../components/signup/SignupContainer';
+import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
 import {
   Form,

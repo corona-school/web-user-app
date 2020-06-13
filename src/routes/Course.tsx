@@ -6,12 +6,16 @@ import { CourseOverview } from '../types';
 import { message, Empty } from 'antd';
 import { Title } from '../components/Typography';
 import CourseCard from '../components/cards/CourseCard';
+import Button from '../components/button';
+import Icons from '../assets/icons';
+import { useHistory } from 'react-router-dom';
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
   const [courses, setCourses] = useState<CourseOverview[]>([]);
   const apiContext = useContext(Context.Api);
   const userContext = useContext(Context.User);
+  const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
@@ -40,7 +44,20 @@ const Course = () => {
   return (
     <div className={classes.container}>
       <div className={classes.containerRequests}>
-        <Title size="h1">Deine Kurse</Title>
+        <div className={classes.header}>
+          <Title size="h1">Deine Kurse</Title>
+          <Button
+            onClick={() => {
+              history.push('/courses/create');
+            }}
+            backgroundColor="#4E6AE6"
+            color="white"
+            className={classes.courseButton}
+          >
+            <Icons.Add height="16px" />
+            Erstelle einen Kurs
+          </Button>
+        </div>
         <div className={classes.myCoursesContainer}>
           {myCourses.length === 0 ? (
             <Empty description="Du hast im moment keine Kurse"></Empty>

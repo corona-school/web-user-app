@@ -1,5 +1,5 @@
 import React from 'react';
-import SignupContainer from '../components/signup/SignupContainer';
+import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
 import Icons from '../assets/icons';
 import { Link } from 'react-router-dom';

@@ -1,3 +1,18 @@
+.header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 32px;
+}
+
+.courseButton {
+  font-weight: normal;
+  height: 40px;
+  font-size: 15px;
+  padding-right: 16px;
+}
+
 .container {
   display: flex;
   flex-direction: column;

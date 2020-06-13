@@ -20,6 +20,7 @@ import Course from './routes/Course';
 import Register from './routes/Register';
 import RegisterTutee from './routes/RegisterTutee';
 import RegisterTutor from './routes/RegisterTutor';
+import { CourseForm } from './routes/CourseForm';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -66,6 +67,9 @@ const App: React.FC = () => {
         <Route path="/verify">
           <Verify />
         </Route>
+        <PrivateRoute path="/courses/create">
+          <CourseForm />
+        </PrivateRoute>
         <PageComponent>
           <Route exact path="/">
             <Redirect to="/settings" />
@@ -76,6 +80,7 @@ const App: React.FC = () => {
           <PrivateRoute path="/courses">
             <Course />
           </PrivateRoute>
+
           <PrivateRoute
             path="/matches"
             active={

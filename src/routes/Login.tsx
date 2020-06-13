@@ -6,7 +6,7 @@ import Context from '../context';
 import storedCredentials from '../api/storedCredentials';
 import Icons from '../assets/icons';
 import Button from '../components/button';
-import SignupContainer from '../components/signup/SignupContainer';
+import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
 import { Input } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
