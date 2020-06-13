@@ -31,7 +31,7 @@ const Register = () => {
           </Title>
         </Link>
         <Link to="/register/tutor" className={classes.userType}>
-          <Icons.SignupTutor />
+          <Icons.SignupTutor width="100%" height="100px" />
           <Title size="h2" className={classes.userTitle}>
             Tutor*in
           </Title>

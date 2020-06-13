@@ -1,14 +1,14 @@
 import React, { useState, useContext } from 'react';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/signup/SignupContainer';
-import { Title } from '../components/Typography';
+import { Title, Text } from '../components/Typography';
 import { Form, Input, Checkbox, Select, message } from 'antd';
 import Button from '../components/button';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 import classes from './RegisterTutor.module.scss';
 import { Subject } from '../types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import Context from '../context';
 import { Tutee } from '../types/Registration';
 
@@ -33,9 +33,9 @@ interface FormData {
 const RegisterTutee = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [formState, setFormState] = useState<'start' | 'finnish' | 'done'>(
-    'start'
-  );
+  const [formState, setFormState] = useState<
+    'start' | 'detail' | 'finnish' | 'done'
+  >('start');
   const [isTutee, setTutee] = useState(false);
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
@@ -78,31 +78,6 @@ const RegisterTutee = () => {
             defaultValue={formData.email}
           />
         </Form.Item>
-        <Form.Item
-          className={classes.formItem}
-          label="Klasse"
-          name="grade"
-          rules={[{ required: true, message: 'Bitte trage deine Klasse ein!' }]}
-        >
-          <Select
-            placeholder="Bitte wähle deine Klasse aus"
-            defaultValue={formData.grade ? `${formData.grade}` : undefined}
-          >
-            <Option value="1">1 Klasse</Option>
-            <Option value="2">2 Klasse</Option>
-            <Option value="3">3 Klasse</Option>
-            <Option value="4">4 Klasse</Option>
-            <Option value="5">5 Klasse</Option>
-            <Option value="6">6 Klasse</Option>
-            <Option value="7">7 Klasse</Option>
-            <Option value="8">8 Klasse</Option>
-            <Option value="9">9 Klasse</Option>
-            <Option value="10">10 Klasse</Option>
-            <Option value="11">11 Klasse</Option>
-            <Option value="12">12 Klasse</Option>
-            <Option value="13">13 Klasse</Option>
-          </Select>
-        </Form.Item>
 
         <Form.Item
           className={classes.formItem}
@@ -130,9 +105,27 @@ const RegisterTutee = () => {
     );
   };
 
-  const renderFinnish = () => {
+  const renderDetail = () => {
     return (
       <>
+        <Form.Item
+          className={classes.formItem}
+          label="Schulform"
+          name="school"
+          rules={[
+            { required: true, message: 'Bitte trage deine Schulform ein' },
+          ]}
+        >
+          <Select placeholder="Grundschule.." defaultValue={formData.school}>
+            <Option value="Grundschule">Grundschule</Option>
+            <Option value="Gesamtschule">Gesamtschule</Option>
+            <Option value="Hauptschule">Hauptschule</Option>
+            <Option value="Realschule">Realschule</Option>
+            <Option value="Gymnasium">Gymnasium</Option>
+            <Option value="Förderschule">Förderschule</Option>
+            <Option value="Sonstige">Sonstige</Option>
+          </Select>
+        </Form.Item>
         <Form.Item
           className={classes.formItem}
           label="Bundesland"
@@ -163,20 +156,27 @@ const RegisterTutee = () => {
         </Form.Item>
         <Form.Item
           className={classes.formItem}
-          label="Schulform"
-          name="school"
-          rules={[
-            { required: true, message: 'Bitte trage deine Schulform ein' },
-          ]}
+          label="Klasse"
+          name="grade"
+          rules={[{ required: true, message: 'Bitte trage deine Klasse ein!' }]}
         >
-          <Select placeholder="Grundschule.." defaultValue={formData.school}>
-            <Option value="Grundschule">Grundschule</Option>
-            <Option value="Gesamtschule">Gesamtschule</Option>
-            <Option value="Hauptschule">Hauptschule</Option>
-            <Option value="Realschule">Realschule</Option>
-            <Option value="Gymnasium">Gymnasium</Option>
-            <Option value="Förderschule">Förderschule</Option>
-            <Option value="Sonstige">Sonstige</Option>
+          <Select
+            placeholder="Bitte wähle deine Klasse aus"
+            defaultValue={formData.grade ? `${formData.grade}` : undefined}
+          >
+            <Option value="1">1. Klasse</Option>
+            <Option value="2">2. Klasse</Option>
+            <Option value="3">3. Klasse</Option>
+            <Option value="4">4. Klasse</Option>
+            <Option value="5">5. Klasse</Option>
+            <Option value="6">6. Klasse</Option>
+            <Option value="7">7. Klasse</Option>
+            <Option value="8">8. Klasse</Option>
+            <Option value="9">9. Klasse</Option>
+            <Option value="10">10. Klasse</Option>
+            <Option value="11">11. Klasse</Option>
+            <Option value="12">12. Klasse</Option>
+            <Option value="13">13. Klasse</Option>
           </Select>
         </Form.Item>
         {isTutee && (
@@ -189,6 +189,16 @@ const RegisterTutee = () => {
                 required: true,
                 message: 'Bitte trage deine Fächer ein',
               },
+              ({ getFieldValue }) => ({
+                validator(rule, value) {
+                  if (value.length < 6) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    'Du darfst maximal 5 Fächer auswählen!'
+                  );
+                },
+              }),
             ]}
           >
             <Select
@@ -231,7 +241,13 @@ const RegisterTutee = () => {
             defaultValue={formData.msg}
           />
         </Form.Item>
+      </>
+    );
+  };
 
+  const renderFinnish = () => {
+    return (
+      <>
         <Form.Item
           className={classes.formItem}
           label="Newsletter"
@@ -239,7 +255,9 @@ const RegisterTutee = () => {
         >
           <Checkbox.Group className={classes.checkboxGroup}>
             <Checkbox value={'newsletter'} defaultChecked={formData.newsletter}>
-              Newsletter abonnieren
+              Ich möchte den Newsletter der Corona School erhalten und über
+              Angebote, Aktionen und weitere Unterstützungsmöglichkeiten per
+              E-Mail informiert werden.
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
@@ -256,8 +274,10 @@ const RegisterTutee = () => {
         >
           <Checkbox.Group className={classes.checkboxGroup}>
             <Checkbox value="dataprotection">
-              Ich habe die Datenschutzinformationen und Einwilligung in die
-              Verarbeitung personenbezogener Daten gelesen
+              Durch die Registrierung stimmst du unseren Allgemeinen
+              Geschäftsbedingungen zu. In unserer Datenschutzerklärung erfährst
+              du, wir deine Daten erfassen, verwenden und teilen. Unsere
+              Cookie-Richtlinie erklärt, wie wir Cookies verwenden.
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
@@ -279,6 +299,9 @@ const RegisterTutee = () => {
     if (formState === 'start') {
       return renderStart();
     }
+    if (formState === 'detail') {
+      return renderDetail();
+    }
 
     if (formState === 'finnish') {
       return renderFinnish();
@@ -290,6 +313,9 @@ const RegisterTutee = () => {
 
   const back = () => {
     if (formState === 'finnish') {
+      setFormState('detail');
+    }
+    if (formState === 'detail') {
       setFormState('start');
     }
     if (formState === 'done') {
@@ -315,18 +341,17 @@ const RegisterTutee = () => {
           firstname: formValues.firstname,
           lastname: formValues.lastname,
           email: formValues.email,
-          grade: parseInt(formValues.grade),
           isTutee: formValues.additional.includes('isTutee'),
         });
 
-        setFormState('finnish');
+        setFormState('detail');
       }
-
-      if (formState === 'finnish') {
-        const data = {
+      if (formState === 'detail') {
+        setFormData({
           ...formData,
           state: formValues.state,
           school: formValues.school,
+          grade: parseInt(formValues.grade),
           subjects: isTutee
             ? formValues.subjects.map((s) => ({
                 name: s,
@@ -335,7 +360,14 @@ const RegisterTutee = () => {
               }))
             : undefined,
           msg: formValues.msg,
-          newsletter: formValues.newsletter?.includes('newsletter'),
+        });
+        setFormState('finnish');
+      }
+
+      if (formState === 'finnish') {
+        const data = {
+          ...formData,
+          newsletter: formValues.newsletter?.includes('newsletter') || false,
         };
         console.log(data);
 
@@ -466,10 +498,17 @@ const RegisterTutee = () => {
           >
             {formState === 'finnish' && 'Registrieren'}
             {formState === 'start' && 'Weiter'}
+            {formState === 'detail' && 'Weiter'}
             {formState === 'done' && 'Anmelden'}
           </Button>
         </div>
       </Form>
+      <Text className={classes.helpText}>
+        Du hast schon ein Account? Hier{' '}
+        <Link style={{ color: '#4e6ae6' }} to="/login">
+          anmelden
+        </Link>
+      </Text>
     </SignupContainer>
   );
 };

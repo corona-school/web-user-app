@@ -1,7 +1,7 @@
 import React from 'react';
 import { User, ScreeningStatus } from '../types';
 import Images from '../assets/images';
-import Button, { LinkButton } from '../components/button';
+import { LinkButton } from '../components/button';
 
 const StatusTexts = new Map([
   [

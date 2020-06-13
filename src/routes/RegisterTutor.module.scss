@@ -89,3 +89,13 @@
     width: 120px;
   }
 }
+
+.helpText {
+  text-align: center;
+  max-width: 400px;
+  color: #6c6c6c !important;
+  margin: 16px 4px !important;
+  .link {
+    color: #4e6ae6 !important;
+  }
+}

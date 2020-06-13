@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/signup/SignupContainer';
-import { Title } from '../components/Typography';
+import { Title, Text } from '../components/Typography';
 import {
   Form,
   Input,
@@ -16,7 +16,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 import classes from './RegisterTutor.module.scss';
 import { Subject } from '../types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import Context from '../context';
 import { Tutor } from '../types/Registration';
 
@@ -32,7 +32,7 @@ interface FormData {
   // isOfficial
   state?: string;
   university?: string;
-  module?: 'internship' | 'seminar';
+  module?: 'internship' | 'seminar' | 'other';
   hours?: number;
   // isTutor
   subjects?: Subject[];
@@ -47,7 +47,7 @@ const RegisterTutor = () => {
   const [isOfficial, setOfficial] = useState(false);
   const [isTutor, setTutor] = useState(false);
   const [formState, setFormState] = useState<
-    'start' | 'official' | 'finnish' | 'done'
+    'start' | 'detail' | 'finnish' | 'done'
   >('start');
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
@@ -106,17 +106,17 @@ const RegisterTutor = () => {
               style={{ lineHeight: '32px', marginLeft: '8px' }}
               defaultChecked={formData.isTutor}
             >
-              Ich möchte persönliche Nachhilfe geben.
+              Ich möchte eine*n Schüler*in im 1-zu-1-Format unterstützen
             </Checkbox>
             <Checkbox value="isGroups" style={{ lineHeight: '32px' }}>
-              Ich möchte Gruppenkurse durchführen.
+              Ich möchte meine Hilfe im Rahmen eines Kurses anbieten
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
         <Form.Item
           className={classes.formItem}
           name="official"
-          label="Offiziel"
+          label="Hilfst du im Rahmen einer Universitätsveranstaltung? (z.B. Seminar oder Praktikum) "
         >
           <Checkbox.Group className={classes.checkboxGroup}>
             <Checkbox
@@ -127,102 +127,49 @@ const RegisterTutor = () => {
               style={{ lineHeight: '32px', marginLeft: '8px' }}
               defaultChecked={formData.isOfficial}
             >
-              Ich möchte dies offiziell anmeleden.
+              Ja
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
       </>
     );
   };
-  const renderOfficial = () => {
+  const renderDetail = () => {
     return (
       <>
-        <Form.Item
-          className={classes.formItem}
-          label="Bundesland"
-          name="state"
-          rules={[
-            { required: true, message: 'Bitte trage dein Bundesland ein' },
-          ]}
-        >
-          <Select placeholder="Baden-Württemberg" defaultValue={formData.state}>
-            <Option value="BW"> Baden-Württemberg</Option>
-            <Option value="BY"> Bayern</Option>
-            <Option value="BE"> Berlin</Option>
-            <Option value="BB"> Brandenburg</Option>
-            <Option value="HB"> Bremen</Option>
-            <Option value="HH"> Hamburg</Option>
-            <Option value="HE"> Hessen</Option>
-            <Option value="MV"> Mecklenburg-Vorpommern</Option>
-            <Option value="NI"> Niedersachsen</Option>
-            <Option value="NW"> Nordrhein-Westfalen</Option>
-            <Option value="RP"> Rheinland-Pfalz</Option>
-            <Option value="SL"> Saarland</Option>
-            <Option value="SN"> Sachsen</Option>
-            <Option value="ST"> Sachsen-Anhalt</Option>
-            <Option value="SH"> Schleswig-Holstein</Option>
-            <Option value="TH"> Thüringen</Option>
-            <Option value="other">anderes Bundesland</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          className={classes.formItem}
-          label="Universität"
-          name="university"
-          rules={[
-            { required: true, message: 'Bitte trage deine Universität ein' },
-          ]}
-        >
-          <Input
-            placeholder="Duale Hochschule Musterstadt"
-            defaultValue={formData.university}
-          />
-        </Form.Item>
-        <Form.Item
-          className={classes.formItem}
-          label="Modul"
-          name="module"
-          rules={[{ required: true, message: 'Bitte trage dein Modul ein' }]}
-        >
-          <Radio.Group>
-            <Radio.Button
-              defaultChecked={formData.module === 'internship'}
-              value="internship"
+        {isOfficial && (
+          <Form.Item
+            className={classes.formItem}
+            label="Derzeitiges Bundesland"
+            name="state"
+            rules={[
+              { required: true, message: 'Bitte trage dein Bundesland ein' },
+            ]}
+          >
+            <Select
+              placeholder="Baden-Württemberg"
+              defaultValue={formData.state}
             >
-              Praktikum
-            </Radio.Button>
-            <Radio.Button
-              defaultChecked={formData.module === 'seminar'}
-              value="seminar"
-            >
-              Seminar
-            </Radio.Button>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item
-          className={classes.formItem}
-          label="Aufwand (in Stunden)"
-          name="hours"
-          rules={[
-            {
-              required: true,
-              message: 'Bitte trage dein zeitlichen Aufwand ein',
-            },
-          ]}
-        >
-          <InputNumber
-            placeholder="40h"
-            min={1}
-            max={500}
-            defaultValue={formData.hours}
-          />
-        </Form.Item>
-      </>
-    );
-  };
-  const renderFinnish = () => {
-    return (
-      <>
+              <Option value="BW"> Baden-Württemberg</Option>
+              <Option value="BY"> Bayern</Option>
+              <Option value="BE"> Berlin</Option>
+              <Option value="BB"> Brandenburg</Option>
+              <Option value="HB"> Bremen</Option>
+              <Option value="HH"> Hamburg</Option>
+              <Option value="HE"> Hessen</Option>
+              <Option value="MV"> Mecklenburg-Vorpommern</Option>
+              <Option value="NI"> Niedersachsen</Option>
+              <Option value="NW"> Nordrhein-Westfalen</Option>
+              <Option value="RP"> Rheinland-Pfalz</Option>
+              <Option value="SL"> Saarland</Option>
+              <Option value="SN"> Sachsen</Option>
+              <Option value="ST"> Sachsen-Anhalt</Option>
+              <Option value="SH"> Schleswig-Holstein</Option>
+              <Option value="TH"> Thüringen</Option>
+              <Option value="other">anderes Bundesland</Option>
+            </Select>
+          </Form.Item>
+        )}
         {isTutor && (
           <Form.Item
             className={classes.formItem}
@@ -275,7 +222,76 @@ const RegisterTutor = () => {
             defaultValue={formData.msg}
           />
         </Form.Item>
-
+        {isOfficial && (
+          <Form.Item
+            className={classes.formItem}
+            label="Universität"
+            name="university"
+            rules={[
+              { required: true, message: 'Bitte trage deine Universität ein' },
+            ]}
+          >
+            <Input
+              placeholder="Duale Hochschule Musterstadt"
+              defaultValue={formData.university}
+            />
+          </Form.Item>
+        )}
+        {isOfficial && (
+          <Form.Item
+            className={classes.formItem}
+            label="Modul"
+            name="module"
+            rules={[{ required: true, message: 'Bitte trage dein Modul ein' }]}
+          >
+            <Radio.Group>
+              <Radio.Button
+                defaultChecked={formData.module === 'internship'}
+                value="internship"
+              >
+                Praktikum
+              </Radio.Button>
+              <Radio.Button
+                defaultChecked={formData.module === 'seminar'}
+                value="seminar"
+              >
+                Seminar
+              </Radio.Button>
+              <Radio.Button
+                defaultChecked={formData.module === 'other'}
+                value="other"
+              >
+                Sonstiges
+              </Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        )}
+        {isOfficial && (
+          <Form.Item
+            className={classes.formItem}
+            label="Aufwand (in Stunden)"
+            name="hours"
+            rules={[
+              {
+                required: true,
+                message: 'Bitte trage dein zeitlichen Aufwand ein',
+              },
+            ]}
+          >
+            <InputNumber
+              placeholder="40h"
+              min={1}
+              max={500}
+              defaultValue={formData.hours}
+            />
+          </Form.Item>
+        )}
+      </>
+    );
+  };
+  const renderFinnish = () => {
+    return (
+      <>
         <Form.Item
           className={classes.formItem}
           label="Newsletter"
@@ -283,7 +299,9 @@ const RegisterTutor = () => {
         >
           <Checkbox.Group className={classes.checkboxGroup}>
             <Checkbox value={'newsletter'} defaultChecked={formData.newsletter}>
-              Newsletter abonnieren
+              Ich möchte den Newsletter der Corona School erhalten und über
+              Angebote, Aktionen und weitere Unterstützungsmöglichkeiten per
+              E-Mail informiert werden.
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
@@ -300,8 +318,10 @@ const RegisterTutor = () => {
         >
           <Checkbox.Group className={classes.checkboxGroup}>
             <Checkbox value="dataprotection">
-              Ich habe die Datenschutzinformationen und Einwilligung in die
-              Verarbeitung personenbezogener Daten gelesen
+              Durch die Registrierung stimmst du unseren Allgemeinen
+              Geschäftsbedingungen zu. In unserer Datenschutzerklärung erfährst
+              du, wir deine Daten erfassen, verwenden und teilen. Unsere
+              Cookie-Richtlinie erklärt, wie wir Cookies verwenden.
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
@@ -323,8 +343,8 @@ const RegisterTutor = () => {
     if (formState === 'start') {
       return renderStart();
     }
-    if (formState === 'official') {
-      return renderOfficial();
+    if (formState === 'detail') {
+      return renderDetail();
     }
     if (formState === 'finnish') {
       return renderFinnish();
@@ -335,16 +355,13 @@ const RegisterTutor = () => {
   };
 
   const back = () => {
-    if (formState === 'official') {
+    if (formState === 'detail') {
       setFormState('start');
     }
-    if (formState === 'finnish' && isOfficial) {
-      setFormState('official');
+    if (formState === 'finnish') {
+      setFormState('detail');
     }
 
-    if (formState === 'finnish' && !isOfficial) {
-      setFormState('start');
-    }
     if (formState === 'done') {
       setFormState('start');
     }
@@ -371,15 +388,20 @@ const RegisterTutor = () => {
           isOfficial: isOfficial,
           isTutor: formValues.additional.includes('isTutor'),
         });
-        if (isOfficial) {
-          setFormState('official');
-        } else {
-          setFormState('finnish');
-        }
+
+        setFormState('detail');
       }
-      if (formState === 'official') {
+      if (formState === 'detail') {
         setFormData({
           ...formData,
+          subjects: isTutor
+            ? formValues.subjects.map((s) => ({
+                name: s,
+                minGrade: 1,
+                maxGrade: 13,
+              }))
+            : undefined,
+          msg: formValues.msg,
           state: formValues.state,
           university: formValues.university,
           module: formValues.module,
@@ -390,14 +412,6 @@ const RegisterTutor = () => {
       if (formState === 'finnish') {
         const data = {
           ...formData,
-          subjects: isTutor
-            ? formValues.subjects.map((s) => ({
-                name: s,
-                minGrade: 1,
-                maxGrade: 13,
-              }))
-            : undefined,
-          msg: formValues.msg,
           newsletter: formValues.newsletter?.includes('newsletter'),
         };
         setFormData(data);
@@ -452,6 +466,8 @@ const RegisterTutor = () => {
           hours: undefined,
           module: undefined,
         });
+        setOfficial(false);
+        setTutor(false);
         form.resetFields();
       })
       .catch((err) => {
@@ -522,11 +538,17 @@ const RegisterTutor = () => {
             backgroundColor="#4E6AE6"
           >
             {formState === 'finnish' && 'Registrieren'}
-            {(formState === 'start' || formState === 'official') && 'Weiter'}
+            {(formState === 'start' || formState === 'detail') && 'Weiter'}
             {formState === 'done' && 'Anmelden'}
           </Button>
         </div>
       </Form>
+      <Text className={classes.helpText}>
+        Du hast schon ein Account? Hier{' '}
+        <Link style={{ color: '#4e6ae6' }} to="/login">
+          anmelden
+        </Link>
+      </Text>
     </SignupContainer>
   );
 };

@@ -23,7 +23,7 @@ export interface Tutor {
   // isOfficial
   state?: string;
   university?: string;
-  module?: 'internship' | 'seminar';
+  module?: 'internship' | 'seminar' | 'other';
   hours?: number;
   // isTutor
   subjects?: Subject[];
