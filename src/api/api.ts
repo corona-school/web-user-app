@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
-import { Credentials, User, Subject, CourseOverview } from '../types';
+import { Credentials, User, Subject } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { Tutee, Tutor } from '../types/Registration';
-import { Course, SubCourse } from '../types/Course';
+import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 
 const dev = process.env.NODE_ENV === 'development';
 
@@ -177,7 +177,30 @@ export const axiosGetCourses = (token: string): Promise<CourseOverview[]> => {
 
   return new Promise((resolve, reject) => {
     const params = new URLSearchParams();
-    params.append('fields', 'name,outline,category,startDate,instructor');
+    params.append('fields', 'name,outline,category');
+
+    axios
+      .get(url, { headers: { token }, params })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosGetMyCourses = (
+  token: string,
+  instructor: string
+): Promise<CourseOverview[]> => {
+  const url = `${apiURL}/courses`;
+
+  return new Promise((resolve, reject) => {
+    const params = new URLSearchParams();
+    params.append('fields', 'name,outline,category');
+    params.append('instructor', instructor);
+    params.append('states', 'created,submitted,allowed');
 
     axios
       .get(url, { headers: { token }, params })
@@ -281,6 +304,32 @@ export const axiosCreateSubCourse = (
       .post(`${apiURL}/course/${courseId}/subcourse`, subCourse, {
         headers: { token },
       })
+      .then((response) => {
+        resolve(response.data.id);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosCreateLecture = (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  lecture: Lecture
+): Promise<number> => {
+  console.log(lecture);
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture`,
+        lecture,
+        {
+          headers: { token },
+        }
+      )
       .then((response) => {
         resolve(response.data.id);
       })

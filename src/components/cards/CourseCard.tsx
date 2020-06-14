@@ -1,13 +1,14 @@
 import React from 'react';
 import moment from 'moment';
-import { CourseOverview } from '../../types';
 import styled from 'styled-components';
 import Button from '../button';
 import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
-import classes from './CourseCard.module.scss';
 import { Tag } from '../Tag';
+import { CourseOverview } from '../../types/Course';
+
+import classes from './CourseCard.module.scss';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -50,7 +51,7 @@ const CourseCard: React.FC<Props> = ({ course }) => {
             <b>Beginn</b>
           </Text>
           <Text className={classes.emailText} large>
-            {moment(course.startDate).fromNow()}
+            {moment().fromNow()}
           </Text>
         </div>
         <ButtonContainer>

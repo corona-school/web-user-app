@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useContext } from 'react';
 import Button from '../button';
-import { Form, InputNumber, Switch, List } from 'antd';
+import { Form, InputNumber, Switch, List, message } from 'antd';
 import Context from '../../context';
 
 import classes from './CreateSubCourse.module.scss';
@@ -90,9 +90,8 @@ export const CreateSubCourse: React.FC<Props> = (props) => {
   const handleCourseCreation = async () => {
     try {
       setLoading(true);
-      const formValues = await form.validateFields();
+      await form.validateFields();
 
-      console.log(formValues);
       const subCourse: SubCourse = {
         instructors: [],
         minGrade,
@@ -101,7 +100,6 @@ export const CreateSubCourse: React.FC<Props> = (props) => {
         joinAfterStart: joinAfterStart,
         published: false,
       };
-      console.log(subCourse);
 
       apiContext
         .createSubCourse(props.course.id, subCourse)
@@ -113,6 +111,9 @@ export const CreateSubCourse: React.FC<Props> = (props) => {
           });
         })
         .catch((err) => {
+          message.error(
+            'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.'
+          );
           setLoading(false);
           console.log(err);
         });

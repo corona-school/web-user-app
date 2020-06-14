@@ -1,3 +1,11 @@
+export interface CourseOverview {
+  id: number;
+  name: string;
+  outline: string;
+  category: string;
+  instructor: string;
+}
+
 export interface Course {
   instructors: string[];
   name: string;

@@ -5,18 +5,25 @@ import { Title } from '../components/Typography';
 import classes from './CourseForm.module.scss';
 import { CreateCourse } from '../components/forms/CreateCourse';
 import { CreateSubCourse } from '../components/forms/CreateSubCourse';
-import { Course } from '../types/Course';
+import { Course, Lecture } from '../types/Course';
 import { CreateLecture } from '../components/forms/CreateLecture';
+import { useHistory } from 'react-router-dom';
 
 export interface CompletedCourse extends Course {
   id: number;
 }
 
+export interface CompletedLecture extends Lecture {
+  id: number;
+}
+
 export const CourseForm: React.FC = () => {
-  const [position, setPosition] = useState(2);
+  const [position, setPosition] = useState(0);
   const [course, setCourse] = useState<CompletedCourse>(null);
   const [subCourses, setSubCourses] = useState([]);
   const [lectures, setLectures] = useState([]);
+
+  const history = useHistory();
 
   const renderForm = () => {
     if (position === 0) {
@@ -50,7 +57,7 @@ export const CourseForm: React.FC = () => {
           subCourses={subCourses}
           course={course}
           next={() => {
-            console.log('submit');
+            history.push('/courses');
           }}
           onSuccess={(lecture) => {
             setLectures([...lectures, lecture]);

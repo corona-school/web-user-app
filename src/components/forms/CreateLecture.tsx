@@ -1,29 +1,39 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useContext } from 'react';
 import Button from '../button';
-import { Form, InputNumber, List, Select, DatePicker } from 'antd';
+import {
+  Form,
+  InputNumber,
+  List,
+  Select,
+  DatePicker,
+  TimePicker,
+  message,
+} from 'antd';
 import Context from '../../context';
 import { CompletedSubCourse } from './CreateSubCourse';
 import { Lecture } from '../../types/Course';
-import { CompletedCourse } from '../../routes/CourseForm';
+import { CompletedCourse, CompletedLecture } from '../../routes/CourseForm';
+import moment from 'moment';
 
 import classes from './CreateLecture.module.scss';
 
 const { Option } = Select;
 
 interface Props {
-  lectures: any[];
+  lectures: CompletedLecture[];
   subCourses: CompletedSubCourse[];
   course: CompletedCourse;
   next: () => void;
-  onSuccess: (subCourse: CompletedSubCourse) => void;
+  onSuccess: (lecture: CompletedLecture) => void;
 }
 
 export const CreateLecture: React.FC<Props> = (props) => {
-  const [start, setStart] = useState(null);
-  const [duration, setDuration] = useState(null);
+  const [start, setStart] = useState<moment.Moment>(moment());
+  const [duration, setDuration] = useState<number | null>(null);
+
   const [loading, setLoading] = useState(false);
-  const [selectedSubCourse, setSelectedSubCourse] = useState(null);
+  const [selectedSubCourseId, setSelectedSubCourseId] = useState(null);
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
 
@@ -45,9 +55,27 @@ export const CreateLecture: React.FC<Props> = (props) => {
           ]}
         >
           Der Kurs ist am
-          <DatePicker style={{ margin: '0px 4px' }} placeholder="25.06.2020" />
+          <DatePicker
+            value={start}
+            onChange={(v) => setStart(v)}
+            style={{ margin: '0px 4px' }}
+            placeholder="25.06.2020"
+            format={'DD.MM.YYYY'}
+          />{' '}
+          um
+          <TimePicker
+            onChange={(v) => setStart(v)}
+            value={start}
+            style={{ margin: '0px 4px' }}
+            defaultOpenValue={moment('00:00:00', 'HH:mm')}
+            format={'HH:mm'}
+          />
           und dauert
           <InputNumber
+            value={duration}
+            step={5}
+            min={0}
+            onChange={(v: number) => setDuration(v)}
             style={{ margin: '0px 4px', width: '64px' }}
             placeholder="45"
           />
@@ -60,15 +88,27 @@ export const CreateLecture: React.FC<Props> = (props) => {
   const handleCourseCreation = async () => {
     try {
       setLoading(true);
-      const formValues = await form.validateFields();
+      await form.validateFields();
 
-      console.log(formValues);
       const lecture: Lecture = {
         instructor: '',
-        start,
+        start: start.unix(),
         duration,
       };
       console.log(lecture);
+      apiContext
+        .createLecture(props.course.id, selectedSubCourseId, lecture)
+        .then((id) => {
+          setLoading(false);
+          props.onSuccess({ ...lecture, id });
+        })
+        .catch((err) => {
+          setLoading(false);
+          message.error(
+            'Ein Fehler ist aufgetreten. Bitte versuche es erneut.'
+          );
+          console.log(err);
+        });
     } catch (err) {
       setLoading(false);
       console.log(err);
@@ -93,10 +133,18 @@ export const CreateLecture: React.FC<Props> = (props) => {
               <div className={classes.selectContainer}>
                 <Select
                   className={classes.courseSelect}
+                  onChange={(v) => {
+                    setSelectedSubCourseId(v);
+                  }}
                   placeholder="Wähle einen Kurs aus"
                 >
-                  <Option value="a">Kurs mit 5-10 Klasse</Option>
-                  <Option value="b">Kurs mit 10-12 Klasse</Option>
+                  {props.subCourses.map((subCourse) => {
+                    return (
+                      <Option
+                        value={subCourse.id}
+                      >{`${props.course.name} ${subCourse.minGrade}-${subCourse.maxGrade}`}</Option>
+                    );
+                  })}
                 </Select>
               </div>
 
@@ -125,7 +173,9 @@ export const CreateLecture: React.FC<Props> = (props) => {
           >
             <List.Item.Meta
               title={props.course.name}
-              description={`Der Kurse ist am ${item.start} und dauert ${item.duration}`}
+              description={`Der Kurse ist am ${moment(item.start * 1000).format(
+                'HH:mm DD.MM.YYYY'
+              )} und dauert ${item.duration} min.`}
             />
           </List.Item>
         )}
@@ -149,7 +199,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
         color="#4E6AE6"
         backgroundColor="white"
       >
-        Weiter
+        Fertigstellen
       </Button>
     </Form>
   );
