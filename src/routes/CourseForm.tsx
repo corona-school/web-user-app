@@ -14,6 +14,7 @@ export interface CompletedCourse extends Course {
 }
 
 export interface CompletedLecture extends Lecture {
+  subCourseId: number;
   id: number;
 }
 
@@ -44,6 +45,9 @@ export const CourseForm: React.FC = () => {
           next={() => {
             setPosition(2);
           }}
+          onCancelCourse={(id) => {
+            setSubCourses([...subCourses.filter((s) => s.id !== id)]);
+          }}
           onSuccess={(subCourse) => {
             setSubCourses([...subCourses, subCourse]);
           }}
@@ -58,6 +62,9 @@ export const CourseForm: React.FC = () => {
           course={course}
           next={() => {
             history.push('/courses');
+          }}
+          onCancelLecture={(id) => {
+            setLectures([...lectures.filter((s) => s.id !== id)]);
           }}
           onSuccess={(lecture) => {
             setLectures([...lectures, lecture]);

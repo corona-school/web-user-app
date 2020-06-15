@@ -17,6 +17,7 @@ interface Props {
   course: CompletedCourse;
   next: () => void;
   onSuccess: (subCourse: CompletedSubCourse) => void;
+  onCancelCourse: (id: number) => void;
 }
 
 export const CreateSubCourse: React.FC<Props> = (props) => {
@@ -123,7 +124,17 @@ export const CreateSubCourse: React.FC<Props> = (props) => {
     }
   };
 
-  const deleteSubCourse = (id: number) => {};
+  const deleteSubCourse = (id: number) => {
+    setLoading(true);
+    apiContext
+      .cancelSubCourse(props.course.id, id)
+      .then(() => {
+        props.onCancelCourse(id);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const renderSubCourses = () => {
     return (

@@ -15,28 +15,28 @@ interface Props {
 }
 
 const revisionTags = [
-  'easy',
-  'medium',
-  'difficult',
-  'Mathematics',
-  'English',
-  'German',
+  { name: 'easy', identifier: 'easy' },
+  { name: 'medium', identifier: 'medium' },
+  { name: 'difficult', identifier: 'difficult' },
+  { name: 'Mathematik', identifier: 'Mathematics' },
+  { name: 'Englisch', identifier: 'English' },
+  { name: 'Deutsch', identifier: 'German' },
 ];
 
 const clubTags = [
-  'Spiel & Spaß',
-  'Kreativität',
-  'Sport & Bewegung',
-  'Naturwissenschaften',
-  'Musik',
-  'Gesundheit',
-  'Interkulturelles',
+  { name: 'Spiel & Spaß', identifier: 'play&fun' },
+  { name: 'Kreativität', identifier: 'creativity' },
+  { name: 'Sport & Bewegung', identifier: 'sports' },
+  { name: 'Naturwissenschaften', identifier: 'science' },
+  { name: 'Musik', identifier: 'music' },
+  { name: 'Gesundheit', identifier: 'health' },
+  { name: 'Interkulturelles', identifier: 'intercultural' },
 ];
 
 const coachingTags = [
-  'Prüfungsvorbereitung',
-  'Selbstsorganisation',
-  'Persönlichkeitsbildung',
+  { name: 'Prüfungsvorbereitung', identifier: 'preparation' },
+  { name: 'Selbstsorganisation', identifier: 'organisation' },
+  { name: 'Persönlichkeitsbildung', identifier: 'personality' },
 ];
 
 const tags = new Map([
@@ -124,7 +124,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
             placeholder="Ergänze hier Tags damit dein Kurs besser gefunden werden kann"
           >
             {tags.get(category)?.map((tag) => {
-              return <Option value={tag}>{tag}</Option>;
+              return <Option value={tag.identifier}>{tag.name}</Option>;
             })}
           </Select>
         </Form.Item>

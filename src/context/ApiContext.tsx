@@ -20,11 +20,17 @@ export const ApiContext = React.createContext<{
   getMyCourses: () => Promise<CourseOverview[]>;
   createCourse: (coure: Course) => Promise<number>;
   createSubCourse: (courseId: number, subCoure: SubCourse) => Promise<number>;
+  cancelSubCourse: (courseId: number, subCoureId: number) => Promise<void>;
   createLecture: (
     courseId: number,
     subCourseId: number,
     lecture: Lecture
   ) => Promise<number>;
+  cancelLecture: (
+    courseId: number,
+    subCourseId: number,
+    lectureId: number
+  ) => Promise<void>;
   registerTutee: (tutee: Tutee) => Promise<any>;
   registerTutor: (tutor: Tutor) => Promise<any>;
 }>({
@@ -38,7 +44,9 @@ export const ApiContext = React.createContext<{
   getMyCourses: () => Promise.reject(),
   createCourse: (course) => Promise.reject(),
   createSubCourse: (id, subCourse) => Promise.reject(),
+  cancelSubCourse: (id, subCourseId) => Promise.reject(),
   createLecture: (id, subCourseId, lecture) => Promise.reject(),
+  cancelLecture: (id, subCourseId, lectureId) => Promise.reject(),
   registerTutee: (tutee) => Promise.reject(),
   registerTutor: (tutor) => Promise.reject(),
 });
@@ -87,6 +95,11 @@ export const ApiProvider: React.FC = ({ children }) => {
       instructors: [...subCourse.instructors, id],
     });
 
+  const cancelSubCourse = (
+    courseId: number,
+    subCourseId: number
+  ): Promise<void> => api.axiosCancelSubCourse(token, courseId, subCourseId);
+
   const createLecture = (
     courseId: number,
     subCourseId: number,
@@ -96,6 +109,13 @@ export const ApiProvider: React.FC = ({ children }) => {
       ...lecture,
       instructor: lecture.instructor.length === 0 ? id : lecture.instructor,
     });
+
+  const cancelLecture = (
+    courseId: number,
+    subCourseId: number,
+    lectureId: number
+  ): Promise<void> =>
+    api.axiosCancelLecture(token, courseId, subCourseId, lectureId);
 
   const registerTutee = (tutee: Tutee): Promise<void> =>
     api.axiosRegisterTutee(tutee);
@@ -116,7 +136,9 @@ export const ApiProvider: React.FC = ({ children }) => {
         getMyCourses,
         createCourse,
         createSubCourse,
+        cancelSubCourse,
         createLecture,
+        cancelLecture,
         registerTutee,
         registerTutor,
       }}

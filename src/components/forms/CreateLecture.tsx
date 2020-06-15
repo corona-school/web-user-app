@@ -26,6 +26,7 @@ interface Props {
   course: CompletedCourse;
   next: () => void;
   onSuccess: (lecture: CompletedLecture) => void;
+  onCancelLecture: (id: number) => void;
 }
 
 export const CreateLecture: React.FC<Props> = (props) => {
@@ -44,7 +45,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
           className={classes.formItem}
           name="class"
           rules={[
-            ({ getFieldValue }) => ({
+            (_) => ({
               validator() {
                 if (start && duration) {
                   return Promise.resolve();
@@ -64,6 +65,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
           />{' '}
           um
           <TimePicker
+            minuteStep={5}
             onChange={(v) => setStart(v)}
             value={start}
             style={{ margin: '0px 4px' }}
@@ -100,7 +102,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
         .createLecture(props.course.id, selectedSubCourseId, lecture)
         .then((id) => {
           setLoading(false);
-          props.onSuccess({ ...lecture, id });
+          props.onSuccess({ ...lecture, id, subCourseId: selectedSubCourseId });
         })
         .catch((err) => {
           setLoading(false);
@@ -115,7 +117,17 @@ export const CreateLecture: React.FC<Props> = (props) => {
     }
   };
 
-  const deleteLecture = (id: number) => {};
+  const deleteLecture = (id: number, subCourseId: number) => {
+    setLoading(true);
+    apiContext
+      .cancelLecture(props.course.id, subCourseId, id)
+      .then(() => {
+        props.onCancelLecture(id);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const renderSubCourses = () => {
     return (
@@ -165,7 +177,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
             actions={[
               <a
                 key="list-loadmore-more"
-                onClick={() => deleteLecture(item.id)}
+                onClick={() => deleteLecture(item.id, item.subCourseId)}
               >
                 löschen
               </a>,

@@ -292,6 +292,22 @@ export const axiosCreateCourse = (
   });
 };
 
+export const axiosCancelCourse = (
+  token: string,
+  courseId: number
+): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`${apiURL}/course/${courseId}`, { headers: { token } })
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export const axiosCreateSubCourse = (
   token: string,
   courseId: number,
@@ -306,6 +322,25 @@ export const axiosCreateSubCourse = (
       })
       .then((response) => {
         resolve(response.data.id);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosCancelSubCourse = (
+  token: string,
+  courseId: number,
+  subCourseId: number
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`${apiURL}/course/${courseId}/subcourse/${subCourseId}`, {
+        headers: { token },
+      })
+      .then(() => {
+        resolve();
       })
       .catch((error) => {
         reject(error);
@@ -332,6 +367,27 @@ export const axiosCreateLecture = (
       )
       .then((response) => {
         resolve(response.data.id);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosCancelLecture = (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  lectureId: number
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(
+        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture/${lectureId}`,
+        { headers: { token } }
+      )
+      .then(() => {
+        resolve();
       })
       .catch((error) => {
         reject(error);
