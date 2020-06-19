@@ -11,6 +11,7 @@ export interface User {
   matchesRequested?: number;
   subjects: Subject[];
   matches: Match[];
+  dissolved_matches: Match[]; 
   screeningStatus: ScreeningStatus;
 }
 

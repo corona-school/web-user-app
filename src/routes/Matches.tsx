@@ -65,14 +65,14 @@ const Matches: React.FC = () => {
   ));
   return (
     <div className={classes.container}>
-      <div className={classes.containerRequests}>
-        <Title size="h1">Deine Anfragen</Title>
-        <div className={classes.openRequests}>{openRequests}</div>
-      </div>
-      <Title size="h2">Deine Zuordnungen</Title>
-      {currentMatches}
-      <Title size="h2">Entfernte Zuordnungen</Title>
-    </div>
+          <div className={classes.containerRequests}>
+            <Title size="h1">Deine Anfragen</Title>
+            <div className={classes.openRequests}>{openRequests}</div>
+          </div>
+          <Title size="h2">Deine Zuordnungen</Title>
+          {currentMatches}
+          <Title size="h2">Entfernte Zuordnungen</Title>
+        </div>
   );
 };
 

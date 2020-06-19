@@ -9,7 +9,7 @@ import Button from '../button';
 import Icons from '../../assets/icons';
 import { User } from '../../types';
 import { Select, DatePicker, InputNumber, message } from 'antd';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import ActivityForm from '../forms/ActivityForm';
 
 const { Option } = Select;
@@ -27,6 +27,7 @@ export interface Activity {
 
 export interface CertificateData {
   student?: string;
+  startDate: number;
   endDate: number;
   weekCount: number;
   hoursPerWeek: number;
@@ -38,8 +39,10 @@ export interface CertificateData {
 
 const CertificateModal: React.FC<Props> = ({ user }) => {
   const [loading, setLoading] = useState(false);
+  const allMatches = [...user.matches, ...user.dissolved_matches];
 
   const [certificateData, setCertificateData] = useState<CertificateData>({
+    startDate: moment().unix(),
     endDate: moment().unix(),
     weekCount: 0,
     hoursPerWeek: 1.0,
@@ -111,21 +114,31 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
       </>
     );
   };
+  
+  const handleDatePickerValue = (selectedPupil, dateFormat) => {
+    let dateValue : Moment; 
+    if(user.dissolved_matches.includes(selectedPupil)) {
+      dateValue = moment(certificateData.startDate * 1000);
+    } else {
+      dateValue = moment(moment(Date.now()), dateFormat);
+    }
+    return dateValue; 
+  }
 
   const renderGeneralInformationForm = () => {
     const dateFormat = 'DD/MM/YYYY';
     const MediaTypes = ['Video-Chat', 'E-Mail', 'Telefon', 'Chat-Nachrichten'];
 
-    if (user.matches.length === 0) {
+    if (allMatches.length === 0) {
       return (
         <div>
           <Title size="h2">Zertifikat erstellen</Title>
-          <Text>Du hast keien Matches</Text>
+          <Text>Du hast keine Matches</Text>
         </div>
       );
     }
 
-    const selectedPupil = user.matches.find(
+    const selectedPupil = allMatches.find(
       (s) => s.uuid === certificateData.student
     );
 
@@ -150,7 +163,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
             }}
             style={{ width: '200px' }}
           >
-            {user.matches.map((m) => {
+            {allMatches.map((m) => {
               return (
                 <Option value={m.uuid}>{`${m.firstname} ${m.lastname}`}</Option>
               );
@@ -163,11 +176,19 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
         <div className={classes.inputField}>
           Vom{' '}
           <DatePicker
-            disabled
-            bordered={false}
-            value={moment(selectedPupil?.date)}
+            disabled={!user.dissolved_matches.includes(selectedPupil)}
+            bordered={user.dissolved_matches.includes(selectedPupil)}
+            value={handleDatePickerValue(selectedPupil, dateFormat)}
             defaultValue={moment(moment(Date.now()), dateFormat)}
             format={dateFormat}
+            onChange={(v) => {
+              if (v) {
+                setCertificateData({
+                  ...certificateData,
+                  startDate: v.unix()
+                })
+              }
+            }}
           />{' '}
           bis zum{' '}
           <DatePicker

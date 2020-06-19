@@ -24,6 +24,17 @@ export const defaultUser = {
       date: 120301923,
     },
   ],
+  dissolved_matches: [
+    {
+      firstname: 'defaultPupilFirstname',
+      lastname: 'defaultPupilLastname',
+      email: 'defaultEmail',
+      subjects: ['Mathe', 'Deutsch', 'Englisch'],
+      uuid: 'defaultUuid',
+      jitsilink: 'defaultJitsilink',
+      date: 120301923,
+    }
+  ],
   subjects: [
     {
       name: 'Mathematik' as const,
