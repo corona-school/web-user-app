@@ -71,7 +71,7 @@ const Matches: React.FC = () => {
       </div>
       <Title size="h2">Deine Zuordnungen</Title>
       {currentMatches}
-      {false && <Title size="h2">Entfernte Zuordnungen</Title>}
+      <Title size="h2">Entfernte Zuordnungen</Title>
     </div>
   );
 };
