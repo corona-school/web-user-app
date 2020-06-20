@@ -198,7 +198,10 @@ export const axiosGetMyCourses = (
 
   return new Promise((resolve, reject) => {
     const params = new URLSearchParams();
-    params.append('fields', 'name,outline,category');
+    params.append(
+      'fields',
+      'name,description,tags,outline,state,category,instructors,subcourses'
+    );
     params.append('instructor', instructor);
     params.append('states', 'created,submitted,allowed');
 

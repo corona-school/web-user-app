@@ -9,6 +9,7 @@ import Button from '../components/button';
 import Icons from '../assets/icons';
 import { useHistory } from 'react-router-dom';
 import { CourseOverview } from '../types/Course';
+import MyCourseCard from '../components/cards/MyCourseCard';
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
@@ -62,7 +63,7 @@ const Course = () => {
             <Empty description="Du hast im moment keine Kurse"></Empty>
           ) : (
             myCourses.map((c) => {
-              return <CourseCard course={c} />;
+              return <MyCourseCard course={c} />;
             })
           )}
         </div>
