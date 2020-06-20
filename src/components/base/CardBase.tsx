@@ -8,9 +8,14 @@ interface Props {
   className?: string;
 }
 
-const CardBase: React.FC<Props> = ({ highlightColor, className, children }) => {
+const CardBase: React.FC<Props & React.AllHTMLAttributes<HTMLDivElement>> = ({
+  highlightColor,
+  className,
+  children,
+  ...props
+}) => {
   return (
-    <div className={classnames(classes.container, className)}>
+    <div {...props} className={classnames(classes.container, className)}>
       <Highlight color={highlightColor} />
       <div className={classes.cardContent}>{children}</div>
     </div>
