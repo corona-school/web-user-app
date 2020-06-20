@@ -20,12 +20,23 @@ const ButtonContainer = styled.div`
 interface Props {
   match: Match;
   type: 'pupil' | 'student';
+  dissolved: boolean;
   handleDissolveMatch: () => void;
 }
 
-const MatchCard: React.FC<Props> = ({ match, type, handleDissolveMatch }) => {
+const setHighlightColor = (isDissolvedMatch: boolean) => {
+  let color: string;
+  if (isDissolvedMatch) {
+    color = "#DE2C18";
+  } else {
+    color = "#71DE5A";
+  }
+  return color;
+}
+
+const MatchCard: React.FC<Props> = ({ match, type, dissolved, handleDissolveMatch }) => {
   return (
-    <CardBase highlightColor="#71DE5A" className={classes.baseContainer}>
+    <CardBase highlightColor={setHighlightColor(dissolved)} className={classes.baseContainer}>
       <div className={classes.container}>
         <div className={classes.matchInfoContainer}>
           <Title size="h4" bold>
@@ -50,34 +61,36 @@ const MatchCard: React.FC<Props> = ({ match, type, handleDissolveMatch }) => {
             )}
           </Text>
         </div>
-        <ButtonContainer>
-          <LinkButton
-            color="#71DE5A"
-            backgroundColor="#F4FFF2"
-            href={match.jitsilink}
-            target="_blank"
-            style={{ margin: '4px' }}
-          >
-            <Icons.VideoChat />
+        {!dissolved &&
+          <ButtonContainer>
+            <LinkButton
+              color="#71DE5A"
+              backgroundColor="#F4FFF2"
+              href={match.jitsilink}
+              target="_blank"
+              style={{ margin: '4px' }}
+            >
+              <Icons.VideoChat />
             Video-Chat
           </LinkButton>
-          <LinkButton
-            href={'mailto:' + match.email}
-            style={{ margin: '4px' }}
-            color="#71DE5A"
-            backgroundColor="#F4FFF2"
-          >
-            <Icons.Contact />
-          </LinkButton>
-          <Button
-            onClick={handleDissolveMatch}
-            style={{ margin: '4px' }}
-            color="#71DE5A"
-            backgroundColor="#F4FFF2"
-          >
-            <Icons.Delete />
-          </Button>
-        </ButtonContainer>
+            <LinkButton
+              href={'mailto:' + match.email}
+              style={{ margin: '4px' }}
+              color="#71DE5A"
+              backgroundColor="#F4FFF2"
+            >
+              <Icons.Contact />
+            </LinkButton>
+            <Button
+              onClick={handleDissolveMatch}
+              style={{ margin: '4px' }}
+              color="#71DE5A"
+              backgroundColor="#F4FFF2"
+            >
+              <Icons.Delete />
+            </Button>
+          </ButtonContainer>
+        }
       </div>
     </CardBase>
   );

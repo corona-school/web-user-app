@@ -8,6 +8,7 @@ import { Title, Text } from '../Typography';
 import Button from '../button';
 import Icons from '../../assets/icons';
 import { User } from '../../types';
+import { Match } from '../../types';
 import { Select, DatePicker, InputNumber, message } from 'antd';
 import moment, { Moment } from 'moment';
 import ActivityForm from '../forms/ActivityForm';
@@ -115,7 +116,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     );
   };
   
-  const handleDatePickerValue = (selectedPupil, dateFormat) => {
+  const handleDatePickerValue = (selectedPupil: Match, dateFormat: string) => {
     let dateValue : Moment; 
     if(user.dissolved_matches.includes(selectedPupil)) {
       dateValue = moment(certificateData.startDate * 1000);
