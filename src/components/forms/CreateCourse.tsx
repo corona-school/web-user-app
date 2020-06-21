@@ -14,7 +14,7 @@ interface Props {
   onSuccess: (courseId: CompletedCourse) => void;
 }
 
-const revisionTags = [
+export const revisionTags = [
   { name: 'easy', identifier: 'easy' },
   { name: 'medium', identifier: 'medium' },
   { name: 'difficult', identifier: 'difficult' },
@@ -23,7 +23,7 @@ const revisionTags = [
   { name: 'Deutsch', identifier: 'German' },
 ];
 
-const clubTags = [
+export const clubTags = [
   { name: 'Spiel & Spaß', identifier: 'play&fun' },
   { name: 'Kreativität', identifier: 'creativity' },
   { name: 'Sport & Bewegung', identifier: 'sports' },
@@ -33,13 +33,13 @@ const clubTags = [
   { name: 'Interkulturelles', identifier: 'intercultural' },
 ];
 
-const coachingTags = [
+export const coachingTags = [
   { name: 'Prüfungsvorbereitung', identifier: 'preparation' },
   { name: 'Selbstsorganisation', identifier: 'organisation' },
   { name: 'Persönlichkeitsbildung', identifier: 'personality' },
 ];
 
-const tags = new Map([
+export const tags = new Map([
   ['revision', revisionTags],
   ['club', clubTags],
   ['coaching', coachingTags],

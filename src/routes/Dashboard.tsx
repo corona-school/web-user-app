@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Title, Text } from '../components/Typography';
 import classes from './Dashboard.module.scss';
 import { Tag } from '../components/Tag';
-import Icons from '../assets/icons';
 import { getStatus, getNextSteps, getNews } from '../utils/DashboardUtils';
 import { UserContext } from '../context/UserContext';
 import { ColumnCard } from '../components/Card';

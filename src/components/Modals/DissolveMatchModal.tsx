@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import Modal from '.';
 import Icons from '../../assets/icons';
@@ -8,7 +8,6 @@ import {
 } from '../../assets/dissolveMatchReasons';
 import { ButtonDestructive, ButtonNonDestructive } from '../button';
 import Context from '../../context';
-// import { putUser, dissolveMatch } from '../../api/api';
 import { putUser } from '../../api/api';
 
 const Question = styled.div`

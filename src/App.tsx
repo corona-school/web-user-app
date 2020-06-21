@@ -21,6 +21,7 @@ import Register from './routes/Register';
 import RegisterTutee from './routes/RegisterTutee';
 import RegisterTutor from './routes/RegisterTutor';
 import { CourseForm } from './routes/CourseForm';
+import CourseDetail from './routes/CourseDetail';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -77,9 +78,14 @@ const App: React.FC = () => {
           <PrivateRoute path="/dashboard">
             <Dashboard />
           </PrivateRoute>
-          <PrivateRoute path="/courses">
-            <Course />
-          </PrivateRoute>
+          <Switch>
+            <PrivateRoute path="/courses/:id">
+              <CourseDetail />
+            </PrivateRoute>
+            <PrivateRoute path="/courses">
+              <Course />
+            </PrivateRoute>
+          </Switch>
 
           <PrivateRoute
             path="/matches"

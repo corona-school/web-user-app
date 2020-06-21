@@ -2,6 +2,8 @@ export enum CourseState {
   SUBMITTED = 'submitted',
   CREATED = 'created',
   ALLOWED = 'allowed',
+  DENIED = 'denied',
+  CANCELLED = 'cancelled',
 }
 
 export enum CourseCategory {
@@ -27,6 +29,12 @@ export interface Participant {
   lastname: string;
 }
 
+export interface CourseParticipant extends Participant {
+  grade: number;
+  email: string;
+  schooltype: string;
+}
+
 export interface CourseSubCourse {
   id: number;
   minGrade: number;
@@ -34,9 +42,12 @@ export interface CourseSubCourse {
   maxParticipants: number;
   participants: number;
   instructors: Instructor[];
-  lectures: Lecture[];
+  lectures: CourseLecture[];
   joinAfterStart: boolean;
-  participantList: Participant[];
+  participantList: CourseParticipant[];
+  joined: boolean;
+  published: boolean;
+  cancelled: boolean;
 }
 
 export interface Tag {
@@ -55,6 +66,19 @@ export interface CourseOverview {
   category: CourseCategory;
   instructors: Instructor[];
   subcourses: CourseSubCourse[];
+  joinAfterStart: boolean;
+}
+
+export interface ParsedCourseOverview {
+  id: number;
+  name: string;
+  description: string;
+  outline: string;
+  state: CourseState;
+  tags: Tag[];
+  category: CourseCategory;
+  instructors: Instructor[];
+  subcourse?: CourseSubCourse;
 }
 
 export interface Course {

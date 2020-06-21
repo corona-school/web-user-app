@@ -1,36 +1,39 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Context from '../context';
-
-import classes from './Course.module.scss';
-import { message, Empty } from 'antd';
+import { Empty } from 'antd';
 import { Title } from '../components/Typography';
-import CourseCard from '../components/cards/CourseCard';
 import Button from '../components/button';
 import Icons from '../assets/icons';
 import { useHistory } from 'react-router-dom';
-import { CourseOverview } from '../types/Course';
+import { ParsedCourseOverview } from '../types/Course';
 import MyCourseCard from '../components/cards/MyCourseCard';
+
+import classes from './Course.module.scss';
+import { parseCourse } from '../utils/CourseUtil';
+import { UserContext } from '../context/UserContext';
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
-  const [courses, setCourses] = useState<CourseOverview[]>([]);
-  const [myCourses, setMyCourses] = useState<CourseOverview[]>([]);
+  const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
+  const [myCourses, setMyCourses] = useState<ParsedCourseOverview[]>([]);
   const apiContext = useContext(Context.Api);
+  const userContext = useContext(UserContext);
   const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
+
     apiContext
-      .getMyCourses()
+      .getCourses()
       .then((c) => {
-        setMyCourses(c);
-        return apiContext.getCourses();
+        setCourses(c.map(parseCourse));
+        return apiContext.getMyCourses(userContext.user.type);
       })
       .then((c) => {
-        setCourses(c);
+        setMyCourses(c.map(parseCourse));
       })
       .catch((e) => {
-        message.error('Kurse konnten nicht geladen werden.');
+        // message.error('Kurse konnten nicht geladen werden.');
       })
       .finally(() => {
         setLoading(false);
@@ -69,9 +72,16 @@ const Course = () => {
         </div>
       </div>
       <Title size="h2">Alle Kurse</Title>
-      {courses.map((c) => {
-        return <CourseCard course={c} />;
-      })}
+      {courses.length === 0 ? (
+        <Empty
+          style={{ marginBottom: '64px' }}
+          description="Es gibt im moment keine Kurse"
+        ></Empty>
+      ) : (
+        courses.map((c) => {
+          return <MyCourseCard course={c} />;
+        })
+      )}
     </div>
   );
 };

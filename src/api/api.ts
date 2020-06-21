@@ -177,7 +177,10 @@ export const axiosGetCourses = (token: string): Promise<CourseOverview[]> => {
 
   return new Promise((resolve, reject) => {
     const params = new URLSearchParams();
-    params.append('fields', 'name,outline,category');
+    params.append(
+      'fields',
+      'name,description,tags,outline,state,category,instructors,subcourses,joinAfterStart'
+    );
 
     axios
       .get(url, { headers: { token }, params })
@@ -190,9 +193,86 @@ export const axiosGetCourses = (token: string): Promise<CourseOverview[]> => {
   });
 };
 
+export const axiosGetCourse = (
+  token: string,
+  id: string
+): Promise<CourseOverview> => {
+  const url = `${apiURL}/course/${id}`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url, { headers: { token } })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosEditCourse = (
+  token: string,
+  id: number,
+  course: Course
+): Promise<void> => {
+  const url = `${apiURL}/course/${id}`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .put(url, course, { headers: { token } })
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosSubmitCourse = (
+  token: string,
+  id: number,
+  course: Course
+): Promise<void> => {
+  const url = `${apiURL}/course/${id}`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .put(url, { ...course, submit: true }, { headers: { token } })
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosPublishSubCourse = (
+  token: string,
+  courseId: number,
+  id: number,
+  subcourse: SubCourse
+): Promise<void> => {
+  const url = `${apiURL}/course/${courseId}/subcourse/${id}`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .put(url, { ...subcourse, published: true }, { headers: { token } })
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export const axiosGetMyCourses = (
   token: string,
-  instructor: string
+  instructor?: string,
+  participant?: string
 ): Promise<CourseOverview[]> => {
   const url = `${apiURL}/courses`;
 
@@ -200,10 +280,15 @@ export const axiosGetMyCourses = (
     const params = new URLSearchParams();
     params.append(
       'fields',
-      'name,description,tags,outline,state,category,instructors,subcourses'
+      'name,description,tags,outline,state,category,instructors,subcourses,published,cancelled,joined,joinAfterStart'
     );
-    params.append('instructor', instructor);
-    params.append('states', 'created,submitted,allowed');
+    if (instructor) {
+      params.append('instructor', instructor);
+      params.append('states', 'created,submitted,allowed,denied,cancelled');
+    }
+    if (participant) {
+      params.append('participant', participant);
+    }
 
     axios
       .get(url, { headers: { token }, params })
@@ -295,10 +380,53 @@ export const axiosCreateCourse = (
   });
 };
 
+export const axiosJoinCourse = (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  participant: string
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/participants/${participant}`,
+        {},
+        { headers: { token } }
+      )
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosLeaveCourse = (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  participant: string
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(
+        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/participants/${participant}`,
+        { headers: { token } }
+      )
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export const axiosCancelCourse = (
   token: string,
   courseId: number
-): Promise<number> => {
+): Promise<void> => {
   return new Promise((resolve, reject) => {
     axios
       .delete(`${apiURL}/course/${courseId}`, { headers: { token } })

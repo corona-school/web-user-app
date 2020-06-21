@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import ClipLoader from 'react-spinners/ClipLoader';

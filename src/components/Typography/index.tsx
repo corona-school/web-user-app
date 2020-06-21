@@ -58,34 +58,36 @@ interface Props {
   className?: string;
 }
 
-export const Title: React.FC<Props> = (props) => {
+export const Title: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = (
+  props
+) => {
   if (props.size === 'h5')
     return (
-      <Title5 className={props.className} bold={props.bold}>
+      <Title5 className={props.className} bold={props.bold} {...props}>
         {props.children}
       </Title5>
     );
   if (props.size === 'h4')
     return (
-      <Title4 className={props.className} bold={props.bold}>
+      <Title4 className={props.className} bold={props.bold} {...props}>
         {props.children}
       </Title4>
     );
   if (props.size === 'h3')
     return (
-      <Title3 className={props.className} bold={props.bold}>
+      <Title3 className={props.className} bold={props.bold} {...props}>
         {props.children}
       </Title3>
     );
   if (props.size === 'h2')
     return (
-      <Title2 className={props.className} bold={props.bold}>
+      <Title2 className={props.className} bold={props.bold} {...props}>
         {props.children}
       </Title2>
     );
 
   return (
-    <Title1 className={props.className} bold={props.bold}>
+    <Title1 className={props.className} bold={props.bold} {...props}>
       {props.children}
     </Title1>
   );
