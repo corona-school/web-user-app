@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  flex-direction: row;
+
+  padding-left: 40px;
+  width: 100%;
+
+  @media only screen and (max-width: 600px) {
+    padding: 16px;
+    flex-direction: column-reverse;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 30px;
+    flex-grow: 1;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-left: 16px;
+      margin-bottom: 32px;
+
+      > svg {
+        path {
+          fill: #7183e0;
+        }
+      }
+    }
+
+    .searchContainer {
+      max-width: 1000px;
+      margin: 10px 10px 10px 10px;
+    }
+  }
+
+  .sideNav {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 100vh;
+
+    padding-top: 100px;
+    padding-left: 30px;
+    min-width: 400px;
+    background: #ececec;
+
+    .checkboxContainer {
+      margin-top: 16px;
+    }
+  }
+}

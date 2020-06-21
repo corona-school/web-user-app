@@ -15,6 +15,7 @@ import classes from './MyCourseCard.module.scss';
 
 interface Props {
   course: ParsedCourseOverview;
+  redirect?: string;
 }
 
 const CourseStateToLabel = new Map([
@@ -30,13 +31,17 @@ const CategoryToLabel = new Map([
   [CourseCategory.CLUB, 'AGs'],
 ]);
 
-const MyCourseCard: React.FC<Props> = ({ course }) => {
+const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
   const history = useHistory();
 
   const subCourse = course.subcourse;
   const firstLecture = subCourse?.lectures.sort((a, b) => a.start - b.start)[0];
 
   const redirectToDetailPage = () => {
+    if (redirect) {
+      history.push(redirect);
+      return;
+    }
     history.push('courses/' + course.id);
   };
 

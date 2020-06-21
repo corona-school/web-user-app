@@ -9,6 +9,7 @@ export enum CourseState {
 export enum CourseCategory {
   REVISION = 'revision',
   CLUB = 'club',
+  COACHING = 'coaching',
 }
 
 export interface Instructor {

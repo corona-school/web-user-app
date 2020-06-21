@@ -12,6 +12,7 @@ import Feedback from './routes/Feedback';
 import Help from './routes/Help';
 import Login from './routes/Login';
 import Verify from './routes/Verify';
+import PublicCourse from './routes/PublicCourse';
 
 import { ScreeningStatus } from './types';
 import NotFound from './routes/NotFound';
@@ -64,6 +65,9 @@ const App: React.FC = () => {
         </Route>
         <Route path="/register">
           <Register />
+        </Route>
+        <Route path="/public/courses">
+          <PublicCourse />
         </Route>
         <Route path="/verify">
           <Verify />
