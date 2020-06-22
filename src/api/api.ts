@@ -444,8 +444,6 @@ export const axiosCreateSubCourse = (
   courseId: number,
   subCourse: SubCourse
 ): Promise<number> => {
-  console.log(subCourse);
-
   return new Promise((resolve, reject) => {
     axios
       .post(`${apiURL}/course/${courseId}/subcourse`, subCourse, {
@@ -485,8 +483,6 @@ export const axiosCreateLecture = (
   subCourseId: number,
   lecture: Lecture
 ): Promise<number> => {
-  console.log(lecture);
-
   return new Promise((resolve, reject) => {
     axios
       .post(
@@ -516,6 +512,31 @@ export const axiosCancelLecture = (
       .delete(
         `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture/${lectureId}`,
         { headers: { token } }
+      )
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosSendCourseGroupMail = (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  subject: string,
+  body: string
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/groupmail`,
+        { subject, body },
+        {
+          headers: { token },
+        }
       )
       .then(() => {
         resolve();

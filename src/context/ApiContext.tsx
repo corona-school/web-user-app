@@ -8,7 +8,7 @@ import { Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { UserContext } from './UserContext';
 
-export const ApiContext = React.createContext<{
+interface IApiContext {
   getUserData: () => Promise<any>;
   dissolveMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string) => Promise<void>;
@@ -54,7 +54,15 @@ export const ApiContext = React.createContext<{
   ) => Promise<void>;
   registerTutee: (tutee: Tutee) => Promise<any>;
   registerTutor: (tutor: Tutor) => Promise<any>;
-}>({
+  sendCourseGroupMail: (
+    courseId: number,
+    subCourseId: number,
+    subject: string,
+    body: string
+  ) => Promise<void>;
+}
+
+export const ApiContext = React.createContext<IApiContext>({
   getUserData: () => Promise.reject(),
   dissolveMatch: (uuid, reason?) => Promise.reject(),
   requestNewToken: api.axiosRequestNewToken,
@@ -79,6 +87,7 @@ export const ApiContext = React.createContext<{
   cancelLecture: (id, subCourseId, lectureId) => Promise.reject(),
   registerTutee: (tutee) => Promise.reject(),
   registerTutor: (tutor) => Promise.reject(),
+  sendCourseGroupMail: (id, subCourseId, subject, body) => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -184,6 +193,14 @@ export const ApiProvider: React.FC = ({ children }) => {
     subcourse: SubCourse
   ) => api.axiosPublishSubCourse(token, courseId, id, subcourse);
 
+  const sendCourseGroupMail = (
+    courseId: number,
+    subCourseId: number,
+    subject: string,
+    body: string
+  ) =>
+    api.axiosSendCourseGroupMail(token, courseId, subCourseId, subject, body);
+
   return (
     <ApiContext.Provider
       value={{
@@ -209,6 +226,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         leaveCourse,
         submitCourse,
         publishSubCourse,
+        sendCourseGroupMail,
       }}
     >
       {children}

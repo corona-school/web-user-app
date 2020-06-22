@@ -15,6 +15,7 @@ interface Props {
 }
 
 const CourseMessageModal: React.FC<Props> = (props) => {
+  const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState<string | null>(null);
   const [text, setText] = useState<string | null>(null);
 
@@ -30,6 +31,24 @@ const CourseMessageModal: React.FC<Props> = (props) => {
       message.error('Der Text der Nachricht fehlt.');
       return;
     }
+
+    setLoading(true);
+
+    api
+      .sendCourseGroupMail(props.courseId, props.subcourseId, title, text)
+      .then(() => {
+        message.success('Nachricht wurde versendet.');
+        setText(null);
+        setTitle(null);
+        modalContext.setOpenedModal(null);
+      })
+      .catch((err) => {
+        message.error('Es ist ein Fehler aufgetreten.');
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
