@@ -1,0 +1,36 @@
+.messageModal {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background-color: white;
+  border-radius: 4px;
+  min-width: 300px;
+  width: 100%;
+  max-width: 550px;
+  align-items: center;
+
+  .label {
+    margin: 0px 0px -8px 8px;
+    width: 100%;
+    color: #545658;
+  }
+
+  .buttonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .sendButton {
+      width: 150px;
+      height: 40px;
+      font-size: 14px;
+      font-weight: 400;
+      margin-top: 16px;
+    }
+
+    .abort {
+      margin-top: 0px;
+      font-weight: normal;
+    }
+  }
+}

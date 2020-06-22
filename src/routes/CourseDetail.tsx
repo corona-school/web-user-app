@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
+
 import { ApiContext } from '../context/ApiContext';
 import { AuthContext } from '../context/AuthContext';
 import {
@@ -28,10 +29,16 @@ import {
   message,
   Button as AntdButton,
   List,
+  Input,
 } from 'antd';
 import { parseCourse } from '../utils/CourseUtil';
 
 import { tags } from '../components/forms/CreateCourse';
+import { ModalContext } from '../context/ModalContext';
+import Button from '../components/button';
+import Icons from '../assets/icons';
+import Images from '../assets/images';
+import CourseMessageModal from '../components/Modals/CourseMessageModal';
 
 moment.locale('de');
 
@@ -47,6 +54,7 @@ const CourseDetail = () => {
   const history = useHistory();
 
   const auth = useContext(AuthContext);
+  const modalContext = useContext(ModalContext);
   const userId = auth.credentials.id;
 
   useEffect(() => {
@@ -147,6 +155,9 @@ const CourseDetail = () => {
           }
           if (param.key === '2') {
             submitCourse();
+          }
+          if (param.key === '3') {
+            modalContext.setOpenedModal('courseMessageModal');
           }
           if (param.key === '4') {
             cancelCourse();
@@ -408,6 +419,10 @@ const CourseDetail = () => {
           </div>
         </div>
       </div>
+      <CourseMessageModal
+        courseId={course.id}
+        subcourseId={course.subcourse.id}
+      />
     </div>
   );
 };
