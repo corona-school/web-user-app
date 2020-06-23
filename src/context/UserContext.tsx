@@ -24,7 +24,7 @@ export const defaultUser = {
       date: 120301923,
     },
   ],
-  dissolved_matches: [
+  dissolvedMatches: [
     {
       firstname: 'defaultPupilFirstname',
       lastname: 'defaultPupilLastname',

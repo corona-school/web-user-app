@@ -40,7 +40,7 @@ export interface CertificateData {
 
 const CertificateModal: React.FC<Props> = ({ user }) => {
   const [loading, setLoading] = useState(false);
-  const allMatches = [...user.matches, ...user.dissolved_matches];
+  const allMatches = [...user.matches, ...user.dissolvedMatches];
 
   const [certificateData, setCertificateData] = useState<CertificateData>({
     startDate: moment().unix(),
@@ -118,7 +118,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   
   const handleDatePickerValue = (selectedPupil: Match, dateFormat: string) => {
     let dateValue : Moment; 
-    if(user.dissolved_matches.includes(selectedPupil)) {
+    if(user.dissolvedMatches.includes(selectedPupil)) {
       dateValue = moment(certificateData.startDate * 1000);
     } else {
       dateValue = moment(moment(Date.now()), dateFormat);
@@ -177,8 +177,8 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
         <div className={classes.inputField}>
           Vom{' '}
           <DatePicker
-            disabled={!user.dissolved_matches.includes(selectedPupil)}
-            bordered={user.dissolved_matches.includes(selectedPupil)}
+            disabled={!user.dissolvedMatches.includes(selectedPupil)}
+            bordered={user.dissolvedMatches.includes(selectedPupil)}
             value={handleDatePickerValue(selectedPupil, dateFormat)}
             defaultValue={moment(moment(Date.now()), dateFormat)}
             format={dateFormat}

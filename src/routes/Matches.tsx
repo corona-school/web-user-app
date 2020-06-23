@@ -65,7 +65,7 @@ const Matches: React.FC = () => {
     </React.Fragment>
   ));
 
-  const dissolvedMatches = userContext.user.dissolved_matches.map((dissolvedMatch) => ( 
+  const dissolvedMatches = userContext.user.dissolvedMatches.map((dissolvedMatch) => ( 
     <React.Fragment key={dissolvedMatch.uuid}>
       <MatchCard
         type={userContext.user.type === 'student' ? 'pupil' : 'student'}
