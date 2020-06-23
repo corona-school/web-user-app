@@ -65,27 +65,29 @@ const Matches: React.FC = () => {
     </React.Fragment>
   ));
 
-  const dissolvedMatches = userContext.user.dissolvedMatches.map((dissolvedMatch) => ( 
-    <React.Fragment key={dissolvedMatch.uuid}>
-      <MatchCard
-        type={userContext.user.type === 'student' ? 'pupil' : 'student'}
-        match={dissolvedMatch}
-        handleDissolveMatch={() => {}}
-        dissolved={true}
-      />
-    </React.Fragment>
-  ));
+  const dissolvedMatches = userContext.user.dissolvedMatches.map(
+    (dissolvedMatch) => (
+      <React.Fragment key={dissolvedMatch.uuid}>
+        <MatchCard
+          type={userContext.user.type === 'student' ? 'pupil' : 'student'}
+          match={dissolvedMatch}
+          handleDissolveMatch={() => {}}
+          dissolved={true}
+        />
+      </React.Fragment>
+    )
+  );
   return (
     <div className={classes.container}>
-          <div className={classes.containerRequests}>
-            <Title size="h1">Deine Anfragen</Title>
-            <div className={classes.openRequests}>{openRequests}</div>
-          </div>
-          <Title size="h2">Deine Zuordnungen</Title>
-          {currentMatches}
-          <Title size="h2">Entfernte Zuordnungen</Title>
-          {dissolvedMatches}
-        </div>
+      <div className={classes.containerRequests}>
+        <Title size="h1">Deine Anfragen</Title>
+        <div className={classes.openRequests}>{openRequests}</div>
+      </div>
+      <Title size="h2">Deine Zuordnungen</Title>
+      {currentMatches}
+      <Title size="h2">Entfernte Zuordnungen</Title>
+      {dissolvedMatches}
+    </div>
   );
 };
 

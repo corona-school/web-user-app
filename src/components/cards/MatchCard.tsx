@@ -27,16 +27,24 @@ interface Props {
 const setHighlightColor = (isDissolvedMatch: boolean) => {
   let color: string;
   if (isDissolvedMatch) {
-    color = "#DE2C18";
+    color = '#DE2C18';
   } else {
-    color = "#71DE5A";
+    color = '#71DE5A';
   }
   return color;
-}
+};
 
-const MatchCard: React.FC<Props> = ({ match, type, dissolved, handleDissolveMatch }) => {
+const MatchCard: React.FC<Props> = ({
+  match,
+  type,
+  dissolved,
+  handleDissolveMatch,
+}) => {
   return (
-    <CardBase highlightColor={setHighlightColor(dissolved)} className={classes.baseContainer}>
+    <CardBase
+      highlightColor={setHighlightColor(dissolved)}
+      className={classes.baseContainer}
+    >
       <div className={classes.container}>
         <div className={classes.matchInfoContainer}>
           <Title size="h4" bold>
@@ -61,7 +69,7 @@ const MatchCard: React.FC<Props> = ({ match, type, dissolved, handleDissolveMatc
             )}
           </Text>
         </div>
-        {!dissolved &&
+        {!dissolved && (
           <ButtonContainer>
             <LinkButton
               color="#71DE5A"
@@ -71,8 +79,8 @@ const MatchCard: React.FC<Props> = ({ match, type, dissolved, handleDissolveMatc
               style={{ margin: '4px' }}
             >
               <Icons.VideoChat />
-            Video-Chat
-          </LinkButton>
+              Video-Chat
+            </LinkButton>
             <LinkButton
               href={'mailto:' + match.email}
               style={{ margin: '4px' }}
@@ -90,7 +98,7 @@ const MatchCard: React.FC<Props> = ({ match, type, dissolved, handleDissolveMatc
               <Icons.Delete />
             </Button>
           </ButtonContainer>
-        }
+        )}
       </div>
     </CardBase>
   );

@@ -115,16 +115,16 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
       </>
     );
   };
-  
+
   const handleDatePickerValue = (selectedPupil: Match, dateFormat: string) => {
-    let dateValue : Moment; 
-    if(user.dissolvedMatches.includes(selectedPupil)) {
+    let dateValue: Moment;
+    if (user.dissolvedMatches.includes(selectedPupil)) {
       dateValue = moment(certificateData.startDate * 1000);
     } else {
       dateValue = moment(moment(Date.now()), dateFormat);
     }
-    return dateValue; 
-  }
+    return dateValue;
+  };
 
   const renderGeneralInformationForm = () => {
     const dateFormat = 'DD/MM/YYYY';
@@ -186,8 +186,8 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
               if (v) {
                 setCertificateData({
                   ...certificateData,
-                  startDate: v.unix()
-                })
+                  startDate: v.unix(),
+                });
               }
             }}
           />{' '}

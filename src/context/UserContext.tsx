@@ -33,7 +33,7 @@ export const defaultUser = {
       uuid: 'defaultUuid',
       jitsilink: 'defaultJitsilink',
       date: 120301923,
-    }
+    },
   ],
   subjects: [
     {
