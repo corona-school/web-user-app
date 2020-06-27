@@ -7,7 +7,7 @@ import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 const dev = process.env.NODE_ENV === 'development';
 
 const apiURL = dev
-  ? 'https://dev.api.corona-school.de/api/'
+  ? 'https://dev.api.corona-school.de/api'
   : `https://api.corona-school.de/api`;
 
 export const redeemVerificationToken = (
