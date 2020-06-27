@@ -1,0 +1,8 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+export const dev = process.env.NODE_ENV === 'development';
+
+export const apiURL = dev
+  ? process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001/api'
+  : process.env.REACT_APP_BACKEND_URL || 'https://api.corona-school.de/api';
