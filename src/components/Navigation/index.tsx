@@ -50,6 +50,13 @@ const Navigation: React.FC<Props> = (props) => {
           Startseite
         </NavButton>
         <NavButton
+          to="/courses"
+          icon={<Icons.Match />}
+          onClick={() => props.setMenuOpen(false)}
+        >
+          Kurse
+        </NavButton>
+        <NavButton
           to="/matches"
           icon={<Icons.Match />}
           active={
