@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import moment from 'moment';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
@@ -12,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 import { Tag } from '../Tag';
 
 import classes from './MyCourseCard.module.scss';
+import { AuthContext } from '../../context/AuthContext';
 
 interface Props {
   course: ParsedCourseOverview;
@@ -34,9 +35,15 @@ export const CategoryToLabel = new Map([
 
 const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
   const history = useHistory();
+  const auth = useContext(AuthContext);
 
   const subCourse = course.subcourse;
   const firstLecture = subCourse?.lectures.sort((a, b) => a.start - b.start)[0];
+
+  const userId = auth.credentials.id;
+  const isMyCourse =
+    course.instructors.some((i) => i.id === userId) ||
+    course.subcourse?.instructors.some((i) => i.id === userId);
 
   const redirectToDetailPage = () => {
     if (redirect) {
@@ -94,16 +101,20 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
             <div className={classes.metaInfo}>
               {CategoryToLabel.get(course.category)}
             </div>
-            <div className={classes.metaInfo}>
-              <Tag
-                background={
-                  course.state === CourseState.CANCELLED ? '#F4486D' : undefined
-                }
-                style={{ margin: 0 }}
-              >
-                {CourseStateToLabel.get(course.state)}
-              </Tag>
-            </div>
+            {isMyCourse && (
+              <div className={classes.metaInfo}>
+                <Tag
+                  background={
+                    course.state === CourseState.CANCELLED
+                      ? '#F4486D'
+                      : undefined
+                  }
+                  style={{ margin: 0 }}
+                >
+                  {CourseStateToLabel.get(course.state)}
+                </Tag>
+              </div>
+            )}
 
             <div className={classes.metaInfo}>
               {subCourse?.participants}/{subCourse?.maxParticipants} Teilnehmer

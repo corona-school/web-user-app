@@ -114,8 +114,36 @@ const CourseDetail = () => {
     });
   };
 
+  const joinCourse = () => {
+    if (course.subcourse.joined) {
+      api.leaveCourse(course.id, course.subcourse.id, userId).then(() => {
+        setCourse({
+          ...course,
+          subcourse: {
+            ...course.subcourse,
+            participants: course.subcourse.participants - 1,
+            joined: false,
+          },
+        });
+        message.success('Du hast den Kurs verlassen.');
+      });
+    } else {
+      api.joinCourse(course.id, course.subcourse.id, userId).then(() => {
+        setCourse({
+          ...course,
+          subcourse: {
+            ...course.subcourse,
+            participants: course.subcourse.participants + 1,
+            joined: true,
+          },
+        });
+        message.success('Du bist dem Kurs beigetreten.');
+      });
+    }
+  };
+
   const renderCourseInformation = () => {
-    const menu = (
+    const getMenu = () => (
       <Menu
         onClick={(param) => {
           if (param.key === '2') {
@@ -149,11 +177,16 @@ const CourseDetail = () => {
       </Menu>
     );
 
+    const instructors = [
+      ...course.subcourse.instructors,
+      ...course.instructors,
+    ].map((i) => `${i.firstname} ${i.lastname}`);
+
     return (
       <div className={classes.statusContainer}>
         <div className={classes.headerContainer}>
           <div>
-            <Title size="h1" style={{ margin: '0px 10px' }}>
+            <Title size="h1" style={{ margin: '0px 20px 10px 8px' }}>
               {course.name}
             </Title>
             <Title size="h5" style={{ margin: '-4px 10px 0px 10px' }}>
@@ -162,7 +195,7 @@ const CourseDetail = () => {
           </div>
           <div className={classes.actionContainer}>
             {isMyCourse && (
-              <Dropdown overlay={menu}>
+              <Dropdown overlay={getMenu()}>
                 {course.state === CourseState.CREATED ? (
                   <AntdButton
                     type="primary"
@@ -183,43 +216,6 @@ const CourseDetail = () => {
                   </AntdButton>
                 )}
               </Dropdown>
-            )}
-            {canJoinCourse() && (
-              <AntdButton
-                onClick={() => {
-                  if (course.subcourse.joined) {
-                    api
-                      .leaveCourse(course.id, course.subcourse.id, userId)
-                      .then(() => {
-                        setCourse({
-                          ...course,
-                          subcourse: {
-                            ...course.subcourse,
-                            participants: course.subcourse.participants - 1,
-                            joined: false,
-                          },
-                        });
-                        message.success('Du hast den Kurs verlassen.');
-                      });
-                  } else {
-                    api
-                      .joinCourse(course.id, course.subcourse.id, userId)
-                      .then(() => {
-                        setCourse({
-                          ...course,
-                          subcourse: {
-                            ...course.subcourse,
-                            participants: course.subcourse.participants + 1,
-                            joined: true,
-                          },
-                        });
-                        message.success('Du bist dem Kurs beigetreten.');
-                      });
-                  }
-                }}
-              >
-                {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
-              </AntdButton>
             )}
           </div>
         </div>
@@ -279,8 +275,8 @@ const CourseDetail = () => {
               .join(', ')}{' '}
           </Descriptions.Item>
           <Descriptions.Item label="Tutoren">
-            {course.subcourse.instructors
-              .map((i) => `${i.firstname} ${i.lastname}`)
+            {instructors
+              .filter((item, pos) => instructors.indexOf(item) === pos)
               .join(', ')}
           </Descriptions.Item>
         </Descriptions>
@@ -301,6 +297,21 @@ const CourseDetail = () => {
             })}
           </Descriptions.Item>
         </Descriptions>
+        {canJoinCourse() && (
+          <AntdButton
+            type="primary"
+            style={{
+              backgroundColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
+              borderColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
+              color: course.subcourse.joined ? 'white' : '#373E47',
+              width: '120px',
+              margin: '0px 10px',
+            }}
+            onClick={joinCourse}
+          >
+            {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
+          </AntdButton>
+        )}
         {isMyCourse && (
           <div>
             <Title size="h3" style={{ margin: '0px 10px' }}>
