@@ -28,6 +28,7 @@ interface FormData {
   lastname?: string;
   email?: string;
   isOfficial?: boolean;
+  isInstructor?: boolean;
   isTutor?: boolean;
   // isOfficial
   state?: string;
@@ -41,11 +42,20 @@ interface FormData {
   newsletter?: boolean;
 }
 
-const RegisterTutor = () => {
+interface Props {
+  isPractica?: boolean;
+  isClub?: boolean;
+  isStudent?: boolean;
+}
+
+const RegisterTutor: React.FC<Props> = (props) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [isOfficial, setOfficial] = useState(false);
-  const [isTutor, setTutor] = useState(false);
+  const [isOfficial, setOfficial] = useState(props.isPractica || false);
+  const [isTutor, setTutor] = useState(props.isStudent || false);
+  const [isGroups, setGroups] = useState(
+    props.isPractica || props.isClub || false
+  );
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'finnish' | 'done'
   >('start');
@@ -95,41 +105,83 @@ const RegisterTutor = () => {
           className={classes.formItem}
           name="additional"
           label="Weitere Angaben"
-          rules={[{ required: true, message: 'Bitte wähle eine Option aus' }]}
+          rules={[
+            (_) => ({
+              required: true,
+              validator() {
+                if (isGroups || isTutor) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('Bitte wähle eine Option aus.');
+              },
+            }),
+          ]}
         >
-          <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox
-              onChange={(e) => {
-                setTutor(!isTutor);
-              }}
-              value="isTutor"
-              style={{ lineHeight: '32px', marginLeft: '8px' }}
-              defaultChecked={formData.isTutor}
-            >
-              Ich möchte eine*n Schüler*in im 1-zu-1-Format unterstützen
-            </Checkbox>
-            <Checkbox value="isGroups" style={{ lineHeight: '32px' }}>
-              Ich möchte meine Hilfe im Rahmen eines Kurses anbieten
-            </Checkbox>
-          </Checkbox.Group>
+          <Checkbox
+            onChange={(e) => {
+              setTutor(!isTutor);
+            }}
+            value="isTutor"
+            style={{ lineHeight: '32px', marginLeft: '8px' }}
+            checked={isTutor}
+          >
+            Ich möchte eine*n Schüler*in im 1-zu-1-Format unterstützen
+          </Checkbox>
+          <Checkbox
+            onChange={(e) => {
+              if (props.isPractica) {
+                return;
+              }
+              setGroups(!isGroups);
+            }}
+            value="isGroups"
+            style={{ lineHeight: '32px' }}
+            checked={isGroups}
+          >
+            Ich möchte an Gruppenkursen der Corona School teilnehmen (z.B.
+            Sommer-AG, Repetitorium, Lerncoaching)
+          </Checkbox>
         </Form.Item>
         <Form.Item
           className={classes.formItem}
           name="official"
-          label="Hilfst du im Rahmen einer Universitätsveranstaltung? (z.B. Seminar oder Praktikum) "
+          label={
+            <span>
+              Für Lehramtsstudierende: Möchtest du dich für unser{' '}
+              <a
+                href="https://www.corona-school.de/digital-lehren-lernen"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                digitales Praktikum
+              </a>{' '}
+              anmelden?
+            </span>
+          }
+          rules={[
+            (_) => ({
+              required: props.isPractica,
+              validator() {
+                if (!props.isPractica) {
+                  return Promise.resolve();
+                }
+                if (props.isPractica && isOfficial) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('Bitte wähle eine Option aus.');
+              },
+            }),
+          ]}
         >
-          <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox
-              onChange={(e) => {
-                setOfficial(!isOfficial);
-              }}
-              value="isOfficial"
-              style={{ lineHeight: '32px', marginLeft: '8px' }}
-              defaultChecked={formData.isOfficial}
-            >
-              Ja
-            </Checkbox>
-          </Checkbox.Group>
+          <Checkbox
+            onChange={(e) => {
+              setOfficial(!isOfficial);
+            }}
+            style={{ lineHeight: '32px', marginLeft: '8px' }}
+            checked={isOfficial}
+          >
+            Ja
+          </Checkbox>
         </Form.Item>
       </>
     );
@@ -147,25 +199,29 @@ const RegisterTutor = () => {
             ]}
           >
             <Select
+              showSearch
               placeholder="Baden-Württemberg"
               defaultValue={formData.state}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
             >
-              <Option value="BW"> Baden-Württemberg</Option>
-              <Option value="BY"> Bayern</Option>
-              <Option value="BE"> Berlin</Option>
-              <Option value="BB"> Brandenburg</Option>
-              <Option value="HB"> Bremen</Option>
-              <Option value="HH"> Hamburg</Option>
-              <Option value="HE"> Hessen</Option>
-              <Option value="MV"> Mecklenburg-Vorpommern</Option>
-              <Option value="NI"> Niedersachsen</Option>
-              <Option value="NW"> Nordrhein-Westfalen</Option>
-              <Option value="RP"> Rheinland-Pfalz</Option>
-              <Option value="SL"> Saarland</Option>
-              <Option value="SN"> Sachsen</Option>
-              <Option value="ST"> Sachsen-Anhalt</Option>
-              <Option value="SH"> Schleswig-Holstein</Option>
-              <Option value="TH"> Thüringen</Option>
+              <Option value="BW">Baden-Württemberg</Option>
+              <Option value="BY">Bayern</Option>
+              <Option value="BE">Berlin</Option>
+              <Option value="BB">Brandenburg</Option>
+              <Option value="HB">Bremen</Option>
+              <Option value="HH">Hamburg</Option>
+              <Option value="HE">Hessen</Option>
+              <Option value="MV">Mecklenburg-Vorpommern</Option>
+              <Option value="NI">Niedersachsen</Option>
+              <Option value="NW">Nordrhein-Westfalen</Option>
+              <Option value="RP">Rheinland-Pfalz</Option>
+              <Option value="SL">Saarland</Option>
+              <Option value="SN">Sachsen</Option>
+              <Option value="ST">Sachsen-Anhalt</Option>
+              <Option value="SH">Schleswig-Holstein</Option>
+              <Option value="TH">Thüringen</Option>
               <Option value="other">anderes Bundesland</Option>
             </Select>
           </Form.Item>
@@ -216,12 +272,7 @@ const RegisterTutor = () => {
             </Select>
           </Form.Item>
         )}
-        <Form.Item className={classes.formItem} label="Nachricht" name="msg">
-          <Input.TextArea
-            placeholder="Hier deine Nachricht"
-            defaultValue={formData.msg}
-          />
-        </Form.Item>
+
         {isOfficial && (
           <Form.Item
             className={classes.formItem}
@@ -237,35 +288,7 @@ const RegisterTutor = () => {
             />
           </Form.Item>
         )}
-        {isOfficial && (
-          <Form.Item
-            className={classes.formItem}
-            label="Modul"
-            name="module"
-            rules={[{ required: true, message: 'Bitte trage dein Modul ein' }]}
-          >
-            <Radio.Group>
-              <Radio.Button
-                defaultChecked={formData.module === 'internship'}
-                value="internship"
-              >
-                Praktikum
-              </Radio.Button>
-              <Radio.Button
-                defaultChecked={formData.module === 'seminar'}
-                value="seminar"
-              >
-                Seminar
-              </Radio.Button>
-              <Radio.Button
-                defaultChecked={formData.module === 'other'}
-                value="other"
-              >
-                Sonstiges
-              </Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-        )}
+
         {isOfficial && (
           <Form.Item
             className={classes.formItem}
@@ -286,6 +309,21 @@ const RegisterTutor = () => {
             />
           </Form.Item>
         )}
+        <Form.Item
+          className={classes.formItem}
+          label="Nachricht hinzufügen"
+          name="msg"
+          initialValue={
+            isGroups
+              ? 'Nun bitten wir dich die Inhalte deines Gruppenkurses näher zu beschreiben (3-5 Sätze). Welchen Themenbereich hast du dir ausgesucht? (Sommer AG, Repetitorium, Lerncoaching).\n\nWelches konkrete Kursthema stellst du dir vor und für welche Schüler*innen wäre dieser Kurs geeignet (Jahrgangsstufe, Schulform, Fächer)?\n\nWie viele Personen sollen an deinem Kurs teilnehmen?\n\nWie schaffst du Interaktion mit den Teilnehmer*innen?\n\n'
+              : undefined
+          }
+        >
+          <Input.TextArea
+            autoSize={{ minRows: isGroups ? 10 : 4 }}
+            placeholder={'Hier deine Nachricht für uns.'}
+          />
+        </Form.Item>
       </>
     );
   };
@@ -377,7 +415,6 @@ const RegisterTutor = () => {
 
     try {
       const formValues = await form.validateFields();
-      console.log(formValues);
 
       if (formState === 'start') {
         setFormData({
@@ -386,7 +423,8 @@ const RegisterTutor = () => {
           lastname: formValues.lastname,
           email: formValues.email,
           isOfficial: isOfficial,
-          isTutor: formValues.additional.includes('isTutor'),
+          isTutor: isTutor,
+          isInstructor: isGroups,
         });
 
         setFormState('detail');
@@ -404,7 +442,7 @@ const RegisterTutor = () => {
           msg: formValues.msg,
           state: formValues.state,
           university: formValues.university,
-          module: formValues.module,
+          module: 'internship',
           hours: formValues.hours,
         });
         setFormState('finnish');
@@ -433,6 +471,7 @@ const RegisterTutor = () => {
       isTutor: data.isTutor,
       subjects: data.subjects || [],
       isOfficial: data.isOfficial,
+      isInstructor: data.isInstructor,
       university: data.university,
       module: data.module,
       hours: data.hours,
@@ -447,7 +486,6 @@ const RegisterTutor = () => {
       message.error('Es ein Fehler aufgetreten.');
       return;
     }
-    console.log(tutor);
 
     setLoading(true);
     apiContext
@@ -494,7 +532,7 @@ const RegisterTutor = () => {
             Corona School
           </Title>
         </a>
-        <Title>
+        {/* <Title>
           {formState === 'done' ? (
             <span>Du wurdest erfolgreich als Tutor*in registriert</span>
           ) : (
@@ -502,7 +540,7 @@ const RegisterTutor = () => {
               Ich möchte mich registrieren als <b>Tutor*in</b>
             </span>
           )}
-        </Title>
+        </Title> */}
       </div>
 
       <Form

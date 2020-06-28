@@ -28,6 +28,13 @@
   @media only screen and (max-width: 600px) {
     max-height: 100vh;
   }
+
+  .backButton {
+    position: absolute;
+    z-index: 3;
+    top: 16px;
+    left: 16px;
+  }
 }
 
 .background1 {

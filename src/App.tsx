@@ -60,6 +60,15 @@ const App: React.FC = () => {
         <Route path="/register/tutee">
           <RegisterTutee />
         </Route>
+        <Route path="/register/practica">
+          <RegisterTutor isPractica />
+        </Route>
+        <Route path="/register/club">
+          <RegisterTutor isClub />
+        </Route>
+        <Route path="/register/student">
+          <RegisterTutor isStudent />
+        </Route>
         <Route path="/register/tutor">
           <RegisterTutor />
         </Route>

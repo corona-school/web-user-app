@@ -20,6 +20,7 @@ export interface Tutor {
   email: string;
   isOfficial: boolean;
   isTutor: boolean;
+  isInstructor: boolean;
   // isOfficial
   state?: string;
   university?: string;

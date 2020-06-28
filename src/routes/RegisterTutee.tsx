@@ -36,7 +36,8 @@ const RegisterTutee = () => {
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'finnish' | 'done'
   >('start');
-  const [isTutee, setTutee] = useState(false);
+  const [isTutee, setTutee] = useState(true);
+  const [isGroups, setGroups] = useState(true);
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
@@ -83,23 +84,39 @@ const RegisterTutee = () => {
           className={classes.formItem}
           name="additional"
           label="Weitere Angaben"
-          rules={[{ required: true, message: 'Bitte wähle eine Option aus' }]}
+          rules={[
+            (_) => ({
+              validator() {
+                if (isGroups || isTutee) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('Bitte wähle eine Option aus.');
+              },
+            }),
+          ]}
         >
-          <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox
-              onChange={(e) => {
-                setTutee(!isTutee);
-              }}
-              value="isTutee"
-              style={{ lineHeight: '32px', marginLeft: '8px' }}
-              defaultChecked={formData.isTutee}
-            >
-              Ich möchte persönliche Nachhilfe nehmen.
-            </Checkbox>
-            <Checkbox value="isGroups" style={{ lineHeight: '32px' }}>
-              Ich möchte bei Gruppenkursen mitmachen.
-            </Checkbox>
-          </Checkbox.Group>
+          <Checkbox
+            onChange={() => {
+              setTutee(!isTutee);
+            }}
+            style={{ lineHeight: '32px', marginLeft: '8px' }}
+            checked={isTutee}
+            defaultChecked={formData.isTutee}
+          >
+            Ich möchte Unterstützung im 1-zu-1-Format von einem/einer Student*in
+            erhalten.
+          </Checkbox>
+          <Checkbox
+            onChange={() => {
+              setGroups(!isGroups);
+            }}
+            value="isGroups"
+            style={{ lineHeight: '32px' }}
+            checked={isGroups}
+          >
+            Ich möchte an Gruppenkursen der Corona School teilnehmen (z.B.
+            Sommer-AG, Repetitorium, Lerncoaching)
+          </Checkbox>
         </Form.Item>
       </>
     );
@@ -341,7 +358,7 @@ const RegisterTutee = () => {
           firstname: formValues.firstname,
           lastname: formValues.lastname,
           email: formValues.email,
-          isTutee: formValues.additional.includes('isTutee'),
+          isTutee: isTutee,
         });
 
         setFormState('detail');
