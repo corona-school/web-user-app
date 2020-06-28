@@ -8,9 +8,8 @@ import { Title, Text } from '../Typography';
 import Button from '../button';
 import Icons from '../../assets/icons';
 import { User } from '../../types';
-import { Match } from '../../types';
 import { Select, DatePicker, InputNumber, message } from 'antd';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import ActivityForm from '../forms/ActivityForm';
 
 const { Option } = Select;
@@ -28,7 +27,6 @@ export interface Activity {
 
 export interface CertificateData {
   student?: string;
-  startDate: number;
   endDate: number;
   weekCount: number;
   hoursPerWeek: number;
@@ -43,7 +41,6 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   const allMatches = [...user.matches, ...user.dissolvedMatches];
 
   const [certificateData, setCertificateData] = useState<CertificateData>({
-    startDate: moment().unix(),
     endDate: moment().unix(),
     weekCount: 0,
     hoursPerWeek: 1.0,
@@ -58,7 +55,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   const apiContext = useContext(context.Api);
 
   useEffect(() => {
-    const selectedPupil = user.matches.find(
+    const selectedPupil = allMatches.find(
       (s) => s.uuid === certificateData.student
     );
     if (selectedPupil) {
@@ -116,16 +113,6 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     );
   };
 
-  const handleDatePickerValue = (selectedPupil: Match, dateFormat: string) => {
-    let dateValue: Moment;
-    if (user.dissolvedMatches.includes(selectedPupil)) {
-      dateValue = moment(certificateData.startDate * 1000);
-    } else {
-      dateValue = moment(moment(Date.now()), dateFormat);
-    }
-    return dateValue;
-  };
-
   const renderGeneralInformationForm = () => {
     const dateFormat = 'DD/MM/YYYY';
     const MediaTypes = ['Video-Chat', 'E-Mail', 'Telefon', 'Chat-Nachrichten'];
@@ -160,6 +147,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
                 ...certificateData,
                 student: v,
                 subjects: [],
+                endDate: moment().unix(), //reset this, such that it does not get an invalid value (otherwise an invalid value for the end date may occur if the current certificateData.endDate value from a previously selected pupil is no longer valid for the now selected pupil because certificateData.endDate was a date before the match with the now selected pupil was created)
               });
             }}
             style={{ width: '200px' }}
@@ -177,22 +165,15 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
         <div className={classes.inputField}>
           Vom{' '}
           <DatePicker
-            disabled={!user.dissolvedMatches.includes(selectedPupil)}
-            bordered={user.dissolvedMatches.includes(selectedPupil)}
-            value={handleDatePickerValue(selectedPupil, dateFormat)}
+            disabled
+            bordered={false}
+            value={moment(selectedPupil?.date)}
             defaultValue={moment(moment(Date.now()), dateFormat)}
             format={dateFormat}
-            onChange={(v) => {
-              if (v) {
-                setCertificateData({
-                  ...certificateData,
-                  startDate: v.unix(),
-                });
-              }
-            }}
           />{' '}
           bis zum{' '}
           <DatePicker
+            disabled={!selectedPupil}
             style={{ marginLeft: '4px', marginRight: '4px' }}
             allowClear={false}
             value={moment(certificateData.endDate * 1000)}
@@ -205,7 +186,10 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
               }
             }}
             disabledDate={(currentDate) => {
-              return moment().diff(currentDate) <= 0;
+              return (
+                moment().diff(currentDate) <= 0 ||
+                moment(currentDate).isBefore(selectedPupil.date)
+              );
             }}
             format={dateFormat}
           />{' '}
