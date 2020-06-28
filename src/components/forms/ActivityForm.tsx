@@ -110,6 +110,8 @@ const ActivityForm = ({ certificateData, setCertificateData }: Props) => {
             </Select>
             {certificateData.activities[i] && (
               <Button
+                backgroundColor="#F4F6FF"
+                color="#4E6AE6"
                 className={classes.buttonStyle}
                 onClick={() => deleteItem(i)}
               >
