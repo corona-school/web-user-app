@@ -1,17 +1,23 @@
 import React, { useState, useContext } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Button from '../button';
-import { Form, Input, Radio, Select } from 'antd';
+import { Form, Input, Radio, Select, InputNumber, Switch, message } from 'antd';
 import Context from '../../context';
 
 import classes from './CreateCourse.module.scss';
-import { Course } from '../../types/Course';
+import { Course, SubCourse } from '../../types/Course';
 import { CompletedCourse } from '../../routes/CourseForm';
 
 const { Option } = Select;
 
+export interface CompletedSubCourse extends SubCourse {
+  id: number;
+}
+
 interface Props {
-  onSuccess: (courseId: CompletedCourse) => void;
+  onSuccess: () => void;
+  setCourse: (course: CompletedCourse) => void;
+  setSubCourse: (subCourse: CompletedSubCourse) => void;
 }
 
 export const revisionTags = [
@@ -46,10 +52,79 @@ export const tags = new Map([
 ]);
 
 export const CreateCourse: React.FC<Props> = (props) => {
+  const [minGrade, setMinGrade] = useState(null);
+  const [maxGrade, setMaxGrade] = useState(null);
+  const [maxParticipants, setMaxParticipants] = useState(null);
+  const [joinAfterStart, setJoinAfterStart] = useState(false);
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState('revision');
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
+
+  const renderSubCourseForm = () => {
+    return (
+      <>
+        <Form.Item
+          label="Beschränkungen (Klasse, Teilnehmer)"
+          className={classes.formItem}
+          name="class"
+          rules={[
+            ({ getFieldValue }) => ({
+              required: true,
+              validator() {
+                if (minGrade && maxGrade && maxParticipants) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('Du musst die Klassen begrenzen.');
+              },
+            }),
+          ]}
+        >
+          Von Klasse
+          <InputNumber
+            style={{ margin: '0px 4px', width: '64px' }}
+            onChange={(v) => setMinGrade(v)}
+            min={1}
+            max={maxGrade || 13}
+            placeholder="5"
+            value={minGrade}
+          />
+          bis zu Klasse
+          <InputNumber
+            style={{ margin: '0px 4px', width: '64px' }}
+            onChange={(v) => setMaxGrade(v)}
+            min={minGrade || 1}
+            max={13}
+            placeholder="7"
+            value={maxGrade}
+          />
+          mit maximal
+          <InputNumber
+            onChange={(v) => setMaxParticipants(v)}
+            style={{ margin: '0px 4px', width: '64px' }}
+            min={1}
+            max={99}
+            placeholder="14"
+          />{' '}
+          Teilnehmer.
+        </Form.Item>
+
+        <Form.Item
+          className={classes.formItem}
+          name="joinAfterStart"
+          label="Sonstiges"
+        >
+          <Switch
+            style={{ margin: '0px 4px' }}
+            onChange={(v) => {
+              setJoinAfterStart(v);
+            }}
+          />
+          Teilnehmer dürfen nach Kursbeginn beitreten
+        </Form.Item>
+      </>
+    );
+  };
 
   const renderFormItems = () => {
     const radioStyle = {
@@ -128,6 +203,8 @@ export const CreateCourse: React.FC<Props> = (props) => {
             })}
           </Select>
         </Form.Item>
+
+        {renderSubCourseForm()}
       </>
     );
   };
@@ -145,20 +222,27 @@ export const CreateCourse: React.FC<Props> = (props) => {
         tags: formValues.tags || [],
         submit: false,
       };
-      console.log(course);
+      const subCourse: SubCourse = {
+        instructors: [],
+        minGrade,
+        maxGrade,
+        maxParticipants: maxParticipants,
+        joinAfterStart: joinAfterStart,
+        published: false,
+      };
+      console.log(course, subCourse);
 
-      apiContext
-        .createCourse(course)
-        .then((id) => {
-          setLoading(false);
-          props.onSuccess({ ...course, id });
-        })
-        .catch((err) => {
-          setLoading(false);
-          console.log(err);
-        });
+      const courseId = await apiContext.createCourse(course);
+      props.setCourse({ ...course, id: courseId });
+
+      const subCourseId = await apiContext.createSubCourse(courseId, subCourse);
+      props.setSubCourse({ ...subCourse, id: subCourseId });
+
+      setLoading(false);
+      props.onSuccess();
     } catch (err) {
       setLoading(false);
+      message.error('Ein Fehler ist aufgetreten.');
       console.log(err);
     }
   };
@@ -179,14 +263,16 @@ export const CreateCourse: React.FC<Props> = (props) => {
         </div>
       )}
 
-      <Button
-        onClick={handleCourseCreation}
-        className={classes.button}
-        color="white"
-        backgroundColor="#4E6AE6"
-      >
-        Erstellen
-      </Button>
+      <div className={classes.buttonContainer}>
+        <Button
+          onClick={handleCourseCreation}
+          className={classes.button}
+          color="white"
+          backgroundColor="#4E6AE6"
+        >
+          Erstellen
+        </Button>
+      </div>
     </Form>
   );
 };

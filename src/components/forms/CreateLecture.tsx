@@ -11,18 +11,18 @@ import {
   message,
 } from 'antd';
 import Context from '../../context';
-import { CompletedSubCourse } from './CreateSubCourse';
 import { Lecture } from '../../types/Course';
 import { CompletedCourse, CompletedLecture } from '../../routes/CourseForm';
 import moment from 'moment';
 
 import classes from './CreateLecture.module.scss';
+import { CompletedSubCourse } from './CreateCourse';
 
 const { Option } = Select;
 
 interface Props {
   lectures: CompletedLecture[];
-  subCourses: CompletedSubCourse[];
+  subCourse: CompletedSubCourse;
   course: CompletedCourse;
   next: () => void;
   onSuccess: (lecture: CompletedLecture) => void;
@@ -50,7 +50,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
                 if (start && duration) {
                   return Promise.resolve();
                 }
-                return Promise.reject('Du musst die Klassen begrenzen.');
+                return Promise.reject('Bitte fülle alle Felder korrekt aus.');
               },
             }),
           ]}
@@ -91,28 +91,33 @@ export const CreateLecture: React.FC<Props> = (props) => {
     try {
       setLoading(true);
       await form.validateFields();
-
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      return;
+    }
+    try {
       const lecture: Lecture = {
         instructor: '',
         start: start.unix(),
         duration,
       };
-      console.log(lecture);
-      apiContext
-        .createLecture(props.course.id, selectedSubCourseId, lecture)
-        .then((id) => {
-          setLoading(false);
-          props.onSuccess({ ...lecture, id, subCourseId: selectedSubCourseId });
-        })
-        .catch((err) => {
-          setLoading(false);
-          message.error(
-            'Ein Fehler ist aufgetreten. Bitte versuche es erneut.'
-          );
-          console.log(err);
-        });
+
+      const lectureId = await apiContext.createLecture(
+        props.course.id,
+        props.subCourse.id,
+        lecture
+      );
+
+      setLoading(false);
+      props.onSuccess({
+        ...lecture,
+        id: lectureId,
+        subCourseId: selectedSubCourseId,
+      });
     } catch (err) {
       setLoading(false);
+      message.error('Ein Fehler ist aufgetreten. Bitte versuche es erneut.');
       console.log(err);
     }
   };
@@ -140,26 +145,15 @@ export const CreateLecture: React.FC<Props> = (props) => {
         bordered
         footer={
           <div className={classes.footerContainer}>
-            <div className="ant-list-footer">Lektion hinzufügen</div>
-            <div className={classes.footerForm}>
-              <div className={classes.selectContainer}>
-                <Select
-                  className={classes.courseSelect}
-                  onChange={(v) => {
-                    setSelectedSubCourseId(v);
-                  }}
-                  placeholder="Wähle einen Kurs aus"
-                >
-                  {props.subCourses.map((subCourse) => {
-                    return (
-                      <Option
-                        value={subCourse.id}
-                      >{`${props.course.name} ${subCourse.minGrade}-${subCourse.maxGrade}`}</Option>
-                    );
-                  })}
-                </Select>
+            <div className="ant-list-footer" style={{ marginBottom: 0 }}>
+              Lektion hinzufügen
+            </div>
+            <div style={{ padding: '0px 0px 8px 24px', marginTop: '-8px' }}>
+              <div className="ant-form-item-explain">
+                Der Termin muss mindestens 2 Tage in der Zukunft liegen.
               </div>
-
+            </div>
+            <div className={classes.footerForm}>
               {renderFormItems()}
               <Button
                 onClick={handleCourseCreation}

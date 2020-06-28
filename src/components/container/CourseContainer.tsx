@@ -24,19 +24,19 @@ export const CourseContainer: React.FC<Props> = (props) => {
               }
             />
             <Step
-              title="Kursarten"
+              title="Termine"
               description={
                 <div className={classes.stepDescription}>
-                  Hier kannst du verschiedene Arten deines Kurses festlegen.
+                  Lege Termine für deinen Kurs fest.
                 </div>
               }
             />
             <Step
               className={classes.step}
-              title="Termine"
+              title="Fertig"
               description={
                 <div className={classes.stepDescription}>
-                  Lege deine Termine für dein Kurs fest.
+                  Dein Kurs wurde erfolgreich erstellt.
                 </div>
               }
             />
