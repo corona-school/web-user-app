@@ -18,7 +18,7 @@ interface Props {
   redirect?: string;
 }
 
-const CourseStateToLabel = new Map([
+export const CourseStateToLabel = new Map([
   [CourseState.SUBMITTED, 'Eingereicht'],
   [CourseState.CREATED, 'Erstellt'],
   [CourseState.ALLOWED, 'Erlaubt'],
@@ -26,8 +26,9 @@ const CourseStateToLabel = new Map([
   [CourseState.CANCELLED, 'Abgesagt'],
 ]);
 
-const CategoryToLabel = new Map([
-  [CourseCategory.REVISION, 'Repititorien'],
+export const CategoryToLabel = new Map([
+  [CourseCategory.REVISION, 'Repititorium'],
+  [CourseCategory.COACHING, 'Lern-Coaching'],
   [CourseCategory.CLUB, 'AGs'],
 ]);
 

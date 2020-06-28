@@ -4,20 +4,15 @@ import moment from 'moment';
 
 import { ApiContext } from '../context/ApiContext';
 import { AuthContext } from '../context/AuthContext';
-import {
-  ParsedCourseOverview,
-  CourseState,
-  SubCourse,
-  Course,
-} from '../types/Course';
+import { ParsedCourseOverview, CourseState, Course } from '../types/Course';
 import { Title, Text } from '../components/Typography';
 import { Tag } from '../components/Tag';
 import 'moment/locale/de';
 import {
   DeleteOutlined,
   MailOutlined,
-  GlobalOutlined,
   CheckCircleOutlined,
+  DownOutlined,
 } from '@ant-design/icons';
 import classes from './CourseDetail.module.scss';
 import { UserContext } from '../context/UserContext';
@@ -29,15 +24,16 @@ import {
   message,
   Button as AntdButton,
   List,
-  Input,
+  Tooltip,
 } from 'antd';
 import { parseCourse } from '../utils/CourseUtil';
+import {
+  CategoryToLabel,
+  CourseStateToLabel,
+} from '../components/cards/MyCourseCard';
 
 import { tags } from '../components/forms/CreateCourse';
 import { ModalContext } from '../context/ModalContext';
-import Button from '../components/button';
-import Icons from '../assets/icons';
-import Images from '../assets/images';
 import CourseMessageModal from '../components/Modals/CourseMessageModal';
 
 moment.locale('de');
@@ -84,34 +80,6 @@ const CourseDetail = () => {
 
   const isMyCourse = course.instructors.some((i) => i.id === userId);
 
-  const publishCourse = () => {
-    if (!course.subcourse) {
-      return;
-    }
-
-    const subCourse: SubCourse = {
-      instructors: course.subcourse.instructors.map((i) => i.id),
-      minGrade: course.subcourse.minGrade,
-      maxGrade: course.subcourse.maxGrade,
-      maxParticipants: course.subcourse.maxParticipants,
-      joinAfterStart: course.subcourse.joinAfterStart,
-      published: true,
-    };
-
-    api
-      .publishSubCourse(course.id, course.subcourse.id, subCourse)
-      .then(() => {
-        setCourse({
-          ...course,
-          subcourse: { ...course.subcourse, published: true },
-        });
-        message.success('Kurs wurde veröffentlicht.');
-      })
-      .catch((err) => {
-        message.error('Kurs wurde veröffentlicht.');
-      });
-  };
-
   const submitCourse = () => {
     const category = course.category;
     const tagObj = tags.get(category);
@@ -150,9 +118,6 @@ const CourseDetail = () => {
     const menu = (
       <Menu
         onClick={(param) => {
-          if (param.key === '1') {
-            publishCourse();
-          }
           if (param.key === '2') {
             submitCourse();
           }
@@ -164,17 +129,16 @@ const CourseDetail = () => {
           }
         }}
       >
-        {!course.subcourse.published && (
-          <Menu.Item key="1" icon={<GlobalOutlined />}>
-            Veröffentlichen
-          </Menu.Item>
-        )}
         {course.state === CourseState.CREATED && (
           <Menu.Item key="2" icon={<CheckCircleOutlined />}>
             Zur Prüfung freigeben
           </Menu.Item>
         )}
-        <Menu.Item key="3" icon={<MailOutlined />}>
+        <Menu.Item
+          key="3"
+          icon={<MailOutlined />}
+          disabled={course.subcourse.participantList.length === 0}
+        >
           Nachricht senden
         </Menu.Item>
         {course.state !== CourseState.CANCELLED && (
@@ -198,7 +162,27 @@ const CourseDetail = () => {
           </div>
           <div className={classes.actionContainer}>
             {isMyCourse && (
-              <Dropdown.Button overlay={menu}>Bearbeiten</Dropdown.Button>
+              <Dropdown overlay={menu}>
+                {course.state === CourseState.CREATED ? (
+                  <AntdButton
+                    type="primary"
+                    style={{
+                      backgroundColor: '#FCD95C',
+                      borderColor: '#FCD95C',
+                      color: '#373E47',
+                    }}
+                    onClick={() => {
+                      submitCourse();
+                    }}
+                  >
+                    <CheckCircleOutlined /> Zur Prüfung freigeben
+                  </AntdButton>
+                ) : (
+                  <AntdButton>
+                    Einstellungen <DownOutlined />
+                  </AntdButton>
+                )}
+              </Dropdown>
             )}
             {canJoinCourse() && (
               <AntdButton
@@ -252,19 +236,34 @@ const CourseDetail = () => {
                   course.state === CourseState.CANCELLED ||
                   course.state === CourseState.DENIED
                     ? '#F4486D'
-                    : '#ffcc11'
+                    : '#FCD95C'
+                }
+                color={
+                  course.state === CourseState.CANCELLED ||
+                  course.state === CourseState.DENIED
+                    ? 'white'
+                    : '#373E47'
                 }
                 style={{ fontSize: '12px', margin: 0 }}
               >
-                {course.state}
+                {CourseStateToLabel.get(course.state)}
               </Tag>
             </Descriptions.Item>
           )}
           {isMyCourse && (
             <Descriptions.Item label="Sichtbarkeit">
-              {course.subcourse?.published ? 'Öffentlich' : 'Privat'}
+              {course.subcourse?.published ? (
+                'Öffentlich'
+              ) : (
+                <Tooltip title="Der Kurs ist nur für dich sichtbar.">
+                  <span>Privat</span>
+                </Tooltip>
+              )}
             </Descriptions.Item>
           )}
+          <Descriptions.Item label="Kategorie">
+            {CategoryToLabel.get(course.category)}
+          </Descriptions.Item>
           <Descriptions.Item label="Teilnehmer">
             {course.subcourse.participants}/{course.subcourse.maxParticipants}
           </Descriptions.Item>

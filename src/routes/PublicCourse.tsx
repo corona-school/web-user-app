@@ -226,7 +226,7 @@ const PublicCourse = () => {
             onChange={(e) => onCheckAllChange(e, '2')}
             checked={checkAll2}
           >
-            AGs
+            Repetitorium
           </Checkbox>
         </div>
 
@@ -247,7 +247,7 @@ const PublicCourse = () => {
             onChange={(e) => onCheckAllChange(e, '3')}
             checked={checkAll3}
           >
-            AGs
+            Lern-Coaching
           </Checkbox>
         </div>
 

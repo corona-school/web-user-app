@@ -49,17 +49,19 @@ const Course = () => {
       <div className={classes.containerRequests}>
         <div className={classes.header}>
           <Title size="h1">Deine Kurse</Title>
-          <Button
-            onClick={() => {
-              history.push('/courses/create');
-            }}
-            backgroundColor="#4E6AE6"
-            color="white"
-            className={classes.courseButton}
-          >
-            <Icons.Add height="16px" />
-            Erstelle einen Kurs
-          </Button>
+          {userContext.user.type === 'student' && myCourses.length <= 2 && (
+            <Button
+              onClick={() => {
+                history.push('/courses/create');
+              }}
+              backgroundColor="#4E6AE6"
+              color="white"
+              className={classes.courseButton}
+            >
+              <Icons.Add height="16px" />
+              Erstelle einen Kurs
+            </Button>
+          )}
         </div>
         <div className={classes.myCoursesContainer}>
           {myCourses.length === 0 ? (
