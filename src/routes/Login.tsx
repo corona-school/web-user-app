@@ -90,7 +90,7 @@ const Login: React.FC = () => {
   };
 
   if (state === 'success') {
-    return <Redirect to="/settings" />;
+    return <Redirect to="/dashboard" />;
   }
 
   return (
