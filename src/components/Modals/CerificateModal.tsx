@@ -39,6 +39,7 @@ export interface CertificateData {
 
 const CertificateModal: React.FC<Props> = ({ user }) => {
   const [loading, setLoading] = useState(false);
+  const allMatches = [...user.matches, ...user.dissolvedMatches];
 
   const [certificateData, setCertificateData] = useState<CertificateData>({
     endDate: moment().unix(),
@@ -55,7 +56,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   const apiContext = useContext(context.Api);
 
   useEffect(() => {
-    const selectedPupil = user.matches.find(
+    const selectedPupil = allMatches.find(
       (s) => s.uuid === certificateData.student
     );
     if (selectedPupil) {
@@ -117,16 +118,16 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     const dateFormat = 'DD/MM/YYYY';
     const MediaTypes = ['Video-Chat', 'E-Mail', 'Telefon', 'Chat-Nachrichten'];
 
-    if (user.matches.length === 0) {
+    if (allMatches.length === 0) {
       return (
         <div>
           <Title size="h2">Zertifikat erstellen</Title>
-          <Text>Du hast keien Matches</Text>
+          <Text>Du hast keine Matches</Text>
         </div>
       );
     }
 
-    const selectedPupil = user.matches.find(
+    const selectedPupil = allMatches.find(
       (s) => s.uuid === certificateData.student
     );
 
@@ -147,11 +148,12 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
                 ...certificateData,
                 student: v,
                 subjects: [],
+                endDate: moment().unix(), //reset this, such that it does not get an invalid value (otherwise an invalid value for the end date may occur if the current certificateData.endDate value from a previously selected pupil is no longer valid for the now selected pupil because certificateData.endDate was a date before the match with the now selected pupil was created)
               });
             }}
             style={{ width: '200px' }}
           >
-            {user.matches.map((m) => {
+            {allMatches.map((m) => {
               return (
                 <Option value={m.uuid}>{`${m.firstname} ${m.lastname}`}</Option>
               );
@@ -172,6 +174,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           />{' '}
           bis zum{' '}
           <DatePicker
+            disabled={!selectedPupil}
             style={{ marginLeft: '4px', marginRight: '4px' }}
             allowClear={false}
             value={moment(certificateData.endDate * 1000)}
@@ -184,7 +187,10 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
               }
             }}
             disabledDate={(currentDate) => {
-              return moment().diff(currentDate) <= 0;
+              return (
+                moment().diff(currentDate) <= 0 ||
+                moment(currentDate).isBefore(selectedPupil.date)
+              );
             }}
             format={dateFormat}
           />{' '}

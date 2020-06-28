@@ -54,6 +54,7 @@ const Matches: React.FC = () => {
         handleDissolveMatch={() => {
           modalContext.setOpenedModal('dissolveMatchModal' + match.uuid);
         }}
+        dissolved={false}
       />
       <DissolveMatchModal
         identifier={'dissolveMatchModal' + match.uuid}
@@ -63,6 +64,19 @@ const Matches: React.FC = () => {
       />
     </React.Fragment>
   ));
+
+  const dissolvedMatches = userContext.user.dissolvedMatches.map(
+    (dissolvedMatch) => (
+      <React.Fragment key={dissolvedMatch.uuid}>
+        <MatchCard
+          type={userContext.user.type === 'student' ? 'pupil' : 'student'}
+          match={dissolvedMatch}
+          handleDissolveMatch={() => {}}
+          dissolved={true}
+        />
+      </React.Fragment>
+    )
+  );
   return (
     <div className={classes.container}>
       <div className={classes.containerRequests}>
@@ -71,7 +85,8 @@ const Matches: React.FC = () => {
       </div>
       <Title size="h2">Deine Zuordnungen</Title>
       {currentMatches}
-      {false && <Title size="h2">Entfernte Zuordnungen</Title>}
+      <Title size="h2">Entfernte Zuordnungen</Title>
+      {dissolvedMatches}
     </div>
   );
 };
