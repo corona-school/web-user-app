@@ -52,7 +52,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [isOfficial, setOfficial] = useState(props.isPractica || false);
-  const [isTutor, setTutor] = useState(props.isStudent || false);
+  const [isTutor, setTutor] = useState(
+    props.isStudent || props.isPractica || false
+  );
   const [isGroups, setGroups] = useState(
     props.isPractica || props.isClub || false
   );
@@ -119,6 +121,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
         >
           <Checkbox
             onChange={(e) => {
+              if (props.isPractica) {
+                return;
+              }
               setTutor(!isTutor);
             }}
             value="isTutor"
