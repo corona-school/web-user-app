@@ -2,15 +2,7 @@ import React, { useState, useContext } from 'react';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
-import {
-  Form,
-  Input,
-  Checkbox,
-  Radio,
-  InputNumber,
-  Select,
-  message,
-} from 'antd';
+import { Form, Input, Checkbox, InputNumber, Select, message } from 'antd';
 import Button from '../components/button';
 import ClipLoader from 'react-spinners/ClipLoader';
 
@@ -43,7 +35,7 @@ interface FormData {
 }
 
 interface Props {
-  isPractica?: boolean;
+  isInternship?: boolean;
   isClub?: boolean;
   isStudent?: boolean;
 }
@@ -51,12 +43,12 @@ interface Props {
 const RegisterTutor: React.FC<Props> = (props) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [isOfficial, setOfficial] = useState(props.isPractica || false);
+  const [isOfficial, setOfficial] = useState(props.isInternship || false);
   const [isTutor, setTutor] = useState(
-    props.isStudent || props.isPractica || false
+    props.isStudent || props.isInternship || false
   );
   const [isGroups, setGroups] = useState(
-    props.isPractica || props.isClub || false
+    props.isInternship || props.isClub || false
   );
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'finnish' | 'done'
@@ -121,7 +113,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         >
           <Checkbox
             onChange={(e) => {
-              if (props.isPractica) {
+              if (props.isInternship) {
                 return;
               }
               setTutor(!isTutor);
@@ -134,7 +126,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           </Checkbox>
           <Checkbox
             onChange={(e) => {
-              if (props.isPractica) {
+              if (props.isInternship) {
                 return;
               }
               setGroups(!isGroups);
@@ -165,12 +157,12 @@ const RegisterTutor: React.FC<Props> = (props) => {
           }
           rules={[
             (_) => ({
-              required: props.isPractica,
+              required: props.isInternship,
               validator() {
-                if (!props.isPractica) {
+                if (!props.isInternship) {
                   return Promise.resolve();
                 }
-                if (props.isPractica && isOfficial) {
+                if (props.isInternship && isOfficial) {
                   return Promise.resolve();
                 }
                 return Promise.reject('Bitte wähle eine Option aus.');
@@ -316,17 +308,20 @@ const RegisterTutor: React.FC<Props> = (props) => {
         )}
         <Form.Item
           className={classes.formItem}
-          label="Nachricht hinzufügen"
-          name="msg"
-          initialValue={
+          label={
             isGroups
-              ? 'Nun bitten wir dich die Inhalte deines Gruppenkurses näher zu beschreiben (3-5 Sätze). Welchen Themenbereich hast du dir ausgesucht? (Sommer AG, Repetitorium, Lerncoaching).\n\nWelches konkrete Kursthema stellst du dir vor und für welche Schüler*innen wäre dieser Kurs geeignet (Jahrgangsstufe, Schulform, Fächer)?\n\nWie viele Personen sollen an deinem Kurs teilnehmen?\n\nWie schaffst du Interaktion mit den Teilnehmer*innen?\n\n'
-              : undefined
+              ? 'Beschreibe die Inhalte deines Gruppenkurses (3-5 Sätze)'
+              : 'Nachricht hinzufügen'
           }
+          name="msg"
         >
           <Input.TextArea
-            autoSize={{ minRows: isGroups ? 10 : 4 }}
-            placeholder={'Hier deine Nachricht für uns.'}
+            autoSize={{ minRows: isGroups ? 6 : 4 }}
+            placeholder={
+              isGroups
+                ? 'Kursthema, Zielgruppe, Kursgröße, Interaktion'
+                : 'Hier deine Nachricht für uns.'
+            }
           />
         </Form.Item>
       </>
@@ -341,16 +336,16 @@ const RegisterTutor: React.FC<Props> = (props) => {
           name="newsletter"
         >
           <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox value={'newsletter'} defaultChecked={formData.newsletter}>
-              Ich möchte den Newsletter der Corona School erhalten und über
-              Angebote, Aktionen und weitere Unterstützungsmöglichkeiten per
-              E-Mail informiert werden.
+            <Checkbox value="newsletter" defaultChecked={formData.newsletter}>
+              Ich möchte über weitere Aktionen, Angebote und
+              Unterstützunsmöglichkeiten der Corona School per E-Mail informiert
+              werden.
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
         <Form.Item
           className={classes.formItem}
-          label="AGBs"
+          label="Datenschutzerklärung"
           name="dataprotection"
           rules={[
             {
@@ -361,10 +356,24 @@ const RegisterTutor: React.FC<Props> = (props) => {
         >
           <Checkbox.Group className={classes.checkboxGroup}>
             <Checkbox value="dataprotection">
-              Durch die Registrierung stimmst du unseren Allgemeinen
-              Geschäftsbedingungen zu. In unserer Datenschutzerklärung erfährst
-              du, wir deine Daten erfassen, verwenden und teilen. Unsere
-              Cookie-Richtlinie erklärt, wie wir Cookies verwenden.
+              Ich habe die{' '}
+              <a
+                href="https://www.corona-school.de/datenschutz"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Datenschutzerklärung
+              </a>{' '}
+              dieser Webseite zur Kenntnis genommen und willige in die
+              Verarbeitung personenbezogener Daten ein. Unsere{' '}
+              <a
+                href="https://www.corona-school.de/datenschutz"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Cookie-Richtlinie
+              </a>
+              erklärt, wie wir Cookies verwenden.
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
