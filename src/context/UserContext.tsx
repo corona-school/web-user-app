@@ -3,6 +3,7 @@ import { User, ScreeningStatus } from '../types';
 import storedCredentials from '../api/storedCredentials';
 import { AuthContext } from '../context/AuthContext';
 import { ApiContext } from '../context/ApiContext';
+import { message } from 'antd';
 
 export const defaultUser = {
   id: 'defaultId',
@@ -58,11 +59,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
           authContext.setStatus('authorized');
         })
         .catch((error) => {
-          console.log('error', error);
+          message.error('Du konntest nicht eingeloggt werden.');
+          authContext.setStatus('invalid');
           if (error && error.response && error.response.status === 403) {
             authContext.setCredentials({ id: '', token: '' });
             storedCredentials.delete();
-            authContext.setStatus('invalid');
           }
         });
     } else {

@@ -51,7 +51,7 @@ const Navigation: React.FC<Props> = (props) => {
         </NavButton>
         <NavButton
           to="/courses"
-          icon={<Icons.Match />}
+          icon={<Icons.Palm />}
           onClick={() => props.setMenuOpen(false)}
         >
           Kurse
