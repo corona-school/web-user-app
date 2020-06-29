@@ -18,7 +18,7 @@ interface Props {
 const Navigation: React.FC<Props> = (props) => {
   const authContext = useContext(AuthContext);
   const {
-    user: { firstname, type, screeningStatus },
+    user: { firstname, type, screeningStatus, instructorScreeningStatus },
   } = useContext(UserContext);
   const history = useHistory();
 
@@ -52,6 +52,9 @@ const Navigation: React.FC<Props> = (props) => {
         <NavButton
           to="/courses"
           icon={<Icons.Palm />}
+          active={
+            type === 'pupil' || instructorScreeningStatus === ScreeningStatus.Accepted
+          }
           onClick={() => props.setMenuOpen(false)}
         >
           Kurse

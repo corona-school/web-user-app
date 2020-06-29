@@ -14,6 +14,7 @@ export const defaultUser = {
   type: 'student' as const,
   matchesRequested: 0,
   screeningStatus: ScreeningStatus.Accepted,
+  instructorScreeningStatus: ScreeningStatus.Accepted,
   matches: [
     {
       firstname: 'defaultPupilFirstname',

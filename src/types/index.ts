@@ -13,6 +13,7 @@ export interface User {
   matches: Match[];
   dissolvedMatches: Match[];
   screeningStatus: ScreeningStatus;
+  instructorScreeningStatus: ScreeningStatus;
 }
 
 export enum ScreeningStatus {
