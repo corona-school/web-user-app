@@ -90,6 +90,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           rules={[{ required: true, message: 'Bitte trage deine E-Mail ein!' }]}
         >
           <Input
+            type="email"
             placeholder="max.musterman@email.com"
             defaultValue={formData.email}
           />
