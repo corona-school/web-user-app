@@ -36,8 +36,8 @@ const RegisterTutee = () => {
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'finnish' | 'done'
   >('start');
-  const [isTutee, setTutee] = useState(true);
-  const [isGroups, setGroups] = useState(true);
+  const [isTutee, setTutee] = useState(false);
+  const [isGroups, setGroups] = useState(false);
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);

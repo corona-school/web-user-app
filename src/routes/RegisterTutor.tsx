@@ -135,7 +135,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             style={{ lineHeight: '32px' }}
             checked={isGroups}
           >
-            Ich möchte an Gruppenkursen der Corona School teilnehmen (z.B.
+            Ich möchte einen Gruppenkurs in der Corona School anbieten (z.B.
             Sommer-AG, Repetitorium, Lerncoaching)
           </Checkbox>
         </Form.Item>
