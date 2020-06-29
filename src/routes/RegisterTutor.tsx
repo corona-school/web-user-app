@@ -372,7 +372,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
                 rel="noopener noreferrer"
               >
                 Cookie-Richtlinie
-              </a>
+              </a>{' '}
               erklärt, wie wir Cookies verwenden.
             </Checkbox>
           </Checkbox.Group>
