@@ -95,7 +95,13 @@ const App: React.FC = () => {
             <PrivateRoute path="/courses/:id">
               <CourseDetail />
             </PrivateRoute>
-            <PrivateRoute path="/courses">
+            <PrivateRoute 
+              path="/courses"
+              active={
+                userContext.user.type === 'pupil' ||
+                userContext.user.instructorScreeningStatus === ScreeningStatus.Accepted
+              }
+            >
               <Course />
             </PrivateRoute>
           </Switch>
