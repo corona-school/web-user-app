@@ -3,7 +3,10 @@ import { Credentials, User, Subject } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
-import { apiURL, dev } from '../config/env';
+
+const apiURL = (window as any).apiURL || 'https://api.corona-school.de/api';
+
+const dev = process.env.NODE_ENV === 'development';
 
 export const redeemVerificationToken = (
   verificationToken: string
