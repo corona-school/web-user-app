@@ -1,4 +1,5 @@
 .container {
+  min-height: fit-content;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -20,6 +21,7 @@
   }
 
   .statusContainer {
+    min-height: fit-content;
     background-image: url(/background_triangle_yellow.svg);
     background-size: 700px;
     // because background is somehow angled
@@ -47,6 +49,7 @@
   }
 
   .newsContainer {
+    min-height: fit-content;
     display: flex;
     position: relative;
     flex-direction: column;
@@ -90,6 +93,7 @@
 }
 
 .bottomContainer {
+  min-height: fit-content;
   margin-top: 40px;
   padding: 0px 32px;
   display: flex;

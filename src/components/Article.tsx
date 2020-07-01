@@ -8,7 +8,6 @@ const Container = styled.article<{ cardDirection: 'row' | 'column' }>`
   border-radius: 4px;
 
   padding: 15px;
-
   display: flex;
   flex-direction: column;
 

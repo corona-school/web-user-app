@@ -4,6 +4,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 const PageWrapper = styled.div`
   align-items: center;
+
   display: flex;
   font-size: 18px;
   min-height: 100vh;
