@@ -33,11 +33,17 @@
 .formContainerGroup {
   display: flex;
   margin: 0;
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 }
 
 .formItem {
   flex-grow: 1;
   margin: 10px 16px;
+  @media only screen and (max-width: 600px) {
+    margin: 4px 10px;
+  }
 }
 
 .checkboxGroup {

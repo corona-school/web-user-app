@@ -1,16 +1,16 @@
 import React, { useState, useContext } from 'react';
+import { useHistory, Link } from 'react-router-dom';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
 import { Form, Input, Checkbox, InputNumber, Select, message } from 'antd';
 import Button from '../components/button';
 import ClipLoader from 'react-spinners/ClipLoader';
-
-import classes from './RegisterTutor.module.scss';
 import { Subject } from '../types';
-import { useHistory, Link } from 'react-router-dom';
 import Context from '../context';
 import { Tutor } from '../types/Registration';
+
+import classes from './RegisterTutor.module.scss';
 
 const { Option } = Select;
 
@@ -351,7 +351,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           rules={[
             {
               required: true,
-              message: 'Bitte akzeptiere die AGBs',
+              message: 'Bitte akzeptiere die Datenschutzerklärung',
             },
           ]}
         >

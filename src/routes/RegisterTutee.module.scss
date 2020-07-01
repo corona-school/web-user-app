@@ -33,11 +33,37 @@
 .formContainerGroup {
   display: flex;
   margin: 0;
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+  }
+}
+
+.tuteeTitle {
+  @media only screen and (max-width: 600px) {
+    font-size: 18px !important;
+    line-height: 30px !important;
+    width: 100%;
+    text-align: center;
+    margin: 0px 0px !important;
+  }
+}
+
+.successTitle {
+  @media only screen and (max-width: 600px) {
+    font-size: 15px !important;
+    line-height: 30px !important;
+    width: 100%;
+    text-align: center;
+    margin: 0px 0px !important;
+  }
 }
 
 .formItem {
   flex-grow: 1;
   margin: 10px 16px;
+  @media only screen and (max-width: 600px) {
+    margin: 4px 10px;
+  }
 }
 
 .checkboxGroup {

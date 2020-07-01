@@ -6,7 +6,7 @@ import { Form, Input, Checkbox, Select, message } from 'antd';
 import Button from '../components/button';
 import ClipLoader from 'react-spinners/ClipLoader';
 
-import classes from './RegisterTutor.module.scss';
+import classes from './RegisterTutee.module.scss';
 import { Subject } from '../types';
 import { useHistory, Link } from 'react-router-dom';
 import Context from '../context';
@@ -281,21 +281,35 @@ const RegisterTutee = () => {
         </Form.Item>
         <Form.Item
           className={classes.formItem}
-          label="AGBs"
+          label="Datenschutzerklärung"
           name="dataprotection"
           rules={[
             {
               required: true,
-              message: 'Bitte akzeptiere die AGBs',
+              message: 'Bitte akzeptiere die Datenschutzerklärung',
             },
           ]}
         >
           <Checkbox.Group className={classes.checkboxGroup}>
             <Checkbox value="dataprotection">
-              Durch die Registrierung stimmst du unseren Allgemeinen
-              Geschäftsbedingungen zu. In unserer Datenschutzerklärung erfährst
-              du, wir deine Daten erfassen, verwenden und teilen. Unsere
-              Cookie-Richtlinie erklärt, wie wir Cookies verwenden.
+              Ich habe die{' '}
+              <a
+                href="https://www.corona-school.de/datenschutz"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Datenschutzerklärung
+              </a>{' '}
+              dieser Webseite zur Kenntnis genommen und willige in die
+              Verarbeitung personenbezogener Daten ein. Unsere{' '}
+              <a
+                href="https://www.corona-school.de/datenschutz"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Cookie-Richtlinie
+              </a>{' '}
+              erklärt, wie wir Cookies verwenden.
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
@@ -305,7 +319,7 @@ const RegisterTutee = () => {
   const renderDone = () => {
     return (
       <div className={classes.successContainer}>
-        <Title className={classes.loginTitle} size="h4">
+        <Title className={classes.successTitle} size="h4">
           Wir haben dir eine E-Mail geschickt.
         </Title>
         <Icons.SignupEmailSent />
@@ -471,7 +485,7 @@ const RegisterTutee = () => {
             Corona School
           </Title>
         </a>
-        <Title>
+        <Title className={classes.tuteeTitle}>
           {formState === 'done' ? (
             <span>Du wurdest erfolgreich als Schüler*in registriert</span>
           ) : (
