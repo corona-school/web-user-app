@@ -53,7 +53,8 @@ const Navigation: React.FC<Props> = (props) => {
           to="/courses"
           icon={<Icons.Palm />}
           active={
-            type === 'pupil' || instructorScreeningStatus === ScreeningStatus.Accepted
+            type === 'pupil' ||
+            instructorScreeningStatus === ScreeningStatus.Accepted
           }
           onClick={() => props.setMenuOpen(false)}
         >
@@ -107,9 +108,11 @@ const Navigation: React.FC<Props> = (props) => {
           />
         </div>
       </div>
-      <NavActionButton icon={<Icons.Logout />} onClick={handleLogoutClick}>
-        Ausloggen
-      </NavActionButton>
+      <div className={classes.logoutContainer}>
+        <NavActionButton icon={<Icons.Logout />} onClick={handleLogoutClick}>
+          Ausloggen
+        </NavActionButton>
+      </div>
     </div>
   );
 };

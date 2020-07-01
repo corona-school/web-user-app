@@ -18,6 +18,7 @@
   background-color: $navigationBackground;
 
   .header {
+    min-height: fit-content;
     svg {
       margin-right: 8px;
       path {
@@ -34,7 +35,7 @@
   }
 
   .navigationGroup {
-    min-height: 500px;
+    min-height: fit-content;
     @media only screen and (max-height: 800px) {
       margin: 0px 24px 0px 24px;
     }
@@ -51,6 +52,10 @@
       display: flex;
       margin: 16px;
     }
+  }
+  .logoutContainer {
+    min-height: 200px;
+    min-height: fit-content;
   }
 }
 
