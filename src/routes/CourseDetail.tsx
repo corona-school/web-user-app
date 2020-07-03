@@ -288,7 +288,7 @@ const CourseDetail = () => {
         >
           <Descriptions.Item label="Beschreibung">
             <Text large>
-              <i>"{course.description}"</i>
+              <i style={{ whiteSpace: 'pre-wrap' }}>{course.description}</i>
             </Text>
           </Descriptions.Item>
           <Descriptions.Item label="Tags">
