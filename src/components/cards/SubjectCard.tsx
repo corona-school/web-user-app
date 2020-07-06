@@ -215,44 +215,55 @@ interface Props {
 }
 
 export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
-  const [edit, setEdit] = useState(false);
-  const [editMinGrade, setEditMinGrade] = useState(1);
-  const [editMaxGrade, setEditMaxGrade] = useState(13);
-  const [editName, setEditName] = useState<SubjectName>('Mathematik');
+  const availableSubjects = subjectOptions.filter((s) => !subjects.includes(s));
+  const [isEditing, setEditing] = useState(false);
+  const [minGrade, setMinGrade] = useState(1);
+  const [maxGrade, setMaxGrade] = useState(13);
+  const [subjectName, setSubjectName] = useState<SubjectName>(
+    availableSubjects[0]
+  );
   const apiContext = useContext(Context.Api);
   const userContext = useContext(Context.User);
   const isStudent = type === 'student';
 
-  const handleOnChangeName = (value: SubjectName): void => setEditName(value);
   const handleOnChangeMinGrade = (value: number): void => {
-    setEditMinGrade(value);
-    if (editMaxGrade < value) setEditMaxGrade(value);
+    setMinGrade(value);
+    if (maxGrade < value) setMaxGrade(value);
   };
+
   const handleOnChangeMaxGrade = (value: number): void => {
-    setEditMaxGrade(value);
-    if (editMinGrade > value) setEditMinGrade(value);
+    setMaxGrade(value);
+    if (minGrade > value) setMinGrade(value);
   };
+
   const handleSave = () => {
     const newSubject: Subject = isStudent
-      ? { name: editName, minGrade: editMinGrade, maxGrade: editMaxGrade }
-      : { name: editName };
+      ? { name: subjectName, minGrade: minGrade, maxGrade: maxGrade }
+      : { name: subjectName };
+
+    const newSubjects = [...userContext.user.subjects, newSubject];
+
     apiContext
-      .putUserSubjects([...userContext.user.subjects, newSubject])
-      .then(userContext.fetchUserData)
-      .then(() => setEdit(false));
+      .putUserSubjects(newSubjects)
+      .then(() => {
+        const availableSubjects = subjectOptions.filter(
+          (s) => !newSubjects.map((s) => s.name).includes(s)
+        );
+        setSubjectName(availableSubjects[0]);
+        return userContext.fetchUserData();
+      })
+      .then(() => setEditing(false));
   };
 
   return (
     <CardWrapper>
       <StyledCard highlightColor="blue">
-        {edit ? (
+        {isEditing ? (
           <>
             <div style={{ display: 'center' }}>
               <SelectStyle
-                value={editName}
-                onChange={(e) =>
-                  handleOnChangeName(e.target.value as SubjectName)
-                }
+                value={subjectName}
+                onChange={(e) => setSubjectName(e.target.value as SubjectName)}
               >
                 {subjectOptions
                   .filter((s) => !subjects.includes(s))
@@ -266,7 +277,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
             {isStudent && (
               <SelectWrapper>
                 <SelectStyle
-                  value={editMinGrade}
+                  value={minGrade}
                   onChange={(e) =>
                     handleOnChangeMinGrade(Number(e.target.value))
                   }
@@ -287,7 +298,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
                 </SelectStyle>
                 -
                 <SelectStyle
-                  value={editMaxGrade}
+                  value={maxGrade}
                   onChange={(e) =>
                     handleOnChangeMaxGrade(Number(e.target.value))
                   }
@@ -315,7 +326,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
                 onClick={handleSave}
               />
             </IconButtonWrapper>
-            <CloseButtonStyle onClick={() => setEdit(false)}>
+            <CloseButtonStyle onClick={() => setEditing(false)}>
               <Icons.Close />
             </CloseButtonStyle>
           </>
@@ -327,7 +338,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
               <IconButton
                 icon={'Add'}
                 label={'Hinzufügen'}
-                onClick={() => setEdit(true)}
+                onClick={() => setEditing(true)}
               />
             </IconButtonWrapper>
           </>
