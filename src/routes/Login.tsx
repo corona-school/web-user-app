@@ -185,6 +185,7 @@ const Login: React.FC = () => {
           <Link to="/register">
             <a>registrieren</a>
           </Link>
+          .
         </Text>
       </div>
     </SignupContainer>
