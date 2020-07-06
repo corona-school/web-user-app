@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: fit-content;
 
   > a {
     display: flex;
@@ -10,6 +11,8 @@
   }
 
   .logo {
+    min-height: 100px;
+    min-width: 100px;
     height: 100px;
     width: 100px;
     margin: 16px;
@@ -38,18 +41,28 @@
   max-width: 500px;
   display: flex;
   flex-wrap: nowrap;
+  min-height: fit-content;
+
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 
   .userType {
     border: 1px solid #ababab;
     margin: 16px;
     padding: 16px;
     display: flex;
+
     flex-direction: column;
     align-items: center;
     max-width: 200px;
     width: 100%;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
+    min-height: 140px;
+    min-width: 140px;
 
     .userTitle {
       font-weight: 300;
@@ -59,6 +72,8 @@
     }
 
     svg {
+      min-height: 50px;
+      min-width: 50px;
       path {
         transition: fill 0.2s ease-in-out;
       }

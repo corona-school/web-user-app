@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { User } from '../../types';
 import StyledReactModal from 'styled-react-modal';
-import styled from 'styled-components';
 import Button from '../button';
 import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import CertificateModal from '../Modals/CerificateModal';
+import { dev } from '../../api/config';
 
 import { Tag } from '../Tag';
 import context from '../../context';
@@ -22,6 +22,38 @@ interface Props {
 const SettingsCard: React.FC<Props> = ({ user }) => {
   const modalContext = useContext(context.Modal);
   const ApiContext = useContext(context.Api);
+
+  const renderCourseButton = () => {
+    if (user.type !== 'student') {
+      return;
+    }
+
+    if (!dev) {
+      return;
+    }
+
+    return (
+      <>
+        <Button
+          onClick={() => modalContext.setOpenedModal('certificateModal')}
+          color="#ffffff"
+          backgroundColor="#4E6AE6"
+          style={{ margin: '4px' }}
+        >
+          Bescheinigung anfordern
+        </Button>
+
+        <Button
+          onClick={() => modalContext.setOpenedModal('becomeInstructor')}
+          color="#ffffff"
+          backgroundColor="#4E6AE6"
+          style={{ margin: '4px' }}
+        >
+          Kursleiter*in werden
+        </Button>
+      </>
+    );
+  };
 
   return (
     <>
@@ -55,26 +87,8 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             </Text>
           </div>
           <div className={classes.mainButtonContainer}>
-            {user.type === 'student' && (
-              <Button
-                onClick={() => modalContext.setOpenedModal('certificateModal')}
-                color="#ffffff"
-                backgroundColor="#4E6AE6"
-                style={{ margin: '4px' }}
-              >
-                Bescheinigung anfordern
-              </Button>
-            )}
-            {user.type === 'student' && (
-              <Button
-                onClick={() => modalContext.setOpenedModal('becomeInstructor')}
-                color="#ffffff"
-                backgroundColor="#4E6AE6"
-                style={{ margin: '4px' }}
-              >
-                Kursleiter*in werden
-              </Button>
-            )}
+            {renderCourseButton()}
+
             {user.type === 'student' && (
               <Button
                 onClick={() => modalContext.setOpenedModal('startInternship')}

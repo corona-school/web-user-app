@@ -9,10 +9,20 @@
   align-items: center;
 
   .buttonContainer {
+    justify-content: center;
+    align-items: center;
     margin-top: 12px;
     display: flex;
     button {
       margin: 8px;
     }
   }
+}
+
+.formContainer {
+  width: 100%;
+}
+
+.formItem {
+  width: 100%;
 }
