@@ -39,7 +39,7 @@ const Register = () => {
       </div>
 
       <Text className={classes.helpText}>
-        Du hast schon ein Account? Hier <Link to="/login">anmelden</Link>
+        Du hast schon ein Account? Hier <Link to="/login">anmelden</Link>.
       </Text>
     </SignupContainer>
   );

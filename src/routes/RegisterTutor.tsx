@@ -85,9 +85,11 @@ const RegisterTutor: React.FC<Props> = (props) => {
 
         <Form.Item
           className={classes.formItem}
-          label="E-Mail"
+          label="Uni E-Mail"
           name="email"
-          rules={[{ required: true, message: 'Bitte trage deine E-Mail ein!' }]}
+          rules={[
+            { required: true, message: 'Bitte trage deine Uni-E-Mail ein!' },
+          ]}
         >
           <Input
             type="email"
@@ -99,7 +101,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         <Form.Item
           className={classes.formItem}
           name="additional"
-          label="Weitere Angaben"
+          label="Auf welche Art möchtest du Schüler*innen unterstützen?"
           rules={[
             (_) => ({
               required: true,
@@ -227,7 +229,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         {isTutor && (
           <Form.Item
             className={classes.formItem}
-            label="Fächer"
+            label="In welchen Fächern kannst du Schüler*innen unterstützen? "
             name="subjects"
             rules={[
               {
@@ -274,7 +276,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         {isOfficial && (
           <Form.Item
             className={classes.formItem}
-            label="Universität"
+            label="Universität/Hochschule"
             name="university"
             rules={[
               { required: true, message: 'Bitte trage deine Universität ein' },
@@ -290,7 +292,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         {isOfficial && (
           <Form.Item
             className={classes.formItem}
-            label="Aufwand (in Stunden)"
+            label="Aufwand des Moduls (in Stunden)"
             name="hours"
             rules={[
               {
@@ -311,7 +313,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           className={classes.formItem}
           label={
             isGroups
-              ? 'Beschreibe die Inhalte deines Gruppenkurses (3-5 Sätze)'
+              ? 'Beschreibe die Inhalte deines Gruppenkurses bzw. deiner Gruppenkurse (3-5 Sätze)'
               : 'Nachricht hinzufügen'
           }
           name="msg"
@@ -339,8 +341,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
           <Checkbox.Group className={classes.checkboxGroup}>
             <Checkbox value="newsletter" defaultChecked={formData.newsletter}>
               Ich möchte über weitere Aktionen, Angebote und
-              Unterstützunsmöglichkeiten der Corona School per E-Mail informiert
-              werden.
+              Unterstützungsmöglichkeiten der Corona School per E-Mail
+              informiert werden. Dazu gehören Möglichkeiten zur Vernetzung mit
+              anderen registrierten Studierenden, Mentoring und Nachrichten aus
+              dem Organisationsteam.
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
@@ -365,16 +369,46 @@ const RegisterTutor: React.FC<Props> = (props) => {
               >
                 Datenschutzerklärung
               </a>{' '}
-              dieser Webseite zur Kenntnis genommen und willige in die
-              Verarbeitung personenbezogener Daten ein. Unsere{' '}
+              des Corona School e.V. zur Kenntnis genommen und willige in die
+              Verarbeitung personenbezogener Daten zu den angegebenen Zwecken
+              ein. Mir ist insbesondere bekannt, dass meine Angaben an geeignete
+              Lernpartner*innen übermittelt werden. Die Verarbeitung der
+              personenbezogenen Daten erfolgt auf privaten IT-Geräten der
+              Lernpartner*innen. Es kann im Rahmen der Übermittlung dazu kommen,
+              dass personenbezogene Daten an E-Mail Server (bspw. google-mail
+              oder @me.com) außerhalb der Europäischen Union übermittelt werden.
+              In Ländern außerhalb der Europäischen Union besteht ggf. kein
+              adäquates Datenschutzniveau. Zudem kann die Durchsetzung von
+              Rechten erschwert bzw. ausgeschlossen sein. Mir sind diese Risiken
+              bewusst und bekannt.
+              <br />
+              Mir ist außerdem bekannt, dass meine Einwilligung freiwillig und
+              jederzeit mit Wirkung für die Zukunft widerruflich ist. Ein
+              Widerruf der Einwilligung kann formlos erfolgen (beispielsweise an{' '}
+              <a href="mailto:datenschutz@corona-school.de">
+                datenschutz@corona-school.de
+              </a>
+              ). Mir ist bewusst, dass der Widerruf nur für die Zukunft gilt und
+              daher Datenverarbeitungen bis zum Widerruf, insbesondere die
+              Weitergabe von meinen personenbezogenen Daten an geeignete
+              Lernpartner*innen bis zum Zeitpunkt des Widerrufs unberührt
+              bleiben. Weitere Datenschutzinformationen sind abrufbar unter{' '}
               <a
                 href="https://www.corona-school.de/datenschutz"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Cookie-Richtlinie
-              </a>{' '}
-              erklärt, wie wir Cookies verwenden.
+                www.corona-school.de/datenschutz
+              </a>
+              .
+              <br />
+              <br />
+              <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
+              <span style={{ fontStyle: 'italic' }}>
+                Für den Fall, dass die einwilligende Person noch nicht 18 Jahre
+                alt ist, hat der Träger der elterlichen Verantwortung für die
+                Person die Einwilligung zu erklären.
+              </span>
             </Checkbox>
           </Checkbox.Group>
         </Form.Item>
@@ -601,6 +635,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         <Link style={{ color: '#4e6ae6' }} to="/login">
           anmelden
         </Link>
+        .
       </Text>
     </SignupContainer>
   );
