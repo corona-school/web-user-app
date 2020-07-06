@@ -12,15 +12,8 @@ import { Tag } from '../Tag';
 import context from '../../context';
 
 import classes from './SettingsCard.module.scss';
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-grow: 1;
-  padding: 15px 5px;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-`;
+import BecomeInstructorModal from '../Modals/BecomeInstructorModal';
+import BecomeInternModal from '../Modals/BecomeInternModal';
 
 interface Props {
   user: User;
@@ -61,7 +54,7 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
               )}
             </Text>
           </div>
-          <ButtonContainer>
+          <div className={classes.mainButtonContainer}>
             {user.type === 'student' && (
               <Button
                 onClick={() => modalContext.setOpenedModal('certificateModal')}
@@ -72,6 +65,26 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
                 Bescheinigung anfordern
               </Button>
             )}
+            {user.type === 'student' && (
+              <Button
+                onClick={() => modalContext.setOpenedModal('becomeInstructor')}
+                color="#ffffff"
+                backgroundColor="#4E6AE6"
+                style={{ margin: '4px' }}
+              >
+                Kursleiter*in werden
+              </Button>
+            )}
+            {user.type === 'student' && (
+              <Button
+                onClick={() => modalContext.setOpenedModal('startInternship')}
+                color="#ffffff"
+                backgroundColor="#4E6AE6"
+                style={{ margin: '4px' }}
+              >
+                Praktikum anmelden
+              </Button>
+            )}
             <Button
               onClick={() => modalContext.setOpenedModal('deactivateAccount')}
               style={{ margin: '4px' }}
@@ -80,10 +93,12 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             >
               <Icons.Delete /> Deaktivieren
             </Button>
-          </ButtonContainer>
+          </div>
         </div>
       </CardBase>
       <CertificateModal user={user} />
+      <BecomeInstructorModal user={user} />
+      <BecomeInternModal user={user} />
       <StyledReactModal
         isOpen={modalContext.openedModal === 'deactivateAccount'}
       >

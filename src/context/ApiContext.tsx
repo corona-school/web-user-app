@@ -13,6 +13,7 @@ interface IApiContext {
   dissolveMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
+  becomeInstructor: (description: string) => Promise<void>;
   putUserActiveFalse: () => Promise<void>;
   getCertificate: (
     cerfiticateData: CertificateData
@@ -39,7 +40,6 @@ interface IApiContext {
     id: number,
     subcourse: SubCourse
   ) => Promise<void>;
-
   createSubCourse: (courseId: number, subCoure: SubCourse) => Promise<number>;
   cancelSubCourse: (courseId: number, subCoureId: number) => Promise<void>;
   createLecture: (
@@ -67,6 +67,7 @@ export const ApiContext = React.createContext<IApiContext>({
   dissolveMatch: (uuid, reason?) => Promise.reject(),
   requestNewToken: api.axiosRequestNewToken,
   putUserSubjects: (subjects) => Promise.reject(),
+  becomeInstructor: (description: string) => Promise.reject(),
   putUserActiveFalse: () => Promise.reject(),
   getCertificate: (cerfiticateData) => Promise.reject(),
   getCourses: () => Promise.reject(),
@@ -104,6 +105,9 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const putUserSubjects = (subjects: Subject[]): Promise<void> =>
     api.axiosPutUserSubjects(id, token, subjects);
+
+  const becomeInstructor = (description: string): Promise<void> =>
+    api.axiosBecomeInstructor(token, description);
 
   const putUserActiveFalse = (): Promise<void> =>
     api.axiosPutUserActive(id, token, false);
@@ -208,6 +212,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         dissolveMatch,
         requestNewToken: api.axiosRequestNewToken,
         putUserSubjects,
+        becomeInstructor,
         putUserActiveFalse,
         getCertificate,
         getCourses,

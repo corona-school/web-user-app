@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import './normalize.css';
+import HttpsRedirect from 'react-https-redirect';
 import theme from './theme';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter } from 'react-router-dom';
@@ -18,9 +19,11 @@ ReactDOM.render(
         <ApiProvider>
           <UserProvider>
             <ModalProvider>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
+              <HttpsRedirect>
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
+              </HttpsRedirect>
             </ModalProvider>
           </UserProvider>
         </ApiProvider>

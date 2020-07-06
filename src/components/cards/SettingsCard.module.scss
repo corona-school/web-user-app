@@ -1,6 +1,6 @@
 .baseContainer {
-  max-width: 600px !important;
-  min-width: 600px;
+  max-width: 700px !important;
+  width: 100%;
   min-height: 260px;
 }
 
@@ -35,6 +35,15 @@
   }
 }
 
+.mainButtonContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+  }
+}
+
 .modal {
   display: flex;
   flex-direction: column;
@@ -46,6 +55,7 @@
   .buttonContainer {
     margin-top: 12px;
     display: flex;
+    flex-wrap: wrap;
     button {
       margin: 8px;
     }

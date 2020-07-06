@@ -541,3 +541,25 @@ export const axiosSendCourseGroupMail = (
       });
   });
 };
+
+export const axiosBecomeInstructor = (
+  token: string,
+  description: string
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/instructor/bli/bla/blub`,
+        { description },
+        {
+          headers: { token },
+        }
+      )
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
