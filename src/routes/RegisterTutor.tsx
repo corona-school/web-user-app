@@ -162,6 +162,11 @@ const RegisterTutor: React.FC<Props> = (props) => {
             (_) => ({
               required: props.isInternship,
               validator() {
+                if ((!isGroups || !isTutor) && isOfficial) {
+                  return Promise.reject(
+                    'Um am Praktikum teilzunehmen, musst du sowohl Schüler*innen im 1-zu-1-Format als auch in Gruppenkursen helfen.'
+                  );
+                }
                 if (!props.isInternship) {
                   return Promise.resolve();
                 }
