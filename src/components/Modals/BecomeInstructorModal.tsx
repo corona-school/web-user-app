@@ -19,7 +19,7 @@ interface Props {
 
 const BecomeInstructorModal: React.FC<Props> = (props) => {
   const [loading, setLoading] = useState(false);
-  const [description, setDescription] = useState(null);
+  const [description, setDescription] = useState<string | null>(null);
 
   const modalContext = useContext(ModalContext);
   const userContext = useContext(UserContext);
