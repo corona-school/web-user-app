@@ -84,7 +84,7 @@ const Course = () => {
         ></Empty>
       ) : (
         courses
-          .filter((c) => c.published)
+          .filter((c) => c.subcourse)
           .map((c) => {
             return <MyCourseCard course={c} />;
           })

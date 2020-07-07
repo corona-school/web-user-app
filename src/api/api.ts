@@ -174,7 +174,7 @@ export const axiosGetCourses = (token: string): Promise<CourseOverview[]> => {
     const params = new URLSearchParams();
     params.append(
       'fields',
-      'name,description,tags,outline,state,category,instructors,subcourses,published,cancelled,joined,joinAfterStart'
+      'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
     );
 
     axios
@@ -275,7 +275,7 @@ export const axiosGetMyCourses = (
     const params = new URLSearchParams();
     params.append(
       'fields',
-      'name,description,tags,outline,state,category,instructors,subcourses,published,cancelled,joined,joinAfterStart'
+      'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
     );
     if (instructor) {
       params.append('instructor', instructor);

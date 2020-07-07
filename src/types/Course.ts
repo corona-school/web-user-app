@@ -65,7 +65,6 @@ export interface CourseOverview {
   state: CourseState;
   tags: Tag[];
   category: CourseCategory;
-  published: boolean;
   instructors: Instructor[];
   subcourses: CourseSubCourse[];
   joinAfterStart: boolean;
@@ -79,7 +78,6 @@ export interface ParsedCourseOverview {
   state: CourseState;
   tags: Tag[];
   category: CourseCategory;
-  published: boolean;
   instructors: Instructor[];
   subcourse?: CourseSubCourse;
 }
