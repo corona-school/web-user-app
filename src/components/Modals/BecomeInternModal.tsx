@@ -45,7 +45,7 @@ const BecomeInternModal: React.FC<Props> = (props) => {
       isOfficial: true,
       university: onFinish.university,
       hours: onFinish.hours,
-      state: onFinish.state,
+      state: onFinish.state.toLowerCase(),
       module: 'internship',
       subjects: onFinish.subjects.map((s) => ({ name: s })),
     };
