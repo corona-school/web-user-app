@@ -26,6 +26,13 @@ const BecomeInstructorModal: React.FC<Props> = (props) => {
   const api = useContext(ApiContext);
 
   const becomeInstructor = () => {
+    if (!description || description.length === 0) {
+      message.error(
+        '  Beschreibe die Inhalte deines Gruppenkurses (3-5 Sätze).'
+      );
+      return;
+    }
+
     setLoading(true);
 
     const data: BecomeInstructor = {
