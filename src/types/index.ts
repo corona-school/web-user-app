@@ -9,6 +9,8 @@ export interface User {
   active: boolean;
   grade?: number;
   matchesRequested?: number;
+  isInstructor?: boolean;
+  isTutor?: boolean;
   subjects: Subject[];
   matches: Match[];
   dissolvedMatches: Match[];

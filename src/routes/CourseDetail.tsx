@@ -4,7 +4,12 @@ import moment from 'moment';
 
 import { ApiContext } from '../context/ApiContext';
 import { AuthContext } from '../context/AuthContext';
-import { ParsedCourseOverview, CourseState, Course } from '../types/Course';
+import {
+  ParsedCourseOverview,
+  CourseState,
+  Course,
+  SubCourse,
+} from '../types/Course';
 import { Title, Text } from '../components/Typography';
 import { Tag } from '../components/Tag';
 import 'moment/locale/de';
@@ -35,6 +40,7 @@ import {
 import { tags } from '../components/forms/CreateCourse';
 import { ModalContext } from '../context/ModalContext';
 import CourseMessageModal from '../components/Modals/CourseMessageModal';
+import { dev } from '../api/config';
 
 moment.locale('de');
 
@@ -75,7 +81,7 @@ const CourseDetail = () => {
   }
 
   if (!course || !course.subcourse) {
-    return <div> Wir konnten den Kurs leider nicht finden.</div>;
+    return <div>Wir konnten den Kurs leider nicht finden.</div>;
   }
 
   const isMyCourse = course.instructors.some((i) => i.id === userId);
@@ -96,13 +102,30 @@ const CourseDetail = () => {
       submit: true,
     };
 
+    const apiSubCourse: SubCourse = {
+      minGrade: course.subcourse.minGrade,
+      maxGrade: course.subcourse.maxGrade,
+      instructors: course.subcourse.instructors.map((i) => i.id),
+      joinAfterStart: course.subcourse.joinAfterStart,
+      maxParticipants: course.subcourse.maxParticipants,
+      published: true,
+    };
+
     api
       .submitCourse(course.id, apiCourse)
       .then(() => {
         setCourse({ ...course, state: CourseState.SUBMITTED });
-        message.success('Kurs  wurde zur Prüfung freigegeben.');
+        return api.publishSubCourse(
+          course.id,
+          course.subcourse.id,
+          apiSubCourse
+        );
+      })
+      .then(() => {
+        message.success('Kurs wurde zur Prüfung freigegeben.');
       })
       .catch((err) => {
+        if (dev) console.error(err);
         message.error('Kurs konnte zur Prüfung freigegeben werden..');
       });
   };

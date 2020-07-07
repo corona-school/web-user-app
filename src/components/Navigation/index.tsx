@@ -18,7 +18,14 @@ interface Props {
 const Navigation: React.FC<Props> = (props) => {
   const authContext = useContext(AuthContext);
   const {
-    user: { firstname, type, screeningStatus, instructorScreeningStatus },
+    user: {
+      firstname,
+      type,
+      screeningStatus,
+      instructorScreeningStatus,
+      isInstructor,
+      isTutor,
+    },
   } = useContext(UserContext);
   const history = useHistory();
 
@@ -42,34 +49,40 @@ const Navigation: React.FC<Props> = (props) => {
       <div className={classes.navigationGroup}>
         <Welcome firstname={firstname} type={type} />
         <div className={classes.section}>Menü</div>
-        <NavButton
-          to="/dashboard"
-          icon={<Icons.Home />}
-          onClick={() => props.setMenuOpen(false)}
-        >
-          Startseite
-        </NavButton>
-        <NavButton
-          to="/courses"
-          icon={<Icons.Palm />}
-          active={
-            type === 'pupil' ||
-            instructorScreeningStatus === ScreeningStatus.Accepted
-          }
-          onClick={() => props.setMenuOpen(false)}
-        >
-          Kurse
-        </NavButton>
-        <NavButton
-          to="/matches"
-          icon={<Icons.Match />}
-          active={
-            type === 'pupil' || screeningStatus === ScreeningStatus.Accepted
-          }
-          onClick={() => props.setMenuOpen(false)}
-        >
-          Zuordnung
-        </NavButton>
+        {(type === 'pupil' || isTutor) && (
+          <NavButton
+            to="/dashboard"
+            icon={<Icons.Home />}
+            onClick={() => props.setMenuOpen(false)}
+          >
+            Startseite
+          </NavButton>
+        )}
+        {(type === 'pupil' || isInstructor) && (
+          <NavButton
+            to="/courses"
+            icon={<Icons.Palm />}
+            active={
+              type === 'pupil' ||
+              instructorScreeningStatus === ScreeningStatus.Accepted
+            }
+            onClick={() => props.setMenuOpen(false)}
+          >
+            Kurse
+          </NavButton>
+        )}
+        {(type === 'pupil' || isTutor) && (
+          <NavButton
+            to="/matches"
+            icon={<Icons.Match />}
+            active={
+              type === 'pupil' || screeningStatus === ScreeningStatus.Accepted
+            }
+            onClick={() => props.setMenuOpen(false)}
+          >
+            Zuordnung
+          </NavButton>
+        )}
         <NavButton
           to="/settings"
           icon={<Icons.Settings />}

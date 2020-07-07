@@ -12,6 +12,8 @@ import classes from './Course.module.scss';
 import { parseCourse } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
 
+const MAX_COURSES = 25;
+
 const Course = () => {
   const [loading, setLoading] = useState(false);
   const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
@@ -49,19 +51,20 @@ const Course = () => {
       <div className={classes.containerRequests}>
         <div className={classes.header}>
           <Title size="h1">Deine Kurse</Title>
-          {userContext.user.type === 'student' && myCourses.length <= 2 && (
-            <Button
-              onClick={() => {
-                history.push('/courses/create');
-              }}
-              backgroundColor="#4E6AE6"
-              color="white"
-              className={classes.courseButton}
-            >
-              <Icons.Add height="16px" />
-              Erstelle einen Kurs
-            </Button>
-          )}
+          {userContext.user.type === 'student' &&
+            myCourses.length <= MAX_COURSES && (
+              <Button
+                onClick={() => {
+                  history.push('/courses/create');
+                }}
+                backgroundColor="#4E6AE6"
+                color="white"
+                className={classes.courseButton}
+              >
+                <Icons.Add height="16px" />
+                Erstelle einen Kurs
+              </Button>
+            )}
         </div>
         <div className={classes.myCoursesContainer}>
           {myCourses.length === 0 ? (
@@ -80,9 +83,11 @@ const Course = () => {
           description="Es gibt im moment keine Kurse"
         ></Empty>
       ) : (
-        courses.map((c) => {
-          return <MyCourseCard course={c} />;
-        })
+        courses
+          .filter((c) => c.published)
+          .map((c) => {
+            return <MyCourseCard course={c} />;
+          })
       )}
     </div>
   );

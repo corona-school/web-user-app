@@ -10,6 +10,7 @@ export const parseCourse = (course: CourseOverview): ParsedCourseOverview => {
     tags: course.tags,
     category: course.category,
     instructors: course.instructors,
+    published: course.published,
     subcourse: course.subcourses[0],
   };
 };
