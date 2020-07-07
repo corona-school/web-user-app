@@ -1,14 +1,17 @@
 import React, { useContext, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { Title, Text } from '../Typography';
+import { Title } from '../Typography';
 import Button from '../button';
 import { ModalContext } from '../../context/ModalContext';
-
-import classes from './BecomeInternModal.module.scss';
 import { User } from '../../types';
 import { Input, message, Form, Select, InputNumber } from 'antd';
 import { ApiContext } from '../../context/ApiContext';
+import { BecomeIntern } from '../../types/Instructor';
+import { UserContext } from '../../context/UserContext';
+import { dev } from '../../api/config';
+
+import classes from './BecomeInternModal.module.scss';
 
 const { Option } = Select;
 
@@ -18,20 +21,45 @@ interface Props {
 
 const BecomeInternModal: React.FC<Props> = (props) => {
   const [loading, setLoading] = useState(false);
-  const [description, setDescription] = useState(null);
 
   const modalContext = useContext(ModalContext);
+  const userContext = useContext(UserContext);
   const api = useContext(ApiContext);
 
   const onFinish = (onFinish) => {
+    if (
+      !onFinish.description ||
+      !onFinish.university ||
+      !onFinish.hours ||
+      !onFinish.state ||
+      !onFinish.subjects
+    ) {
+      if (dev) console.log('Not all forms filled', onFinish);
+      return null;
+    }
     console.log(onFinish);
 
     setLoading(true);
 
+    const data: BecomeIntern = {
+      msg: onFinish.description,
+      isOfficial: true,
+      university: onFinish.university,
+      hours: onFinish.hours,
+      state: onFinish.state,
+      module: 'internship',
+      subjects: onFinish.subjects.map((s) => ({ name: s })),
+    };
+
     api
-      .becomeInstructor(description)
-      .then(() => {})
+      .becomeInstructor(data)
+      .then(() => {
+        message.success('Du wurdest als Kursleiter*in angemeldet.');
+        modalContext.setOpenedModal(null);
+        userContext.fetchUserData();
+      })
       .catch((err) => {
+        if (dev) console.error(err);
         message.error('Etwas ist schief gegangen.');
       })
       .finally(() => {
@@ -182,8 +210,6 @@ const BecomeInternModal: React.FC<Props> = (props) => {
             ]}
           >
             <Input.TextArea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
               autoSize={{ minRows: 6 }}
               placeholder={'Kursthema, Zielgruppe, Kursgröße, Interaktion'}
             />

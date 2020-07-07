@@ -4,6 +4,7 @@ import { CertificateData } from '../components/Modals/CerificateModal';
 import { Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { apiURL, dev } from './config';
+import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -543,14 +544,15 @@ export const axiosSendCourseGroupMail = (
 };
 
 export const axiosBecomeInstructor = (
+  id: string,
   token: string,
-  description: string
+  data: BecomeInstructor | BecomeIntern
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
     axios
       .post(
-        `${apiURL}/instructor/bli/bla/blub`,
-        { description },
+        `${apiURL}/user/${id}/role/instructor`,
+        { ...data },
         {
           headers: { token },
         }

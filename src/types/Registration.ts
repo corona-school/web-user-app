@@ -28,7 +28,7 @@ export interface Tutor {
   hours?: number;
   // isTutor
   subjects?: Subject[];
+  msg?: string;
   // finnish
   newsletter: boolean;
-  msg?: string;
 }

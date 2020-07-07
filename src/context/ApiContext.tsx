@@ -7,13 +7,14 @@ import { CertificateData } from '../components/Modals/CerificateModal';
 import { Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { UserContext } from './UserContext';
+import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 
 interface IApiContext {
   getUserData: () => Promise<any>;
   dissolveMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
-  becomeInstructor: (description: string) => Promise<void>;
+  becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
   putUserActiveFalse: () => Promise<void>;
   getCertificate: (
     cerfiticateData: CertificateData
@@ -67,7 +68,8 @@ export const ApiContext = React.createContext<IApiContext>({
   dissolveMatch: (uuid, reason?) => Promise.reject(),
   requestNewToken: api.axiosRequestNewToken,
   putUserSubjects: (subjects) => Promise.reject(),
-  becomeInstructor: (description: string) => Promise.reject(),
+  becomeInstructor: (description: BecomeInstructor | BecomeIntern) =>
+    Promise.reject(),
   putUserActiveFalse: () => Promise.reject(),
   getCertificate: (cerfiticateData) => Promise.reject(),
   getCourses: () => Promise.reject(),
@@ -106,8 +108,9 @@ export const ApiProvider: React.FC = ({ children }) => {
   const putUserSubjects = (subjects: Subject[]): Promise<void> =>
     api.axiosPutUserSubjects(id, token, subjects);
 
-  const becomeInstructor = (description: string): Promise<void> =>
-    api.axiosBecomeInstructor(token, description);
+  const becomeInstructor = (
+    data: BecomeInstructor | BecomeIntern
+  ): Promise<void> => api.axiosBecomeInstructor(id, token, data);
 
   const putUserActiveFalse = (): Promise<void> =>
     api.axiosPutUserActive(id, token, false);

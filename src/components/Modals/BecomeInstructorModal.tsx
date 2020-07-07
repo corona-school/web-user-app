@@ -9,6 +9,9 @@ import classes from './BecomeInstructorModal.module.scss';
 import { User } from '../../types';
 import { Input, message } from 'antd';
 import { ApiContext } from '../../context/ApiContext';
+import { BecomeInstructor } from '../../types/Instructor';
+import { UserContext } from '../../context/UserContext';
+import { dev } from '../../api/config';
 
 interface Props {
   user: User;
@@ -19,18 +22,26 @@ const BecomeInstructorModal: React.FC<Props> = (props) => {
   const [description, setDescription] = useState(null);
 
   const modalContext = useContext(ModalContext);
+  const userContext = useContext(UserContext);
   const api = useContext(ApiContext);
 
   const becomeInstructor = () => {
     setLoading(true);
 
+    const data: BecomeInstructor = {
+      isOfficial: false,
+      msg: description,
+    };
+
     api
-      .becomeInstructor(description)
+      .becomeInstructor(data)
       .then(() => {
         message.success('Du wurdest als Kursleiter*in angemeldet.');
         modalContext.setOpenedModal(null);
+        userContext.fetchUserData();
       })
       .catch((err) => {
+        if (dev) console.error(err);
         message.error('Etwas ist schief gegangen.');
       })
       .finally(() => {

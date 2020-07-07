@@ -28,21 +28,20 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
       return;
     }
 
-    if (!dev) {
+    if (user.isInstructor) {
       return;
     }
 
     return (
       <>
-      
         <Button
-                onClick={() => modalContext.setOpenedModal('startInternship')}
-                color="#ffffff"
-                backgroundColor="#4E6AE6"
-                style={{ margin: '4px' }}
-              >
-                Praktikum anmelden
-              </Button>
+          onClick={() => modalContext.setOpenedModal('startInternship')}
+          color="#ffffff"
+          backgroundColor="#4E6AE6"
+          style={{ margin: '4px' }}
+        >
+          Praktikum anmelden
+        </Button>
 
         <Button
           onClick={() => modalContext.setOpenedModal('becomeInstructor')}
@@ -91,14 +90,14 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             {renderCourseButton()}
 
             {user.type === 'student' && (
-                <Button
-          onClick={() => modalContext.setOpenedModal('certificateModal')}
-          color="#ffffff"
-          backgroundColor="#4E6AE6"
-          style={{ margin: '4px' }}
-        >
-          Bescheinigung anfordern
-        </Button>
+              <Button
+                onClick={() => modalContext.setOpenedModal('certificateModal')}
+                color="#ffffff"
+                backgroundColor="#4E6AE6"
+                style={{ margin: '4px' }}
+              >
+                Bescheinigung anfordern
+              </Button>
             )}
             <Button
               onClick={() => modalContext.setOpenedModal('deactivateAccount')}
