@@ -37,7 +37,6 @@ const BecomeInternModal: React.FC<Props> = (props) => {
       if (dev) console.log('Not all forms filled', onFinish);
       return null;
     }
-    console.log(onFinish);
 
     setLoading(true);
 
