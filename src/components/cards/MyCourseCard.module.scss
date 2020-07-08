@@ -1,5 +1,6 @@
 .baseContainer {
   margin-bottom: 32px;
+  min-height: fit-content;
 
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
