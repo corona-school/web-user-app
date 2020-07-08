@@ -41,7 +41,12 @@ const Settings: React.FC = () => {
   const userContext = useContext(Context.User);
 
   useEffect(() => {
-    if (userContext.user.screeningStatus === ScreeningStatus.Unscreened) {
+    if (
+      userContext.user.screeningStatus === ScreeningStatus.Unscreened ||
+      (userContext.user.isInstructor &&
+        userContext.user.instructorScreeningStatus ===
+          ScreeningStatus.Unscreened)
+    ) {
       modalContext.setOpenedModal('accountNotScreened');
     }
   }, [userContext.user.screeningStatus]);
@@ -94,7 +99,13 @@ const Settings: React.FC = () => {
               backgroundColor="#FFF7DB"
               color="#FFCC12"
               target="_blank"
-              href="https://authentication.corona-school.de"
+              href={
+                userContext.user.isInstructor
+                  ? `https://go.oncehub.com/CourseReview?name=${encodeURI(
+                      userContext.user.firstname + userContext.user.lastname
+                    )}&email=${encodeURI(userContext.user.email)}&skip=1`
+                  : 'https://authentication.corona-school.de'
+              }
             >
               Kennenlernen
             </LinkButton>
