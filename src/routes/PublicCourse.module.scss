@@ -13,7 +13,8 @@
   .main {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    max-height: 100vh;
+    overflow: auto;
     box-sizing: border-box;
     padding: 30px;
     flex-grow: 1;
