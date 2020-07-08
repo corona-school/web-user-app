@@ -73,7 +73,7 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
               color="#ffffff"
               style={{ marginLeft: '10px' }}
             >
-              {user.type === 'pupil' ? `Schüler*in` : `Stundent*in`}
+              {user.type === 'pupil' ? `Schüler*in` : `Student*in`}
             </Tag>
           </div>
           <div className={classes.subjectContainer}>

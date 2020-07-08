@@ -126,7 +126,7 @@ const CourseDetail = () => {
       })
       .catch((err) => {
         if (dev) console.error(err);
-        message.error('Kurs konnte zur Prüfung freigegeben werden..');
+        message.error('Kurs konnte nicht zur Prüfung freigegeben werden.');
       });
   };
 
