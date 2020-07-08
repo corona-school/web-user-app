@@ -105,9 +105,8 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           <li>das zeitliche Ausmaß der ehrenamtlichen Tätigkeit</li>
           <li>
             die genauen Inhalte und Aufgaben der ehrenamtlichen Tätigkeit
-            angeben.
           </li>
-          Daraus erstellen wir dir ein fertiges PDF, welches du an deine*n
+          angeben. Daraus erstellen wir dir ein fertiges PDF, welches du an deine*n
           Schüler*in zum Unterschreiben schicken kannst.
         </Text>
       </>
