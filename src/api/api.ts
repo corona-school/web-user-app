@@ -362,8 +362,6 @@ export const axiosCreateCourse = (
   token: string,
   course: Course
 ): Promise<number> => {
-  console.log(course);
-
   return new Promise((resolve, reject) => {
     axios
       .post(`${apiURL}/course`, course, { headers: { token } })
@@ -473,6 +471,26 @@ export const axiosCancelSubCourse = (
   });
 };
 
+export const axiosEditSubCourse = (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  subCourse: SubCourse
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(`${apiURL}/course/${courseId}/subcourse/${subCourseId}`, subCourse, {
+        headers: { token },
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export const axiosCreateLecture = (
   token: string,
   courseId: number,
@@ -483,6 +501,31 @@ export const axiosCreateLecture = (
     axios
       .post(
         `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture`,
+        lecture,
+        {
+          headers: { token },
+        }
+      )
+      .then((response) => {
+        resolve(response.data.id);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosEditLecture = (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  lectureId: number,
+  lecture: Lecture
+): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(
+        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture/${lectureId}`,
         lecture,
         {
           headers: { token },

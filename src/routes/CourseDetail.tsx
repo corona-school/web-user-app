@@ -178,6 +178,9 @@ const CourseDetail = () => {
           if (param.key === '4') {
             cancelCourse();
           }
+          if (param.key === '5') {
+            history.push(`/courses/edit/${course.id}`);
+          }
         }}
       >
         {course.state === CourseState.CREATED && (
@@ -197,6 +200,9 @@ const CourseDetail = () => {
             Löschen
           </Menu.Item>
         )}
+        <Menu.Item key="5" icon={<CheckCircleOutlined />}>
+          Bearbeiten
+        </Menu.Item>
       </Menu>
     );
 
