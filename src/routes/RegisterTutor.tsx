@@ -531,6 +531,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       hours: data.hours,
       newsletter: !!data.newsletter,
       msg: data.msg || '',
+      state: data.state.toLowerCase()
     };
   };
 
