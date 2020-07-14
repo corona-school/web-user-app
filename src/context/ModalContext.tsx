@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ModalProvider as StyledReactModalProvider } from 'styled-react-modal';
+import { ModalProvider as StyledReactModalProvider, BaseModalBackground } from 'styled-react-modal';
+import styled from 'styled-components';
 
 export const ModalContext = React.createContext<{
   openedModal: string | null;
@@ -13,9 +14,15 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({
     'dissolveMatchModal'
   );
 
+  //make the modal visible above everything else
+  const CSModalBackground = styled(BaseModalBackground)`
+    z-index: 1000;
+    max-height: 100%;
+  `
+
   return (
     <ModalContext.Provider value={{ openedModal, setOpenedModal }}>
-      <StyledReactModalProvider>{children}</StyledReactModalProvider>
+      <StyledReactModalProvider backgroundComponent={CSModalBackground}>{children}</StyledReactModalProvider>
     </ModalContext.Provider>
   );
 };
