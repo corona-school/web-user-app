@@ -246,6 +246,21 @@ const CourseDetail = () => {
                 )}
               </Dropdown>
             )}
+            {canJoinCourse() && (
+              <AntdButton
+                type="primary"
+                style={{
+                  backgroundColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
+                  borderColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
+                  color: course.subcourse.joined ? 'white' : '#373E47',
+                  width: '120px',
+                  margin: '0px 10px',
+                }}
+                onClick={joinCourse}
+              >
+                {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
+              </AntdButton>
+            )}
           </div>
         </div>
 
@@ -326,21 +341,6 @@ const CourseDetail = () => {
             })}
           </Descriptions.Item>
         </Descriptions>
-        {canJoinCourse() && (
-          <AntdButton
-            type="primary"
-            style={{
-              backgroundColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
-              borderColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
-              color: course.subcourse.joined ? 'white' : '#373E47',
-              width: '120px',
-              margin: '0px 10px',
-            }}
-            onClick={joinCourse}
-          >
-            {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
-          </AntdButton>
-        )}
         {isMyCourse && (
           <div>
             <Title size="h3" style={{ margin: '0px 10px' }}>
