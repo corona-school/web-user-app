@@ -28,12 +28,14 @@ const Login: React.FC = () => {
 
   const query = useQuery();
   const token = query.get('token');
+  
+  const redirectPath = query.get('path');
 
   const authContext = useContext(Context.Auth);
   const apiContext = useContext(Context.Api);
 
   useEffect(() => {
-    if (!token && authContext.status === 'authorized') setState('success');
+    if (authContext.status === 'authorized') setState('success');
   }, [authContext.status]);
 
   useEffect(() => {
@@ -43,7 +45,6 @@ const Login: React.FC = () => {
         .then((id) => {
           storedCredentials.write({ id, token });
           authContext.setCredentials({ id, token });
-          setState('success');
         })
         .catch(() => {
           setState('failed');
@@ -90,6 +91,9 @@ const Login: React.FC = () => {
   };
 
   if (state === 'success') {
+    if (redirectPath && redirectPath !== "") {
+      return <Redirect to={redirectPath} />
+    }
     return <Redirect to="/dashboard" />;
   }
 
