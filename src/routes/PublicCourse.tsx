@@ -6,7 +6,7 @@ import { ParsedCourseOverview, CourseCategory } from '../types/Course';
 import MyCourseCard from '../components/cards/MyCourseCard';
 
 import classes from './PublicCourse.module.scss';
-import { parseCourse } from '../utils/CourseUtil';
+import { parseCourse, defaultPublicCourseSort } from '../utils/CourseUtil';
 import { SelectProps } from 'antd/lib/select';
 import { Tag } from '../components/Tag';
 import { useHistory } from 'react-router-dom';
@@ -55,7 +55,7 @@ const PublicCourse = () => {
     apiContext
       .getCourses()
       .then((c) => {
-        setCourses(c.map(parseCourse));
+        setCourses(c.map(parseCourse).sort(defaultPublicCourseSort));
       })
       .catch((e) => {
         // message.error('Kurse konnten nicht geladen werden.');

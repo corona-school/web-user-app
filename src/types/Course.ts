@@ -59,6 +59,7 @@ export interface Tag {
 
 export interface CourseOverview {
   id: number;
+  publicRanking: number;
   name: string;
   description: string;
   outline: string;
@@ -72,6 +73,7 @@ export interface CourseOverview {
 
 export interface ParsedCourseOverview {
   id: number;
+  publicRanking: number;
   name: string;
   description: string;
   outline: string;
