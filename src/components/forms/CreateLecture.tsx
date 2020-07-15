@@ -21,7 +21,6 @@ import { CompletedSubCourse } from './CreateCourse';
 const { Option } = Select;
 
 interface Props {
-  edit: boolean;
   lectures: CompletedLecture[];
   subCourse: CompletedSubCourse;
   course: CompletedCourse;

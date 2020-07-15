@@ -8,8 +8,6 @@ import { Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { UserContext } from './UserContext';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
-import { CompletedSubCourse } from '../components/forms/CreateCourse';
-import { CompletedLecture } from '../routes/CourseForm';
 
 interface IApiContext {
   getUserData: () => Promise<any>;
@@ -45,19 +43,10 @@ interface IApiContext {
   ) => Promise<void>;
   createSubCourse: (courseId: number, subCoure: SubCourse) => Promise<number>;
   cancelSubCourse: (courseId: number, subCoureId: number) => Promise<void>;
-  editSubCourse: (
-    courseId: number,
-    subCourse: CompletedSubCourse
-  ) => Promise<void>;
   createLecture: (
     courseId: number,
     subCourseId: number,
     lecture: Lecture
-  ) => Promise<number>;
-  editLecture: (
-    courseId: number,
-    subCourseId: number,
-    lecture: CompletedLecture
   ) => Promise<number>;
   cancelLecture: (
     courseId: number,
@@ -96,10 +85,8 @@ export const ApiContext = React.createContext<IApiContext>({
   submitCourse: (id, course) => Promise.reject(),
   publishSubCourse: (courseId, id, course) => Promise.reject(),
   createSubCourse: (id, subCourse) => Promise.reject(),
-  editSubCourse: (id, subCourse) => Promise.reject(),
   cancelSubCourse: (id, subCourseId) => Promise.reject(),
   createLecture: (id, subCourseId, lecture) => Promise.reject(),
-  editLecture: (id, subCourseId, lecture) => Promise.reject(),
   cancelLecture: (id, subCourseId, lectureId) => Promise.reject(),
   registerTutee: (tutee) => Promise.reject(),
   registerTutor: (tutor) => Promise.reject(),
@@ -167,12 +154,6 @@ export const ApiProvider: React.FC = ({ children }) => {
       instructors: [...subCourse.instructors, id],
     });
 
-  const editSubCourse = (
-    courseId: number,
-    subCourse: CompletedSubCourse
-  ): Promise<void> =>
-    api.axiosEditSubCourse(token, courseId, subCourse.id, subCourse);
-
   const cancelSubCourse = (
     courseId: number,
     subCourseId: number
@@ -187,12 +168,6 @@ export const ApiProvider: React.FC = ({ children }) => {
       ...lecture,
       instructor: lecture.instructor.length === 0 ? id : lecture.instructor,
     });
-
-  const editLecture = (
-    courseId: number,
-    subCourseId: number,
-    lecture: CompletedLecture
-  ) => api.axiosEditLecture(token, courseId, subCourseId, lecture.id, lecture);
 
   const cancelLecture = (
     courseId: number,
@@ -246,22 +221,20 @@ export const ApiProvider: React.FC = ({ children }) => {
         getCourses,
         getCourse,
         getMyCourses,
+        createCourse,
+        cancelCourse,
+        createSubCourse,
+        cancelSubCourse,
+        createLecture,
+        cancelLecture,
         registerTutee,
         registerTutor,
-        sendCourseGroupMail,
+        editCourse,
         joinCourse,
         leaveCourse,
         submitCourse,
-        createCourse,
-        createSubCourse,
-        createLecture,
-        cancelCourse,
-        cancelSubCourse,
-        cancelLecture,
         publishSubCourse,
-        editCourse,
-        editSubCourse,
-        editLecture,
+        sendCourseGroupMail,
       }}
     >
       {children}

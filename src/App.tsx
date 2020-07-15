@@ -80,9 +80,6 @@ const App: React.FC = () => {
         <Route path="/verify">
           <Verify />
         </Route>
-        <PrivateRoute path="/courses/edit/:id">
-          <CourseForm />
-        </PrivateRoute>
         <PrivateRoute path="/courses/create">
           <CourseForm />
         </PrivateRoute>
