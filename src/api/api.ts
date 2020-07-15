@@ -91,12 +91,12 @@ export const axiosDissolveMatch = (
   });
 };
 
-export const axiosRequestNewToken = (email: string): Promise<void> => {
+export const axiosRequestNewToken = (email: string, redirectPath: string): Promise<void> => {
   const url = `${apiURL}/token`;
   return new Promise((resolve, reject) => {
     axios
       .get(url, {
-        params: { email },
+        params: { email, redirectPath },
       })
       .then(() => resolve())
       .catch((error) => {
