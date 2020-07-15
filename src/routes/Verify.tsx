@@ -53,7 +53,7 @@ const Verify: React.FC = () => {
           case 'pending':
             return <>Laden...</>;
           case 'success':
-            return <Redirect to="/settings" />;
+            return <Redirect to={query.get("redirectTo") || "/settings"} />;
           case 'failed':
             return <>Token ungültig</>;
         }

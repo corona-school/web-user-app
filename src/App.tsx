@@ -91,7 +91,7 @@ const App: React.FC = () => {
             <Dashboard />
           </PrivateRoute>
           <Switch>
-            <PrivateRoute path="/courses/:id">
+            <PrivateRoute path="/courses/:id" comeback>
               <CourseDetail />
             </PrivateRoute>
             <PrivateRoute
