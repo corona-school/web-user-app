@@ -10,6 +10,7 @@ import {
 import { Tooltip } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { Tag } from '../Tag';
+import { firstLectureOfSubcourse } from '../../utils/CourseUtil';
 
 import classes from './MyCourseCard.module.scss';
 import { AuthContext } from '../../context/AuthContext';
@@ -38,7 +39,7 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
   const auth = useContext(AuthContext);
 
   const subCourse = course.subcourse;
-  const firstLecture = subCourse?.lectures.sort((a, b) => a.start - b.start)[0];
+  const firstLecture = firstLectureOfSubcourse(subCourse);
 
   const userId = auth.credentials.id;
   const isMyCourse =

@@ -1,4 +1,4 @@
-import { CourseOverview, ParsedCourseOverview } from '../types/Course';
+import { CourseOverview, ParsedCourseOverview, CourseSubCourse, Lecture, CourseLecture } from '../types/Course';
 
 export const parseCourse = (course: CourseOverview): ParsedCourseOverview => {
   return {
@@ -49,8 +49,12 @@ export const defaultPublicCourseSort = (a: ParsedCourseOverview, b: ParsedCourse
     return lectureOrder;
   }
 
-  const firstLectureA = A.lectures[0];
-  const firstLectureB = B.lectures[0];
+  const firstLectureA = firstLectureOfSubcourse(A);
+  const firstLectureB = firstLectureOfSubcourse(B);
 
   return firstLectureA.start - firstLectureB.start;
+}
+
+export const firstLectureOfSubcourse = (subcourse?: CourseSubCourse): CourseLecture => {
+  return subcourse?.lectures.sort((a, b) => a.start - b.start)[0];
 }
