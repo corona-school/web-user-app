@@ -186,7 +186,7 @@ const Login: React.FC = () => {
         )}
         <Text className={classes.description}>
           Du hast noch kein Account? Hier{' '}
-          <Link to="/register">
+          <Link to={`/register?redirectTo=${redirectPath ?? ""}`}>
             <a>registrieren</a>
           </Link>
           .

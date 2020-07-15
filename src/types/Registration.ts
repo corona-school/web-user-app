@@ -12,6 +12,7 @@ export interface Tutee {
   school: string;
   msg?: string;
   newsletter: boolean;
+  redirectTo?: string;
 }
 
 export interface Tutor {
@@ -31,4 +32,5 @@ export interface Tutor {
   msg?: string;
   // finnish
   newsletter: boolean;
+  redirectTo?: string;
 }
