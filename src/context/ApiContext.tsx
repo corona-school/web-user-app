@@ -12,7 +12,7 @@ import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 interface IApiContext {
   getUserData: () => Promise<any>;
   dissolveMatch: (uuid: string, reason?: number) => Promise<void>;
-  requestNewToken: (email: string, redirectPath: string) => Promise<void>;
+  requestNewToken: (email: string, redirectTo: string) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
   becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
   putUserActiveFalse: () => Promise<void>;
