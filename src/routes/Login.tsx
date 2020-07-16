@@ -28,7 +28,7 @@ const Login: React.FC = () => {
 
   const query = useQuery();
   const token = query.get('token');
-  
+
   const redirectPath = query.get('path');
 
   const authContext = useContext(Context.Auth);
@@ -55,7 +55,7 @@ const Login: React.FC = () => {
   const login = () => {
     setLoginState('loading');
     apiContext
-      .requestNewToken(email)
+      .requestNewToken(email, redirectPath)
       .then(() => {
         setLoginState('success');
       })
