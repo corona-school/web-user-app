@@ -260,7 +260,7 @@ const CourseDetail = () => {
                 )}
               </Dropdown>
             )}
-            {canJoinCourse() && (
+            {(canJoinCourse() || canDisjoinCourse()) && (
               <AntdButton
                 type="primary"
                 style={{
@@ -438,6 +438,14 @@ const CourseDetail = () => {
     }
 
     return false;
+  };
+
+  const canDisjoinCourse = () => {
+    if (!course.subcourse || isStudent) {
+      return false;
+    }
+
+    return course.subcourse.joined;
   };
 
   const renderLectures = () => {
