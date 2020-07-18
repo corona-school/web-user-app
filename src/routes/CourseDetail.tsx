@@ -1,17 +1,18 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import React, {useContext, useState, useEffect} from 'react';
+import {useParams, useHistory} from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
 
-import { ApiContext } from '../context/ApiContext';
-import { AuthContext } from '../context/AuthContext';
+import {ApiContext} from '../context/ApiContext';
+import {AuthContext} from '../context/AuthContext';
 import {
   ParsedCourseOverview,
   CourseState,
   Course,
   SubCourse,
 } from '../types/Course';
-import { Title, Text } from '../components/Typography';
-import { Tag } from '../components/Tag';
+import {Title, Text} from '../components/Typography';
+import {Tag} from '../components/Tag';
 import 'moment/locale/de';
 import {
   DeleteOutlined,
@@ -20,7 +21,7 @@ import {
   DownOutlined,
 } from '@ant-design/icons';
 import classes from './CourseDetail.module.scss';
-import { UserContext } from '../context/UserContext';
+import {UserContext} from '../context/UserContext';
 import {
   Empty,
   Descriptions,
@@ -31,23 +32,24 @@ import {
   List,
   Tooltip,
 } from 'antd';
-import { parseCourse } from '../utils/CourseUtil';
+import {parseCourse} from '../utils/CourseUtil';
 import {
   CategoryToLabel,
   CourseStateToLabel,
 } from '../components/cards/MyCourseCard';
 
-import { tags } from '../components/forms/CreateCourse';
-import { ModalContext } from '../context/ModalContext';
+import {tags} from '../components/forms/CreateCourse';
+import {ModalContext} from '../context/ModalContext';
 import CourseMessageModal from '../components/Modals/CourseMessageModal';
-import { dev } from '../api/config';
+import {dev} from '../api/config';
 
 moment.locale('de');
 
 const CourseDetail = () => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
-  const { id } = useParams();
+  const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
+  const {id} = useParams();
 
   const api = useContext(ApiContext);
   const userContext = useContext(UserContext);
@@ -114,7 +116,7 @@ const CourseDetail = () => {
     api
       .submitCourse(course.id, apiCourse)
       .then(() => {
-        setCourse({ ...course, state: CourseState.SUBMITTED });
+        setCourse({...course, state: CourseState.SUBMITTED});
         return api.publishSubCourse(
           course.id,
           course.subcourse.id,
@@ -165,6 +167,24 @@ const CourseDetail = () => {
     }
   };
 
+  const joinBBBmeeting = () => {
+    setIsLoadingVideoChat(true);
+    api.joinBBBmeeting(course.id)
+      .then((res) => {
+        setIsLoadingVideoChat(false);
+        //use window.location to not have problems with popup blocking
+        window.location.href = res.url;
+      })
+      .catch((err) => {
+        setIsLoadingVideoChat(false);
+        if (err?.response?.status === 400) {
+          message.error('Der Videochat wurde noch nicht gestartet. Du musst auf die*den Kursleiter*in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.');
+        } else {
+          message.error('Ein unerwarter Fehler ist aufgetreten. Versuche, die Seite neuzuladen.');
+        }
+      })
+  };
+
   const renderCourseInformation = () => {
     const getMenu = () => (
       <Menu
@@ -181,19 +201,19 @@ const CourseDetail = () => {
         }}
       >
         {course.state === CourseState.CREATED && (
-          <Menu.Item key="2" icon={<CheckCircleOutlined />}>
+          <Menu.Item key="2" icon={<CheckCircleOutlined/>}>
             Zur Prüfung freigeben
           </Menu.Item>
         )}
         <Menu.Item
           key="3"
-          icon={<MailOutlined />}
+          icon={<MailOutlined/>}
           disabled={course.subcourse.participantList.length === 0}
         >
           Nachricht senden
         </Menu.Item>
         {course.state !== CourseState.CANCELLED && (
-          <Menu.Item key="4" icon={<DeleteOutlined />}>
+          <Menu.Item key="4" icon={<DeleteOutlined/>}>
             Löschen
           </Menu.Item>
         )}
@@ -209,10 +229,10 @@ const CourseDetail = () => {
       <div className={classes.statusContainer}>
         <div className={classes.headerContainer}>
           <div>
-            <Title size="h1" style={{ margin: '0px 20px 10px 8px' }}>
+            <Title size="h1" style={{margin: '0px 20px 10px 8px'}}>
               {course.name}
             </Title>
-            <Title size="h5" style={{ margin: '-4px 10px 0px 10px' }}>
+            <Title size="h5" style={{margin: '-4px 10px 0px 10px'}}>
               {course.outline}
             </Title>
           </div>
@@ -231,11 +251,11 @@ const CourseDetail = () => {
                       submitCourse();
                     }}
                   >
-                    <CheckCircleOutlined /> Zur Prüfung freigeben
+                    <CheckCircleOutlined/> Zur Prüfung freigeben
                   </AntdButton>
                 ) : (
                   <AntdButton>
-                    Einstellungen <DownOutlined />
+                    Einstellungen <DownOutlined/>
                   </AntdButton>
                 )}
               </Dropdown>
@@ -255,13 +275,31 @@ const CourseDetail = () => {
                 {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
               </AntdButton>
             )}
+            <div className="classes.videochatAction">
+              {((isMyCourse && course.state === CourseState.ALLOWED) || course.subcourse.joined) && (
+                <AntdButton
+                  type="primary"
+                  style={{
+                    backgroundColor: '#FCD95C',
+                    borderColor: '#FCD95C',
+                    color: '#373E47',
+                    width: '120px',
+                    margin: '5px 10px'
+                  }}
+                  onClick={joinBBBmeeting}
+                >
+                  Zum Videochat
+                </AntdButton>
+              )}
+              <ClipLoader size={15} color={'#123abc'} loading={isLoadingVideoChat} />
+            </div>
           </div>
         </div>
 
         <Descriptions
           column={3}
           size={'small'}
-          style={{ margin: '10px', maxWidth: '700px' }}
+          style={{margin: '10px', maxWidth: '700px'}}
         >
           {isMyCourse && (
             <Descriptions.Item label="Status">
@@ -278,7 +316,7 @@ const CourseDetail = () => {
                     ? 'white'
                     : '#373E47'
                 }
-                style={{ fontSize: '12px', margin: 0 }}
+                style={{fontSize: '12px', margin: 0}}
               >
                 {CourseStateToLabel.get(course.state)}
               </Tag>
@@ -322,11 +360,11 @@ const CourseDetail = () => {
           size="small"
           layout="vertical"
           column={1}
-          style={{ margin: '10px', maxWidth: '700px' }}
+          style={{margin: '10px', maxWidth: '700px'}}
         >
           <Descriptions.Item label="Beschreibung">
             <Text large>
-              <i style={{ whiteSpace: 'pre-wrap' }}>{course.description}</i>
+              <i style={{whiteSpace: 'pre-wrap'}}>{course.description}</i>
             </Text>
           </Descriptions.Item>
           <Descriptions.Item label="Tags">
@@ -337,7 +375,7 @@ const CourseDetail = () => {
         </Descriptions>
         {isMyCourse && (
           <div>
-            <Title size="h3" style={{ margin: '0px 10px' }}>
+            <Title size="h3" style={{margin: '0px 10px'}}>
               Teilnehmer
             </Title>
             <div>{renderParticipants()}</div>
@@ -425,9 +463,10 @@ const CourseDetail = () => {
 
             <Text>
               Die {i + 1}te Lektion findet {moment(l.start).fromNow()} statt und
-              dauert ungefähr {l.duration}min. Der Kurs ist für Schüler in der{' '}
+              dauert ungefähr {l.duration}min. Der Kurs ist für Schüler in
+              der{' '}
               {course.subcourse.minGrade}-{course.subcourse.maxGrade} Klasse.{' '}
-              <br />
+              <br/>
               Tutor: {l.instructor.firstname} {l.instructor.lastname}
             </Text>
           </div>

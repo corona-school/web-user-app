@@ -61,6 +61,9 @@ interface IApiContext {
     subject: string,
     body: string
   ) => Promise<void>;
+  joinBBBmeeting: (
+    courseId: number
+  ) => Promise<any>;
 }
 
 export const ApiContext = React.createContext<IApiContext>({
@@ -91,6 +94,7 @@ export const ApiContext = React.createContext<IApiContext>({
   registerTutee: (tutee) => Promise.reject(),
   registerTutor: (tutor) => Promise.reject(),
   sendCourseGroupMail: (id, subCourseId, subject, body) => Promise.reject(),
+  joinBBBmeeting: (courseId) => Promise.reject()
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -208,6 +212,10 @@ export const ApiProvider: React.FC = ({ children }) => {
   ) =>
     api.axiosSendCourseGroupMail(token, courseId, subCourseId, subject, body);
 
+  const joinBBBmeeting = (
+    courseId: number
+  ) => api.axiosJoinBBBmeeting(token, courseId);
+
   return (
     <ApiContext.Provider
       value={{
@@ -235,6 +243,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         submitCourse,
         publishSubCourse,
         sendCourseGroupMail,
+        joinBBBmeeting
       }}
     >
       {children}

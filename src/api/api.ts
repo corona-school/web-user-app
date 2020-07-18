@@ -565,3 +565,22 @@ export const axiosBecomeInstructor = (
       });
   });
 };
+
+export const axiosJoinBBBmeeting = (
+  token: string,
+  courseId: number,
+): Promise<CourseOverview> => {
+  const url = `${apiURL}/course/${courseId}/meeting/join`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url, { headers: { token } })
+      .then((response) => {
+        console.log(response);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
