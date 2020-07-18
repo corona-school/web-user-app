@@ -1,5 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {useParams, useHistory} from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
 
 import {ApiContext} from '../context/ApiContext';
@@ -47,6 +48,7 @@ moment.locale('de');
 const CourseDetail = () => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
+  const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
   const {id} = useParams();
 
   const api = useContext(ApiContext);
@@ -166,15 +168,19 @@ const CourseDetail = () => {
   };
 
   const joinBBBmeeting = () => {
+    setIsLoadingVideoChat(true);
     api.joinBBBmeeting(course.id)
       .then((res) => {
-        window.open(res.url);
+        setIsLoadingVideoChat(false);
+        //use window.location to not have problems with popup blocking
+        window.location.href = res.url;
       })
       .catch((err) => {
-        if (err.response.status === 400) {
-          message.error('Der Videchat wurde noch nicht gestartet.');
+        setIsLoadingVideoChat(false);
+        if (err?.response?.status === 400) {
+          message.error('Der Videochat wurde noch nicht gestartet. Du musst auf die*den Kursleiter*in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.');
         } else {
-          message.error('Ein unerwarter Fehler ist aufgetreten.');
+          message.error('Ein unerwarter Fehler ist aufgetreten. Versuche, die Seite neuzuladen.');
         }
       })
   };
@@ -269,36 +275,24 @@ const CourseDetail = () => {
                 {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
               </AntdButton>
             )}
-            {isMyCourse && (
-              <AntdButton
-                type="primary"
-                style={{
-                  backgroundColor: '#FCD95C',
-                  borderColor: '#FCD95C',
-                  color: '#373E47',
-                  width: '120px',
-                  margin: '5px 10px'
-                }}
-                onClick={joinBBBmeeting}
-              >
-                Zum Videochat
-              </AntdButton>
-            )}
-            {course.subcourse.joined && (
-              <AntdButton
-                type="primary"
-                style={{
-                  backgroundColor: '#FCD95C',
-                  borderColor: '#FCD95C',
-                  color: '#373E47',
-                  width: '120px',
-                  margin: '5px 10px'
-                }}
-                onClick={joinBBBmeeting}
-              >
-                Zum Videochat
-              </AntdButton>
-            )}
+            <div className="classes.videochatAction">
+              {((isMyCourse && course.state === CourseState.ALLOWED) || course.subcourse.joined) && (
+                <AntdButton
+                  type="primary"
+                  style={{
+                    backgroundColor: '#FCD95C',
+                    borderColor: '#FCD95C',
+                    color: '#373E47',
+                    width: '120px',
+                    margin: '5px 10px'
+                  }}
+                  onClick={joinBBBmeeting}
+                >
+                  Zum Videochat
+                </AntdButton>
+              )}
+              <ClipLoader size={15} color={'#123abc'} loading={isLoadingVideoChat} />
+            </div>
           </div>
         </div>
 
