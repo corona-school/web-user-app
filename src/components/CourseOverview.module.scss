@@ -1,0 +1,59 @@
+.header {
+  position: absolute;
+  width: 100%;
+  height: 214px;
+  left: 0px;
+  top: 74px;
+
+  background: #F4F6FF;
+}
+
+.icon {
+  position: static;
+  width: 36px;
+  height: 36px;
+  left: 46px;
+  top: 14px;
+}
+
+.button-text {
+  position: static;
+  height: 28px;
+  left: 100px;
+  top: 18px;
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 28px;
+}
+
+.button {
+  display: flex;
+  flex-direction: row;
+  padding: 14px 46px;
+
+  position: static;
+  width: 288px;
+  height: 64px;
+  left: 0px;
+  top: 0px;
+
+  flex: none;
+  order: 0;
+  align-self: center;
+  margin: 0px 0px;
+}
+
+.radio {
+  display: flex;
+  flex-direction: row;
+  padding: 0px;
+
+  position: absolute;
+  width: 862px;
+  height: 64px;
+  left: 289px;
+  top: 0px;
+}
