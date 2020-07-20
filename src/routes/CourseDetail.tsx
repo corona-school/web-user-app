@@ -203,6 +203,9 @@ const CourseDetail = () => {
           if (param.key === '4') {
             cancelCourse();
           }
+          if (param.key === '5') {
+            history.push(`/courses/edit/${course.id}`);
+          }
         }}
       >
         {course.state === CourseState.CREATED && (
