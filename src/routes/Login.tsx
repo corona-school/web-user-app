@@ -22,7 +22,7 @@ const Login: React.FC = () => {
     'noToken' | 'pending' | 'failed' | 'success'
   >('noToken');
   const [loginState, setLoginState] = useState<
-    'idle' | 'loading' | 'error' | 'success'
+    'idle' | 'loading' | 'error' | 'success' | 'rateLimit'
   >('idle');
   const [email, setEmail] = useState('');
 
@@ -59,8 +59,13 @@ const Login: React.FC = () => {
       .then(() => {
         setLoginState('success');
       })
-      .catch(() => {
-        setLoginState('error');
+      .catch((error) => {
+        if (error === 403) {
+          setLoginState('rateLimit');
+        }
+        else {
+          setLoginState('error');
+        }
       });
   };
 
@@ -118,7 +123,7 @@ const Login: React.FC = () => {
             <ClipLoader size={100} color={'#123abc'} loading={true} />
           </div>
         )}
-        {loginState === 'error' && (
+        {(loginState === 'error' || loginState === 'rateLimit') && (
           <Title className={classes.loginTitle} size="h4">
             Das hat leider nicht geklappt.
           </Title>
@@ -154,6 +159,13 @@ const Login: React.FC = () => {
           <Text className={classes.textError}>
             Wir konnten deine E-Mail-Adresse leider nicht in unserem System
             finden.
+          </Text>
+        )}
+        {loginState === 'rateLimit' && (
+          <Text className={classes.textError}>
+            Du hast in den letzten 24 Stunden bereits einen bisher ungenutzen Zugangslink angefordert. <br/>
+            Bitte schaue dafür in dein E-Mail-Postfach nach einer E-Mail von uns. <br/>
+            Wenn du auch nach ca. 10 Minuten noch keinen Zugangslink bekommen hast, wende dich bitte an <a href="mailto:support@corona-school.de">support@corona-school.de</a> oder warte bis zum nächsten Tag, um erneut einen Zugangslink anzufordern.
           </Text>
         )}
         {loginState !== 'success' ? (

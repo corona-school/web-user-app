@@ -100,7 +100,7 @@ export const axiosRequestNewToken = (email: string, redirectTo: string): Promise
       })
       .then(() => resolve())
       .catch((error) => {
-        reject();
+        reject(error?.response?.status);
         if (dev) console.error('requestNewToken failed:', error);
       });
   });
