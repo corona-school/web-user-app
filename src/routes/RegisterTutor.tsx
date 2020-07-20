@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Link, useLocation } from 'react-router-dom';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
@@ -40,6 +40,10 @@ interface Props {
   isStudent?: boolean;
 }
 
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+};
+
 const RegisterTutor: React.FC<Props> = (props) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -56,6 +60,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
+
+  const redirectTo = useQuery().get("redirectTo");
 
   const renderStart = () => {
     return (
@@ -531,6 +537,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
       hours: data.hours,
       newsletter: !!data.newsletter,
       msg: data.msg || '',
+      state: data.state?.toLowerCase(),
+      redirectTo
     };
   };
 

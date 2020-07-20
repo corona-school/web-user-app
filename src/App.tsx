@@ -30,8 +30,7 @@ const GlobalStyle = createGlobalStyle`
   html {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 14px;
-    overflow: hidden;
-
+    height: 100%;
   }
 
   *{
@@ -81,9 +80,6 @@ const App: React.FC = () => {
         <Route path="/verify">
           <Verify />
         </Route>
-        <PrivateRoute path="/courses/edit/:id">
-          <CourseForm />
-        </PrivateRoute>
         <PrivateRoute path="/courses/create">
           <CourseForm />
         </PrivateRoute>
@@ -95,7 +91,7 @@ const App: React.FC = () => {
             <Dashboard />
           </PrivateRoute>
           <Switch>
-            <PrivateRoute path="/courses/:id">
+            <PrivateRoute path="/courses/:id" comeback>
               <CourseDetail />
             </PrivateRoute>
             <PrivateRoute

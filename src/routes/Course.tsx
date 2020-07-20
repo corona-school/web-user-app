@@ -14,6 +14,10 @@ import { UserContext } from '../context/UserContext';
 
 const MAX_COURSES = 25;
 
+function tutorOrGradeFittingTuteeFilter(grade?: number): (c: ParsedCourseOverview) => boolean {
+  return c => !grade || (c.subcourse?.minGrade <= grade && grade <= c.subcourse?.maxGrade);
+}
+
 const Course = () => {
   const [loading, setLoading] = useState(false);
   const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
@@ -21,6 +25,10 @@ const Course = () => {
   const apiContext = useContext(Context.Api);
   const userContext = useContext(UserContext);
   const history = useHistory();
+
+  const filteredCourses = courses
+                            .filter((c) => c.subcourse)
+                            .filter(tutorOrGradeFittingTuteeFilter(userContext.user.grade))
 
   useEffect(() => {
     setLoading(true);
@@ -68,7 +76,7 @@ const Course = () => {
         </div>
         <div className={classes.myCoursesContainer}>
           {myCourses.length === 0 ? (
-            <Empty description="Du hast im moment keine Kurse"></Empty>
+            <Empty description="Du hast im Moment keine Kurse"></Empty>
           ) : (
             myCourses.map((c) => {
               return <MyCourseCard course={c} />;
@@ -77,14 +85,13 @@ const Course = () => {
         </div>
       </div>
       <Title size="h2">Alle Kurse</Title>
-      {courses.length === 0 ? (
+      {filteredCourses.length === 0 ? (
         <Empty
           style={{ marginBottom: '64px' }}
-          description="Es gibt im moment keine Kurse"
+          description={"Es gibt im Moment keine Kurse" + (userContext.user.type === 'pupil' ? " für deine Klassenstufe" : "")}
         ></Empty>
       ) : (
-        courses
-          .filter((c) => c.subcourse)
+        filteredCourses
           .map((c) => {
             return <MyCourseCard course={c} />;
           })

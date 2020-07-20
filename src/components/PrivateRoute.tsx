@@ -3,14 +3,18 @@ import { Route, Redirect } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import PageLoading from './PageLoading';
 
+// If you set comeback, the user will be redirected to this page after login / registration
+
 const PrivateRoute = ({
   children,
   active = true,
+  comeback = false,
   ...rest
 }: {
   children: React.ReactNode;
   active?: boolean;
   [index: string]: any;
+  comeback?: boolean;
 }) => {
   const authContext = useContext(AuthContext);
 
@@ -29,7 +33,7 @@ const PrivateRoute = ({
             return children;
           case 'missing':
           case 'invalid':
-            return <Redirect to="/login" />;
+            return <Redirect to={comeback ? `/login?path=${location.pathname}` : `/login`} />;
         }
       }}
     />

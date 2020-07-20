@@ -109,6 +109,8 @@ const ButtonDestructiveStyle = styled.button`
   font-size: 18px;
   line-height: 27px;
 
+  flex-shrink: 0;
+
   color: ${(props) => props.theme.color.destructiveButton};
 
   cursor: pointer;

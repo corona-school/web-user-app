@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
 
 import { ApiContext } from '../context/ApiContext';
@@ -47,6 +48,7 @@ moment.locale('de');
 const CourseDetail = () => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
+  const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
   const { id } = useParams();
 
   const api = useContext(ApiContext);
@@ -165,6 +167,29 @@ const CourseDetail = () => {
     }
   };
 
+  const joinBBBmeeting = () => {
+    setIsLoadingVideoChat(true);
+    api
+      .joinBBBmeeting(course.id)
+      .then((res) => {
+        setIsLoadingVideoChat(false);
+        //use window.location to not have problems with popup blocking
+        window.location.href = res.url;
+      })
+      .catch((err) => {
+        setIsLoadingVideoChat(false);
+        if (err?.response?.status === 400) {
+          message.error(
+            'Der Videochat wurde noch nicht gestartet. Du musst auf die*den Kursleiter*in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.'
+          );
+        } else {
+          message.error(
+            'Ein unerwarter Fehler ist aufgetreten. Versuche, die Seite neuzuladen.'
+          );
+        }
+      });
+  };
+
   const renderCourseInformation = () => {
     const getMenu = () => (
       <Menu
@@ -177,9 +202,6 @@ const CourseDetail = () => {
           }
           if (param.key === '4') {
             cancelCourse();
-          }
-          if (param.key === '5') {
-            history.push(`/courses/edit/${course.id}`);
           }
         }}
       >
@@ -200,6 +222,7 @@ const CourseDetail = () => {
             Löschen
           </Menu.Item>
         )}
+
         {course.state === CourseState.CREATED && (
           <Menu.Item key="5" icon={<CheckCircleOutlined />}>
             Bearbeiten
@@ -248,6 +271,46 @@ const CourseDetail = () => {
                 )}
               </Dropdown>
             )}
+            {(canJoinCourse() || canDisjoinCourse()) && (
+              <AntdButton
+                type="primary"
+                style={{
+                  backgroundColor: course.subcourse.joined
+                    ? '#F4486D'
+                    : '#FCD95C',
+                  borderColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
+                  color: course.subcourse.joined ? 'white' : '#373E47',
+                  width: '120px',
+                  margin: '0px 10px',
+                }}
+                onClick={joinCourse}
+              >
+                {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
+              </AntdButton>
+            )}
+            <div className="classes.videochatAction">
+              {((isMyCourse && course.state === CourseState.ALLOWED) ||
+                course.subcourse.joined) && (
+                <AntdButton
+                  type="primary"
+                  style={{
+                    backgroundColor: '#FCD95C',
+                    borderColor: '#FCD95C',
+                    color: '#373E47',
+                    width: '120px',
+                    margin: '5px 10px',
+                  }}
+                  onClick={joinBBBmeeting}
+                >
+                  Zum Videochat
+                </AntdButton>
+              )}
+              <ClipLoader
+                size={15}
+                color={'#123abc'}
+                loading={isLoadingVideoChat}
+              />
+            </div>
           </div>
         </div>
 
@@ -328,21 +391,6 @@ const CourseDetail = () => {
             })}
           </Descriptions.Item>
         </Descriptions>
-        {canJoinCourse() && (
-          <AntdButton
-            type="primary"
-            style={{
-              backgroundColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
-              borderColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
-              color: course.subcourse.joined ? 'white' : '#373E47',
-              width: '120px',
-              margin: '0px 10px',
-            }}
-            onClick={joinCourse}
-          >
-            {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
-          </AntdButton>
-        )}
         {isMyCourse && (
           <div>
             <Title size="h3" style={{ margin: '0px 10px' }}>
@@ -408,6 +456,14 @@ const CourseDetail = () => {
     }
 
     return false;
+  };
+
+  const canDisjoinCourse = () => {
+    if (!course.subcourse || isStudent) {
+      return false;
+    }
+
+    return course.subcourse.joined;
   };
 
   const renderLectures = () => {

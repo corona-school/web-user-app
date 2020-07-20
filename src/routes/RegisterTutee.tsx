@@ -8,7 +8,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 import classes from './RegisterTutee.module.scss';
 import { Subject } from '../types';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Link, useLocation } from 'react-router-dom';
 import Context from '../context';
 import { Tutee } from '../types/Registration';
 
@@ -30,6 +30,10 @@ interface FormData {
   newsletter?: boolean;
 }
 
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+};
+
 const RegisterTutee = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -41,6 +45,8 @@ const RegisterTutee = () => {
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
+
+  const redirectTo = useQuery().get("redirectTo");
 
   const renderStart = () => {
     return (
@@ -463,6 +469,7 @@ const RegisterTutee = () => {
       state: data.state.toLowerCase(),
       newsletter: !!data.newsletter,
       msg: data.msg || '',
+      redirectTo,
     };
   };
 

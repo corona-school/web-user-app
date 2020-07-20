@@ -22,18 +22,20 @@ const Login: React.FC = () => {
     'noToken' | 'pending' | 'failed' | 'success'
   >('noToken');
   const [loginState, setLoginState] = useState<
-    'idle' | 'loading' | 'error' | 'success'
+    'idle' | 'loading' | 'error' | 'success' | 'rateLimit'
   >('idle');
   const [email, setEmail] = useState('');
 
   const query = useQuery();
   const token = query.get('token');
 
+  const redirectPath = query.get('path');
+
   const authContext = useContext(Context.Auth);
   const apiContext = useContext(Context.Api);
 
   useEffect(() => {
-    if (!token && authContext.status === 'authorized') setState('success');
+    if (authContext.status === 'authorized') setState('success');
   }, [authContext.status]);
 
   useEffect(() => {
@@ -43,7 +45,6 @@ const Login: React.FC = () => {
         .then((id) => {
           storedCredentials.write({ id, token });
           authContext.setCredentials({ id, token });
-          setState('success');
         })
         .catch(() => {
           setState('failed');
@@ -54,12 +55,17 @@ const Login: React.FC = () => {
   const login = () => {
     setLoginState('loading');
     apiContext
-      .requestNewToken(email)
+      .requestNewToken(email, redirectPath)
       .then(() => {
         setLoginState('success');
       })
-      .catch(() => {
-        setLoginState('error');
+      .catch((error) => {
+        if (error === 403) {
+          setLoginState('rateLimit');
+        }
+        else {
+          setLoginState('error');
+        }
       });
   };
 
@@ -90,6 +96,9 @@ const Login: React.FC = () => {
   };
 
   if (state === 'success') {
+    if (redirectPath && redirectPath !== "") {
+      return <Redirect to={redirectPath} />
+    }
     return <Redirect to="/dashboard" />;
   }
 
@@ -114,7 +123,7 @@ const Login: React.FC = () => {
             <ClipLoader size={100} color={'#123abc'} loading={true} />
           </div>
         )}
-        {loginState === 'error' && (
+        {(loginState === 'error' || loginState === 'rateLimit') && (
           <Title className={classes.loginTitle} size="h4">
             Das hat leider nicht geklappt.
           </Title>
@@ -124,6 +133,10 @@ const Login: React.FC = () => {
             <Title className={classes.loginTitle} size="h4">
               Wir haben dir eine E-Mail geschickt.
             </Title>
+            <Text>
+              In dieser E-Mail ist ein Zugangslink enthalten.<br/>
+              Klicke einfach auf den Link in der E-Mail und du kommst direkt in deinen persönlichen User-Bereich!
+            </Text>
             <Icons.SignupEmailSent />
           </div>
         )}
@@ -152,7 +165,14 @@ const Login: React.FC = () => {
             finden.
           </Text>
         )}
-        {loginState !== 'success' ? (
+        {loginState === 'rateLimit' && (
+          <Text className={classes.textError}>
+            Du hast in den letzten 24 Stunden bereits einen bisher ungenutzen Zugangslink angefordert. <br/>
+            Bitte schaue dafür in dein E-Mail-Postfach nach einer E-Mail von uns. <br/>
+            Wenn du auch nach ca. 10 Minuten noch keinen Zugangslink bekommen hast, wende dich bitte an <a href="mailto:support@corona-school.de">support@corona-school.de</a> oder warte bis zum nächsten Tag, um erneut einen Zugangslink anzufordern.
+          </Text>
+        )}
+        {loginState !== 'success' && (
           <Button
             className={classes.signinButton}
             color="white"
@@ -160,15 +180,6 @@ const Login: React.FC = () => {
             onClick={login}
           >
             Anmelden
-          </Button>
-        ) : (
-          <Button
-            className={classes.successButton}
-            color="#2B2C3B"
-            backgroundColor="white"
-            onClick={login}
-          >
-            E-Mail erneut versenden
           </Button>
         )}
         {loginState !== 'idle' && (
@@ -182,7 +193,7 @@ const Login: React.FC = () => {
         )}
         <Text className={classes.description}>
           Du hast noch kein Account? Hier{' '}
-          <Link to="/register">
+          <Link to={`/register?redirectTo=${redirectPath ?? ""}`}>
             <a>registrieren</a>
           </Link>
           .

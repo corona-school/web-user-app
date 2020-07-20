@@ -7,13 +7,20 @@
 .navigationContainer {
   min-width: 300px;
   max-width: 300px;
-  max-height: 100vh;
-  overflow: hidden;
+  height: 100vh;
+
+  position: sticky;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  z-index: 1000;
 
   display: flex;
   flex-grow: 1;
   flex-direction: column;
   justify-content: space-between;
+  overflow: scroll;
 
   background-color: $navigationBackground;
 
@@ -62,12 +69,13 @@
 @media only screen and (max-width: 1200px) {
   .navigationContainer {
     position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
     width: 300px;
     height: 100%;
     top: 0px;
-    z-index: 300;
-    overflow: auto;
-    left: 0;
+    z-index: 1000;
     transition: transform 0.2s ease-in-out;
     transform: translate(-100%);
 

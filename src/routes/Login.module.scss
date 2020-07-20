@@ -98,12 +98,14 @@
 .textError {
   margin-top: -16px !important;
   color: #f0466b !important;
+  text-align: center;
 }
 
 .successContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 
   svg {
     margin: 32px;
