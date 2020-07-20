@@ -127,7 +127,6 @@ export const CourseForm: React.FC = () => {
     if (position === 1) {
       return (
         <CreateLecture
-          edit={params?.id ? true : false}
           lectures={lectures}
           subCourse={subCourse}
           course={course}

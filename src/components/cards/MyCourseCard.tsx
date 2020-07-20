@@ -16,6 +16,7 @@ import classes from './MyCourseCard.module.scss';
 import { AuthContext } from '../../context/AuthContext';
 
 interface Props {
+  ownedByMe?: boolean;
   course: ParsedCourseOverview;
   redirect?: string;
 }
@@ -34,7 +35,7 @@ export const CategoryToLabel = new Map([
   [CourseCategory.CLUB, 'AGs'],
 ]);
 
-const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
+const MyCourseCard: React.FC<Props> = ({ course, redirect, ownedByMe }) => {
   const history = useHistory();
   const auth = useContext(AuthContext);
 
@@ -51,7 +52,8 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
       history.push(redirect);
       return;
     }
-    if (!course.subcourse && isMyCourse) {
+    console.log(course.subcourse, isMyCourse, course);
+    if (!course.subcourse && (isMyCourse || ownedByMe)) {
       history.push('courses/edit/' + course.id);
       return;
     }

@@ -7,6 +7,7 @@ import Context from '../../context';
 import classes from './CreateCourse.module.scss';
 import { Course, SubCourse } from '../../types/Course';
 import { CompletedCourse } from '../../routes/CourseForm';
+import { dev } from '../../api/config';
 
 const { Option } = Select;
 
@@ -85,10 +86,15 @@ export const CreateCourse: React.FC<Props> = (props) => {
             ({ getFieldValue }) => ({
               required: true,
               validator() {
-                if (minGrade && maxGrade && maxParticipants) {
-                  return Promise.resolve();
+                if (!minGrade || !maxGrade || !maxParticipants) {
+                  return Promise.reject('Du musst die Klassen begrenzen.');
                 }
-                return Promise.reject('Du musst die Klassen begrenzen.');
+                if (maxParticipants < 3) {
+                  return Promise.reject(
+                    'Die Anzahl an Teilnehmer muss mindestens 3 sein.'
+                  );
+                }
+                return Promise.resolve();
               },
             }),
           ]}
@@ -116,7 +122,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
             value={maxParticipants}
             onChange={(v) => setMaxParticipants(Number(v))}
             style={{ margin: '0px 4px', width: '64px' }}
-            min={1}
+            min={3}
             max={99}
             placeholder="14"
           />{' '}
@@ -254,7 +260,10 @@ export const CreateCourse: React.FC<Props> = (props) => {
         joinAfterStart: !!joinAfterStart,
         published: false,
       };
-      console.log({ course, subCourse, edit: props.edit });
+
+      if (dev) {
+        console.log({ course, subCourse, edit: props.edit });
+      }
 
       if (props.edit && props.course) {
         await apiContext.editCourse(props.course.id, course);
@@ -290,7 +299,9 @@ export const CreateCourse: React.FC<Props> = (props) => {
     } catch (err) {
       setLoading(false);
       message.error('Ein Fehler ist aufgetreten.');
-      console.log(err);
+      if (dev) {
+        console.error(err);
+      }
     }
   };
 

@@ -83,7 +83,7 @@ const Course = () => {
             <Empty description="Du hast im Moment keine Kurse"></Empty>
           ) : (
             myCourses.map((c) => {
-              return <MyCourseCard course={c} />;
+              return <MyCourseCard course={c} ownedByMe />;
             })
           )}
         </div>
