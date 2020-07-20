@@ -200,9 +200,11 @@ const CourseDetail = () => {
             Löschen
           </Menu.Item>
         )}
-        <Menu.Item key="5" icon={<CheckCircleOutlined />}>
-          Bearbeiten
-        </Menu.Item>
+        {course.state === CourseState.CREATED && (
+          <Menu.Item key="5" icon={<CheckCircleOutlined />}>
+            Bearbeiten
+          </Menu.Item>
+        )}
       </Menu>
     );
 

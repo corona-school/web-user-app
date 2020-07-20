@@ -1,6 +1,6 @@
 export enum CourseState {
-  SUBMITTED = 'submitted',
   CREATED = 'created',
+  SUBMITTED = 'submitted',
   ALLOWED = 'allowed',
   DENIED = 'denied',
   CANCELLED = 'cancelled',
