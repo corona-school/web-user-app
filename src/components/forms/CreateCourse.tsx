@@ -251,10 +251,10 @@ export const CreateCourse: React.FC<Props> = (props) => {
         minGrade,
         maxGrade,
         maxParticipants: maxParticipants,
-        joinAfterStart: joinAfterStart,
+        joinAfterStart: !!joinAfterStart,
         published: false,
       };
-      console.log(course, subCourse);
+      console.log({ course, subCourse, edit: props.edit });
 
       if (props.edit && props.course) {
         await apiContext.editCourse(props.course.id, course);

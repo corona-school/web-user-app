@@ -91,7 +91,10 @@ export const axiosDissolveMatch = (
   });
 };
 
-export const axiosRequestNewToken = (email: string, redirectTo: string): Promise<void> => {
+export const axiosRequestNewToken = (
+  email: string,
+  redirectTo: string
+): Promise<void> => {
   const url = `${apiURL}/token`;
   return new Promise((resolve, reject) => {
     axios
@@ -439,6 +442,8 @@ export const axiosCreateSubCourse = (
   subCourse: SubCourse
 ): Promise<number> => {
   return new Promise((resolve, reject) => {
+    console.log(subCourse);
+
     axios
       .post(`${apiURL}/course/${courseId}/subcourse`, subCourse, {
         headers: { token },
@@ -611,7 +616,7 @@ export const axiosBecomeInstructor = (
 
 export const axiosJoinBBBmeeting = (
   token: string,
-  courseId: number,
+  courseId: number
 ): Promise<CourseOverview> => {
   const url = `${apiURL}/course/${courseId}/meeting/join`;
 

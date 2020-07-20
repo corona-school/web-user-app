@@ -51,6 +51,10 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
       history.push(redirect);
       return;
     }
+    if (!course.subcourse && isMyCourse) {
+      history.push('courses/edit/' + course.id);
+      return;
+    }
     history.push('courses/' + course.id);
   };
 
