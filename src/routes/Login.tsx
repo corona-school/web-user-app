@@ -133,6 +133,10 @@ const Login: React.FC = () => {
             <Title className={classes.loginTitle} size="h4">
               Wir haben dir eine E-Mail geschickt.
             </Title>
+            <Text>
+              In dieser E-Mail ist ein Zugangslink enthalten.<br/>
+              Klicke einfach auf den Link in der E-Mail und du kommst direkt in deinen persönlichen User-Bereich!
+            </Text>
             <Icons.SignupEmailSent />
           </div>
         )}
@@ -168,7 +172,7 @@ const Login: React.FC = () => {
             Wenn du auch nach ca. 10 Minuten noch keinen Zugangslink bekommen hast, wende dich bitte an <a href="mailto:support@corona-school.de">support@corona-school.de</a> oder warte bis zum nächsten Tag, um erneut einen Zugangslink anzufordern.
           </Text>
         )}
-        {loginState !== 'success' ? (
+        {loginState !== 'success' && (
           <Button
             className={classes.signinButton}
             color="white"
@@ -176,15 +180,6 @@ const Login: React.FC = () => {
             onClick={login}
           >
             Anmelden
-          </Button>
-        ) : (
-          <Button
-            className={classes.successButton}
-            color="#2B2C3B"
-            backgroundColor="white"
-            onClick={login}
-          >
-            E-Mail erneut versenden
           </Button>
         )}
         {loginState !== 'idle' && (
