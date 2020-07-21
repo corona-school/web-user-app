@@ -289,6 +289,8 @@ export const axiosGetMyCourses = (
       params.append('participant', participant);
     }
 
+    params.append('onlyJoinableCourses', 'false');
+
     axios
       .get(url, { headers: { token }, params })
       .then((response) => {
