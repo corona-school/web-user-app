@@ -1,0 +1,42 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  &::after {
+    flex: 0 0 20px;
+    visibility: hidden;
+    content: 'spacer';
+  }
+
+  .header {
+    width: 100%; 
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 80px;
+    background-color: white;
+    z-index: 2000;
+    box-shadow: 0 4px 9px -10px black;
+    padding: 7px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    h1 {
+      padding-left: 7px;
+    }
+
+    .headerText {
+      flex-grow: 1;
+    }
+    .headerAction {
+      flex-shrink: 0;
+      flex-grow: 0;
+    }
+
+    @media only screen and (max-width: 485px) {
+      flex-direction: column;
+    }
+  }
+}

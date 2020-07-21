@@ -45,11 +45,13 @@ import { dev } from '../api/config';
 
 moment.locale('de');
 
-const CourseDetail = () => {
+const CourseDetail = (params: {id?: string}) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
   const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
-  const { id } = useParams();
+
+  const { id: urlParamID } = useParams();
+  const id = params.id ?? urlParamID;
 
   const api = useContext(ApiContext);
   const userContext = useContext(UserContext);

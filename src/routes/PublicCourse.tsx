@@ -199,7 +199,7 @@ const PublicCourse = () => {
             )
           )
           .map((c) => {
-            return <MyCourseCard course={c} redirect={`/courses/${c.id}`} />;
+            return <MyCourseCard course={c} redirect={`/public/courses/${c.id}`} />;
           })}
       </div>
 
