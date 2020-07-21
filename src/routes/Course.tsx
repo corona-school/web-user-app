@@ -9,7 +9,7 @@ import { ParsedCourseOverview } from '../types/Course';
 import MyCourseCard from '../components/cards/MyCourseCard';
 
 import classes from './Course.module.scss';
-import { parseCourse } from '../utils/CourseUtil';
+import { parseCourse, defaultPublicCourseSort } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
 
 const MAX_COURSES = 25;
@@ -40,7 +40,7 @@ const Course = () => {
     apiContext
       .getCourses()
       .then((c) => {
-        setCourses(c.map(parseCourse));
+        setCourses(c.map(parseCourse).sort(defaultPublicCourseSort));
         return apiContext.getMyCourses(userContext.user.type);
       })
       .then((c) => {
