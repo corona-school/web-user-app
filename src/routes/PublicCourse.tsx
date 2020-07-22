@@ -74,7 +74,7 @@ const PublicCourse = () => {
       <div className={classes.container}>
         <Empty
           style={{ marginBottom: '64px' }}
-          description="Es gibt im moment keine Kurse"
+          description="Es gibt im Moment keine Kurse"
         ></Empty>
       </div>
     );
