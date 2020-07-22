@@ -482,10 +482,10 @@ const CourseDetail = (params: {id?: string}) => {
         return (
           <div className={classes.newsContent}>
             <div className={classes.newsHeadline}>
-              <Tag>{moment(l.start).format('DD.MM')}</Tag>
+              <Tag>{moment.unix(l.start).format('DD.MM')}</Tag>
               <Tag>
-                {moment(l.start).format('HH:mm')}-
-                {moment(l.start).add(l.duration, 'minutes').format('HH:mm')} Uhr
+                {moment.unix(l.start).format('HH:mm')}-
+                {moment.unix(l.start).add(l.duration, 'minutes').format('HH:mm')} Uhr
               </Tag>
               <Title bold size="h5">
                 Lektion {i + 1}
@@ -493,8 +493,8 @@ const CourseDetail = (params: {id?: string}) => {
             </div>
 
             <Text>
-              Die {i + 1}te Lektion findet {moment(l.start).fromNow()} statt und
-              dauert ungefähr {l.duration}min. Der Kurs ist für Schüler in der{' '}
+              Die {i + 1}te Lektion {moment.unix(l.start).isAfter(Date.now()) ? "findet" : "fand"} {moment.unix(l.start).fromNow()} statt und
+              dauert{moment.unix(l.start).isAfter(Date.now()) ? "" : "e"} ungefähr {l.duration}min. Der Kurs ist für Schüler in der{' '}
               {course.subcourse.minGrade}-{course.subcourse.maxGrade} Klasse.{' '}
               <br />
               Tutor: {l.instructor.firstname} {l.instructor.lastname}

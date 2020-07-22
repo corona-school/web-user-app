@@ -66,7 +66,7 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect, ownedByMe }) => {
         {subCourse?.lectures
           .filter((l) => l !== firstLecture)
           .map((l) => {
-            return <div>{moment(l.start).format('DD.MM.YY')}</div>;
+            return <div>{moment.unix(l.start).format('DD.MM.YY')}</div>;
           })}
       </div>
     );
@@ -133,7 +133,7 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect, ownedByMe }) => {
             </div>
             {firstLecture && (
               <div className={classes.metaInfo}>
-                Beginn: {moment(firstLecture.start).format('DD.MM.YY')}{' '}
+                Beginn: {moment.unix(firstLecture.start).format('DD.MM.YY')}{' '}
                 {subCourse?.lectures.length > 1 ? renderAdditionalDates() : ''}
               </div>
             )}

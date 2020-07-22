@@ -169,9 +169,11 @@ export const CreateLecture: React.FC<Props> = (props) => {
           >
             <List.Item.Meta
               title={props.course.name}
-              description={`Der Kurse ist am ${moment(item.start * 1000).format(
-                'HH:mm DD.MM.YYYY'
-              )} und dauert ${item.duration} min.`}
+              description={`Der Kurs ist am ${moment.unix(item.start).format(
+                'DD.MM.YYYY'
+              )} um ${moment.unix(item.start).format(
+                'HH:mm'
+              )} Uhr und dauert ${item.duration} min.`}
             />
           </List.Item>
         )}
