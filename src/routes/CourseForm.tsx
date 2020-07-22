@@ -45,7 +45,7 @@ export const CourseForm: React.FC = () => {
     outline: course.outline,
     description: course.description,
     category: course.category,
-    tags: course.tags.map((t) => t.name),
+    tags: course.tags.map((t) => t.id),
     submit: false,
   });
 
