@@ -54,10 +54,10 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect, ownedByMe }) => {
     }
     console.log(course.subcourse, isMyCourse, course);
     if (!course.subcourse && (isMyCourse || ownedByMe)) {
-      history.push('courses/edit/' + course.id);
+      history.push('/courses/edit/' + course.id);
       return;
     }
-    history.push('courses/' + course.id);
+    history.push('/courses/' + course.id);
   };
 
   const renderAdditionalDates = () => {
