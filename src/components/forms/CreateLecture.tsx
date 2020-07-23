@@ -24,7 +24,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
   const [duration, setDuration] = useState<number | null>(null);
 
   const [loading, setLoading] = useState(false);
-  const [selectedSubCourseId, setSelectedSubCourseId] = useState(null);
+
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
 
@@ -103,7 +103,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
       props.onSuccess({
         ...lecture,
         id: lectureId,
-        subCourseId: selectedSubCourseId,
+        subCourseId: props.subCourse.id,
       });
     } catch (err) {
       setLoading(false);
