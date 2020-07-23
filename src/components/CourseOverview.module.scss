@@ -78,6 +78,115 @@
         top: 0px;
 
         background: #F2F2F2;
+
+        .courseCard {
+          display: flex;
+          flex-direction: row;
+
+          position: relative;
+          width: 270px;
+          height: 201px;
+
+          .highlight {
+            position: relative;
+            width: 100%;
+            height: 10px;
+
+            background: #F4486D;
+          }
+
+          .courseTitle {
+            position: relative;
+            width: 240px;
+            height: 56px;
+            left: 15px;
+            top: 20px;
+
+            font-family: Roboto, sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 24px;
+            line-height: 28px;
+
+            color: #333333;
+          }
+
+          .courseOutline {
+            position: relative;
+            width: 240px;
+            height: 64px;
+            left: 15px;
+            top: 86px;
+
+            font-family: Roboto, sans-serif;
+            font-style: italic;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 16px;
+
+            color: #828282;
+          }
+
+          .courseInformation {
+            display: flex;
+            flex-direction: row;
+            padding: 0px 15px;
+
+            position: relative;
+            width: 268px;
+            height: 25px;
+            left: 0px;
+            top: 160px;
+
+            font-family: Roboto, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 16px;
+
+            color: #828282;
+
+            .courseDate {
+              display: flex;
+              flex-direction: row;
+              padding: 0px;
+
+              position: relative;
+              width: 88px;
+              height: 25px;
+              left: 15px;
+              top: 0px;
+
+              .courseDateText {
+                position: relative;
+                width: 58px;
+                height: 16px;
+                left: 30px;
+                top: 4.5px;
+              }
+            }
+
+            .grade {
+              display: flex;
+              flex-direction: row;
+              padding: 0px;
+
+              position: relative;
+              width: 125px;
+              height: 25px;
+              left: 128px;
+              top: 0px;
+
+              .gradeText {
+                position: absolute;
+                width: 95px;
+                height: 16px;
+                left: 30px;
+                top: 4.5px;
+              }
+            }
+          }
+        }
       }
     }
   }

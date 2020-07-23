@@ -1,16 +1,44 @@
-import React, { useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Radio } from "antd";
 import {Text} from "./Typography";
 
-import { CourseCategory } from "../types/Course";
+import {CourseCategory, ParsedCourseOverview} from "../types/Course";
 import classes from "./CourseOverview.module.scss";
 import Icons from "../assets/icons/index";
 import {CourseIntroductionText} from "../assets/courseIntroduction";
 import {tags} from "./forms/CreateCourse";
+import {
+  defaultPublicCourseSort,
+  firstLectureOfSubcourse,
+  parseCourse
+} from "../utils/CourseUtil";
+import Context from "../context";
+import moment from "moment";
 
 
 const CourseOverview = () => {
+  const [loading, setLoading] = useState(false);
+  const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
+
   const [courseCategory, setCourseCategory] = useState(CourseCategory.CLUB);
+
+  const apiContext = useContext(Context.Api);
+
+  useEffect(() => {
+    setLoading(true);
+
+    apiContext
+      .getCourses()
+      .then((c) => {
+        setCourses(c.map(parseCourse).sort(defaultPublicCourseSort));
+      })
+      .catch((e) => {
+        // message.error('Kurse konnten nicht geladen werden.');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [apiContext]);
 
   const CategoryButtons = () => {
     return (
@@ -39,6 +67,38 @@ const CourseOverview = () => {
     )
   }
 
+  const CourseCard = (course: ParsedCourseOverview) => {
+    const firstLecture = firstLectureOfSubcourse(course.subcourse);
+    const firstLectureDate = moment(firstLecture.start).format("DD.MM.");
+
+    return (
+      <div className={classes.courseCard}>
+        <div className={classes.highlight} />
+        <div className={classes.courseTitle}>
+          { course.name }
+        </div>
+        <div className={classes.courseOutline}>
+          { course.outline }
+        </div>
+
+        <div className={classes.courseInformation}>
+          <div className={classes.courseDate}>
+            <Icons.Grade style={{width: "25px", height: "25px"}} />
+            <div className={classes.courseDateText}>
+              { course.subcourse?.lectures.length > 1 ? `ab ${firstLectureDate}` : firstLectureDate }
+            </div>
+          </div>
+          <div className={classes.grade}>
+            <Icons.Grade style={{width: "25px", height: "25px"}} />
+            <div className={classes.gradeText}>
+              {course.subcourse.minGrade}. - {course.subcourse.maxGrade}. Klasse
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const CoursesWithTag = (tag: string) => {
     const tagDisplay =
       <Text className={classes.tagDisplay}>
@@ -47,7 +107,10 @@ const CourseOverview = () => {
 
     const scrollFrame =
       <div className={classes.scrollFrame}>
-
+        { courses
+          .filter(c => c.tags.find(t => t.name === tag))
+          .map(c => CourseCard(c))
+        }
       </div>
 
     return (
