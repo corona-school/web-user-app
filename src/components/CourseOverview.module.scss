@@ -4,6 +4,9 @@
   height: 214px;
   left: 0px;
   top: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   background: #F4F6FF;
 }
@@ -54,6 +57,13 @@
   position: absolute;
   width: 862px;
   height: 64px;
-  left: 289px;
   top: 0px;
+}
+
+.header-text {
+  position: relative;
+  width: 862px;
+  height: 63px;
+  left: 289px;
+  top: 107px;
 }
