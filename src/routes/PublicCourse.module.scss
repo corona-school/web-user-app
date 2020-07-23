@@ -16,7 +16,7 @@
     background-color: white;
 
     width: 100vw;
-    height: 70px;
+    height: 74px;
 
     display: flex;
     flex-direction: row;
@@ -34,12 +34,13 @@
       flex-grow: 1;
       align-items: center;
       margin-left: 29px;
-      margin-top: 15px;
       height: 40px;
 
       > svg {
         path {
           fill: #F7C851;
+          width: 40px;
+          height: 40px;
         }
       }
 
@@ -60,12 +61,9 @@
   }
 
   .main {
-    overflow: scroll;
-    padding-left: 40px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    padding: 30px;
     flex-grow: 1;
 
     .searchContainer {

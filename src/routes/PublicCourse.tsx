@@ -22,7 +22,9 @@ const PublicCourse = () => {
   return (
     <div className={classes.container}>
       <Header />
-      <CourseOverview />
+      <div className={classes.main}>
+        <CourseOverview />
+      </div>
     </div>
   )
 }

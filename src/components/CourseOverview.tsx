@@ -6,6 +6,7 @@ import { CourseCategory } from "../types/Course";
 import classes from "./CourseOverview.module.scss";
 import Icons from "../assets/icons/index";
 import {CourseIntroductionText} from "../assets/courseIntroduction";
+import {tags} from "./forms/CreateCourse";
 
 
 const CourseOverview = () => {
@@ -31,15 +32,40 @@ const CourseOverview = () => {
     return (
       <div className={classes.header}>
         <CategoryButtons />
-        <Text style={{position: "absolute", width: "862px", height: "63px", top: "107px", fontFamily: "Roboto, sans-serif", fontStyle: "normal", fontWeight: "normal", fontSize: "18px", lineHeight: "21px", color: "#000000"}}>
+        <Text className={classes.headerText}>
           { CourseIntroductionText }
         </Text>
       </div>
     )
   }
 
+  const CoursesWithTag = (tag: string) => {
+    const tagDisplay =
+      <Text className={classes.tagDisplay}>
+        { tag }
+      </Text>
+
+    const scrollFrame =
+      <div className={classes.scrollFrame}>
+
+      </div>
+
+    return (
+      <div className={classes.coursesWithTag}>
+        { tagDisplay }
+        { scrollFrame }
+      </div>
+    )
+  }
+
   return (
-    <OverviewHeader />
+    <div className={classes.container}>
+      <OverviewHeader />
+      <div className={classes.main}>
+        { tags.get(courseCategory).map(t => CoursesWithTag(t.name)) }
+      </div>
+    </div>
+
   )
 }
 
