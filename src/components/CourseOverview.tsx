@@ -101,16 +101,16 @@ const CourseOverview = () => {
     )
   }
 
-  const CoursesWithTag = (tag: string) => {
+  const CoursesWithTag = (tag: { name: string, identifier: string }) => {
     const tagDisplay =
       <Text className={classes.tagDisplay}>
-        { tag }
+        { tag.name }
       </Text>
 
     const scrollFrame =
       <div className={classes.scrollFrame}>
         { courses
-          .filter(c => c.tags.find(t => t.name === tag))
+          .filter(c => c.tags.find(t => t.id === tag.identifier))
           .map(c => CourseCard(c))
         }
       </div>
@@ -127,7 +127,7 @@ const CourseOverview = () => {
     <div className={classes.container}>
       <OverviewHeader />
       <div className={classes.main}>
-        { tags.get(courseCategory).map(t => CoursesWithTag(t.name)) }
+        { tags.get(courseCategory).map(t => CoursesWithTag(t)) }
       </div>
     </div>
 
