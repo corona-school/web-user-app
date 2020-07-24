@@ -28,6 +28,7 @@
   flex-direction: column;
   padding-top: 60px;
   padding-left: 40px;
+  padding-right: 40px;
   width: 100%;
 
   @media only screen and (max-width: 600px) {
@@ -42,5 +43,10 @@
       display: flex;
       flex-wrap: wrap;
     }
+  }
+
+  .courseOverview {
+    position: absolute;
+    width: 100%;
   }
 }
