@@ -14,6 +14,7 @@ import {
 } from "../utils/CourseUtil";
 import Context from "../context";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 
 const CourseOverview = () => {
@@ -23,6 +24,7 @@ const CourseOverview = () => {
   const [courseCategory, setCourseCategory] = useState(CourseCategory.CLUB);
 
   const apiContext = useContext(Context.Api);
+  const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
@@ -72,7 +74,7 @@ const CourseOverview = () => {
     const firstLectureDate = moment(firstLecture.start).format("DD.MM.");
 
     return (
-      <div className={classes.courseCard}>
+      <div className={classes.courseCard} onClick={() => history.push(`/courses/${course.id}`)}>
         <div className={classes.highlight} />
         <div className={classes.courseTitle}>
           { course.name }
