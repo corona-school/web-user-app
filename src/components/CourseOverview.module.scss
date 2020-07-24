@@ -30,56 +30,18 @@
       .button {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        justify-content: center;
 
         width: 288px;
         height: 64px;
 
-        color: #4F4F4F;
-        background: transparent;
-        border-color: transparent;
-
-        &:checked:not(&-disabled) {
-          color: white;
-          background: #7083E0;
-          border-color: #7083E0;
-
-          .buttonIcon {
-            > svg {
-              path {
-                fill: white;
-                width: 36px;
-                height: 36px;
-              }
-            }
-          }
-        }
-
-        .buttonIcon {
-          position: absolute;
-          left: 46px;
-          top: 14px;
-
-          > svg {
-            path {
-              fill: #4F4F4F;
-              width: 36px;
-              height: 36px;
-            }
-          }
-        }
-
-        .buttonText {
-          position: absolute;
-          height: 28px;
-          left: 100px;
-          top: 18px;
-
-          font-family: Roboto, sans-serif;
-          font-style: normal;
-          font-weight: lighter;
-          font-size: 24px;
-          line-height: 28px;
-        }
+        text-align: center;
+        font-family: Roboto, sans-serif;
+        font-style: normal;
+        font-weight: lighter;
+        font-size: 24px;
+        line-height: 28px;
       }
     }
 
