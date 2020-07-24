@@ -180,11 +180,12 @@ export const CreateCourse: React.FC<Props> = (props) => {
         </Form.Item>
         <Form.Item
           className={classes.formItem}
-          label="Beschreibung"
+          label="Beschreibung (max. 140 Zeichen)"
           initialValue={props.course?.description}
           name="description"
           rules={[
             { required: true, message: 'Bitte trage eine Beschreibung ein' },
+            { max: 140, message: 'Bitte beschränke dich auf 140 Zeichen' },
           ]}
         >
           <Input.TextArea
