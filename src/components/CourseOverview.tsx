@@ -44,15 +44,30 @@ const CourseOverview = () => {
 
   const CategoryButtons = () => {
     return (
-      <Radio.Group defaultValue={courseCategory} className={classes.radio}>
+      <Radio.Group defaultValue={courseCategory} onChange={e => setCourseCategory(e.target.value)} className={classes.radio} buttonStyle="solid">
         <Radio.Button value={CourseCategory.CLUB} className={classes.button}>
+          <div className={classes.buttonIcon}>
+            <Icons.Club />
+          </div>
+          <div className={classes.buttonText}>
             Sommer-AGs
+          </div>
         </Radio.Button>
         <Radio.Button value={CourseCategory.REVISION} className={classes.button}>
-          Repetitorium
+          <div className={classes.buttonIcon}>
+            <Icons.Revision />
+          </div>
+          <div className={classes.buttonText}>
+            Repetitorium
+          </div>
         </Radio.Button>
         <Radio.Button value={CourseCategory.COACHING} className={classes.button}>
-          Lerncoaching
+          <div className={classes.buttonIcon}>
+            <Icons.Coaching />
+          </div>
+          <div className={classes.buttonText}>
+            Lerncoaching
+          </div>
         </Radio.Button>
       </Radio.Group>
     )
