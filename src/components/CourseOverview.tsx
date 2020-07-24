@@ -14,7 +14,7 @@ import {
 } from "../utils/CourseUtil";
 import Context from "../context";
 import moment from "moment";
-import { useHistory } from "react-router-dom";
+import {MiniCourseCard} from "./cards/MiniCourseCard";
 
 
 const CourseOverview = () => {
@@ -24,7 +24,6 @@ const CourseOverview = () => {
   const [courseCategory, setCourseCategory] = useState(CourseCategory.CLUB);
 
   const apiContext = useContext(Context.Api);
-  const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
@@ -69,38 +68,6 @@ const CourseOverview = () => {
     )
   }
 
-  const CourseCard = (course: ParsedCourseOverview) => {
-    const firstLecture = firstLectureOfSubcourse(course.subcourse);
-    const firstLectureDate = moment(firstLecture.start).format("DD.MM.");
-
-    return (
-      <div className={classes.courseCard} onClick={() => history.push(`/courses/${course.id}`)}>
-        <div className={classes.highlight} />
-        <div className={classes.courseTitle}>
-          { course.name }
-        </div>
-        <div className={classes.courseOutline}>
-          { course.outline }
-        </div>
-
-        <div className={classes.courseInformation}>
-          <div className={classes.courseDate}>
-            <Icons.Grade style={{width: "25px", height: "25px"}} />
-            <div className={classes.courseDateText}>
-              { course.subcourse?.lectures.length > 1 ? `ab ${firstLectureDate}` : firstLectureDate }
-            </div>
-          </div>
-          <div className={classes.grade}>
-            <Icons.Grade style={{width: "25px", height: "25px"}} />
-            <div className={classes.gradeText}>
-              {course.subcourse.minGrade}. - {course.subcourse.maxGrade}. Klasse
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   const CoursesWithTag = (tag: { name: string, identifier: string }) => {
     const tagDisplay =
       <Text className={classes.tagDisplay}>
@@ -111,7 +78,7 @@ const CourseOverview = () => {
       <div className={classes.scrollFrame}>
         { courses
           .filter(c => c.tags.find(t => t.id === tag.identifier))
-          .map(c => CourseCard(c))
+          .map(c => MiniCourseCard(c))
         }
       </div>
 
