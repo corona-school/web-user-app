@@ -162,6 +162,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
           initialValue={props.course?.name}
           rules={[
             { required: true, message: 'Bitte trage einen Kursnamen ein' },
+            { max: 30, message: 'Bitte beschränke dich auf 30 Zeichen' },
           ]}
         >
           <Input placeholder="Mathematik Hilfe" />
@@ -174,6 +175,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
           initialValue={props.course?.outline}
           rules={[
             { required: true, message: 'Bitte trage eine Beschreibung ein' },
+            { max: 140, message: 'Bitte beschränke dich auf 140 Zeichen' },
           ]}
         >
           <Input placeholder="Ich erkläre euch wie ihr schwierige Mathe Probleme löst" />
@@ -185,7 +187,6 @@ export const CreateCourse: React.FC<Props> = (props) => {
           name="description"
           rules={[
             { required: true, message: 'Bitte trage eine Beschreibung ein' },
-            { max: 140, message: 'Bitte beschränke dich auf 140 Zeichen' },
           ]}
         >
           <Input.TextArea
