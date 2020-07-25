@@ -170,7 +170,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
 
         <Form.Item
           className={classes.formItem}
-          label="Kurze Erklärung"
+          label="Kurze Erklärung (max. 140 Zeichen)"
           name="outline"
           initialValue={props.course?.outline}
           rules={[
@@ -182,7 +182,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
         </Form.Item>
         <Form.Item
           className={classes.formItem}
-          label="Beschreibung (max. 140 Zeichen)"
+          label="Beschreibung"
           initialValue={props.course?.description}
           name="description"
           rules={[
