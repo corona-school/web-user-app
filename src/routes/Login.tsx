@@ -8,10 +8,11 @@ import Icons from '../assets/icons';
 import Button from '../components/button';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
-import { Input } from 'antd';
+import { Input, message } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 import classes from './Login.module.scss';
+import PageLoading from '../components/PageLoading';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -36,6 +37,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (authContext.status === 'authorized') setState('success');
+    if (authContext.status === 'invalid') setState('failed'); //if a stored token is invalid...
   }, [authContext.status]);
 
   useEffect(() => {
@@ -95,13 +97,36 @@ const Login: React.FC = () => {
     );
   };
 
-  if (state === 'success') {
-    if (redirectPath && redirectPath !== "") {
-      return <Redirect to={redirectPath} />
-    }
-    return <Redirect to="/dashboard" />;
+console.log(`-----\nstate: ${state} \nauthcontext.status: ${authContext.status}`);
+
+
+  //show UI based on the state (not the loginState, which is used for the token requests)
+  switch (state) {
+    //successfully logged in
+    case 'success':
+      if (redirectPath && redirectPath !== "") {
+        return <Redirect to={redirectPath} />
+      }
+      return <Redirect to="/dashboard" />;
+
+    //have a token in the url and querying the api to verify the token and log in
+    case 'pending':
+      return <PageLoading />; //indicate page loading
+
+    //have a token, but that one is invalid
+    case 'failed':
+        message.error('Du konntest nicht eingeloggt werden. Hast du bereits einen neueren Zugangslink bekommen?', 9);
+        break;
+
+    //no token in the url (so waiting for the authContext status to be success, then log in)
+    case 'noToken':
+      if (authContext.status === 'pending') { //trying to log in with a stored token (at least checking if a token is stored)
+        return <PageLoading text="Die Seite wird geladen... 🐌" />;
+       }
+       break; //otherwise render the normal SignUpContainer below
   }
 
+  // no token in the url (at least not a valid one) / no token in localStorage (at least not a valid one)
   return (
     <SignupContainer>
       <div className={classes.signinContainer}>
