@@ -31,7 +31,7 @@ const Navigation: React.FC<Props> = (props) => {
 
   const handleLogoutClick = () => {
     authContext.setCredentials({ id: '', token: '' });
-    authContext.setStatus('pending');
+    authContext.setStatus('missing');
     authContext.deleteStoredCredentials();
     history.push('/login');
   };
