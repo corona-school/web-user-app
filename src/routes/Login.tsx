@@ -39,6 +39,13 @@ const Login: React.FC = () => {
     if (authContext.status === 'authorized') setState('success');
     if (authContext.status === 'invalid') setState('failed'); //if a stored token is invalid...
   }, [authContext.status]);
+  
+  
+  useEffect(() => {
+    if (state === 'failed') {
+      message.error('Du konntest nicht eingeloggt werden. Hast du bereits einen neueren Zugangslink bekommen?', 9);
+    }
+  });
 
   useEffect(() => {
     if (token) {
@@ -115,8 +122,9 @@ console.log(`-----\nstate: ${state} \nauthcontext.status: ${authContext.status}`
 
     //have a token, but that one is invalid
     case 'failed':
-        message.error('Du konntest nicht eingeloggt werden. Hast du bereits einen neueren Zugangslink bekommen?', 9);
-        break;
+      //render the normal page but show a error message
+      //see useEffect above that shows the error message to prevent side effects
+      break;
 
     //no token in the url (so waiting for the authContext status to be success, then log in)
     case 'noToken':
