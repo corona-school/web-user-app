@@ -284,7 +284,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
       })
       .catch((err) => {
         message.error(
-          'Ein Fehler ist aufgetreten. Versuche er später nochmal.'
+          'Ein Fehler ist aufgetreten. Versuche es später nochmal.'
         );
         setLoading(false);
       });
