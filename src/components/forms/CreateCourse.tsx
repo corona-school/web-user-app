@@ -72,6 +72,11 @@ export const CreateCourse: React.FC<Props> = (props) => {
   const [category, setCategory] = useState(
     props.course ? props.course.category : 'revision'
   );
+
+  const [editTags, setEditTags] = useState(
+    props.course?.tags ? props.course?.tags : []
+  );
+
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
 
@@ -205,8 +210,9 @@ export const CreateCourse: React.FC<Props> = (props) => {
         >
           <Radio.Group
             onChange={(v) => {
-              form.resetFields(['tags']);
               setCategory(v.target.value);
+              setEditTags([]);
+              form.resetFields(['tags']);
             }}
           >
             <Radio style={radioStyle} value="revision">
@@ -220,13 +226,12 @@ export const CreateCourse: React.FC<Props> = (props) => {
             </Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item
-          className={classes.formItem}
-          label="Tags"
-          name="tags"
-          initialValue={props.course?.tags}
-        >
+        <Form.Item className={classes.formItem} label="Tags" name="tags">
           <Select
+            defaultValue={editTags}
+            onChange={(v: string[]) => {
+              setEditTags(v);
+            }}
             mode="multiple"
             placeholder="Ergänze hier Tags damit dein Kurs besser gefunden werden kann"
           >
