@@ -56,6 +56,9 @@ export const tags = new Map([
 ]);
 
 export const CreateCourse: React.FC<Props> = (props) => {
+  const [outline, setOutline] = useState(
+    props.course ? props.course.outline : null
+  );
   const [minGrade, setMinGrade] = useState(
     props.subCourse ? props.subCourse.minGrade : null
   );
@@ -152,6 +155,17 @@ export const CreateCourse: React.FC<Props> = (props) => {
     );
   };
 
+  const getOutlineHelp = () => {
+    if (!outline) {
+      return 'Die Beschreibung darf nicht länger als 140 Zeichen sein.';
+    }
+    if (outline.length > 140) {
+      return null;
+    }
+
+    return `Du hast noch ${outline.length}/140 Zeichen.`;
+  };
+
   const renderFormItems = () => {
     const radioStyle = {
       display: 'block',
@@ -175,15 +189,26 @@ export const CreateCourse: React.FC<Props> = (props) => {
 
         <Form.Item
           className={classes.formItem}
-          label="Kurze Erklärung (max. 140 Zeichen)"
+          label="Kurze Erklärung"
           name="outline"
           initialValue={props.course?.outline}
           rules={[
             { required: true, message: 'Bitte trage eine Beschreibung ein' },
-            { max: 140, message: 'Bitte beschränke dich auf 140 Zeichen' },
+            {
+              max: 140,
+              required: true,
+              message: 'Bitte beschränke dich auf 140 Zeichen',
+            },
           ]}
+          help={getOutlineHelp()}
         >
-          <Input placeholder="Ich erkläre euch wie ihr schwierige Mathe Probleme löst" />
+          <Input
+            value={outline}
+            onChange={(v) => {
+              setOutline(v.target.value);
+            }}
+            placeholder="Ich erkläre euch wie ihr schwierige Mathe Probleme löst"
+          />
         </Form.Item>
         <Form.Item
           className={classes.formItem}
