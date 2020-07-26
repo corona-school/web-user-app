@@ -12,6 +12,7 @@
   z-index: 1;
 }
 .content {
+  overflow-y: scroll;
   background: white;
   position: relative;
   display: flex;
@@ -60,5 +61,4 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-y: scroll;
 }
