@@ -104,8 +104,6 @@ const Login: React.FC = () => {
     );
   };
 
-console.log(`-----\nstate: ${state} \nauthcontext.status: ${authContext.status}`);
-
 
   //show UI based on the state (not the loginState, which is used for the token requests)
   switch (state) {
