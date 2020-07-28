@@ -224,9 +224,9 @@ const CourseDetail = (params: {id?: string}) => {
   const antdShareMenu = (
     <Menu>
       <Menu.Item icon={<CopyOutlined/>} key="copyLink">
-        <button onClick={copyCourseLink}>
+        <span onClick={copyCourseLink}>
           Link kopieren
-        </button>
+        </span>
       </Menu.Item>
       <Menu.Item icon={<WhatsAppOutlined/>} key="shareWhatsApp">
         <a href={whatsAppShareURL} data-action="share/whatsapp/share" className={classes.shareLink}>
