@@ -19,6 +19,9 @@ import {
   MailOutlined,
   CheckCircleOutlined,
   DownOutlined,
+  ShareAltOutlined,
+  WhatsAppOutlined,
+  CopyOutlined
 } from '@ant-design/icons';
 import classes from './CourseDetail.module.scss';
 import { UserContext } from '../context/UserContext';
@@ -49,6 +52,7 @@ const CourseDetail = (params: {id?: string}) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
   const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
+  const [isCustomShareMenuVisible, setIsCustomShareMenuVisible] = useState(false);
 
   const { id: urlParamID } = useParams();
   const id = params.id ?? urlParamID;
@@ -192,6 +196,58 @@ const CourseDetail = (params: {id?: string}) => {
       });
   };
 
+
+  const shareData = {
+    title: course.name,
+    text: "Guck dir diesen kostenlosen Kurs der Corona School an!",
+    url: `https://my.corona-school.de/public/courses/${course.id}`
+  }
+
+  const copyCourseLink = async () => {
+    if (!navigator.clipboard) {
+      message.error("Dein Browser unterstützt das nicht 😔");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareData.url);
+
+      message.success("Link wurde in die Zwischenablage kopiert!");
+    }
+    catch {
+      message.error("Link konnte nicht kopiert werden!");
+    }
+  }
+
+  const whatsAppShareURL = `whatsapp://send?text=${shareData.text} ${shareData.url}`
+
+  const antdShareMenu = (
+    <Menu>
+      <Menu.Item icon={<CopyOutlined/>} key="copyLink">
+        <button onClick={copyCourseLink}>
+          Link kopieren
+        </button>
+      </Menu.Item>
+      <Menu.Item icon={<WhatsAppOutlined/>} key="shareWhatsApp">
+      <a href={whatsAppShareURL} data-action="share/whatsapp/share">
+        Whatsapp
+      </a>
+      </Menu.Item>
+    </Menu>
+  );
+  
+  const tsNavigator: any = navigator //so that typescript compiles with share
+
+  const shareCourse = () => {
+    if (tsNavigator.share) {
+      setIsCustomShareMenuVisible(false);
+      tsNavigator.share(shareData)
+    }
+    else {
+      setIsCustomShareMenuVisible(true);
+    }
+  }
+
   const renderCourseInformation = () => {
     const getMenu = () => (
       <Menu
@@ -315,6 +371,24 @@ const CourseDetail = (params: {id?: string}) => {
                 color={'#123abc'}
                 loading={isLoadingVideoChat}
               />
+            </div>
+            <div className="classes.shareAction">
+              <Dropdown overlay={antdShareMenu} trigger={["click"]} visible={isCustomShareMenuVisible} onVisibleChange={ (v) => !v && setIsCustomShareMenuVisible(v)}>
+                <AntdButton
+                  type="primary"
+                  style={{
+                    backgroundColor: '#FCD95C',
+                    borderColor: '#FCD95C',
+                    color: '#373E47',
+                    width: '120px',
+                    margin: '5px 10px',
+                  }}
+                  onClick={shareCourse}
+                  icon={<ShareAltOutlined/>}
+                >
+                  Kurs teilen
+                </AntdButton>
+              </Dropdown>
             </div>
           </div>
         </div>
