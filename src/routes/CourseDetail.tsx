@@ -230,7 +230,7 @@ const CourseDetail = (params: {id?: string}) => {
       </Menu.Item>
       <Menu.Item icon={<WhatsAppOutlined/>} key="shareWhatsApp">
         <a href={whatsAppShareURL} data-action="share/whatsapp/share" className={classes.shareLink}>
-          Whatsapp
+          WhatsApp
         </a>
       </Menu.Item>
     </Menu>
