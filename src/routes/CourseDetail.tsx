@@ -392,7 +392,7 @@ const CourseDetail = (params: {id?: string}) => {
           </Descriptions.Item>
           <Descriptions.Item label="Tags">
             {course.tags.map((t) => {
-              return <Tag>{t.name}</Tag>;
+              return <Tag key={t.id}>{t.name}</Tag>;
             })}
           </Descriptions.Item>
         </Descriptions>
@@ -480,7 +480,7 @@ const CourseDetail = (params: {id?: string}) => {
       .sort((a, b) => a.start - b.start)
       .map((l, i) => {
         return (
-          <div className={classes.newsContent}>
+          <div className={classes.newsContent} key={l.id}>
             <div className={classes.newsHeadline}>
               <Tag>{moment.unix(l.start).format('DD.MM')}</Tag>
               <Tag>
