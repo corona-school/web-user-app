@@ -229,9 +229,9 @@ const CourseDetail = (params: {id?: string}) => {
         </button>
       </Menu.Item>
       <Menu.Item icon={<WhatsAppOutlined/>} key="shareWhatsApp">
-      <a href={whatsAppShareURL} data-action="share/whatsapp/share">
-        Whatsapp
-      </a>
+        <a href={whatsAppShareURL} data-action="share/whatsapp/share" className={classes.shareLink}>
+          Whatsapp
+        </a>
       </Menu.Item>
     </Menu>
   );
