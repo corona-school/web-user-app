@@ -349,7 +349,7 @@ const CourseDetail = (params: {id?: string}) => {
                 {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
               </AntdButton>
             )}
-            <div className="classes.videochatAction">
+            <div className={classes.videochatAction}>
               {((isMyCourse && course.state === CourseState.ALLOWED) ||
                 course.subcourse.joined) && (
                 <AntdButton
@@ -372,7 +372,7 @@ const CourseDetail = (params: {id?: string}) => {
                 loading={isLoadingVideoChat}
               />
             </div>
-            <div className="classes.shareAction">
+            <div className={classes.shareAction}>
               <Dropdown overlay={antdShareMenu} trigger={["click"]} visible={isCustomShareMenuVisible} onVisibleChange={ (v) => !v && setIsCustomShareMenuVisible(v)}>
                 <AntdButton
                   type="primary"
