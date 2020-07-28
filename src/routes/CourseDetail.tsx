@@ -200,7 +200,7 @@ const CourseDetail = (params: {id?: string}) => {
   const shareData = {
     title: course.name,
     text: "Guck dir diesen kostenlosen Kurs der Corona School an!",
-    url: `https://my.corona-school.de/public/courses/${course.id}`
+    url: `${window.location.protocol}//${window.location.hostname}/public/courses/${course.id}`
   }
 
   const copyCourseLink = async () => {
