@@ -108,6 +108,7 @@ const CourseOverview = () => {
           coursesWithTag :
           <Empty
             description="Im Moment sind in dieser Kategorie keine Kurse verfügbar."
+            style={{ marginBottom: "35px"}}
           />
         }
       </div>
