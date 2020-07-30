@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import { Radio } from "antd";
+import { Radio, Empty } from "antd";
 import {Text} from "./Typography";
 
 import {CourseCategory, ParsedCourseOverview} from "../types/Course";
@@ -69,6 +69,8 @@ const CourseOverview = () => {
   }
 
   const CoursesWithTag = (tag: { name: string, identifier: string }) => {
+    const feasibleCourses = courses.filter(c => c.tags.find(t => t.id === tag.identifier));
+
     const tagDisplay =
       <Text className={classes.tagDisplay}>
         { tag.name }
@@ -76,25 +78,38 @@ const CourseOverview = () => {
 
     const scrollFrame =
       <div className={classes.scrollFrame}>
-        { courses
-          .filter(c => c.tags.find(t => t.id === tag.identifier))
-          .map(c => MiniCourseCard(c))
-        }
+        { feasibleCourses.map(c => MiniCourseCard(c)) }
       </div>
 
-    return (
-      <div className={classes.coursesWithTag}>
-        { tagDisplay }
-        { scrollFrame }
-      </div>
-    )
+    if (feasibleCourses.length > 0) {
+      return (
+        <div className={classes.coursesWithTag}>
+          { tagDisplay }
+          { scrollFrame }
+        </div>
+      )
+    }
+    else {
+      return undefined;
+    }
   }
+
+  const coursesWithTag =
+    tags
+    .get(courseCategory)
+    .map(t => CoursesWithTag(t))
+    .filter(container => container !== undefined);
 
   return (
     <div className={classes.container}>
       <OverviewHeader />
       <div className={classes.main}>
-        { tags.get(courseCategory).map(t => CoursesWithTag(t)) }
+        { coursesWithTag.length > 0 ?
+          coursesWithTag :
+          <Empty
+            description="Im Moment sind in dieser Kategorie keine Kurse verfügbar."
+          />
+        }
       </div>
     </div>
 
