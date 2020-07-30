@@ -14,7 +14,9 @@ const PublicCourse = () => {
             Corona School
           </Title>
         </div>
-        <Icons.WirVsVirusLogo />
+        <div className={classes.weVsVirusLogo} >
+          <Icons.WirVsVirusLogo  />
+        </div>
       </div>
     )
   }
