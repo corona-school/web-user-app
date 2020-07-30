@@ -47,5 +47,9 @@
   .overviewContainer {
     position: relative;
     margin-right: 40px;
+
+    @media only screen and (max-width: 600px) {
+      margin-right: 0px;
+    }
   }
 }
