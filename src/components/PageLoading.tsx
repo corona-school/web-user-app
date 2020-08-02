@@ -12,7 +12,11 @@ const PageWrapper = styled.div`
   justify-content: center;
 `;
 
-const PageLoading: React.FC = ({ children }) => {
+type Props = {
+  text?: string; 
+}
+
+const PageLoading: React.FC<Props> = ({ children, text }) => {
   if (!children) {
     return (
       <PageWrapper>
@@ -25,7 +29,7 @@ const PageLoading: React.FC = ({ children }) => {
           }}
         >
           <ClipLoader size={100} color={'#123abc'} loading={true} />
-          <p>Du wirst eingeloggt..</p>
+          <p>{text ? text : "Du wirst eingeloggt..."}</p>
         </div>
       </PageWrapper>
     );

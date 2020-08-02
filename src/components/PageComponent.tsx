@@ -5,7 +5,7 @@ import Header from './Header';
 
 const PageWrapper = styled.div`
   display: flex;
-  width: 100vw;
+  width: auto;
 `;
 interface MenuProps {
   readonly isMenuOpen: boolean;
@@ -13,7 +13,7 @@ interface MenuProps {
 
 const MenuBackground = styled.div<MenuProps>`
   position: fixed;
-  width: 100vw;
+  width: auto;
   height: 100%;
   z-index: 999;
   overflow: auto;

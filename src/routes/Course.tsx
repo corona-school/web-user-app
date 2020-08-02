@@ -9,14 +9,18 @@ import { ParsedCourseOverview } from '../types/Course';
 import MyCourseCard from '../components/cards/MyCourseCard';
 
 import classes from './Course.module.scss';
-import { parseCourse } from '../utils/CourseUtil';
+import { parseCourse, defaultPublicCourseSort } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
 import CourseOverview from "../components/CourseOverview";
 
 const MAX_COURSES = 25;
 
-function tutorOrGradeFittingTuteeFilter(grade?: number): (c: ParsedCourseOverview) => boolean {
-  return c => !grade || (c.subcourse?.minGrade <= grade && grade <= c.subcourse?.maxGrade);
+function tutorOrGradeFittingTuteeFilter(
+  grade?: number
+): (c: ParsedCourseOverview) => boolean {
+  return (c) =>
+    !grade ||
+    (c.subcourse?.minGrade <= grade && grade <= c.subcourse?.maxGrade);
 }
 
 const Course = () => {
@@ -28,8 +32,8 @@ const Course = () => {
   const history = useHistory();
 
   const filteredCourses = courses
-                            .filter((c) => c.subcourse)
-                            .filter(tutorOrGradeFittingTuteeFilter(userContext.user.grade))
+    .filter((c) => c.subcourse)
+    .filter(tutorOrGradeFittingTuteeFilter(userContext.user.grade));
 
   useEffect(() => {
     setLoading(true);
@@ -37,7 +41,7 @@ const Course = () => {
     apiContext
       .getCourses()
       .then((c) => {
-        setCourses(c.map(parseCourse));
+        setCourses(c.map(parseCourse).sort(defaultPublicCourseSort));
         return apiContext.getMyCourses(userContext.user.type);
       })
       .then((c) => {
@@ -80,7 +84,7 @@ const Course = () => {
             <Empty description="Du hast im Moment keine Kurse"></Empty>
           ) : (
             myCourses.map((c) => {
-              return <MyCourseCard course={c} />;
+              return <MyCourseCard course={c} ownedByMe />;
             })
           )}
         </div>

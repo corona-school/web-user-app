@@ -234,7 +234,7 @@ const StudentNews = [
   {
     headline: 'Mentoring Programm',
     text:
-      'Du möchtest dich mit anderen Studierenden oder unseren Mentor*innen austauschen? facebook.com/groups/coronaschoolgermany',
+      <span>Du möchtest dich mit anderen Studierenden oder unseren Mentor*innen austauschen? <a href='https://www.facebook.com/groups/coronaschoolgermany/'>https://www.facebook.com/groups/coronaschoolgermany/</a></span>,
   },
 ];
 
@@ -243,6 +243,8 @@ const PupilNews = [
     headline: 'Sommer AGs',
     text:
       'Der Sommerurlaub fällt aus? Wir bieten spannende digitale und kostenfreie AGs in den Sommerferien an.',
+    withLink:
+      false,
   },
   {
     headline: 'Repetitorien',
@@ -254,6 +256,6 @@ const PupilNews = [
 export const getNews = (user: User) => {
   if (user.type === 'pupil') {
     return PupilNews;
-  }
+  } 
   return StudentNews;
 };

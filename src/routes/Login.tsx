@@ -8,10 +8,11 @@ import Icons from '../assets/icons';
 import Button from '../components/button';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
-import { Input } from 'antd';
+import { Input, message } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 import classes from './Login.module.scss';
+import PageLoading from '../components/PageLoading';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -22,7 +23,7 @@ const Login: React.FC = () => {
     'noToken' | 'pending' | 'failed' | 'success'
   >('noToken');
   const [loginState, setLoginState] = useState<
-    'idle' | 'loading' | 'error' | 'success'
+    'idle' | 'loading' | 'error' | 'success' | 'rateLimit'
   >('idle');
   const [email, setEmail] = useState('');
 
@@ -36,7 +37,15 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (authContext.status === 'authorized') setState('success');
+    if (authContext.status === 'invalid') setState('failed'); //if a stored token is invalid...
   }, [authContext.status]);
+  
+  
+  useEffect(() => {
+    if (state === 'failed') {
+      message.error('Du konntest nicht eingeloggt werden. Hast du bereits einen neueren Zugangslink bekommen?', 9);
+    }
+  });
 
   useEffect(() => {
     if (token) {
@@ -59,8 +68,13 @@ const Login: React.FC = () => {
       .then(() => {
         setLoginState('success');
       })
-      .catch(() => {
-        setLoginState('error');
+      .catch((error) => {
+        if (error === 403) {
+          setLoginState('rateLimit');
+        }
+        else {
+          setLoginState('error');
+        }
       });
   };
 
@@ -90,13 +104,35 @@ const Login: React.FC = () => {
     );
   };
 
-  if (state === 'success') {
-    if (redirectPath && redirectPath !== "") {
-      return <Redirect to={redirectPath} />
-    }
-    return <Redirect to="/dashboard" />;
+
+  //show UI based on the state (not the loginState, which is used for the token requests)
+  switch (state) {
+    //successfully logged in
+    case 'success':
+      if (redirectPath && redirectPath !== "") {
+        return <Redirect to={redirectPath} />
+      }
+      return <Redirect to="/dashboard" />;
+
+    //have a token in the url and querying the api to verify the token and log in
+    case 'pending':
+      return <PageLoading />; //indicate page loading
+
+    //have a token, but that one is invalid
+    case 'failed':
+      //render the normal page but show a error message
+      //see useEffect above that shows the error message to prevent side effects
+      break;
+
+    //no token in the url (so waiting for the authContext status to be success, then log in)
+    case 'noToken':
+      if (authContext.status === 'pending') { //trying to log in with a stored token (at least checking if a token is stored)
+        return <PageLoading text="Die Seite wird geladen... 🐌" />;
+       }
+       break; //otherwise render the normal SignUpContainer below
   }
 
+  // no token in the url (at least not a valid one) / no token in localStorage (at least not a valid one)
   return (
     <SignupContainer>
       <div className={classes.signinContainer}>
@@ -118,7 +154,7 @@ const Login: React.FC = () => {
             <ClipLoader size={100} color={'#123abc'} loading={true} />
           </div>
         )}
-        {loginState === 'error' && (
+        {(loginState === 'error' || loginState === 'rateLimit') && (
           <Title className={classes.loginTitle} size="h4">
             Das hat leider nicht geklappt.
           </Title>
@@ -128,6 +164,10 @@ const Login: React.FC = () => {
             <Title className={classes.loginTitle} size="h4">
               Wir haben dir eine E-Mail geschickt.
             </Title>
+            <Text>
+              In dieser E-Mail ist ein Zugangslink enthalten.<br/>
+              Klicke einfach auf den Link in der E-Mail und du kommst direkt in deinen persönlichen User-Bereich!
+            </Text>
             <Icons.SignupEmailSent />
           </div>
         )}
@@ -156,7 +196,14 @@ const Login: React.FC = () => {
             finden.
           </Text>
         )}
-        {loginState !== 'success' ? (
+        {loginState === 'rateLimit' && (
+          <Text className={classes.textError}>
+            Du hast in den letzten 24 Stunden bereits einen bisher ungenutzen Zugangslink angefordert. <br/>
+            Bitte schaue dafür in dein E-Mail-Postfach nach einer E-Mail von uns. <br/>
+            Wenn du auch nach ca. 10 Minuten noch keinen Zugangslink bekommen hast, wende dich bitte an <a href="mailto:support@corona-school.de">support@corona-school.de</a> oder warte bis zum nächsten Tag, um erneut einen Zugangslink anzufordern.
+          </Text>
+        )}
+        {loginState !== 'success' && (
           <Button
             className={classes.signinButton}
             color="white"
@@ -164,15 +211,6 @@ const Login: React.FC = () => {
             onClick={login}
           >
             Anmelden
-          </Button>
-        ) : (
-          <Button
-            className={classes.successButton}
-            color="#2B2C3B"
-            backgroundColor="white"
-            onClick={login}
-          >
-            E-Mail erneut versenden
           </Button>
         )}
         {loginState !== 'idle' && (

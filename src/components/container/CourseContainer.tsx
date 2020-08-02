@@ -42,7 +42,7 @@ export const CourseContainer: React.FC<Props> = (props) => {
             />
           </Steps>
         </div>
-        {props.children}
+        <div className={classes.formContainer}>{props.children}</div>
       </div>
 
       <div className={classes.background}></div>

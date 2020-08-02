@@ -29,7 +29,8 @@ const Verify: React.FC = () => {
           getUserId(token)
             .then((id) => {
               storedCredentials.write({ id, token });
-              auth.setCredentials({ id, token });
+              auth.setCredentials({ id, token }); //this triggers the login in AuthContext/UserContext
+              auth.setStatus('pending'); //now auth should have valid credentials, so update the status (pending is the initial value)
               setState('success');
             })
             .catch((reason) => {

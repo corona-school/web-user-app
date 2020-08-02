@@ -20,7 +20,8 @@
   flex-grow: 1;
   flex-direction: column;
   justify-content: space-between;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   background-color: $navigationBackground;
 

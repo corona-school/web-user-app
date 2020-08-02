@@ -23,6 +23,7 @@ import RegisterTutee from './routes/RegisterTutee';
 import RegisterTutor from './routes/RegisterTutor';
 import { CourseForm } from './routes/CourseForm';
 import CourseDetail from './routes/CourseDetail';
+import PublicCourseDetail from './routes/PublicCourseDetail';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -74,12 +75,18 @@ const App: React.FC = () => {
         <Route path="/register">
           <Register />
         </Route>
-        <Route path="/public/courses">
+        <Route exact path="/public/courses">
           <PublicCourse />
+        </Route>
+        <Route exact path="/public/courses/:id">
+          <PublicCourseDetail />
         </Route>
         <Route path="/verify">
           <Verify />
         </Route>
+        <PrivateRoute path="/courses/edit/:id">
+          <CourseForm />
+        </PrivateRoute>
         <PrivateRoute path="/courses/create">
           <CourseForm />
         </PrivateRoute>

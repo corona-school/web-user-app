@@ -136,11 +136,11 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           Schritt 1: Allgemeine Informationen eintragen
         </Text>
         <Title size="h5" bold>
-          Schüler
+          Schüler*in
         </Title>
         <div className={classes.inputField}>
           <Select
-            placeholder={'Wähle deinen Schüler'}
+            placeholder={'Wähle deine*n Schüler*in'}
             value={certificateData.student}
             onChange={(v) => {
               setCertificateData({
@@ -284,7 +284,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
       })
       .catch((err) => {
         message.error(
-          'Ein Fehler ist aufgetreten. Versuche er später nochmal.'
+          'Ein Fehler ist aufgetreten. Versuche es später nochmal.'
         );
         setLoading(false);
       });
@@ -336,7 +336,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   const onClick = (newStep: number) => {
     if (newStep < STEPS && newStep >= 0) {
       if (newStep === 2 && !certificateData.student) {
-        message.info('Ein Schüler muss ausgewählt sein.');
+        message.info('Ein*e Schüler*in muss ausgewählt sein.');
         return;
       }
       if (newStep === 2 && certificateData.subjects.length === 0) {

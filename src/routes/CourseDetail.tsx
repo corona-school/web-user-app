@@ -1,27 +1,30 @@
-import React, {useContext, useState, useEffect} from 'react';
-import {useParams, useHistory} from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
 
-import {ApiContext} from '../context/ApiContext';
-import {AuthContext} from '../context/AuthContext';
+import { ApiContext } from '../context/ApiContext';
+import { AuthContext } from '../context/AuthContext';
 import {
   ParsedCourseOverview,
   CourseState,
   Course,
   SubCourse,
 } from '../types/Course';
-import {Title, Text} from '../components/Typography';
-import {Tag} from '../components/Tag';
+import { Title, Text } from '../components/Typography';
+import { Tag } from '../components/Tag';
 import 'moment/locale/de';
 import {
   DeleteOutlined,
   MailOutlined,
   CheckCircleOutlined,
   DownOutlined,
+  ShareAltOutlined,
+  WhatsAppOutlined,
+  CopyOutlined
 } from '@ant-design/icons';
 import classes from './CourseDetail.module.scss';
-import {UserContext} from '../context/UserContext';
+import { UserContext } from '../context/UserContext';
 import {
   Empty,
   Descriptions,
@@ -32,24 +35,27 @@ import {
   List,
   Tooltip,
 } from 'antd';
-import {parseCourse} from '../utils/CourseUtil';
+import { parseCourse } from '../utils/CourseUtil';
 import {
   CategoryToLabel,
   CourseStateToLabel,
 } from '../components/cards/MyCourseCard';
 
-import {tags} from '../components/forms/CreateCourse';
-import {ModalContext} from '../context/ModalContext';
+import { tags } from '../components/forms/CreateCourse';
+import { ModalContext } from '../context/ModalContext';
 import CourseMessageModal from '../components/Modals/CourseMessageModal';
-import {dev} from '../api/config';
+import { dev } from '../api/config';
 
 moment.locale('de');
 
-const CourseDetail = () => {
+const CourseDetail = (params: {id?: string}) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
   const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
-  const {id} = useParams();
+  const [isCustomShareMenuVisible, setIsCustomShareMenuVisible] = useState(false);
+
+  const { id: urlParamID } = useParams();
+  const id = params.id ?? urlParamID;
 
   const api = useContext(ApiContext);
   const userContext = useContext(UserContext);
@@ -116,7 +122,7 @@ const CourseDetail = () => {
     api
       .submitCourse(course.id, apiCourse)
       .then(() => {
-        setCourse({...course, state: CourseState.SUBMITTED});
+        setCourse({ ...course, state: CourseState.SUBMITTED });
         return api.publishSubCourse(
           course.id,
           course.subcourse.id,
@@ -169,7 +175,8 @@ const CourseDetail = () => {
 
   const joinBBBmeeting = () => {
     setIsLoadingVideoChat(true);
-    api.joinBBBmeeting(course.id)
+    api
+      .joinBBBmeeting(course.id)
       .then((res) => {
         setIsLoadingVideoChat(false);
         //use window.location to not have problems with popup blocking
@@ -178,12 +185,68 @@ const CourseDetail = () => {
       .catch((err) => {
         setIsLoadingVideoChat(false);
         if (err?.response?.status === 400) {
-          message.error('Der Videochat wurde noch nicht gestartet. Du musst auf die*den Kursleiter*in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.');
+          message.error(
+            'Der Videochat wurde noch nicht gestartet. Du musst auf die*den Kursleiter*in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.'
+          );
         } else {
-          message.error('Ein unerwarter Fehler ist aufgetreten. Versuche, die Seite neuzuladen.');
+          message.error(
+            'Ein unerwarter Fehler ist aufgetreten. Versuche, die Seite neuzuladen.'
+          );
         }
-      })
+      });
   };
+
+
+  const shareData = {
+    title: course.name,
+    text: "Guck dir diesen kostenlosen Kurs der Corona School an!",
+    url: `${window.location.protocol}//${window.location.hostname}/public/courses/${course.id}`
+  }
+
+  const copyCourseLink = async () => {
+    if (!navigator.clipboard) {
+      message.error("Dein Browser unterstützt das nicht 😔");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareData.url);
+
+      message.success("Link wurde in die Zwischenablage kopiert!");
+    }
+    catch {
+      message.error("Link konnte nicht kopiert werden!");
+    }
+  }
+
+  const whatsAppShareURL = `whatsapp://send?text=${shareData.text} ${shareData.url}`
+
+  const antdShareMenu = (
+    <Menu>
+      <Menu.Item icon={<CopyOutlined/>} key="copyLink">
+        <span onClick={copyCourseLink}>
+          Link kopieren
+        </span>
+      </Menu.Item>
+      <Menu.Item icon={<WhatsAppOutlined/>} key="shareWhatsApp">
+        <a href={whatsAppShareURL} data-action="share/whatsapp/share" className={classes.shareLink}>
+          WhatsApp
+        </a>
+      </Menu.Item>
+    </Menu>
+  );
+  
+  const tsNavigator: any = navigator //so that typescript compiles with share
+
+  const shareCourse = () => {
+    if (tsNavigator.share) {
+      setIsCustomShareMenuVisible(false);
+      tsNavigator.share(shareData)
+    }
+    else {
+      setIsCustomShareMenuVisible(true);
+    }
+  }
 
   const renderCourseInformation = () => {
     const getMenu = () => (
@@ -198,23 +261,32 @@ const CourseDetail = () => {
           if (param.key === '4') {
             cancelCourse();
           }
+          if (param.key === '5') {
+            history.push(`/courses/edit/${course.id}`);
+          }
         }}
       >
         {course.state === CourseState.CREATED && (
-          <Menu.Item key="2" icon={<CheckCircleOutlined/>}>
+          <Menu.Item key="2" icon={<CheckCircleOutlined />}>
             Zur Prüfung freigeben
           </Menu.Item>
         )}
         <Menu.Item
           key="3"
-          icon={<MailOutlined/>}
+          icon={<MailOutlined />}
           disabled={course.subcourse.participantList.length === 0}
         >
           Nachricht senden
         </Menu.Item>
         {course.state !== CourseState.CANCELLED && (
-          <Menu.Item key="4" icon={<DeleteOutlined/>}>
+          <Menu.Item key="4" icon={<DeleteOutlined />}>
             Löschen
+          </Menu.Item>
+        )}
+
+        {course.state === CourseState.CREATED && (
+          <Menu.Item key="5" icon={<CheckCircleOutlined />}>
+            Bearbeiten
           </Menu.Item>
         )}
       </Menu>
@@ -229,10 +301,10 @@ const CourseDetail = () => {
       <div className={classes.statusContainer}>
         <div className={classes.headerContainer}>
           <div>
-            <Title size="h1" style={{margin: '0px 20px 10px 8px'}}>
+            <Title size="h1" style={{ margin: '0px 20px 10px 8px' }}>
               {course.name}
             </Title>
-            <Title size="h5" style={{margin: '-4px 10px 0px 10px'}}>
+            <Title size="h5" style={{ margin: '-4px 10px 0px 10px' }}>
               {course.outline}
             </Title>
           </div>
@@ -251,11 +323,11 @@ const CourseDetail = () => {
                       submitCourse();
                     }}
                   >
-                    <CheckCircleOutlined/> Zur Prüfung freigeben
+                    <CheckCircleOutlined /> Zur Prüfung freigeben
                   </AntdButton>
                 ) : (
                   <AntdButton>
-                    Einstellungen <DownOutlined/>
+                    Einstellungen <DownOutlined />
                   </AntdButton>
                 )}
               </Dropdown>
@@ -264,7 +336,9 @@ const CourseDetail = () => {
               <AntdButton
                 type="primary"
                 style={{
-                  backgroundColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
+                  backgroundColor: course.subcourse.joined
+                    ? '#F4486D'
+                    : '#FCD95C',
                   borderColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
                   color: course.subcourse.joined ? 'white' : '#373E47',
                   width: '120px',
@@ -275,8 +349,9 @@ const CourseDetail = () => {
                 {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
               </AntdButton>
             )}
-            <div className="classes.videochatAction">
-              {((isMyCourse && course.state === CourseState.ALLOWED) || course.subcourse.joined) && (
+            <div className={classes.videochatAction}>
+              {((isMyCourse && course.state === CourseState.ALLOWED) ||
+                course.subcourse.joined) && (
                 <AntdButton
                   type="primary"
                   style={{
@@ -284,14 +359,36 @@ const CourseDetail = () => {
                     borderColor: '#FCD95C',
                     color: '#373E47',
                     width: '120px',
-                    margin: '5px 10px'
+                    margin: '5px 10px',
                   }}
                   onClick={joinBBBmeeting}
                 >
                   Zum Videochat
                 </AntdButton>
               )}
-              <ClipLoader size={15} color={'#123abc'} loading={isLoadingVideoChat} />
+              <ClipLoader
+                size={15}
+                color={'#123abc'}
+                loading={isLoadingVideoChat}
+              />
+            </div>
+            <div className={classes.shareAction}>
+              <Dropdown overlay={antdShareMenu} trigger={["click"]} visible={isCustomShareMenuVisible} onVisibleChange={ (v) => !v && setIsCustomShareMenuVisible(v)}>
+                <AntdButton
+                  type="primary"
+                  style={{
+                    backgroundColor: '#FCD95C',
+                    borderColor: '#FCD95C',
+                    color: '#373E47',
+                    width: '120px',
+                    margin: '5px 10px',
+                  }}
+                  onClick={shareCourse}
+                  icon={<ShareAltOutlined/>}
+                >
+                  Kurs teilen
+                </AntdButton>
+              </Dropdown>
             </div>
           </div>
         </div>
@@ -299,7 +396,7 @@ const CourseDetail = () => {
         <Descriptions
           column={3}
           size={'small'}
-          style={{margin: '10px', maxWidth: '700px'}}
+          style={{ margin: '10px', maxWidth: '700px' }}
         >
           {isMyCourse && (
             <Descriptions.Item label="Status">
@@ -316,7 +413,7 @@ const CourseDetail = () => {
                     ? 'white'
                     : '#373E47'
                 }
-                style={{fontSize: '12px', margin: 0}}
+                style={{ fontSize: '12px', margin: 0 }}
               >
                 {CourseStateToLabel.get(course.state)}
               </Tag>
@@ -360,22 +457,22 @@ const CourseDetail = () => {
           size="small"
           layout="vertical"
           column={1}
-          style={{margin: '10px', maxWidth: '700px'}}
+          style={{ margin: '10px', maxWidth: '700px' }}
         >
           <Descriptions.Item label="Beschreibung">
             <Text large>
-              <i style={{whiteSpace: 'pre-wrap'}}>{course.description}</i>
+              <i style={{ whiteSpace: 'pre-wrap' }}>{course.description}</i>
             </Text>
           </Descriptions.Item>
           <Descriptions.Item label="Tags">
             {course.tags.map((t) => {
-              return <Tag>{t.name}</Tag>;
+              return <Tag key={t.id}>{t.name}</Tag>;
             })}
           </Descriptions.Item>
         </Descriptions>
         {isMyCourse && (
           <div>
-            <Title size="h3" style={{margin: '0px 10px'}}>
+            <Title size="h3" style={{ margin: '0px 10px' }}>
               Teilnehmer
             </Title>
             <div>{renderParticipants()}</div>
@@ -457,12 +554,12 @@ const CourseDetail = () => {
       .sort((a, b) => a.start - b.start)
       .map((l, i) => {
         return (
-          <div className={classes.newsContent}>
+          <div className={classes.newsContent} key={l.id}>
             <div className={classes.newsHeadline}>
-              <Tag>{moment(l.start).format('DD.MM')}</Tag>
+              <Tag>{moment.unix(l.start).format('DD.MM')}</Tag>
               <Tag>
-                {moment(l.start).format('HH:mm')}-
-                {moment(l.start).add(l.duration, 'minutes').format('HH:mm')} Uhr
+                {moment.unix(l.start).format('HH:mm')}-
+                {moment.unix(l.start).add(l.duration, 'minutes').format('HH:mm')} Uhr
               </Tag>
               <Title bold size="h5">
                 Lektion {i + 1}
@@ -470,11 +567,10 @@ const CourseDetail = () => {
             </div>
 
             <Text>
-              Die {i + 1}te Lektion findet {moment(l.start).fromNow()} statt und
-              dauert ungefähr {l.duration}min. Der Kurs ist für Schüler in
-              der{' '}
+              Die {i + 1}te Lektion {moment.unix(l.start).isAfter(Date.now()) ? "findet" : "fand"} {moment.unix(l.start).fromNow()} statt und
+              dauert{moment.unix(l.start).isAfter(Date.now()) ? "" : "e"} ungefähr {l.duration}min. Der Kurs ist für Schüler in der{' '}
               {course.subcourse.minGrade}-{course.subcourse.maxGrade} Klasse.{' '}
-              <br/>
+              <br />
               Tutor: {l.instructor.firstname} {l.instructor.lastname}
             </Text>
           </div>
