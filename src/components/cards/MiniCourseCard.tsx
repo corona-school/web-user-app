@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 
 export const MiniCourseCard = (course: ParsedCourseOverview) => {
   const firstLecture = firstLectureOfSubcourse(course.subcourse);
-  const firstLectureDate = moment(firstLecture.start).format("DD.MM.");
+  const firstLectureDate = moment.unix(firstLecture.start).format("DD.MM.");
 
   const history = useHistory();
 
