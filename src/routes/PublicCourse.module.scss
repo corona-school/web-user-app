@@ -3,11 +3,11 @@
   flex-direction: column;
 
   padding: 0px;
-  margin: 0px;;
+  margin: 0px;
   width: 100%;
 
   .header {
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -70,10 +70,12 @@
   }
 
   .main {
+    position: relative;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     flex-grow: 1;
+    margin-top: 74px;
 
     .searchContainer {
       max-width: 1000px;
