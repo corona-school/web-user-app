@@ -2,8 +2,6 @@ import { ReactComponent as Edit } from './edit.svg';
 import { ReactComponent as Add } from './ico-add.svg';
 import { ReactComponent as Calendar } from "./ico-calendar.svg";
 import { ReactComponent as Close } from './ico-close.svg';
-import { ReactComponent as Club } from "./ico-club.svg";
-import { ReactComponent as Coaching } from "./ico-coaching.svg";
 import { ReactComponent as Contact } from './ico-contact.svg';
 import { ReactComponent as Delete } from './ico-delete.svg';
 import { ReactComponent as Feedback } from './ico-feedback.svg';
@@ -12,7 +10,6 @@ import { ReactComponent as Help } from './ico-help.svg';
 import { ReactComponent as Home } from './ico-home.svg';
 import { ReactComponent as Logout } from './ico-logout.svg';
 import { ReactComponent as Match } from './ico-match.svg';
-import { ReactComponent as Revision } from "./ico-revision.svg";
 import { ReactComponent as Save } from './ico-save.svg';
 import { ReactComponent as Settings } from './ico-settings.svg';
 import { ReactComponent as Undo } from './ico-undo.svg';
@@ -52,8 +49,6 @@ const IconsList = {
   Add,
   Calendar,
   Close,
-  Club,
-  Coaching,
   Contact,
   Delete,
   Feedback,
@@ -62,7 +57,6 @@ const IconsList = {
   Home,
   Logout,
   Match,
-  Revision,
   Save,
   Settings,
   Undo,
