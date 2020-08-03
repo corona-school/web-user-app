@@ -13,7 +13,7 @@ export const MiniCourseCard = (course: ParsedCourseOverview) => {
   const history = useHistory();
 
   return (
-    <div className={classes.courseCard} onClick={() => history.push(`/courses/${course.id}`)}>
+    <div className={classes.courseCard} onClick={() => history.push(`/public/courses/${course.id}`)}>
       <div className={classes.highlight} />
       <div className={classes.courseTitle}>
         { course.name }
