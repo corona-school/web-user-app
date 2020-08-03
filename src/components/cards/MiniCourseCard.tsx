@@ -24,7 +24,7 @@ export const MiniCourseCard = (course: ParsedCourseOverview) => {
 
       <div className={classes.courseInformation}>
         <div className={classes.courseDate}>
-          <Icons.Grade style={{width: "25px", height: "25px"}} />
+          <Icons.Calendar style={{width: "25px", height: "25px"}} />
           <div className={classes.courseDateText}>
             { course.subcourse?.lectures.length > 1 ? `ab ${firstLectureDate}` : firstLectureDate }
           </div>
