@@ -11,7 +11,6 @@ import MyCourseCard from '../components/cards/MyCourseCard';
 import classes from './Course.module.scss';
 import { parseCourse, defaultPublicCourseSort } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
-import CourseOverview from "../components/CourseOverview";
 
 const MAX_COURSES = 25;
 
@@ -89,10 +88,20 @@ const Course = () => {
           )}
         </div>
       </div>
-      <div className={classes.overviewContainer}>
-        <Title size="h2">Alle Kurse</Title>
-        <CourseOverview />
-      </div>
+      <Title size="h2">Alle Kurse</Title>
+      {filteredCourses.length === 0 ? (
+        <Empty
+          style={{ marginBottom: '64px' }}
+          description={
+            'Es gibt im Moment keine Kurse' +
+            (userContext.user.type === 'pupil' ? ' für deine Klassenstufe' : '')
+          }
+        ></Empty>
+      ) : (
+        filteredCourses.map((c) => {
+          return <MyCourseCard course={c} />;
+        })
+      )}
     </div>
   );
 };
