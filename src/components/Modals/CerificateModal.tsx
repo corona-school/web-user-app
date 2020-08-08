@@ -77,6 +77,12 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     certificateData.student,
   ]);
 
+  const isWorkloadAllowedNumber = () => {
+    return (certificateData.hoursPerWeek % 0.25) === 0 
+    && certificateData.hoursPerWeek >= 0.25 
+    && certificateData.hoursPerWeek <= 40.0;
+  }
+
   const renderIntroduction = () => {
     return (
       <>
@@ -248,6 +254,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
                 setCertificateData({ ...certificateData, hoursPerWeek: v });
               }
             }}
+            className={!isWorkloadAllowedNumber() ? classes.workloadInputFieldError : null}
           />{' '}
           h/Woche (insgesamt {certificateData.hoursTotal} h)
         </div>
@@ -345,6 +352,10 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
       }
       if (newStep === 2 && !certificateData.mediaType) {
         message.info('Ein Medium muss ausgewählt sein.');
+        return;
+      }
+      if (newStep === 2 && !isWorkloadAllowedNumber()) {
+        message.info('Deine wöchentliche Arbeitszeit darf nur in 15-Minuten-Schritten angegeben werden. Sie muss mindestens 15 Minuten betragen und darf nicht größer als 40 Stunden sein.');
         return;
       }
       if (newStep === 3 && certificateData.activities.length === 0) {
