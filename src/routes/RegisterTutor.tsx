@@ -545,7 +545,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const register = (data: FormData) => {
     const tutor = mapFormDataToTutor(data);
     if (!tutor) {
-      message.error('Es ein Fehler aufgetreten.');
+      message.error('Es ist ein Fehler aufgetreten.');
       return;
     }
 
@@ -577,7 +577,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           return;
         }
         setLoading(false);
-        message.error('Es ein Fehler aufgetreten.');
+        message.error('Es ist ein Fehler aufgetreten.');
       });
   };
 

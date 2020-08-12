@@ -476,7 +476,7 @@ const RegisterTutee = () => {
   const register = (data: FormData) => {
     const tutee = mapFormDataToTutee(data);
     if (!tutee) {
-      message.error('Es ein Fehler aufgetreten.');
+      message.error('Es ist ein Fehler aufgetreten.');
       return;
     }
     console.log(tutee);
@@ -506,7 +506,7 @@ const RegisterTutee = () => {
           return;
         }
         setLoading(false);
-        message.error('Es ein Fehler aufgetreten.');
+        message.error('Es ist ein Fehler aufgetreten.');
       });
   };
 
