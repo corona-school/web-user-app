@@ -147,7 +147,7 @@ const RegisterTutee = () => {
             <Option value="Realschule">Realschule</Option>
             <Option value="Gymnasium">Gymnasium</Option>
             <Option value="Förderschule">Förderschule</Option>
-            <Option value="Sonstige">Sonstige</Option>
+            <Option value="other">Sonstige</Option>
           </Select>
         </Form.Item>
         <Form.Item
