@@ -6,6 +6,7 @@ import {Title} from "../components/Typography";
 import {ParsedCourseOverview} from "../types/Course";
 import Context from "../context";
 import {defaultPublicCourseSort, parseCourse} from "../utils/CourseUtil";
+import {Spin} from "antd";
 
 const PublicCourse = () => {
   const [loading, setLoading] = useState(false);
@@ -48,9 +49,15 @@ const PublicCourse = () => {
   return (
     <div className={classes.container}>
       <Header />
-      <div className={classes.main}>
-        <CourseOverview courses={courses} />
-      </div>
+      {
+        loading ?
+          <div className={classes.spin}>
+            <Spin size="large" />
+          </div> :
+          <div className={classes.main}>
+            <CourseOverview courses={courses} />
+          </div>
+      }
     </div>
   )
 }
