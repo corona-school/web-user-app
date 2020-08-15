@@ -68,12 +68,10 @@ const CourseOverview = () => {
     )
   }
 
-  const CoursesWithTag = (tag: { name: string, identifier: string }) => {
-    const feasibleCourses = courses.filter(c => c.tags.find(t => t.id === tag.identifier));
-
+  const CoursesFrame = (feasibleCourses: ParsedCourseOverview[], tagName: string) => {
     const tagDisplay =
       <Text className={classes.tagDisplay}>
-        { tag.name }
+        { tagName }
       </Text>
 
     const scrollFrame =
@@ -94,11 +92,29 @@ const CourseOverview = () => {
     }
   }
 
+  const CourseFrameWithTag = (tag: {identifier: string, name: string}) => {
+    const feasibleCourses = courses.filter(c => c.tags.find(t => t.id === tag.identifier));
+    return (
+      CoursesFrame(feasibleCourses, tag.name)
+    )
+  }
+
+  const MiscCourseFrame = (courseCategory: CourseCategory) => {
+    const feasibleCourses =
+      courses
+        .filter(c => c.category === courseCategory)
+        .filter(c => c.tags.filter(t => tags.get(courseCategory).map(tag => tag.identifier).indexOf(t.id) !== -1).length === 0)
+    return (
+      CoursesFrame(feasibleCourses, "Sonstige")
+    )
+  }
+
   const coursesWithTag =
     tags
-    .get(courseCategory)
-    .map(t => CoursesWithTag(t))
-    .filter(container => container !== undefined);
+      .get(courseCategory)
+      .map(t => CourseFrameWithTag(t))
+      .concat(MiscCourseFrame(courseCategory))
+      .filter(container => container !== undefined);
 
   return (
     <div className={classes.container}>
