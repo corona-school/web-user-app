@@ -4,20 +4,13 @@ import {Text} from "./Typography";
 
 import {CourseCategory, ParsedCourseOverview} from "../types/Course";
 import classes from "./CourseOverview.module.scss";
-import Icons from "../assets/icons/index";
 import {CourseIntroductionText} from "../assets/courseIntroduction";
 import {tags} from "./forms/CreateCourse";
-import {
-  defaultPublicCourseSort,
-  firstLectureOfSubcourse,
-  parseCourse
-} from "../utils/CourseUtil";
-import Context from "../context";
-import moment from "moment";
 import {MiniCourseCard} from "./cards/MiniCourseCard";
 
 
-const CourseOverview = (courses: ParsedCourseOverview[]) => {
+const CourseOverview = (props: {courses: ParsedCourseOverview[]}) => {
+  const courses = props.courses;
   const [courseCategory, setCourseCategory] = useState(CourseCategory.CLUB);
 
   const CategoryButtons = () => {

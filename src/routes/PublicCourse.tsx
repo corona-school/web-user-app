@@ -49,7 +49,7 @@ const PublicCourse = () => {
     <div className={classes.container}>
       <Header />
       <div className={classes.main}>
-        { CourseOverview(courses) }
+        <CourseOverview courses={courses} />
       </div>
     </div>
   )
