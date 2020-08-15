@@ -17,29 +17,8 @@ import moment from "moment";
 import {MiniCourseCard} from "./cards/MiniCourseCard";
 
 
-const CourseOverview = () => {
-  const [loading, setLoading] = useState(false);
-  const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
-
+const CourseOverview = (courses: ParsedCourseOverview[]) => {
   const [courseCategory, setCourseCategory] = useState(CourseCategory.CLUB);
-
-  const apiContext = useContext(Context.Api);
-
-  useEffect(() => {
-    setLoading(true);
-
-    apiContext
-      .getCourses()
-      .then((c) => {
-        setCourses(c.map(parseCourse).sort(defaultPublicCourseSort));
-      })
-      .catch((e) => {
-        // message.error('Kurse konnten nicht geladen werden.');
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [apiContext]);
 
   const CategoryButtons = () => {
     return (

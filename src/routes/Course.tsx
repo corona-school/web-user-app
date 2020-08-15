@@ -91,7 +91,7 @@ const Course = () => {
       </div>
       <div className={classes.overviewContainer}>
         <Title size="h2">Alle Kurse</Title>
-        <CourseOverview />
+        { CourseOverview(courses) }
       </div>
     </div>
   );
