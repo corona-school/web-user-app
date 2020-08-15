@@ -69,16 +69,20 @@ const CourseOverview = (props: {courses: ParsedCourseOverview[]}) => {
       courses
         .filter(c => c.category === courseCategory)
         .filter(c => c.tags.find(t => t.id === tag.identifier));
+
     return (
       CoursesFrame(feasibleCourses, tag.name)
     )
   }
 
   const MiscCourseFrame = (courseCategory: CourseCategory) => {
+    const predefinedCourseTags = tags.get(courseCategory).map(tag => tag.identifier);
+
     const feasibleCourses =
       courses
         .filter(c => c.category === courseCategory)
-        .filter(c => c.tags.filter(t => tags.get(courseCategory).map(tag => tag.identifier).indexOf(t.id) !== -1).length === 0)
+        .filter(c => c.tags.filter(t => predefinedCourseTags.indexOf(t.id) !== -1).length === 0)
+
     return (
       CoursesFrame(feasibleCourses, "Sonstige")
     )
