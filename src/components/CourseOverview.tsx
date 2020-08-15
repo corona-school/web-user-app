@@ -92,8 +92,11 @@ const CourseOverview = () => {
     }
   }
 
-  const CourseFrameWithTag = (tag: {identifier: string, name: string}) => {
-    const feasibleCourses = courses.filter(c => c.tags.find(t => t.id === tag.identifier));
+  const CourseFrameWithTag = (courseCategory: CourseCategory, tag: {identifier: string, name: string}) => {
+    const feasibleCourses =
+      courses
+        .filter(c => c.category === courseCategory)
+        .filter(c => c.tags.find(t => t.id === tag.identifier));
     return (
       CoursesFrame(feasibleCourses, tag.name)
     )
@@ -112,7 +115,7 @@ const CourseOverview = () => {
   const coursesWithTag =
     tags
       .get(courseCategory)
-      .map(t => CourseFrameWithTag(t))
+      .map(t => CourseFrameWithTag(courseCategory, t))
       .concat(MiscCourseFrame(courseCategory))
       .filter(container => container !== undefined);
 
