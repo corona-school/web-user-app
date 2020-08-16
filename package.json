@@ -36,6 +36,7 @@
   },
   "scripts": {
     "dev": "react-scripts start",
+    "dev:local": "REACT_APP_MODE=LOCAL react-scripts start",
     "start": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
