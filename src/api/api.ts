@@ -11,7 +11,7 @@ export const redeemVerificationToken = (
 ): Promise<string> =>
   new Promise((resolve, reject) => {
     axios
-      .post(apiURL + '/token', {
+      .post(`${apiURL}/token`, {
         token: verificationToken,
       })
       .then((response) => resolve(response.data.token))
@@ -24,7 +24,7 @@ export const redeemVerificationToken = (
 export const getUserId = (token: string): Promise<string> =>
   new Promise((resolve, reject) => {
     axios
-      .get(apiURL + '/user', {
+      .get(`${apiURL}/user`, {
         headers: { token },
       })
       .then((response) => {
@@ -65,9 +65,14 @@ export const putUser = (
 // ========================================================================
 
 export const axiosGetUser = (id: string, token: string): Promise<User> => {
-  return axios.get(`${apiURL}/user/${id}`, {
-    headers: { Token: token },
-  });
+  return new Promise((resolve, reject) =>
+    axios
+      .get(`${apiURL}/user/${id}`, {
+        headers: { Token: token },
+      })
+      .then((res) => resolve(res.data))
+      .catch((err) => reject(err))
+  );
 };
 
 export const axiosDissolveMatch = (
@@ -148,9 +153,10 @@ export const axiosGetCertificate = (
   id: string,
   token: string,
   certificateDate: CertificateData
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<AxiosResponse<any>> => {
   const url = `${apiURL}/certificate/${id}/${certificateDate.student}`;
-  console.log(url);
+
   return new Promise((resolve, reject) => {
     const params = new URLSearchParams();
     params.append('subjects', certificateDate.subjects.join(','));

@@ -9,6 +9,7 @@ import {
 import { ButtonDestructive, ButtonNonDestructive } from '../button';
 import Context from '../../context';
 import { putUser } from '../../api/api';
+import { dev } from '../../api/config';
 
 const Question = styled.div`
   color: ${(props) => props.theme.color.gray1};
@@ -91,16 +92,22 @@ const DissolveMatchModal: React.FC<{
   const { credentials } = useContext(Context.Auth);
   const { user, fetchUserData } = useContext(Context.User);
 
-  const requestNewMatch = (): void => {
+  const requestNewMatch = () => {
     if (typeof user.matchesRequested !== 'number') return;
     putUser(credentials, {
       firstname: user.firstname,
       lastname: user.lastname,
       matchesRequested: Math.min(user.matchesRequested + 1, 2),
-    }).then(fetchUserData);
+    })
+      .catch((err) => {
+        if (dev) console.error(err);
+      })
+      .finally(() => {
+        fetchUserData();
+      });
   };
 
-  const endCollaboration = (): Promise<void> =>
+  const endCollaboration = () =>
     apiContext.dissolveMatch(
       matchUuid,
       supportSuccessful ? -1 : Number(reasonSelected)
@@ -118,7 +125,7 @@ const DissolveMatchModal: React.FC<{
           ? 'Die Zusammenarbeit wurde erfolgreich beendet!'
           : 'Schade, dass du die Zusammenarbeit beenden möchtest.'
       }
-      beforeClose={newMatchWanted ? requestNewMatch : undefined}
+      beforeClose={newMatchWanted ? requestNewMatch : fetchUserData}
     >
       {dissolved ? (
         <>

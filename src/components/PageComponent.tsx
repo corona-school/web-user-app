@@ -13,7 +13,7 @@ interface MenuProps {
 
 const MenuBackground = styled.div<MenuProps>`
   position: fixed;
-  width: auto;
+  width: 100%;
   height: 100%;
   z-index: 999;
   overflow: auto;

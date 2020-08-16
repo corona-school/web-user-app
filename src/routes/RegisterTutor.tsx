@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { useHistory, Link, useLocation } from 'react-router-dom';
+import { Form, Input, Checkbox, InputNumber, Select, message } from 'antd';
+import ClipLoader from 'react-spinners/ClipLoader';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
-import { Form, Input, Checkbox, InputNumber, Select, message } from 'antd';
 import Button from '../components/button';
-import ClipLoader from 'react-spinners/ClipLoader';
 import { Subject } from '../types';
 import Context from '../context';
 import { Tutor } from '../types/Registration';
@@ -61,7 +61,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
 
-  const redirectTo = useQuery().get("redirectTo");
+  const redirectTo = useQuery().get('redirectTo');
 
   const renderStart = () => {
     return (
@@ -109,7 +109,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           name="additional"
           label="Auf welche Art möchtest du Schüler*innen unterstützen?"
           rules={[
-            (_) => ({
+            () => ({
               required: true,
               validator() {
                 if (isGroups || isTutor) {
@@ -121,7 +121,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           ]}
         >
           <Checkbox
-            onChange={(e) => {
+            onChange={() => {
               if (props.isInternship) {
                 return;
               }
@@ -134,7 +134,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             Ich möchte eine*n Schüler*in im 1-zu-1-Format unterstützen
           </Checkbox>
           <Checkbox
-            onChange={(e) => {
+            onChange={() => {
               if (props.isInternship) {
                 return;
               }
@@ -165,7 +165,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             </span>
           }
           rules={[
-            (_) => ({
+            () => ({
               required: props.isInternship,
               validator() {
                 if ((!isGroups || !isTutor) && isOfficial) {
@@ -185,7 +185,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           ]}
         >
           <Checkbox
-            onChange={(e) => {
+            onChange={() => {
               setOfficial(!isOfficial);
             }}
             style={{ lineHeight: '32px', marginLeft: '8px' }}
@@ -436,6 +436,27 @@ const RegisterTutor: React.FC<Props> = (props) => {
       </div>
     );
   };
+  const mapFormDataToTutor = (data: FormData): Tutor | null => {
+    if (!data.firstname || !data.lastname || !data.email) {
+      return null;
+    }
+    return {
+      firstname: data.firstname,
+      lastname: data.lastname,
+      email: data.email.toLowerCase(),
+      isTutor: data.isTutor,
+      subjects: data.subjects || [],
+      isOfficial: data.isOfficial,
+      isInstructor: data.isInstructor,
+      university: data.university,
+      module: data.module,
+      hours: data.hours,
+      newsletter: !!data.newsletter,
+      msg: data.msg || '',
+      state: data.state?.toLowerCase(),
+      redirectTo,
+    };
+  };
 
   const renderFormItems = () => {
     if (formState === 'start') {
@@ -450,6 +471,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
     if (formState === 'done') {
       return renderDone();
     }
+    return renderStart();
   };
 
   const back = () => {
@@ -463,6 +485,45 @@ const RegisterTutor: React.FC<Props> = (props) => {
     if (formState === 'done') {
       setFormState('start');
     }
+  };
+
+  const register = (data: FormData) => {
+    const tutor = mapFormDataToTutor(data);
+    if (!tutor) {
+      message.error('Es ist ein Fehler aufgetreten.');
+      return;
+    }
+
+    setLoading(true);
+    apiContext
+      .registerTutor(tutor)
+      .then(() => {
+        setLoading(false);
+        setFormState('done');
+        setFormData({
+          firstname: undefined,
+          lastname: undefined,
+          email: undefined,
+          subjects: undefined,
+          msg: undefined,
+          newsletter: undefined,
+          state: undefined,
+          hours: undefined,
+          module: undefined,
+        });
+        setOfficial(false);
+        setTutor(false);
+        form.resetFields();
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          setLoading(false);
+          message.error('Du bist schon als Tutor*in bei uns eingetragen.');
+          return;
+        }
+        setLoading(false);
+        message.error('Es ist ein Fehler aufgetreten.');
+      });
   };
 
   const nextStep = async (event: React.MouseEvent) => {
@@ -482,8 +543,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
           firstname: formValues.firstname,
           lastname: formValues.lastname,
           email: formValues.email,
-          isOfficial: isOfficial,
-          isTutor: isTutor,
+          isOfficial,
+          isTutor,
           isInstructor: isGroups,
         });
 
@@ -518,67 +579,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const mapFormDataToTutor = (data: FormData): Tutor | null => {
-    if (!data.firstname || !data.lastname || !data.email) {
-      return null;
-    }
-    return {
-      firstname: data.firstname,
-      lastname: data.lastname,
-      email: data.email.toLowerCase(),
-      isTutor: data.isTutor,
-      subjects: data.subjects || [],
-      isOfficial: data.isOfficial,
-      isInstructor: data.isInstructor,
-      university: data.university,
-      module: data.module,
-      hours: data.hours,
-      newsletter: !!data.newsletter,
-      msg: data.msg || '',
-      state: data.state?.toLowerCase(),
-      redirectTo
-    };
-  };
-
-  const register = (data: FormData) => {
-    const tutor = mapFormDataToTutor(data);
-    if (!tutor) {
-      message.error('Es ein Fehler aufgetreten.');
-      return;
-    }
-
-    setLoading(true);
-    apiContext
-      .registerTutor(tutor)
-      .then(() => {
-        setLoading(false);
-        setFormState('done');
-        setFormData({
-          firstname: undefined,
-          lastname: undefined,
-          email: undefined,
-          subjects: undefined,
-          msg: undefined,
-          newsletter: undefined,
-          state: undefined,
-          hours: undefined,
-          module: undefined,
-        });
-        setOfficial(false);
-        setTutor(false);
-        form.resetFields();
-      })
-      .catch((err) => {
-        if (err.response.status === 401) {
-          setLoading(false);
-          message.error('Du bist schon als Tutor*in bei uns eingetragen.');
-          return;
-        }
-        setLoading(false);
-        message.error('Es ein Fehler aufgetreten.');
-      });
   };
 
   return (
@@ -616,7 +616,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           renderFormItems()
         ) : (
           <div className={classes.loadingContainer}>
-            <ClipLoader size={100} color={'#123abc'} loading={true} />
+            <ClipLoader size={100} color="#123abc" loading />
           </div>
         )}
 

@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Context from '../context';
 import { Empty } from 'antd';
+import { useHistory } from 'react-router-dom';
+import Context from '../context';
 import { Title } from '../components/Typography';
 import Button from '../components/button';
 import Icons from '../assets/icons';
-import { useHistory } from 'react-router-dom';
 import { ParsedCourseOverview } from '../types/Course';
 import MyCourseCard from '../components/cards/MyCourseCard';
 
@@ -15,13 +15,21 @@ import CourseOverview from "../components/CourseOverview";
 
 const MAX_COURSES = 25;
 
-function tutorOrGradeFittingTuteeFilter(
-  grade?: number
-): (c: ParsedCourseOverview) => boolean {
-  return (c) =>
-    !grade ||
-    (c.subcourse?.minGrade <= grade && grade <= c.subcourse?.maxGrade);
-}
+const canJoinCourse = (grade?: number) => (c: ParsedCourseOverview) => {
+  if (!c.subcourse) {
+    return false;
+  }
+
+  if (c.subcourse.participants >= c.subcourse.maxParticipants) {
+    return false;
+  }
+
+  if (!grade) {
+    return true;
+  }
+
+  return c.subcourse.minGrade <= grade && grade <= c.subcourse.maxGrade;
+};
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
@@ -31,9 +39,7 @@ const Course = () => {
   const userContext = useContext(UserContext);
   const history = useHistory();
 
-  const filteredCourses = courses
-    .filter((c) => c.subcourse)
-    .filter(tutorOrGradeFittingTuteeFilter(userContext.user.grade));
+  const filteredCourses = courses.filter(canJoinCourse(userContext.user.grade));
 
   useEffect(() => {
     setLoading(true);
@@ -47,13 +53,13 @@ const Course = () => {
       .then((c) => {
         setMyCourses(c.map(parseCourse));
       })
-      .catch((e) => {
+      .catch(() => {
         // message.error('Kurse konnten nicht geladen werden.');
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [apiContext]);
+  }, [apiContext, userContext.user.type]);
 
   if (loading) {
     return <div>Kurse werden geladen...</div>;
@@ -81,7 +87,7 @@ const Course = () => {
         </div>
         <div className={classes.myCoursesContainer}>
           {myCourses.length === 0 ? (
-            <Empty description="Du hast im Moment keine Kurse"></Empty>
+            <Empty description="Du hast im Moment keine Kurse" />
           ) : (
             myCourses.map((c) => {
               return <MyCourseCard course={c} ownedByMe />;

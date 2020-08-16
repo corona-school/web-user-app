@@ -13,8 +13,8 @@ const PageWrapper = styled.div`
 `;
 
 type Props = {
-  text?: string; 
-}
+  text?: string;
+};
 
 const PageLoading: React.FC<Props> = ({ children, text }) => {
   if (!children) {
@@ -28,8 +28,8 @@ const PageLoading: React.FC<Props> = ({ children, text }) => {
             justifyContent: 'center',
           }}
         >
-          <ClipLoader size={100} color={'#123abc'} loading={true} />
-          <p>{text ? text : "Du wirst eingeloggt..."}</p>
+          <ClipLoader size={100} color="#123abc" loading />
+          <p>{text || 'Du wirst eingeloggt...'}</p>
         </div>
       </PageWrapper>
     );

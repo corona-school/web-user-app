@@ -49,6 +49,7 @@ const IconButton: React.FC<
   const Icon = typeof icon === 'string' ? Icons[icon] : icon;
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <IconButtonStyle {...props}>
       <IconStyle>
         <Icon />
@@ -85,6 +86,7 @@ export const SocialMediaButton: React.FC<
   const Icon = typeof icon === 'string' ? Icons[icon] : icon;
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <SocialStyled {...props}>
       <Icon />
     </SocialStyled>

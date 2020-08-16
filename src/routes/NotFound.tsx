@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { OldButton } from '../components/button';
 import { useHistory } from 'react-router-dom';
+import { OldButton } from '../components/button';
 
 const PageWrapper = styled.div<{ opacity: number }>`
   align-items: center;
@@ -25,7 +25,7 @@ const NotFound = () => {
       <h1>404 Seite nicht gefunden</h1>
 
       <OldButton
-        text={'zurück'}
+        text="zurück"
         onClick={() => {
           history.goBack();
         }}

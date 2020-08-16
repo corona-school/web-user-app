@@ -1,4 +1,9 @@
-import { CourseOverview, ParsedCourseOverview, CourseSubCourse, Lecture, CourseLecture } from '../types/Course';
+import {
+  CourseOverview,
+  ParsedCourseOverview,
+  CourseSubCourse,
+  CourseLecture,
+} from '../types/Course';
 
 export const parseCourse = (course: CourseOverview): ParsedCourseOverview => {
   return {
@@ -15,14 +20,23 @@ export const parseCourse = (course: CourseOverview): ParsedCourseOverview => {
   };
 };
 
-export const defaultPublicCourseSort = (a: ParsedCourseOverview, b: ParsedCourseOverview): number => {
-  //1.: sort by manual public ranking
+export const firstLectureOfSubcourse = (
+  subcourse?: CourseSubCourse
+): CourseLecture => {
+  return subcourse?.lectures.sort((a, b) => a.start - b.start)[0];
+};
+
+export const defaultPublicCourseSort = (
+  a: ParsedCourseOverview,
+  b: ParsedCourseOverview
+): number => {
+  // 1.: sort by manual public ranking
   const rankingOrder = b.publicRanking - a.publicRanking;
 
   if (rankingOrder !== 0) {
     return rankingOrder;
   }
-  
+
   // (courses with subcourses will be preferred)
   const subcourseOrder = +(b.subcourse != null) - +(a.subcourse != null);
 
@@ -30,7 +44,7 @@ export const defaultPublicCourseSort = (a: ParsedCourseOverview, b: ParsedCourse
     return subcourseOrder;
   }
 
-  //2.: sort by remaining free spaces in the subcourse
+  // 2.: sort by remaining free spaces in the subcourse
   const A = a.subcourse;
   const B = b.subcourse;
 
@@ -43,8 +57,8 @@ export const defaultPublicCourseSort = (a: ParsedCourseOverview, b: ParsedCourse
 
   // (subcourses with lectures will be preferred)
   const lectureOrder = +(B.lectures?.length >= 1) - +(A.lectures?.length >= 1);
-  
-  //3.: sort by start date
+
+  // 3.: sort by start date
   if (lectureOrder !== 0) {
     return lectureOrder;
   }
@@ -53,8 +67,4 @@ export const defaultPublicCourseSort = (a: ParsedCourseOverview, b: ParsedCourse
   const firstLectureB = firstLectureOfSubcourse(B);
 
   return firstLectureA.start - firstLectureB.start;
-}
-
-export const firstLectureOfSubcourse = (subcourse?: CourseSubCourse): CourseLecture => {
-  return subcourse?.lectures.sort((a, b) => a.start - b.start)[0];
-}
+};

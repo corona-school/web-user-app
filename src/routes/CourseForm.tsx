@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import { CourseContainer } from '../components/container/CourseContainer';
 import { Title } from '../components/Typography';
 import {
@@ -10,7 +11,6 @@ import { CreateLecture } from '../components/forms/CreateLecture';
 import CourseSuccess from '../components/forms/CourseSuccess';
 
 import classes from './CourseForm.module.scss';
-import { useParams } from 'react-router-dom';
 import { ApiContext } from '../context/ApiContext';
 import { dev } from '../api/config';
 
@@ -106,13 +106,13 @@ export const CourseForm: React.FC = () => {
           setLoading(false);
         });
     }
-  }, [params]);
+  }, [api, params]);
 
   const renderForm = () => {
     if (position === 0) {
       return (
         <CreateCourse
-          edit={params?.id ? true : false}
+          edit={!!params?.id}
           course={course}
           subCourse={subCourse}
           setCourse={(course) => setCourse(course)}
@@ -152,6 +152,7 @@ export const CourseForm: React.FC = () => {
         />
       );
     }
+    return null;
   };
 
   if (loading) {

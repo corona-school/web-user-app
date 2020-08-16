@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import classnames from 'classnames';
+
 import { AuthContext } from '../../context/AuthContext';
 import { UserContext } from '../../context/UserContext';
 import Icons from '../../assets/icons';
 import { ScreeningStatus } from '../../types';
 import classes from './index.module.scss';
 import { NavButton, NavActionButton } from './NavButton';
-import { useHistory } from 'react-router-dom';
 import Welcome from './Welcome';
 import { SocialMediaButton } from '../button/IconButton';
-import classnames from 'classnames';
 
 interface Props {
   isMenuOpen: boolean;
@@ -19,13 +20,13 @@ const Navigation: React.FC<Props> = (props) => {
   const authContext = useContext(AuthContext);
   const {
     user: {
-      firstname,
       type,
       screeningStatus,
       instructorScreeningStatus,
       isInstructor,
       isTutor,
     },
+    user,
   } = useContext(UserContext);
   const history = useHistory();
 
@@ -47,7 +48,7 @@ const Navigation: React.FC<Props> = (props) => {
         Corona School
       </div>
       <div className={classes.navigationGroup}>
-        <Welcome firstname={firstname} type={type} />
+        <Welcome user={user} />
         <div className={classes.section}>Menü</div>
         {(type === 'pupil' || isTutor) && (
           <NavButton

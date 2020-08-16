@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 export const StyledNavLink = styled(NavLink).withConfig({
-  shouldForwardProp: (prop, defaultValidatorFn) =>
-    !['center', 'active'].includes(prop),
+  shouldForwardProp: (prop) => !['center', 'active'].includes(prop),
 })<{
   active?: boolean;
 }>`
@@ -51,10 +50,9 @@ export const LogoutNavLink = styled(StyledNavLink)`
 export const NavButton: React.FC<{
   to: string;
   icon?: ReactElement;
-  center?: boolean;
   active?: boolean;
   onClick?: () => void;
-}> = ({ to, icon, children, center = false, active = true, onClick }) => {
+}> = ({ to, icon, children, active = true, onClick }) => {
   return (
     <StyledNavLink to={to} active={active} onClick={onClick}>
       {icon}

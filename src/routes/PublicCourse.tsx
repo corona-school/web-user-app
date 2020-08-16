@@ -22,7 +22,7 @@ const PublicCourse = () => {
       .then((c) => {
         setCourses(c.map(parseCourse).sort(defaultPublicCourseSort));
       })
-      .catch((e) => {
+      .catch(() => {
         // message.error('Kurse konnten nicht geladen werden.');
       })
       .finally(() => {

@@ -29,8 +29,8 @@ const Verify: React.FC = () => {
           getUserId(token)
             .then((id) => {
               storedCredentials.write({ id, token });
-              auth.setCredentials({ id, token }); //this triggers the login in AuthContext/UserContext
-              auth.setStatus('pending'); //now auth should have valid credentials, so update the status (pending is the initial value)
+              auth.setCredentials({ id, token }); // this triggers the login in AuthContext/UserContext
+              auth.setStatus('pending'); // now auth should have valid credentials, so update the status (pending is the initial value)
               setState('success');
             })
             .catch((reason) => {
@@ -43,7 +43,7 @@ const Verify: React.FC = () => {
           setState('failed');
         });
     }
-  }, []);
+  }, [verificationToken]);
 
   return (
     <PageLoading>
@@ -54,9 +54,11 @@ const Verify: React.FC = () => {
           case 'pending':
             return <>Laden...</>;
           case 'success':
-            return <Redirect to={query.get("redirectTo") || "/settings"} />;
+            return <Redirect to={query.get('redirectTo') || '/settings'} />;
           case 'failed':
             return <>Token ungültig</>;
+          default:
+            return <>Kein Token gefunden</>;
         }
       })()}
     </PageLoading>

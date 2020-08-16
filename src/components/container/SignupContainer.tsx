@@ -1,9 +1,11 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import classes from './SignupContainer.module.scss';
 import Images from '../../assets/images';
-import { useHistory } from 'react-router-dom';
 
 const SignupContainer: React.FC = (props) => {
   const history = useHistory();
@@ -22,7 +24,6 @@ const SignupContainer: React.FC = (props) => {
               }
               if (/\/register$/.test(history.location.pathname)) {
                 history.push('/login');
-                return;
               }
             }}
           >

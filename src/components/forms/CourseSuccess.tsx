@@ -1,18 +1,11 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { CompletedCourse, CompletedLecture } from '../../routes/CourseForm';
 import { CompletedSubCourse } from './CreateCourse';
-import { Title } from '../Typography';
-import MyCourseCard from '../cards/MyCourseCard';
-import {
-  ParsedCourseOverview,
-  CourseState,
-  CourseCategory,
-  Tag,
-} from '../../types/Course';
 
 import classes from './CourseSuccess.module.scss';
 import Button from '../button';
-import { useHistory } from 'react-router-dom';
+
 import Images from '../../assets/images';
 
 interface Props {
@@ -21,7 +14,7 @@ interface Props {
   lectures: CompletedLecture[];
 }
 
-const CourseSuccess: React.FC<Props> = (props) => {
+const CourseSuccess: React.FC<Props> = () => {
   const history = useHistory();
 
   return (

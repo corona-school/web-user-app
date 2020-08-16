@@ -1,7 +1,7 @@
 import React from 'react';
+import { Steps } from 'antd';
 
 import classes from './CourseContainer.module.scss';
-import { Steps } from 'antd';
 
 const { Step } = Steps;
 
@@ -45,7 +45,7 @@ export const CourseContainer: React.FC<Props> = (props) => {
         <div className={classes.formContainer}>{props.children}</div>
       </div>
 
-      <div className={classes.background}></div>
+      <div className={classes.background} />
     </div>
   );
 };

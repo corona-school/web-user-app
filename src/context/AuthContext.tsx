@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Credentials, AuthStatusOptions } from '../types';
 
@@ -10,7 +11,7 @@ const readStoredCredentials = (): { id: string; token: string } | null => {
     const safe = unsafe.replace(/[^a-zA-Z0-9{":,}_-]/g, '');
     const parsed = JSON.parse(safe);
     if (parsed && parsed.id && parsed.token) return parsed;
-    else return null;
+    return null;
   } catch (error) {
     // TODO: maybe warn user to use a newer browser; maybe check beforehand with "typeof Storage"
     if (dev) console.error('could not write credentials', error);

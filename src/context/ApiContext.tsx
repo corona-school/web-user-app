@@ -1,18 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useContext } from 'react';
+import { AxiosResponse } from 'axios';
 import { AuthContext } from './AuthContext';
 import { User, Subject } from '../types';
 import * as api from '../api/api';
-import { AxiosResponse } from 'axios';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
-import { UserContext } from './UserContext';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { CompletedSubCourse } from '../components/forms/CreateCourse';
 import { CompletedLecture } from '../routes/CourseForm';
 
 interface IApiContext {
-  getUserData: () => Promise<any>;
+  getUserData: () => Promise<User>;
   dissolveMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string, redirectTo: string) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
@@ -20,6 +20,7 @@ interface IApiContext {
   putUserActiveFalse: () => Promise<void>;
   getCertificate: (
     cerfiticateData: CertificateData
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => Promise<AxiosResponse<any>>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
@@ -64,15 +65,15 @@ interface IApiContext {
     subCourseId: number,
     lectureId: number
   ) => Promise<void>;
-  registerTutee: (tutee: Tutee) => Promise<any>;
-  registerTutor: (tutor: Tutor) => Promise<any>;
+  registerTutee: (tutee: Tutee) => Promise<void>;
+  registerTutor: (tutor: Tutor) => Promise<void>;
   sendCourseGroupMail: (
     courseId: number,
     subCourseId: number,
     subject: string,
     body: string
   ) => Promise<void>;
-  joinBBBmeeting: (courseId: number) => Promise<any>;
+  joinBBBmeeting: (courseId: number) => Promise<CourseOverview>;
 }
 
 export const ApiContext = React.createContext<IApiContext>({
@@ -132,6 +133,7 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const getCertificate = (
     certificateDate: CertificateData
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<AxiosResponse<any>> =>
     api.axiosGetCertificate(id, token, certificateDate);
 

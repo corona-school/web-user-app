@@ -21,4 +21,4 @@ export const subjectOptions = [
   'Italienisch',
   'Russisch',
   'Niederländisch',
-] as const;
+];
