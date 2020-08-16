@@ -18,7 +18,7 @@ interface Props {
   userType: 'student' | 'pupil';
 }
 
-const OpenRequestCard: React.FC<Props> = ({ type }) => {
+const OpenRequestCard: React.FC<Props> = ({ type, userType }) => {
   const [loading, setLoading] = useState(false);
   const { credentials } = useContext(Context.Auth);
   const { user, fetchUserData } = useContext(Context.User);
@@ -86,9 +86,9 @@ const OpenRequestCard: React.FC<Props> = ({ type }) => {
           <ClipLoader size={100} color="#123abc" loading />
         ) : (
           <Text>
-            Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner
-            zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen
-            möchtest.
+            {userType === 'student'
+              ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen möchtest.'
+              : 'Hier kannst du eine*n neue*n Student*in anfordern, die dich beim Lernen unterstützt.'}
           </Text>
         )}
       </CardNewBase>
