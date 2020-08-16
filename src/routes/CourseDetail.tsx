@@ -21,7 +21,7 @@ import {
   DownOutlined,
   ShareAltOutlined,
   WhatsAppOutlined,
-  CopyOutlined
+  CopyOutlined,
 } from '@ant-design/icons';
 import classes from './CourseDetail.module.scss';
 import { UserContext } from '../context/UserContext';
@@ -48,11 +48,13 @@ import { dev } from '../api/config';
 
 moment.locale('de');
 
-const CourseDetail = (params: {id?: string}) => {
+const CourseDetail = (params: { id?: string }) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
   const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
-  const [isCustomShareMenuVisible, setIsCustomShareMenuVisible] = useState(false);
+  const [isCustomShareMenuVisible, setIsCustomShareMenuVisible] = useState(
+    false
+  );
 
   const { id: urlParamID } = useParams();
   const id = params.id ?? urlParamID;
@@ -196,57 +198,56 @@ const CourseDetail = (params: {id?: string}) => {
       });
   };
 
-
   const shareData = {
     title: course.name,
-    text: "Guck dir diesen kostenlosen Kurs der Corona School an!",
-    url: `${window.location.protocol}//${window.location.hostname}/public/courses/${course.id}`
-  }
+    text: 'Guck dir diesen kostenlosen Kurs der Corona School an!',
+    url: `${window.location.protocol}//${window.location.hostname}/public/courses/${course.id}`,
+  };
 
   const copyCourseLink = async () => {
     if (!navigator.clipboard) {
-      message.error("Dein Browser unterstützt das nicht 😔");
+      message.error('Dein Browser unterstützt das nicht 😔');
       return;
     }
 
     try {
       await navigator.clipboard.writeText(shareData.url);
 
-      message.success("Link wurde in die Zwischenablage kopiert!");
+      message.success('Link wurde in die Zwischenablage kopiert!');
+    } catch {
+      message.error('Link konnte nicht kopiert werden!');
     }
-    catch {
-      message.error("Link konnte nicht kopiert werden!");
-    }
-  }
+  };
 
-  const whatsAppShareURL = `whatsapp://send?text=${shareData.text} ${shareData.url}`
+  const whatsAppShareURL = `whatsapp://send?text=${shareData.text} ${shareData.url}`;
 
   const antdShareMenu = (
     <Menu>
-      <Menu.Item icon={<CopyOutlined/>} key="copyLink">
-        <span onClick={copyCourseLink}>
-          Link kopieren
-        </span>
+      <Menu.Item icon={<CopyOutlined />} key="copyLink">
+        <span onClick={copyCourseLink}>Link kopieren</span>
       </Menu.Item>
-      <Menu.Item icon={<WhatsAppOutlined/>} key="shareWhatsApp">
-        <a href={whatsAppShareURL} data-action="share/whatsapp/share" className={classes.shareLink}>
+      <Menu.Item icon={<WhatsAppOutlined />} key="shareWhatsApp">
+        <a
+          href={whatsAppShareURL}
+          data-action="share/whatsapp/share"
+          className={classes.shareLink}
+        >
           WhatsApp
         </a>
       </Menu.Item>
     </Menu>
   );
-  
-  const tsNavigator: any = navigator //so that typescript compiles with share
+
+  const tsNavigator: any = navigator; //so that typescript compiles with share
 
   const shareCourse = () => {
     if (tsNavigator.share) {
       setIsCustomShareMenuVisible(false);
-      tsNavigator.share(shareData)
-    }
-    else {
+      tsNavigator.share(shareData);
+    } else {
       setIsCustomShareMenuVisible(true);
     }
-  }
+  };
 
   const renderCourseInformation = () => {
     const getMenu = () => (
@@ -373,7 +374,12 @@ const CourseDetail = (params: {id?: string}) => {
               />
             </div>
             <div className={classes.shareAction}>
-              <Dropdown overlay={antdShareMenu} trigger={["click"]} visible={isCustomShareMenuVisible} onVisibleChange={ (v) => !v && setIsCustomShareMenuVisible(v)}>
+              <Dropdown
+                overlay={antdShareMenu}
+                trigger={['click']}
+                visible={isCustomShareMenuVisible}
+                onVisibleChange={(v) => !v && setIsCustomShareMenuVisible(v)}
+              >
                 <AntdButton
                   type="primary"
                   style={{
@@ -384,7 +390,7 @@ const CourseDetail = (params: {id?: string}) => {
                     margin: '5px 10px',
                   }}
                   onClick={shareCourse}
-                  icon={<ShareAltOutlined/>}
+                  icon={<ShareAltOutlined />}
                 >
                   Kurs teilen
                 </AntdButton>
@@ -523,7 +529,7 @@ const CourseDetail = (params: {id?: string}) => {
       return false;
     }
 
-    if (course.subcourse.participants === course.subcourse.maxParticipants) {
+    if (course.subcourse.participants >= course.subcourse.maxParticipants) {
       return false;
     }
 
@@ -559,7 +565,11 @@ const CourseDetail = (params: {id?: string}) => {
               <Tag>{moment.unix(l.start).format('DD.MM')}</Tag>
               <Tag>
                 {moment.unix(l.start).format('HH:mm')}-
-                {moment.unix(l.start).add(l.duration, 'minutes').format('HH:mm')} Uhr
+                {moment
+                  .unix(l.start)
+                  .add(l.duration, 'minutes')
+                  .format('HH:mm')}{' '}
+                Uhr
               </Tag>
               <Title bold size="h5">
                 Lektion {i + 1}
@@ -567,8 +577,12 @@ const CourseDetail = (params: {id?: string}) => {
             </div>
 
             <Text>
-              Die {i + 1}te Lektion {moment.unix(l.start).isAfter(Date.now()) ? "findet" : "fand"} {moment.unix(l.start).fromNow()} statt und
-              dauert{moment.unix(l.start).isAfter(Date.now()) ? "" : "e"} ungefähr {l.duration}min. Der Kurs ist für Schüler in der{' '}
+              Die {i + 1}te Lektion{' '}
+              {moment.unix(l.start).isAfter(Date.now()) ? 'findet' : 'fand'}{' '}
+              {moment.unix(l.start).fromNow()} statt und dauert
+              {moment.unix(l.start).isAfter(Date.now())
+                ? ''
+                : 'e'} ungefähr {l.duration}min. Der Kurs ist für Schüler in der{' '}
               {course.subcourse.minGrade}-{course.subcourse.maxGrade} Klasse.{' '}
               <br />
               Tutor: {l.instructor.firstname} {l.instructor.lastname}
