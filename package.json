@@ -130,7 +130,7 @@
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
       "prettier --write",
-      "eslint . --fix"
+      "eslint --fix"
     ],
     "*.{css,md,json,yml}": [
       "prettier --write"

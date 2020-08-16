@@ -153,7 +153,8 @@ export const axiosGetCertificate = (
   id: string,
   token: string,
   certificateDate: CertificateData
-): Promise<AxiosResponse<void>> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<AxiosResponse<any>> => {
   const url = `${apiURL}/certificate/${id}/${certificateDate.student}`;
 
   return new Promise((resolve, reject) => {

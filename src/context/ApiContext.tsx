@@ -20,7 +20,8 @@ interface IApiContext {
   putUserActiveFalse: () => Promise<void>;
   getCertificate: (
     cerfiticateData: CertificateData
-  ) => Promise<AxiosResponse<void>>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ) => Promise<AxiosResponse<any>>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
   getMyCourses: (type: 'student' | 'pupil') => Promise<CourseOverview[]>;
@@ -132,7 +133,8 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const getCertificate = (
     certificateDate: CertificateData
-  ): Promise<AxiosResponse<void>> =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<AxiosResponse<any>> =>
     api.axiosGetCertificate(id, token, certificateDate);
 
   const getCourses = (): Promise<CourseOverview[]> =>
