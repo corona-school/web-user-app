@@ -14,6 +14,11 @@
   text-decoration: none;
   border: none;
 
+  &.disabled {
+    background: #ededed !important;
+    color: #a09e9e !important;
+  }
+
   &:active {
     border: none;
   }

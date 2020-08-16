@@ -38,7 +38,9 @@ const Button: React.FC<PropType> = ({
       <button
         {...props}
         style={{ backgroundColor: backgroundColor, color: color }}
-        className={classnames(classes.baseButton, props.className)}
+        className={classnames(classes.baseButton, props.className, {
+          [classes.disabled]: props.disabled,
+        })}
       >
         {image}
         {props.children}

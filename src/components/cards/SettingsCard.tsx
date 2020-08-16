@@ -93,6 +93,9 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
 
             {user.isTutor && (
               <Button
+                disabled={
+                  user.matches.length + user.dissolvedMatches.length === 0
+                }
                 onClick={() => modalContext.setOpenedModal('certificateModal')}
                 color="#ffffff"
                 backgroundColor="#4E6AE6"
