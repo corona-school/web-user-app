@@ -14,13 +14,21 @@ import { UserContext } from '../context/UserContext';
 
 const MAX_COURSES = 25;
 
-function tutorOrGradeFittingTuteeFilter(
-  grade?: number
-): (c: ParsedCourseOverview) => boolean {
-  return (c) =>
-    !grade ||
-    (c.subcourse?.minGrade <= grade && grade <= c.subcourse?.maxGrade);
-}
+const canJoinCourse = (grade?: number) => (c: ParsedCourseOverview) => {
+  if (!c.subcourse) {
+    return false;
+  }
+
+  if (c.subcourse.participants >= c.subcourse.maxParticipants) {
+    return false;
+  }
+
+  if (!grade) {
+    return true;
+  }
+
+  return c.subcourse.minGrade <= grade && grade <= c.subcourse.maxGrade;
+};
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
@@ -30,9 +38,7 @@ const Course = () => {
   const userContext = useContext(UserContext);
   const history = useHistory();
 
-  const filteredCourses = courses
-    .filter((c) => c.subcourse)
-    .filter(tutorOrGradeFittingTuteeFilter(userContext.user.grade));
+  const filteredCourses = courses.filter(canJoinCourse(userContext.user.grade));
 
   useEffect(() => {
     setLoading(true);
