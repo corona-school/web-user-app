@@ -22,7 +22,7 @@ interface Props {
 }
 
 export const CreateLecture: React.FC<Props> = (props) => {
-  const [start, setStart] = useState<moment.Moment>(moment());
+  const [start, setStart] = useState<moment.Moment>(moment().add(2, 'days'));
   const [duration, setDuration] = useState<number | null>(null);
 
   const [loading, setLoading] = useState(false);
@@ -49,6 +49,14 @@ export const CreateLecture: React.FC<Props> = (props) => {
         >
           Der Kurs ist am
           <DatePicker
+            disabledDate={(date) => {
+              return (
+                moment(new Date())
+                  .startOf('day')
+                  .add(2, 'days')
+                  .diff(date.startOf('day'), 'days') >= 1
+              );
+            }}
             value={start}
             onChange={(v) => setStart(v)}
             style={{ margin: '0px 4px' }}
