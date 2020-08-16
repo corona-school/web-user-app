@@ -12,7 +12,7 @@ import { CompletedSubCourse } from '../components/forms/CreateCourse';
 import { CompletedLecture } from '../routes/CourseForm';
 
 interface IApiContext {
-  getUserData: () => Promise<any>;
+  getUserData: () => Promise<User>;
   dissolveMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string, redirectTo: string) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
@@ -20,7 +20,7 @@ interface IApiContext {
   putUserActiveFalse: () => Promise<void>;
   getCertificate: (
     cerfiticateData: CertificateData
-  ) => Promise<AxiosResponse<any>>;
+  ) => Promise<AxiosResponse<void>>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
   getMyCourses: (type: 'student' | 'pupil') => Promise<CourseOverview[]>;
@@ -64,15 +64,15 @@ interface IApiContext {
     subCourseId: number,
     lectureId: number
   ) => Promise<void>;
-  registerTutee: (tutee: Tutee) => Promise<any>;
-  registerTutor: (tutor: Tutor) => Promise<any>;
+  registerTutee: (tutee: Tutee) => Promise<void>;
+  registerTutor: (tutor: Tutor) => Promise<void>;
   sendCourseGroupMail: (
     courseId: number,
     subCourseId: number,
     subject: string,
     body: string
   ) => Promise<void>;
-  joinBBBmeeting: (courseId: number) => Promise<any>;
+  joinBBBmeeting: (courseId: number) => Promise<CourseOverview>;
 }
 
 export const ApiContext = React.createContext<IApiContext>({
@@ -132,7 +132,7 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const getCertificate = (
     certificateDate: CertificateData
-  ): Promise<AxiosResponse<any>> =>
+  ): Promise<AxiosResponse<void>> =>
     api.axiosGetCertificate(id, token, certificateDate);
 
   const getCourses = (): Promise<CourseOverview[]> =>

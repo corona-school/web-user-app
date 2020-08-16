@@ -67,7 +67,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       apiContext
         .getUserData()
         .then((response) => {
-          setUser(response.data);
+          setUser(response);
           authContext.setStatus('authorized');
         })
         .catch((error) => {

@@ -52,6 +52,7 @@ const ActivityForm = ({ certificateData, setCertificateData }: Props) => {
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderDropdown = (menu: any) => {
     return (
       <div>

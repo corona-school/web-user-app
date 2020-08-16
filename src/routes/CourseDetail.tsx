@@ -184,7 +184,8 @@ const CourseDetail = (params: { id?: string }) => {
       .then((res) => {
         setIsLoadingVideoChat(false);
         // use window.location to not have problems with popup blocking
-        window.location.href = res.url;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        window.location.href = (res as any).url;
       })
       .catch((err) => {
         setIsLoadingVideoChat(false);
@@ -240,7 +241,7 @@ const CourseDetail = (params: { id?: string }) => {
     </Menu>
   );
 
-  const tsNavigator: any = navigator; // so that typescript compiles with share
+  const tsNavigator = navigator; // so that typescript compiles with share
 
   const shareCourse = () => {
     if (tsNavigator.share) {

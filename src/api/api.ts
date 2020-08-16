@@ -65,9 +65,14 @@ export const putUser = (
 // ========================================================================
 
 export const axiosGetUser = (id: string, token: string): Promise<User> => {
-  return axios.get(`${apiURL}/user/${id}`, {
-    headers: { Token: token },
-  });
+  return new Promise((resolve, reject) =>
+    axios
+      .get(`${apiURL}/user/${id}`, {
+        headers: { Token: token },
+      })
+      .then((res) => resolve(res.data))
+      .catch((err) => reject(err))
+  );
 };
 
 export const axiosDissolveMatch = (
@@ -148,7 +153,7 @@ export const axiosGetCertificate = (
   id: string,
   token: string,
   certificateDate: CertificateData
-): Promise<AxiosResponse<any>> => {
+): Promise<AxiosResponse<void>> => {
   const url = `${apiURL}/certificate/${id}/${certificateDate.student}`;
 
   return new Promise((resolve, reject) => {

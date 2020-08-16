@@ -109,8 +109,9 @@
       "radix": "off",
       "react/button-has-type": "off",
       "react-hooks/exhaustive-deps": "off",
-      "@typescript-eslint/no-unused-vars": "error",
       "no-console": "off",
+      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/no-explicit-any": "error",
       "prettier/prettier": [
         "error",
         {
