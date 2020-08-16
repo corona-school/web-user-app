@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Context from '../context';
 import { Empty } from 'antd';
+import { useHistory } from 'react-router-dom';
+import Context from '../context';
 import { Title } from '../components/Typography';
 import Button from '../components/button';
 import Icons from '../assets/icons';
-import { useHistory } from 'react-router-dom';
 import { ParsedCourseOverview } from '../types/Course';
 import MyCourseCard from '../components/cards/MyCourseCard';
 
@@ -52,13 +52,13 @@ const Course = () => {
       .then((c) => {
         setMyCourses(c.map(parseCourse));
       })
-      .catch((e) => {
+      .catch(() => {
         // message.error('Kurse konnten nicht geladen werden.');
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [apiContext]);
+  }, [apiContext, userContext.user.type]);
 
   if (loading) {
     return <div>Kurse werden geladen...</div>;
@@ -86,7 +86,7 @@ const Course = () => {
         </div>
         <div className={classes.myCoursesContainer}>
           {myCourses.length === 0 ? (
-            <Empty description="Du hast im Moment keine Kurse"></Empty>
+            <Empty description="Du hast im Moment keine Kurse" />
           ) : (
             myCourses.map((c) => {
               return <MyCourseCard course={c} ownedByMe />;
@@ -98,11 +98,10 @@ const Course = () => {
       {filteredCourses.length === 0 ? (
         <Empty
           style={{ marginBottom: '64px' }}
-          description={
-            'Es gibt im Moment keine Kurse' +
-            (userContext.user.type === 'pupil' ? ' für deine Klassenstufe' : '')
-          }
-        ></Empty>
+          description={`Es gibt im Moment keine Kurse${
+            userContext.user.type === 'pupil' ? ' für deine Klassenstufe' : ''
+          }`}
+        />
       ) : (
         filteredCourses.map((c) => {
           return <MyCourseCard course={c} />;

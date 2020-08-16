@@ -3,9 +3,7 @@ import styled from 'styled-components';
 import { Title } from './Typography';
 import classes from './Card.module.scss';
 
-interface HightlightProps {}
-
-const Hightlight = styled.div<HightlightProps>`
+const Hightlight = styled.div`
   min-height: 11px;
   max-height: 11px;
   width: 100%;

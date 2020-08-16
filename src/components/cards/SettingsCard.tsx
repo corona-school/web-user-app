@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import { User } from '../../types';
 import StyledReactModal from 'styled-react-modal';
+
+import { User } from '../../types';
 import Button from '../button';
 import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
@@ -25,11 +26,11 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
 
   const renderCourseButton = () => {
     if (user.type !== 'student') {
-      return;
+      return null;
     }
 
     if (user.isInstructor) {
-      return;
+      return null;
     }
 
     return (

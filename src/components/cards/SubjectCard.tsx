@@ -152,15 +152,15 @@ const SubjectCard: React.FC<{
             <SelectWrapper>
               <IconButtonWrapper>
                 <IconButton
-                  icon={'Save'}
-                  label={'Speichern'}
+                  icon="Save"
+                  label="Speichern"
                   onClick={handleSave}
                 />
               </IconButtonWrapper>
               <IconButtonWrapper>
                 <IconButton
-                  icon={'Delete'}
-                  label={'Löschen'}
+                  icon="Delete"
+                  label="Löschen"
                   onClick={handleDelete}
                 />
               </IconButtonWrapper>
@@ -238,7 +238,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
 
   const handleSave = () => {
     const newSubject: Subject = isStudent
-      ? { name: subjectName, minGrade: minGrade, maxGrade: maxGrade }
+      ? { name: subjectName, minGrade, maxGrade }
       : { name: subjectName };
 
     const newSubjects = [...userContext.user.subjects, newSubject];
@@ -320,11 +320,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
               </SelectWrapper>
             )}
             <IconButtonWrapper>
-              <IconButton
-                icon={'Save'}
-                label={'Speichern'}
-                onClick={handleSave}
-              />
+              <IconButton icon="Save" label="Speichern" onClick={handleSave} />
             </IconButtonWrapper>
             <CloseButtonStyle onClick={() => setEditing(false)}>
               <Icons.Close />
@@ -336,8 +332,8 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
             {isStudent && <small>Jahrgangsstufen</small>}
             <IconButtonWrapper>
               <IconButton
-                icon={'Add'}
-                label={'Hinzufügen'}
+                icon="Add"
+                label="Hinzufügen"
                 onClick={() => setEditing(true)}
               />
             </IconButtonWrapper>

@@ -5,7 +5,7 @@ const readCredentials = (): { id: string; token: string } | null => {
     const safe = unsafe.replace(/[^a-zA-Z0-9{":,}_-]/g, '');
     const parsed = JSON.parse(safe);
     if (parsed && parsed.id && parsed.token) return parsed;
-    else return null;
+    return null;
   } catch (error) {
     // TODO: maybe warn user to use a newer browser; maybe check beforehand with "typeof Storage"
     console.error('could not write credentials', error);

@@ -11,7 +11,7 @@ export const redeemVerificationToken = (
 ): Promise<string> =>
   new Promise((resolve, reject) => {
     axios
-      .post(apiURL + '/token', {
+      .post(`${apiURL}/token`, {
         token: verificationToken,
       })
       .then((response) => resolve(response.data.token))
@@ -24,7 +24,7 @@ export const redeemVerificationToken = (
 export const getUserId = (token: string): Promise<string> =>
   new Promise((resolve, reject) => {
     axios
-      .get(apiURL + '/user', {
+      .get(`${apiURL}/user`, {
         headers: { token },
       })
       .then((response) => {
@@ -150,7 +150,7 @@ export const axiosGetCertificate = (
   certificateDate: CertificateData
 ): Promise<AxiosResponse<any>> => {
   const url = `${apiURL}/certificate/${id}/${certificateDate.student}`;
-  console.log(url);
+
   return new Promise((resolve, reject) => {
     const params = new URLSearchParams();
     params.append('subjects', certificateDate.subjects.join(','));

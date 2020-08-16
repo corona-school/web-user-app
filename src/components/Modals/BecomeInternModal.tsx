@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
+import { Input, message, Form, Select, InputNumber } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Title } from '../Typography';
 import Button from '../button';
 import { ModalContext } from '../../context/ModalContext';
 import { User } from '../../types';
-import { Input, message, Form, Select, InputNumber } from 'antd';
 import { ApiContext } from '../../context/ApiContext';
 import { BecomeIntern } from '../../types/Instructor';
 import { UserContext } from '../../context/UserContext';
@@ -19,7 +19,7 @@ interface Props {
   user: User;
 }
 
-const BecomeInternModal: React.FC<Props> = (props) => {
+const BecomeInternModal: React.FC<Props> = () => {
   const [loading, setLoading] = useState(false);
 
   const modalContext = useContext(ModalContext);
@@ -35,7 +35,7 @@ const BecomeInternModal: React.FC<Props> = (props) => {
       !onFinish.subjects
     ) {
       if (dev) console.log('Not all forms filled', onFinish);
-      return null;
+      return;
     }
 
     setLoading(true);
@@ -71,7 +71,7 @@ const BecomeInternModal: React.FC<Props> = (props) => {
       <StyledReactModal isOpen={modalContext.openedModal === 'startInternship'}>
         <div className={classes.modal}>
           <Title size="h2">Praktikum anmelden</Title>
-          <ClipLoader size={100} color={'#123abc'} loading={true} />
+          <ClipLoader size={100} color="#123abc" loading />
           <div className={classes.buttonContainer}>
             <Button backgroundColor="#F4F6FF" color="#4E6AE6">
               Anmelden
@@ -210,7 +210,7 @@ const BecomeInternModal: React.FC<Props> = (props) => {
           >
             <Input.TextArea
               autoSize={{ minRows: 6 }}
-              placeholder={'Kursthema, Zielgruppe, Kursgröße, Interaktion'}
+              placeholder="Kursthema, Zielgruppe, Kursgröße, Interaktion"
             />
           </Form.Item>
           <div className={classes.buttonContainer}>

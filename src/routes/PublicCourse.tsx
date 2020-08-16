@@ -1,21 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Context from '../context';
 import { Empty, Input, AutoComplete, Checkbox } from 'antd';
+import { SelectProps } from 'antd/lib/select';
+import { useHistory } from 'react-router-dom';
+import classNames from 'classnames';
+import Context from '../context';
 import { Title } from '../components/Typography';
 import { ParsedCourseOverview, CourseCategory } from '../types/Course';
 import MyCourseCard from '../components/cards/MyCourseCard';
 
 import classes from './PublicCourse.module.scss';
 import { parseCourse, defaultPublicCourseSort } from '../utils/CourseUtil';
-import { SelectProps } from 'antd/lib/select';
 import { Tag } from '../components/Tag';
-import { useHistory } from 'react-router-dom';
 import { tags } from '../components/forms/CreateCourse';
-import Images from '../assets/images';
 import Icons from '../assets/icons';
-import classNames from 'classnames';
-
-const { Search } = Input;
 
 const categoryToLabel = new Map([
   [CourseCategory.CLUB, 'AGs'],
@@ -45,6 +42,7 @@ const PublicCourse = () => {
   const [checkAll3, setCheckAll3] = useState(true);
 
   const apiContext = useContext(Context.Api);
+  // eslint-disable-next-line @typescript-eslint/ban-types
   const [options, setOptions] = useState<SelectProps<object>['options']>([]);
 
   const history = useHistory();
@@ -57,7 +55,7 @@ const PublicCourse = () => {
       .then((c) => {
         setCourses(c.map(parseCourse).sort(defaultPublicCourseSort));
       })
-      .catch((e) => {
+      .catch(() => {
         // message.error('Kurse konnten nicht geladen werden.');
       })
       .finally(() => {
@@ -75,7 +73,7 @@ const PublicCourse = () => {
         <Empty
           style={{ marginBottom: '64px' }}
           description="Es gibt im Moment keine Kurse"
-        ></Empty>
+        />
       </div>
     );
   }
@@ -113,7 +111,7 @@ const PublicCourse = () => {
   };
 
   const onSelect = (value: string) => {
-    history.push('/public/courses/' + value);
+    history.push(`/public/courses/${value}`);
   };
 
   const onChange = (checkedList: string[], key: string) => {
@@ -167,7 +165,11 @@ const PublicCourse = () => {
             Corona School
           </Title>
         </div>
-        <button className={classes.filterButton} onClick={() => setFilterOpen(!filterOpen)}>
+        <button
+          type="button"
+          className={classes.filterButton}
+          onClick={() => setFilterOpen(!filterOpen)}
+        >
           Filter anzeigen
         </button>
       </div>
@@ -199,14 +201,26 @@ const PublicCourse = () => {
             )
           )
           .map((c) => {
-            return <MyCourseCard course={c} redirect={`/public/courses/${c.id}`} />;
+            return (
+              <MyCourseCard
+                key={c.id}
+                course={c}
+                redirect={`/public/courses/${c.id}`}
+              />
+            );
           })}
       </div>
 
-      <div className={classNames(classes.sideNav, {
-        [classes.navOpen]: filterOpen,
-      })}>
-        <button className={classes.closeButton} onClick={ () => setFilterOpen(false)}>
+      <div
+        className={classNames(classes.sideNav, {
+          [classes.navOpen]: filterOpen,
+        })}
+      >
+        <button
+          type="button"
+          className={classes.closeButton}
+          onClick={() => setFilterOpen(false)}
+        >
           <Icons.Close />
         </button>
         <Title size="h2" style={{ margin: 0 }}>

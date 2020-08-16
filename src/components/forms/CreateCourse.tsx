@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
-import Button from '../button';
 import { Form, Input, Radio, Select, InputNumber, Switch, message } from 'antd';
+import Button from '../button';
 import Context from '../../context';
 
 import classes from './CreateCourse.module.scss';
@@ -91,7 +91,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
           className={classes.formItem}
           name="class"
           rules={[
-            ({ getFieldValue }) => ({
+            () => ({
               required: true,
               validator() {
                 if (!minGrade || !maxGrade || !maxParticipants) {
@@ -288,7 +288,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
         instructors: props.subCourse ? props.subCourse.instructors : [],
         minGrade,
         maxGrade,
-        maxParticipants: maxParticipants,
+        maxParticipants,
         joinAfterStart: !!joinAfterStart,
         published: false,
       };
@@ -349,7 +349,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
         renderFormItems()
       ) : (
         <div className={classes.loadingContainer}>
-          <ClipLoader size={100} color={'#123abc'} loading={true} />
+          <ClipLoader size={100} color="#123abc" loading />
         </div>
       )}
 

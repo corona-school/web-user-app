@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { message } from 'antd';
 import { User, ScreeningStatus } from '../types';
 import storedCredentials from '../api/storedCredentials';
-import { AuthContext } from '../context/AuthContext';
-import { ApiContext } from '../context/ApiContext';
-import { message } from 'antd';
+import { AuthContext } from './AuthContext';
+import { ApiContext } from './ApiContext';
 
 export const defaultUser = {
   id: 'defaultId',

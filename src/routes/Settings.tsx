@@ -49,7 +49,12 @@ const Settings: React.FC = () => {
     ) {
       modalContext.setOpenedModal('accountNotScreened');
     }
-  }, [userContext.user.screeningStatus]);
+  }, [
+    modalContext,
+    userContext.user.instructorScreeningStatus,
+    userContext.user.isInstructor,
+    userContext.user.screeningStatus,
+  ]);
 
   const renderSubjects = () => {
     return (

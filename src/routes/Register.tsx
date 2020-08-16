@@ -1,8 +1,8 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
 import Icons from '../assets/icons';
-import { Link, useLocation } from 'react-router-dom';
 
 import classes from './Register.module.scss';
 
@@ -11,10 +11,9 @@ const useQuery = () => {
 };
 
 const Register = () => {
-
   const params = useQuery();
-  const redirectTo = params.get("redirectTo");
-  
+  const redirectTo = params.get('redirectTo');
+
   return (
     <SignupContainer>
       <div className={classes.signupContainer}>
@@ -32,13 +31,19 @@ const Register = () => {
       </div>
 
       <div className={classes.userTypeContainer}>
-        <Link to={`/register/tutee?redirectTo=${redirectTo ?? ""}`} className={classes.userType}>
+        <Link
+          to={`/register/tutee?redirectTo=${redirectTo ?? ''}`}
+          className={classes.userType}
+        >
           <Icons.SignupSchoolBag />
           <Title size="h2" className={classes.userTitle}>
             Schüler*in
           </Title>
         </Link>
-        <Link to={`/register/tutor?redirectTo=${redirectTo ?? ""}`}  className={classes.userType}>
+        <Link
+          to={`/register/tutor?redirectTo=${redirectTo ?? ''}`}
+          className={classes.userType}
+        >
           <Icons.SignupTutor width="100%" height="100px" />
           <Title size="h2" className={classes.userTitle}>
             Tutor*in

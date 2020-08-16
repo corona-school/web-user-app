@@ -1,5 +1,8 @@
+/* eslint react/prop-types: 0 */
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import moment from 'moment';
+import { Tooltip } from 'antd';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import {
@@ -7,8 +10,6 @@ import {
   CourseCategory,
   ParsedCourseOverview,
 } from '../../types/Course';
-import { Tooltip } from 'antd';
-import { useHistory } from 'react-router-dom';
 import { Tag } from '../Tag';
 import { firstLectureOfSubcourse } from '../../utils/CourseUtil';
 
@@ -52,12 +53,12 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect, ownedByMe }) => {
       history.push(redirect);
       return;
     }
-    console.log(course.subcourse, isMyCourse, course);
+
     if (!course.subcourse && (isMyCourse || ownedByMe)) {
-      history.push('/courses/edit/' + course.id);
+      history.push(`/courses/edit/${course.id}`);
       return;
     }
-    history.push('/courses/' + course.id);
+    history.push(`/courses/${course.id}`);
   };
 
   const renderAdditionalDates = () => {

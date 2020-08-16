@@ -1,8 +1,29 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
 
+import {
+  DeleteOutlined,
+  MailOutlined,
+  CheckCircleOutlined,
+  DownOutlined,
+  ShareAltOutlined,
+  WhatsAppOutlined,
+  CopyOutlined,
+} from '@ant-design/icons';
+import {
+  Empty,
+  Descriptions,
+  Menu,
+  Dropdown,
+  message,
+  Button as AntdButton,
+  List,
+  Tooltip,
+} from 'antd';
 import { ApiContext } from '../context/ApiContext';
 import { AuthContext } from '../context/AuthContext';
 import {
@@ -14,27 +35,8 @@ import {
 import { Title, Text } from '../components/Typography';
 import { Tag } from '../components/Tag';
 import 'moment/locale/de';
-import {
-  DeleteOutlined,
-  MailOutlined,
-  CheckCircleOutlined,
-  DownOutlined,
-  ShareAltOutlined,
-  WhatsAppOutlined,
-  CopyOutlined,
-} from '@ant-design/icons';
 import classes from './CourseDetail.module.scss';
 import { UserContext } from '../context/UserContext';
-import {
-  Empty,
-  Descriptions,
-  Menu,
-  Dropdown,
-  message,
-  Button as AntdButton,
-  List,
-  Tooltip,
-} from 'antd';
 import { parseCourse } from '../utils/CourseUtil';
 import {
   CategoryToLabel,
@@ -84,7 +86,7 @@ const CourseDetail = (params: { id?: string }) => {
           setLoading(false);
         });
     }
-  }, [id]);
+  }, [api, id]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -97,7 +99,7 @@ const CourseDetail = (params: { id?: string }) => {
   const isMyCourse = course.instructors.some((i) => i.id === userId);
 
   const submitCourse = () => {
-    const category = course.category;
+    const { category } = course;
     const tagObj = tags.get(category);
 
     const apiCourse: Course = {
@@ -181,7 +183,7 @@ const CourseDetail = (params: { id?: string }) => {
       .joinBBBmeeting(course.id)
       .then((res) => {
         setIsLoadingVideoChat(false);
-        //use window.location to not have problems with popup blocking
+        // use window.location to not have problems with popup blocking
         window.location.href = res.url;
       })
       .catch((err) => {
@@ -238,7 +240,7 @@ const CourseDetail = (params: { id?: string }) => {
     </Menu>
   );
 
-  const tsNavigator: any = navigator; //so that typescript compiles with share
+  const tsNavigator: any = navigator; // so that typescript compiles with share
 
   const shareCourse = () => {
     if (tsNavigator.share) {
@@ -247,6 +249,118 @@ const CourseDetail = (params: { id?: string }) => {
     } else {
       setIsCustomShareMenuVisible(true);
     }
+  };
+
+  const canJoinCourse = () => {
+    if (!course.subcourse || isStudent) {
+      return false;
+    }
+
+    if (course.subcourse.participants >= course.subcourse.maxParticipants) {
+      return false;
+    }
+
+    const hasCourseStarted = course.subcourse.lectures.some(
+      (l) => new Date().getDate() - l.start < 0
+    );
+    if (!course.subcourse.joinAfterStart && hasCourseStarted) {
+      return false;
+    }
+
+    if (
+      userContext.user.grade >= course.subcourse.minGrade &&
+      userContext.user.grade <= course.subcourse.maxGrade
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const canDisjoinCourse = () => {
+    if (!course.subcourse || isStudent) {
+      return false;
+    }
+
+    return course.subcourse.joined;
+  };
+
+  const renderLectures = () => {
+    if (!course.subcourse) {
+      return <div>Keine Lektionen geplant.</div>;
+    }
+
+    return course.subcourse.lectures
+      .sort((a, b) => a.start - b.start)
+      .map((l, i) => {
+        return (
+          <div className={classes.newsContent} key={l.id}>
+            <div className={classes.newsHeadline}>
+              <Tag>{moment.unix(l.start).format('DD.MM')}</Tag>
+              <Tag>
+                {moment.unix(l.start).format('HH:mm')}-
+                {moment
+                  .unix(l.start)
+                  .add(l.duration, 'minutes')
+                  .format('HH:mm')}{' '}
+                Uhr
+              </Tag>
+              <Title bold size="h5">
+                Lektion {i + 1}
+              </Title>
+            </div>
+
+            <Text>
+              Die {i + 1}te Lektion{' '}
+              {moment.unix(l.start).isAfter(Date.now()) ? 'findet' : 'fand'}{' '}
+              {moment.unix(l.start).fromNow()} statt und dauert
+              {moment.unix(l.start).isAfter(Date.now())
+                ? ''
+                : 'e'} ungefähr {l.duration}min. Der Kurs ist für Schüler in der{' '}
+              {course.subcourse.minGrade}-{course.subcourse.maxGrade} Klasse.{' '}
+              <br />
+              Tutor: {l.instructor.firstname} {l.instructor.lastname}
+            </Text>
+          </div>
+        );
+      });
+  };
+
+  const renderParticipants = () => {
+    if (!course.subcourse) {
+      return null;
+    }
+    if (course.subcourse.participants === 0) {
+      return <Empty description="Du hast noch keine Teilnehmer" />;
+    }
+
+    return (
+      <div>
+        <List
+          style={{
+            margin: '10px',
+            maxWidth: '800px',
+            background: 'white',
+            padding: '4px',
+          }}
+          itemLayout="horizontal"
+          dataSource={course.subcourse.participantList}
+          renderItem={(item) => (
+            <List.Item
+              actions={[
+                <div>{item.schooltype}</div>,
+                <span>{item.grade} Klasse</span>,
+              ]}
+            >
+              <List.Item.Meta
+                title={`${item.firstname} ${item.lastname}`}
+                description={<a href={`mailto:${item.email}`}>{item.email}</a>}
+              />
+            </List.Item>
+          )}
+        />
+      </div>
+    );
   };
 
   const renderCourseInformation = () => {
@@ -369,7 +483,7 @@ const CourseDetail = (params: { id?: string }) => {
               )}
               <ClipLoader
                 size={15}
-                color={'#123abc'}
+                color="#123abc"
                 loading={isLoadingVideoChat}
               />
             </div>
@@ -401,7 +515,7 @@ const CourseDetail = (params: { id?: string }) => {
 
         <Descriptions
           column={3}
-          size={'small'}
+          size="small"
           style={{ margin: '10px', maxWidth: '700px' }}
         >
           {isMyCourse && (
@@ -450,7 +564,7 @@ const CourseDetail = (params: { id?: string }) => {
           </Descriptions.Item>
           <Descriptions.Item label="Dauer">
             {course.subcourse.lectures
-              .map((l) => l.duration + 'min.')
+              .map((l) => `${l.duration}min.`)
               .join(', ')}{' '}
           </Descriptions.Item>
           <Descriptions.Item label="Tutoren">
@@ -486,117 +600,6 @@ const CourseDetail = (params: { id?: string }) => {
         )}
       </div>
     );
-  };
-
-  const renderParticipants = () => {
-    if (!course.subcourse) {
-      return;
-    }
-    if (course.subcourse.participants === 0) {
-      return <Empty description="Du hast noch keine Teilnehmer"></Empty>;
-    }
-
-    return (
-      <div>
-        <List
-          style={{
-            margin: '10px',
-            maxWidth: '800px',
-            background: 'white',
-            padding: '4px',
-          }}
-          itemLayout="horizontal"
-          dataSource={course.subcourse.participantList}
-          renderItem={(item) => (
-            <List.Item
-              actions={[
-                <div>{item.schooltype}</div>,
-                <span>{item.grade} Klasse</span>,
-              ]}
-            >
-              <List.Item.Meta
-                title={item.firstname + ' ' + item.lastname}
-                description={<a href={`mailto:${item.email}`}>{item.email}</a>}
-              />
-            </List.Item>
-          )}
-        />
-      </div>
-    );
-  };
-  const canJoinCourse = () => {
-    if (!course.subcourse || isStudent) {
-      return false;
-    }
-
-    if (course.subcourse.participants >= course.subcourse.maxParticipants) {
-      return false;
-    }
-
-    const hasCourseStarted = course.subcourse.lectures.some(
-      (l) => new Date().getDate() - l.start < 0
-    );
-    if (!course.subcourse.joinAfterStart && hasCourseStarted) {
-      return false;
-    }
-
-    if (
-      userContext.user.grade >= course.subcourse.minGrade &&
-      userContext.user.grade <= course.subcourse.maxGrade
-    ) {
-      return true;
-    }
-
-    return false;
-  };
-
-  const canDisjoinCourse = () => {
-    if (!course.subcourse || isStudent) {
-      return false;
-    }
-
-    return course.subcourse.joined;
-  };
-
-  const renderLectures = () => {
-    if (!course.subcourse) {
-      return <div>Keine Lektionen geplant.</div>;
-    }
-
-    return course.subcourse.lectures
-      .sort((a, b) => a.start - b.start)
-      .map((l, i) => {
-        return (
-          <div className={classes.newsContent} key={l.id}>
-            <div className={classes.newsHeadline}>
-              <Tag>{moment.unix(l.start).format('DD.MM')}</Tag>
-              <Tag>
-                {moment.unix(l.start).format('HH:mm')}-
-                {moment
-                  .unix(l.start)
-                  .add(l.duration, 'minutes')
-                  .format('HH:mm')}{' '}
-                Uhr
-              </Tag>
-              <Title bold size="h5">
-                Lektion {i + 1}
-              </Title>
-            </div>
-
-            <Text>
-              Die {i + 1}te Lektion{' '}
-              {moment.unix(l.start).isAfter(Date.now()) ? 'findet' : 'fand'}{' '}
-              {moment.unix(l.start).fromNow()} statt und dauert
-              {moment.unix(l.start).isAfter(Date.now())
-                ? ''
-                : 'e'} ungefähr {l.duration}min. Der Kurs ist für Schüler in der{' '}
-              {course.subcourse.minGrade}-{course.subcourse.maxGrade} Klasse.{' '}
-              <br />
-              Tutor: {l.instructor.firstname} {l.instructor.lastname}
-            </Text>
-          </div>
-        );
-      });
   };
 
   return (

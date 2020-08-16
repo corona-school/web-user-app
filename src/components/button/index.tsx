@@ -1,8 +1,9 @@
 import React from 'react';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
-import classes from './index.module.scss';
 import styled from 'styled-components';
+import classes from './index.module.scss';
+
 export * from './IconButton';
 export * from './OldButton';
 
@@ -36,8 +37,9 @@ const Button: React.FC<PropType> = ({
   return (
     <StyleWrapper color={color}>
       <button
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...props}
-        style={{ backgroundColor: backgroundColor, color: color }}
+        style={{ backgroundColor, color }}
         className={classnames(classes.baseButton, props.className, {
           [classes.disabled]: props.disabled,
         })}
@@ -77,6 +79,7 @@ export const LinkButton: React.FC<LinkPropType> = ({ image, ...props }) => {
   return (
     <StyleWrapper color={props.color}>
       <a
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...props}
         style={{ color: props.color, backgroundColor: props.backgroundColor }}
         className={classnames(classes.baseButton, props.className)}

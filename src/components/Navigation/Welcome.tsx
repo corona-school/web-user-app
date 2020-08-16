@@ -9,15 +9,15 @@ interface Props {
 }
 
 const Welcome = (props: Props) => {
+  const { user } = props;
+
   return (
     <div className={classes.navigationUser}>
       <div className={classes.icon}>
         <Icons.DefaultProfile width="100%" />
       </div>
-      <div className={classes.navigationName}>Hallo {props.user.firstname}</div>
-      <div className={classes.navigationUserType}>
-        {getUserType(props.user)}
-      </div>
+      <div className={classes.navigationName}>Hallo {user.firstname}</div>
+      <div className={classes.navigationUserType}>{getUserType(user)}</div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Match } from '../../types';
 import styled from 'styled-components';
+import { Match } from '../../types';
 import Button, { LinkButton } from '../button';
 import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
@@ -82,7 +82,7 @@ const MatchCard: React.FC<Props> = ({
               Video-Chat
             </LinkButton>
             <LinkButton
-              href={'mailto:' + match.email}
+              href={`mailto: ${match.email}`}
               style={{ margin: '4px' }}
               color="#71DE5A"
               backgroundColor="#F4FFF2"
