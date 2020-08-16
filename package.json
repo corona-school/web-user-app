@@ -31,6 +31,8 @@
     "classnames": "^2.2.6",
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
     "moment": "^2.26.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
