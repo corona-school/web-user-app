@@ -533,6 +533,13 @@ const CourseDetail = (params: { id?: string }) => {
       return false;
     }
 
+    const hasCourseStarted = course.subcourse.lectures.some(
+      (l) => new Date().getDate() - l.start < 0
+    );
+    if (!course.subcourse.joinAfterStart && hasCourseStarted) {
+      return false;
+    }
+
     if (
       userContext.user.grade >= course.subcourse.minGrade &&
       userContext.user.grade <= course.subcourse.maxGrade
