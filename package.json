@@ -128,9 +128,9 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
+    "src/**/*.{ts,tsx}": [
       "prettier --write",
-      "eslint"
+      "eslint . --fix"
     ],
     "*.{css,md,json,yml}": [
       "prettier --write"
