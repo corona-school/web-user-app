@@ -70,12 +70,9 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
       });
     }
   }, [
-    user.matches,
     certificateData.hoursPerWeek,
     certificateData.endDate,
     certificateData.student,
-    allMatches,
-    certificateData,
   ]);
 
   const isWorkloadAllowedNumber = () => {
