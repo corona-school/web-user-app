@@ -85,7 +85,7 @@ const OpenRequestCard: React.FC<Props> = ({ type, userType }) => {
         {loading ? (
           <ClipLoader size={100} color="#123abc" loading />
         ) : (
-          <Text>
+          <Text className={classes.newTextContainer}>
             {userType === 'student'
               ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen möchtest.'
               : 'Hier kannst du eine*n neue*n Student*in anfordern, die dich beim Lernen unterstützt.'}
