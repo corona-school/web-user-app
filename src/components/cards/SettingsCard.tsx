@@ -6,7 +6,7 @@ import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import CertificateModal from '../Modals/CerificateModal';
-import { dev } from '../../api/config';
+import { getUserType } from '../../utils/UserUtils';
 
 import { Tag } from '../Tag';
 import context from '../../context';
@@ -73,23 +73,25 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
               color="#ffffff"
               style={{ marginLeft: '10px' }}
             >
-              {user.type === 'pupil' ? `Schüler*in` : `Student*in`}
+              {getUserType(user)}
             </Tag>
           </div>
-          <div className={classes.subjectContainer}>
-            <Text large>
-              <b>Fächer</b>
-            </Text>
-            <Text className={classes.emailText} large>
-              {user.subjects.map((s, i) =>
-                i !== user.subjects.length - 1 ? `${s.name}, ` : s.name
-              )}
-            </Text>
-          </div>
+          {user.isTutor && (
+            <div className={classes.subjectContainer}>
+              <Text large>
+                <b>Fächer</b>
+              </Text>
+              <Text className={classes.emailText} large>
+                {user.subjects.map((s, i) =>
+                  i !== user.subjects.length - 1 ? `${s.name}, ` : s.name
+                )}
+              </Text>
+            </div>
+          )}
           <div className={classes.mainButtonContainer}>
             {renderCourseButton()}
 
-            {user.type === 'student' && (
+            {user.isTutor && (
               <Button
                 onClick={() => modalContext.setOpenedModal('certificateModal')}
                 color="#ffffff"

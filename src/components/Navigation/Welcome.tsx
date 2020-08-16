@@ -1,10 +1,11 @@
 import React from 'react';
 import classes from './Welcome.module.scss';
 import Icons from '../../assets/icons';
+import { User } from '../../types';
+import { getUserType } from '../../utils/UserUtils';
 
 interface Props {
-  firstname: string;
-  type: 'student' | 'pupil';
+  user: User;
 }
 
 const Welcome = (props: Props) => {
@@ -13,9 +14,9 @@ const Welcome = (props: Props) => {
       <div className={classes.icon}>
         <Icons.DefaultProfile width="100%" />
       </div>
-      <div className={classes.navigationName}>Hallo {props.firstname}</div>
+      <div className={classes.navigationName}>Hallo {props.user.firstname}</div>
       <div className={classes.navigationUserType}>
-        {props.type === 'pupil' ? 'Schüler*in' : 'Student*in'}
+        {getUserType(props.user)}
       </div>
     </div>
   );

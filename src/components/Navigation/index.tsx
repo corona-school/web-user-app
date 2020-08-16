@@ -26,6 +26,7 @@ const Navigation: React.FC<Props> = (props) => {
       isInstructor,
       isTutor,
     },
+    user,
   } = useContext(UserContext);
   const history = useHistory();
 
@@ -47,7 +48,7 @@ const Navigation: React.FC<Props> = (props) => {
         Corona School
       </div>
       <div className={classes.navigationGroup}>
-        <Welcome firstname={firstname} type={type} />
+        <Welcome user={user} />
         <div className={classes.section}>Menü</div>
         {(type === 'pupil' || isTutor) && (
           <NavButton
