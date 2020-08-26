@@ -54,7 +54,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
                 moment(new Date())
                   .startOf('day')
                   .add(2, 'days')
-                  .diff(date.startOf('day'), 'days') >= 1
+                  .diff(date.clone().startOf('day'), 'days') >= 1
               );
             }}
             value={start}
