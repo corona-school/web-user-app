@@ -180,7 +180,7 @@ const CourseDetail = (params: { id?: string }) => {
   const joinBBBmeeting = () => {
     setIsLoadingVideoChat(true);
     api
-      .joinBBBmeeting(course.id)
+      .joinBBBmeeting(course.id, course.subcourse.id)
       .then((res) => {
         setIsLoadingVideoChat(false);
         // use window.location to not have problems with popup blocking
