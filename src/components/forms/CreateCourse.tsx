@@ -95,7 +95,12 @@ export const CreateCourse: React.FC<Props> = (props) => {
               required: true,
               validator() {
                 if (!minGrade || !maxGrade || !maxParticipants) {
-                  return Promise.reject('Du musst die Klassen begrenzen.');
+                  return Promise.reject('Bitte fülle alle Felder aus.');
+                }
+                if (minGrade > maxGrade) {
+                  return Promise.reject(
+                    `Bitte begrenze die Klassen von niedrigste bis höchste Klasse.`
+                  );
                 }
                 if (maxParticipants < 3) {
                   return Promise.reject(
@@ -112,7 +117,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
             style={{ margin: '0px 4px', width: '64px' }}
             onChange={(v) => setMinGrade(Number(v))}
             min={1}
-            max={maxGrade || 13}
+            max={13}
             placeholder="5"
             value={minGrade}
           />
@@ -120,7 +125,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
           <InputNumber
             style={{ margin: '0px 4px', width: '64px' }}
             onChange={(v) => setMaxGrade(Number(v))}
-            min={minGrade || 1}
+            min={1}
             max={13}
             placeholder="7"
             value={maxGrade}

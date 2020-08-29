@@ -87,8 +87,16 @@ const Matches: React.FC = () => {
         <div className={classes.openRequests}>{openRequests}</div>
       </div>
       <Title size="h2">Deine Zuordnungen</Title>
+      {currentMatches.length === 0 && (
+        <Empty
+          style={{ maxWidth: '1000px' }}
+          description="Du hast keine aktiven Zuordnungen"
+        />
+      )}
       {currentMatches}
-      <Title size="h2">Entfernte Zuordnungen</Title>
+      {dissolvedMatches.length > 0 && (
+        <Title size="h2">Entfernte Zuordnungen</Title>
+      )}
       {dissolvedMatches}
     </div>
   );

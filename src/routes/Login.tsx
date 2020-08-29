@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Redirect, useLocation, Link } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import classnames from 'classnames';
 import { Input, message } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -8,7 +8,7 @@ import Context from '../context';
 
 import storedCredentials from '../api/storedCredentials';
 import Icons from '../assets/icons';
-import Button from '../components/button';
+import Button, { LinkButton } from '../components/button';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
 
@@ -218,30 +218,32 @@ const Login: React.FC = () => {
           </Text>
         )}
         {loginState !== 'success' && (
-          <Button
-            className={classes.signinButton}
-            color="white"
-            backgroundColor="#4E6AE6"
-            onClick={login}
-          >
-            Anmelden
-          </Button>
+          <div className={classes.loginButtonContainer}>
+            <Button
+              className={classes.signinButton}
+              color="white"
+              backgroundColor="#4E6AE6"
+              onClick={login}
+            >
+              Anmelden
+            </Button>
+            <LinkButton
+              href="/register"
+              className={classes.registerButton}
+              color="#4E6AE6"
+              backgroundColor="white"
+            >
+              Registrieren
+            </LinkButton>
+          </div>
         )}
-        {loginState !== 'idle' && (
-          <Text className={classes.helpText}>
-            Bei technischen Schwierigkeiten kannst du dich jederzeit an{` `}
-            <a href="mailto:support@corona-school.de">
-              support@corona-school.de
-            </a>{' '}
-            wenden.
-          </Text>
-        )}
-        <Text className={classes.description}>
-          Du hast noch kein Account? Hier{' '}
-          <Link to={`/register?redirectTo=${redirectPath ?? ''}`}>
-            <a>registrieren</a>
-          </Link>
-          .
+
+        <Text className={classes.helpText}>
+          Bei technischen Schwierigkeiten kannst du dich jederzeit an{` `}
+          <a href="mailto:support@corona-school.de">
+            support@corona-school.de
+          </a>{' '}
+          wenden.
         </Text>
       </div>
     </SignupContainer>

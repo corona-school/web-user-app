@@ -180,7 +180,7 @@ const CourseDetail = (params: { id?: string }) => {
   const joinBBBmeeting = () => {
     setIsLoadingVideoChat(true);
     api
-      .joinBBBmeeting(course.id)
+      .joinBBBmeeting(course.id, course.subcourse.id)
       .then((res) => {
         setIsLoadingVideoChat(false);
         // use window.location to not have problems with popup blocking
@@ -261,8 +261,8 @@ const CourseDetail = (params: { id?: string }) => {
       return false;
     }
 
-    const hasCourseStarted = course.subcourse.lectures.some(
-      (l) => new Date().getDate() - l.start < 0
+    const hasCourseStarted = course.subcourse.lectures.some((l) =>
+      moment.unix(l.start).isBefore(moment())
     );
     if (!course.subcourse.joinAfterStart && hasCourseStarted) {
       return false;

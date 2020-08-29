@@ -26,7 +26,8 @@
   background-color: $navigationBackground;
 
   .header {
-    min-height: fit-content;
+    min-height: 62px;
+    max-height: 62px;
     svg {
       margin-right: 8px;
       path {
