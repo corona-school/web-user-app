@@ -86,7 +86,7 @@ const Settings: React.FC = () => {
       <Title>Deine Informationen</Title>
       <SettingsCard user={userContext.user} />
 
-      {userContext.user.isTutor && renderSubjects()}
+      {renderSubjects()}
       <StyledReactModal
         isOpen={modalContext.openedModal === 'accountNotScreened'}
       >

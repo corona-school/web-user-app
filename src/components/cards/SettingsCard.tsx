@@ -77,18 +77,16 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
               {getUserType(user)}
             </Tag>
           </div>
-          {user.isTutor && (
-            <div className={classes.subjectContainer}>
-              <Text large>
-                <b>Fächer</b>
-              </Text>
-              <Text className={classes.emailText} large>
-                {user.subjects.map((s, i) =>
-                  i !== user.subjects.length - 1 ? `${s.name}, ` : s.name
-                )}
-              </Text>
-            </div>
-          )}
+          <div className={classes.subjectContainer}>
+            <Text large>
+              <b>Fächer</b>
+            </Text>
+            <Text className={classes.emailText} large>
+              {user.subjects.map((s, i) =>
+                i !== user.subjects.length - 1 ? `${s.name}, ` : s.name
+              )}
+            </Text>
+          </div>
           <div className={classes.mainButtonContainer}>
             {renderCourseButton()}
 
