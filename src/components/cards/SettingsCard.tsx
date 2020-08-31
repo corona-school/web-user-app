@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
 
+import { message } from 'antd';
 import { User } from '../../types';
 import Button from '../button';
 import Icons from '../../assets/icons';
@@ -15,6 +16,10 @@ import context from '../../context';
 import classes from './SettingsCard.module.scss';
 import BecomeInstructorModal from '../Modals/BecomeInstructorModal';
 import BecomeInternModal from '../Modals/BecomeInternModal';
+import EditableUserSettingsCard, {
+  EditableUserSettings,
+} from './EditableUserSettingsCard';
+import SaveEditButton from '../button/SaveEditButton';
 
 interface Props {
   user: User;
@@ -23,6 +28,30 @@ interface Props {
 const SettingsCard: React.FC<Props> = ({ user }) => {
   const modalContext = useContext(context.Modal);
   const ApiContext = useContext(context.Api);
+
+  const [editableUserSettings, setEditableUserSettings] = useState<
+    EditableUserSettings
+  >({
+    state: user.state,
+    grade: user.grade,
+    schoolType: user.schoolType,
+    university: user.university,
+  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const saveUserChanges = async () => {
+    try {
+      setIsSaving(true);
+      await ApiContext.putUser({ ...user, ...editableUserSettings });
+      setIsSaving(false);
+      setIsEditing(false);
+    } catch {
+      message.error('Ein Fehler ist aufgetreten. Probiere es noch einmal!');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const renderCourseButton = () => {
     if (user.type !== 'student') {
@@ -87,6 +116,12 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
               )}
             </Text>
           </div>
+          <EditableUserSettingsCard
+            editableUserSettings={editableUserSettings}
+            onSettingChanges={setEditableUserSettings}
+            isEditing={isEditing}
+            personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
+          />
           <div className={classes.mainButtonContainer}>
             {renderCourseButton()}
 
@@ -111,6 +146,17 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             >
               <Icons.Delete /> Deaktivieren
             </Button>
+            <SaveEditButton
+              isEditing={isEditing}
+              isLoading={isSaving}
+              onEditChange={(nowEditing) => {
+                if (!nowEditing) {
+                  saveUserChanges();
+                } else {
+                  setIsEditing(nowEditing);
+                }
+              }}
+            />
           </div>
         </div>
       </CardBase>
