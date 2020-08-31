@@ -1,13 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Title, Text } from '../components/Typography';
 import classes from './Dashboard.module.scss';
 import { Tag } from '../components/Tag';
 import { getStatus, getNextSteps, getNews } from '../utils/DashboardUtils';
 import { UserContext } from '../context/UserContext';
 import { ColumnCard } from '../components/Card';
+import UpdateInformationBlockerModal, {
+  MODAL_IDENTIFIER as UpdateInformationBlockerModalIdentifier,
+} from '../components/Modals/UpdateInformationBlockerModal';
+import Context from '../context';
 
 const Dashboard: React.FC = () => {
+  const { setOpenedModal } = useContext(Context.Modal);
   const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    setOpenedModal(UpdateInformationBlockerModalIdentifier);
+  }, [setOpenedModal]);
 
   const renderStatusText = () => {
     const status = getStatus(user);
@@ -97,6 +106,7 @@ const Dashboard: React.FC = () => {
         </Title>
         <div className={classes.bottomGrid}>{renderNextSteps()}</div>
       </div>
+      <UpdateInformationBlockerModal user={user} />
     </div>
   );
 };
