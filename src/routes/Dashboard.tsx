@@ -61,9 +61,14 @@ const Dashboard: React.FC = () => {
 
     return steps.map((s) => {
       return (
-        <ColumnCard title={s.title} image={s.image} button={s.action}>
+        <ColumnCard
+          key={s.title}
+          title={s.title}
+          image={s.image}
+          button={s.action}
+        >
           {s.texts.map((text) => {
-            return <Text>{text}</Text>;
+            return <Text key={text}>{text}</Text>;
           })}
         </ColumnCard>
       );
@@ -75,7 +80,7 @@ const Dashboard: React.FC = () => {
 
     return news.map((n) => {
       return (
-        <div className={classes.newsContent}>
+        <div className={classes.newsContent} key={n.headline + n.text}>
           <div className={classes.newsHeadline}>
             <Tag>NEU</Tag>
             <Title bold size="h5">
