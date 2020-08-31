@@ -15,7 +15,7 @@ import { User } from '../../types';
 import classes from './UpdateInformationBlockerModal.module.scss';
 
 export const MODAL_IDENTIFIER = 'updateInformationBlocker';
-const MODAL_TITLE = 'Bitte aktualisiere deine Informationen';
+const MODAL_TITLE = 'Bitte aktualisiere deine Informationen zum Schulstart';
 
 interface Props {
   user: User;
