@@ -16,6 +16,9 @@ export interface User {
   dissolvedMatches: Match[];
   screeningStatus: ScreeningStatus;
   instructorScreeningStatus: ScreeningStatus;
+  state?: string;
+  university?: string;
+  schoolType?: string;
 }
 
 export enum ScreeningStatus {
