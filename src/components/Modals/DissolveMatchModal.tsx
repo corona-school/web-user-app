@@ -160,9 +160,16 @@ const DissolveMatchModal: React.FC<{
       ) : (
         <>
           <Question>
-            <p className="question">
-              Konntest du {matchFirstname} erfolgreich unterstützen?
-            </p>
+            {ownType === 'student' &&
+              <p className="question">
+                Konntest du {matchFirstname} erfolgreich unterstützen?
+              </p>
+            }
+            {ownType === 'pupil' &&
+              <p className="question">
+                Konnte dich {matchFirstname} erfolgreich unterstützen?
+              </p>
+            }
             <div>
               <CheckboxButton
                 label="Ja"
@@ -182,7 +189,7 @@ const DissolveMatchModal: React.FC<{
                 Wir möchten uns bei dir für deine Hilfe bedanken!
                 <br />
                 <br />
-                Ohne dich wäre diese Projekt nicht möglich. Danke, dass du in
+                Ohne dich wäre dieses Projekt nicht möglich. Danke, dass du in
                 dieser schwierigen Zeit gesellschaftliche Verantwortung
                 übernommen hast!
                 <br />
@@ -204,10 +211,18 @@ const DissolveMatchModal: React.FC<{
           {supportSuccessful === false && (
             <>
               <Question>
-                <p className="question">
-                  Warum konntest du {matchFirstname} nicht erfolgreich
-                  unterstützen?
-                </p>
+                {ownType === 'student' &&
+                  <p className="question">
+                    Warum konntest du {matchFirstname} nicht erfolgreich
+                    unterstützen?
+                  </p>
+                }
+                {ownType === 'pupil' &&
+                  <p className="question">
+                    Warum konnte dich {matchFirstname} nicht erfolgreich
+                    unterstützen?
+                  </p>
+                }
                 {Object.entries(reasonOptions).map(([key, value]) => (
                   <CheckboxButton
                     key={key}
