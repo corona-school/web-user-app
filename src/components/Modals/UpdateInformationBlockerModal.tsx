@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
-import { Input, message } from 'antd';
+import { message } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
 import { Title, Text } from '../Typography';
