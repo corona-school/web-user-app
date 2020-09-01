@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import moment from 'moment';
 import { Title, Text } from '../components/Typography';
 import classes from './Dashboard.module.scss';
 import { Tag } from '../components/Tag';
@@ -15,8 +16,20 @@ const Dashboard: React.FC = () => {
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    setOpenedModal(UpdateInformationBlockerModalIdentifier);
-  }, [setOpenedModal]);
+    const shouldShowUpdateInformationBlocker =
+      !user.lastUpdatedSettingsViaBlocker ||
+      moment().isAfter(
+        moment('2042-09-01') // always show blocker on 09-01 in following year after settings were last updated via the blocker
+          .year(moment.unix(user.lastUpdatedSettingsViaBlocker).year())
+          .add(1, 'year')
+      );
+
+    if (shouldShowUpdateInformationBlocker) {
+      setOpenedModal(UpdateInformationBlockerModalIdentifier);
+    } else {
+      setOpenedModal(null);
+    }
+  }, [setOpenedModal, user.lastUpdatedSettingsViaBlocker]);
 
   const renderStatusText = () => {
     const status = getStatus(user);

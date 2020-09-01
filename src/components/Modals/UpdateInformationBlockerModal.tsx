@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import { Input, message } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
+import moment from 'moment';
 import { Title, Text } from '../Typography';
 import Button from '../button';
 import { ModalContext } from '../../context/ModalContext';
@@ -40,7 +41,11 @@ const UpdateInformationBlockerModal: React.FC<Props> = ({ user }) => {
     setIsSaving(true);
 
     try {
-      await api.putUser({ ...user, ...editableUserSettings });
+      await api.putUser({
+        ...user,
+        ...editableUserSettings,
+        lastUpdatedSettingsViaBlocker: moment().unix(),
+      });
       modalContext.setOpenedModal(null);
       userContext.fetchUserData();
     } catch {

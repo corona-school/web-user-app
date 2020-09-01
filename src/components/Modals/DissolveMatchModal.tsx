@@ -98,6 +98,7 @@ const DissolveMatchModal: React.FC<{
       firstname: user.firstname,
       lastname: user.lastname,
       matchesRequested: Math.min(user.matchesRequested + 1, 2),
+      lastUpdatedSettingsViaBlocker: user.lastUpdatedSettingsViaBlocker,
     })
       .catch((err) => {
         if (dev) console.error(err);

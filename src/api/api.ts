@@ -51,6 +51,7 @@ export const putUser = (
     state?: string;
     university?: string;
     schoolType?: string;
+    lastUpdatedSettingsViaBlocker: number;
   }
 ): Promise<void> =>
   new Promise((resolve, reject) => {
