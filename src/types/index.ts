@@ -20,6 +20,7 @@ export interface User {
   university?: string;
   schoolType?: string;
   lastUpdatedSettingsViaBlocker: number;
+  registrationDate: number;
 }
 
 export enum ScreeningStatus {

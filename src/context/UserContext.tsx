@@ -16,6 +16,7 @@ export const defaultUser = {
   screeningStatus: ScreeningStatus.Accepted,
   instructorScreeningStatus: ScreeningStatus.Accepted,
   lastUpdatedSettingsViaBlocker: null,
+  registrationDate: null,
   matches: [
     {
       firstname: 'defaultPupilFirstname',

@@ -10,6 +10,7 @@ import UpdateInformationBlockerModal, {
   MODAL_IDENTIFIER as UpdateInformationBlockerModalIdentifier,
 } from '../components/Modals/UpdateInformationBlockerModal';
 import Context from '../context';
+import { nextDateOfYearAfterDate } from '../utils/DateUtils';
 
 const Dashboard: React.FC = () => {
   const { setOpenedModal } = useContext(Context.Modal);
@@ -17,19 +18,30 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const shouldShowUpdateInformationBlocker =
-      !user.lastUpdatedSettingsViaBlocker ||
-      moment().isAfter(
-        moment('2042-09-01') // always show blocker on 09-01 in following year after settings were last updated via the blocker
-          .year(moment.unix(user.lastUpdatedSettingsViaBlocker).year())
-          .add(1, 'year')
-      );
+      (!user.lastUpdatedSettingsViaBlocker &&
+        moment().isAfter(
+          nextDateOfYearAfterDate(1, 8, moment.unix(user.registrationDate))
+        )) ||
+      (user.lastUpdatedSettingsViaBlocker &&
+        moment().isAfter(
+          // always show blocker on 09-01 in following year after settings were last updated via the blocker
+          nextDateOfYearAfterDate(
+            1,
+            8,
+            moment.unix(user.lastUpdatedSettingsViaBlocker)
+          )
+        ));
 
     if (shouldShowUpdateInformationBlocker) {
       setOpenedModal(UpdateInformationBlockerModalIdentifier);
     } else {
       setOpenedModal(null);
     }
-  }, [setOpenedModal, user.lastUpdatedSettingsViaBlocker]);
+  }, [
+    setOpenedModal,
+    user.lastUpdatedSettingsViaBlocker,
+    user.registrationDate,
+  ]);
 
   const renderStatusText = () => {
     const status = getStatus(user);
