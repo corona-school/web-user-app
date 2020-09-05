@@ -446,7 +446,7 @@ const RegisterTutee = () => {
         form.resetFields();
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response?.status === 401) {
           setLoading(false);
           message.error('Du bist schon als Schüler*in bei uns eingetragen.');
           return;
