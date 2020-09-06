@@ -128,16 +128,16 @@ const PublicCourse = () => {
     if (key === '2') {
       setCheckedList2(checkedList);
       setIndeterminate2(
-        !!checkedList.length && checkedList.length < default1.length
+        !!checkedList.length && checkedList.length < default2.length
       );
-      setCheckAll2(checkedList.length === default1.length);
+      setCheckAll2(checkedList.length === default2.length);
     }
     if (key === '3') {
       setCheckedList3(checkedList);
       setIndeterminate3(
-        !!checkedList.length && checkedList.length < default1.length
+        !!checkedList.length && checkedList.length < default3.length
       );
-      setCheckAll3(checkedList.length === default1.length);
+      setCheckAll3(checkedList.length === default3.length);
     }
   };
 
