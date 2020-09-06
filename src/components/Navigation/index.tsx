@@ -7,7 +7,7 @@ import { UserContext } from '../../context/UserContext';
 import Icons from '../../assets/icons';
 import { ScreeningStatus } from '../../types';
 import classes from './index.module.scss';
-import { NavButton, NavActionButton } from './NavButton';
+import { NavActionButton, NavButton } from './NavButton';
 import Welcome from './Welcome';
 import { SocialMediaButton } from '../button/IconButton';
 
@@ -82,6 +82,15 @@ const Navigation: React.FC<Props> = (props) => {
             onClick={() => props.setMenuOpen(false)}
           >
             Zuordnung
+          </NavButton>
+        )}
+        {(isInstructor || isTutor) && (
+          <NavButton
+            to="/mentoring"
+            active={screeningStatus === ScreeningStatus.Accepted}
+            onClick={() => props.setMenuOpen(false)}
+          >
+            Mentoring
           </NavButton>
         )}
         <NavButton

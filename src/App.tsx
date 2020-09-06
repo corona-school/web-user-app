@@ -13,6 +13,7 @@ import Help from './routes/Help';
 import Login from './routes/Login';
 import Verify from './routes/Verify';
 import PublicCourse from './routes/PublicCourse';
+import Mentoring from './routes/Mentoring';
 
 import { ScreeningStatus } from './types';
 import NotFound from './routes/NotFound';
@@ -124,6 +125,9 @@ const App: React.FC = () => {
           </PrivateRoute>
           <PrivateRoute path="/settings">
             <Settings />
+          </PrivateRoute>
+          <PrivateRoute path="/mentoring">
+            <Mentoring />
           </PrivateRoute>
           <PrivateRoute path="/feedback">
             <Feedback />
