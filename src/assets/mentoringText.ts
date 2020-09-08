@@ -1,2 +1,9 @@
 export const mentoringText =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+  'Online-Nachhilfe ist möglicherweise auch für dich eine neue Erfahrung, ' +
+  'welche viele Fragen und Schwierigkeiten aufwirft. Damit bist du nicht ' +
+  'allein! Wir haben ein Mentoring-Programm entwickelt, um dich optimal zu ' +
+  'unterstützen. Mentor*innen der Corona School zeichnen sich durch ihre ' +
+  'Berufserfahrungen und Expertise in verschiedenen Bereichen aus. Hier ' +
+  'kannst du deine Fragen loswerden und wertvolle Tipps für gute, digitale ' +
+  'Zusammenarbeit erhalten. Darüber hinaus kannst du dich mit anderen ' +
+  'Studierenden bei Feedback-Calls oder in der Facebook-Gruppe austauschen.';
