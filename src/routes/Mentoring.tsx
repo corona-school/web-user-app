@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import classes from './Mentoring.module.scss';
 import { Title, Text } from '../components/Typography';
 import { mentoringText } from '../assets/mentoringText';
 import { ContactCard } from '../components/cards/ContactCard';
+import { UserContext } from '../context/UserContext';
 
 const Categories = [
   {
@@ -29,6 +30,10 @@ const Categories = [
 ];
 
 const Mentoring = () => {
+  const userContext = useContext(UserContext);
+
+  if (userContext.user.type !== 'student') return <></>;
+
   return (
     <div className={classes.container}>
       <div className={classes.header}>
