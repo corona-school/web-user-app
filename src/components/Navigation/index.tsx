@@ -94,6 +94,16 @@ const Navigation: React.FC<Props> = (props) => {
             Mentoring
           </NavButton>
         )}
+        {(isInstructor || isTutor) && (
+          <NavButton
+            to="/helpsection"
+            icon={<Icons.HelpSection />}
+            active={screeningStatus === ScreeningStatus.Accepted}
+            onClick={() => props.setMenuOpen(false)}
+          >
+            Hilfestellungen
+          </NavButton>
+        )}
         <NavButton
           to="/settings"
           icon={<Icons.Settings />}

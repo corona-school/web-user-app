@@ -5,6 +5,7 @@ import { ReactComponent as Contact } from './ico-contact.svg';
 import { ReactComponent as Delete } from './ico-delete.svg';
 import { ReactComponent as Feedback } from './ico-feedback.svg';
 import { ReactComponent as Help } from './ico-help.svg';
+import { ReactComponent as HelpSection } from './ico-help-section.svg';
 import { ReactComponent as Home } from './ico-home.svg';
 import { ReactComponent as Logout } from './ico-logout.svg';
 import { ReactComponent as Match } from './ico-match.svg';
@@ -52,6 +53,7 @@ const IconsList = {
   Delete,
   Feedback,
   Help,
+  HelpSection,
   Home,
   Logout,
   Match,

@@ -25,6 +25,7 @@ import RegisterTutor from './routes/RegisterTutor';
 import { CourseForm } from './routes/CourseForm';
 import CourseDetail from './routes/CourseDetail';
 import PublicCourseDetail from './routes/PublicCourseDetail';
+import { HelpSection } from './routes/HelpSection';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -128,6 +129,9 @@ const App: React.FC = () => {
           </PrivateRoute>
           <PrivateRoute path="/mentoring">
             <Mentoring />
+          </PrivateRoute>
+          <PrivateRoute path="/helpsection">
+            <HelpSection />
           </PrivateRoute>
           <PrivateRoute path="/feedback">
             <Feedback />
