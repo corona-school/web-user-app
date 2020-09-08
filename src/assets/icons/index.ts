@@ -8,6 +8,7 @@ import { ReactComponent as Help } from './ico-help.svg';
 import { ReactComponent as Home } from './ico-home.svg';
 import { ReactComponent as Logout } from './ico-logout.svg';
 import { ReactComponent as Match } from './ico-match.svg';
+import { ReactComponent as Mentoring } from './ico-mentoring.svg';
 import { ReactComponent as Save } from './ico-save.svg';
 import { ReactComponent as Settings } from './ico-settings.svg';
 import { ReactComponent as Undo } from './ico-undo.svg';
@@ -53,6 +54,7 @@ const IconsList = {
   Home,
   Logout,
   Match,
+  Mentoring,
   Save,
   Settings,
   Undo,
