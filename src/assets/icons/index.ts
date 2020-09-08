@@ -35,6 +35,7 @@ import { ReactComponent as BackgroundTriangleYellow } from './background_triangl
 import { ReactComponent as WriteFilled } from './write-filled.svg';
 import { ReactComponent as DownloadWeb } from './download-web.svg';
 import { ReactComponent as Palm } from './palm.svg';
+import { ReactComponent as Studying } from './studying.svg';
 
 import { ReactComponent as SignupEmailSent } from './signup/email-sent.svg';
 import { ReactComponent as SignupNumber1 } from './signup/number-1.svg';
@@ -87,6 +88,7 @@ const IconsList = {
   SignupSchoolBag,
   SignupTutor,
   Palm,
+  Studying,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
