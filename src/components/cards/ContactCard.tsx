@@ -40,7 +40,7 @@ export const ContactCard = (props) => {
   const Content = () => {
     return (
       <div className={classes.content}>
-        <Title size="h4" style={{ marginLeft: '0px' }}>
+        <Title size="h4" className={classes.title}>
           Du hast Fragen?
         </Title>
         <div className={classes.categorySelect}>
@@ -49,29 +49,37 @@ export const ContactCard = (props) => {
             value={recipient}
             onChange={(value) => setRecipient(value)}
             options={props.categories}
-            style={{ marginLeft: 10, minWidth: 430 }}
+            style={{ marginLeft: 10 }}
           />
         </div>
-        <Icons.Studying />
-        <TextArea
-          rows={4}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <Checkbox
-          checked={checkAgreement}
-          onChange={(e) => setCheckAgreement(e.target.checked)}
-        >
-          Agreement
-        </Checkbox>
+        <div className={classes.image}>
+          <Icons.Studying />
+        </div>
+        <div className={classes.input}>
+          <TextArea
+            rows={4}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+        </div>
+        <div className={classes.checkbox}>
+          <Checkbox
+            checked={checkAgreement}
+            onChange={(e) => setCheckAgreement(e.target.checked)}
+          >
+            Agreement
+          </Checkbox>
+        </div>
         {formState === 'failed' && (
-          <div style={{ color: 'red' }}>
+          <div className={classes.warning}>
             Bitte bestätige noch das Agreement.
           </div>
         )}
-        <Button color="white" backgroundColor={cardColor} onClick={submit}>
-          Abschicken
-        </Button>
+        <div className={classes.button}>
+          <Button color="white" backgroundColor={cardColor} onClick={submit}>
+            Abschicken
+          </Button>
+        </div>
       </div>
     );
   };
