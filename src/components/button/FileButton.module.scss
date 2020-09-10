@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  height: 60px;
+  width: 200px;
+
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  svg {
+    height: 100%;
+  }
+
+  .text {
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: 100%;
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    overflow: hidden;
+    text-overflow: clip;
+  }
+
+}
