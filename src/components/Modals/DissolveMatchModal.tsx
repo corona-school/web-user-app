@@ -9,6 +9,7 @@ import {
 import { ButtonDestructive, ButtonNonDestructive } from '../button';
 import Context from '../../context';
 import { putUser } from '../../api/api';
+import { dev } from '../../api/config';
 
 const Question = styled.div`
   color: ${(props) => props.theme.color.gray1};
@@ -91,16 +92,22 @@ const DissolveMatchModal: React.FC<{
   const { credentials } = useContext(Context.Auth);
   const { user, fetchUserData } = useContext(Context.User);
 
-  const requestNewMatch = (): void => {
+  const requestNewMatch = () => {
     if (typeof user.matchesRequested !== 'number') return;
     putUser(credentials, {
       firstname: user.firstname,
       lastname: user.lastname,
       matchesRequested: Math.min(user.matchesRequested + 1, 2),
-    }).then(fetchUserData);
+    })
+      .catch((err) => {
+        if (dev) console.error(err);
+      })
+      .finally(() => {
+        fetchUserData();
+      });
   };
 
-  const endCollaboration = (): Promise<void> =>
+  const endCollaboration = () =>
     apiContext.dissolveMatch(
       matchUuid,
       supportSuccessful ? -1 : Number(reasonSelected)
@@ -118,7 +125,7 @@ const DissolveMatchModal: React.FC<{
           ? 'Die Zusammenarbeit wurde erfolgreich beendet!'
           : 'Schade, dass du die Zusammenarbeit beenden möchtest.'
       }
-      beforeClose={newMatchWanted ? requestNewMatch : undefined}
+      beforeClose={newMatchWanted ? requestNewMatch : fetchUserData}
     >
       {dissolved ? (
         <>
@@ -153,9 +160,16 @@ const DissolveMatchModal: React.FC<{
       ) : (
         <>
           <Question>
-            <p className="question">
-              Konntest du {matchFirstname} erfolgreich unterstützen?
-            </p>
+            {ownType === 'student' &&
+              <p className="question">
+                Konntest du {matchFirstname} erfolgreich unterstützen?
+              </p>
+            }
+            {ownType === 'pupil' &&
+              <p className="question">
+                Konnte dich {matchFirstname} erfolgreich unterstützen?
+              </p>
+            }
             <div>
               <CheckboxButton
                 label="Ja"
@@ -175,7 +189,7 @@ const DissolveMatchModal: React.FC<{
                 Wir möchten uns bei dir für deine Hilfe bedanken!
                 <br />
                 <br />
-                Ohne dich wäre diese Projekt nicht möglich. Danke, dass du in
+                Ohne dich wäre dieses Projekt nicht möglich. Danke, dass du in
                 dieser schwierigen Zeit gesellschaftliche Verantwortung
                 übernommen hast!
                 <br />
@@ -197,10 +211,18 @@ const DissolveMatchModal: React.FC<{
           {supportSuccessful === false && (
             <>
               <Question>
-                <p className="question">
-                  Warum konntest du {matchFirstname} nicht erfolgreich
-                  unterstützen?
-                </p>
+                {ownType === 'student' &&
+                  <p className="question">
+                    Warum konntest du {matchFirstname} nicht erfolgreich
+                    unterstützen?
+                  </p>
+                }
+                {ownType === 'pupil' &&
+                  <p className="question">
+                    Warum konnte dich {matchFirstname} nicht erfolgreich
+                    unterstützen?
+                  </p>
+                }
                 {Object.entries(reasonOptions).map(([key, value]) => (
                   <CheckboxButton
                     key={key}

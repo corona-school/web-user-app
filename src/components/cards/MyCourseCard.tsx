@@ -1,5 +1,8 @@
+/* eslint react/prop-types: 0 */
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import moment from 'moment';
+import { Tooltip } from 'antd';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import {
@@ -7,14 +10,14 @@ import {
   CourseCategory,
   ParsedCourseOverview,
 } from '../../types/Course';
-import { Tooltip } from 'antd';
-import { useHistory } from 'react-router-dom';
 import { Tag } from '../Tag';
+import { firstLectureOfSubcourse } from '../../utils/CourseUtil';
 
 import classes from './MyCourseCard.module.scss';
 import { AuthContext } from '../../context/AuthContext';
 
 interface Props {
+  ownedByMe?: boolean;
   course: ParsedCourseOverview;
   redirect?: string;
 }
@@ -33,12 +36,12 @@ export const CategoryToLabel = new Map([
   [CourseCategory.CLUB, 'AGs'],
 ]);
 
-const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
+const MyCourseCard: React.FC<Props> = ({ course, redirect, ownedByMe }) => {
   const history = useHistory();
   const auth = useContext(AuthContext);
 
   const subCourse = course.subcourse;
-  const firstLecture = subCourse?.lectures.sort((a, b) => a.start - b.start)[0];
+  const firstLecture = firstLectureOfSubcourse(subCourse);
 
   const userId = auth.credentials.id;
   const isMyCourse =
@@ -50,7 +53,12 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
       history.push(redirect);
       return;
     }
-    history.push('courses/' + course.id);
+
+    if (!course.subcourse && (isMyCourse || ownedByMe)) {
+      history.push(`/courses/edit/${course.id}`);
+      return;
+    }
+    history.push(`/courses/${course.id}`);
   };
 
   const renderAdditionalDates = () => {
@@ -59,7 +67,7 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
         {subCourse?.lectures
           .filter((l) => l !== firstLecture)
           .map((l) => {
-            return <div>{moment(l.start).format('DD.MM.YY')}</div>;
+            return <div>{moment.unix(l.start).format('DD.MM.YY')}</div>;
           })}
       </div>
     );
@@ -126,7 +134,7 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect }) => {
             </div>
             {firstLecture && (
               <div className={classes.metaInfo}>
-                Beginn: {moment(firstLecture.start).format('DD.MM.YY')}{' '}
+                Beginn: {moment.unix(firstLecture.start).format('DD.MM.YY')}{' '}
                 {subCourse?.lectures.length > 1 ? renderAdditionalDates() : ''}
               </div>
             )}

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Empty } from 'antd';
 import OpenRequestCard from '../components/cards/OpenRequestCard';
 import { UserContext } from '../context/UserContext';
 import Context from '../context';
@@ -6,7 +7,6 @@ import DissolveMatchModal from '../components/Modals/DissolveMatchModal';
 import { Title } from '../components/Typography';
 import classes from './Matches.module.scss';
 import MatchCard from '../components/cards/MatchCard';
-import { Empty } from 'antd';
 
 const Matches: React.FC = () => {
   const userContext = useContext(UserContext);
@@ -16,16 +16,19 @@ const Matches: React.FC = () => {
     if (userContext.user.type === 'pupil') {
       if (userContext.user.matches.length === 1)
         return (
-          <Empty description="Du hast im moment keine offenen Anfragen."></Empty>
+          <Empty description="Du hast im moment keine offenen Anfragen." />
         );
       if (userContext.user.matchesRequested === 0) {
-        return <OpenRequestCard type="new" />;
+        return <OpenRequestCard type="new" userType={userContext.user.type} />;
       }
       if (userContext.user.matchesRequested >= 1) {
         return (
           <>
             {[...Array(userContext.user.matchesRequested).keys()].map(() => (
-              <OpenRequestCard type="pending" />
+              <OpenRequestCard
+                type="pending"
+                userType={userContext.user.type}
+              />
             ))}
           </>
         );
@@ -33,15 +36,15 @@ const Matches: React.FC = () => {
     }
 
     if (userContext.user.matchesRequested === 0) {
-      return <OpenRequestCard type="new" />;
+      return <OpenRequestCard type="new" userType={userContext.user.type} />;
     }
 
     return (
       <>
         {[...Array(userContext.user.matchesRequested).keys()].map(() => (
-          <OpenRequestCard type="pending" />
+          <OpenRequestCard type="pending" userType={userContext.user.type} />
         ))}
-        <OpenRequestCard type="new" />
+        <OpenRequestCard type="new" userType={userContext.user.type} />
       </>
     );
   })();
@@ -52,12 +55,12 @@ const Matches: React.FC = () => {
         type={userContext.user.type === 'student' ? 'pupil' : 'student'}
         match={match}
         handleDissolveMatch={() => {
-          modalContext.setOpenedModal('dissolveMatchModal' + match.uuid);
+          modalContext.setOpenedModal(`dissolveMatchModal${match.uuid}`);
         }}
         dissolved={false}
       />
       <DissolveMatchModal
-        identifier={'dissolveMatchModal' + match.uuid}
+        identifier={`dissolveMatchModal${match.uuid}`}
         matchUuid={match.uuid}
         matchFirstname={match.firstname}
         ownType={userContext.user.type}
@@ -72,7 +75,7 @@ const Matches: React.FC = () => {
           type={userContext.user.type === 'student' ? 'pupil' : 'student'}
           match={dissolvedMatch}
           handleDissolveMatch={() => {}}
-          dissolved={true}
+          dissolved
         />
       </React.Fragment>
     )
@@ -84,8 +87,16 @@ const Matches: React.FC = () => {
         <div className={classes.openRequests}>{openRequests}</div>
       </div>
       <Title size="h2">Deine Zuordnungen</Title>
+      {currentMatches.length === 0 && (
+        <Empty
+          style={{ maxWidth: '1000px' }}
+          description="Du hast keine aktiven Zuordnungen"
+        />
+      )}
       {currentMatches}
-      <Title size="h2">Entfernte Zuordnungen</Title>
+      {dissolvedMatches.length > 0 && (
+        <Title size="h2">Entfernte Zuordnungen</Title>
+      )}
       {dissolvedMatches}
     </div>
   );

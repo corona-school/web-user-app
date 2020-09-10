@@ -43,14 +43,6 @@
       height: 36px;
     }
   }
-
-  .signinButton {
-    height: 46px;
-    font-size: 16px;
-    font-weight: 300;
-    width: 200px;
-    margin: 16px;
-  }
 }
 .inputContainer {
   margin: 16px 0px;
@@ -85,7 +77,7 @@
   text-align: center;
   max-width: 400px;
   color: #6c6c6c !important;
-  margin: 16px 4px !important;
+  margin: 4px 4px !important;
   a {
     color: #4e6ae6 !important;
   }
@@ -98,12 +90,14 @@
 .textError {
   margin-top: -16px !important;
   color: #f0466b !important;
+  text-align: center;
 }
 
 .successContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 
   svg {
     margin: 32px;
@@ -115,4 +109,25 @@
 .successButton {
   height: 40px;
   border: 2px solid #2b2c3b;
+}
+
+.loginButtonContainer {
+  display: flex;
+
+  .signinButton {
+    height: 42px;
+    font-size: 16px;
+    font-weight: 300;
+    width: 160px;
+    margin: 16px 8px 16px 16px;
+  }
+
+  .registerButton {
+    height: 42px;
+    font-size: 16px;
+    font-weight: 300;
+    width: 160px;
+    margin: 16px 16px 16px 8px;
+    border: 1px solid #4e6ae6;
+  }
 }

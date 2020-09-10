@@ -1,16 +1,16 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import PageLoading from './PageLoading';
 
+// If you set comeback, the user will be redirected to this page after login / registration
+
 const PrivateRoute = ({
   children,
   active = true,
+  comeback = false,
   ...rest
-}: {
-  children: React.ReactNode;
-  active?: boolean;
-  [index: string]: any;
 }) => {
   const authContext = useContext(AuthContext);
 
@@ -19,7 +19,7 @@ const PrivateRoute = ({
       {...rest}
       render={({ location }) => {
         if (!active) {
-          return <Redirect to="/" />; //TODO: add error page
+          return <Redirect to="/" />; // TODO: add error page
         }
 
         switch (authContext.status) {
@@ -29,7 +29,17 @@ const PrivateRoute = ({
             return children;
           case 'missing':
           case 'invalid':
-            return <Redirect to="/login" />;
+            return (
+              <Redirect
+                to={comeback ? `/login?path=${location.pathname}` : `/login`}
+              />
+            );
+          default:
+            return (
+              <Redirect
+                to={comeback ? `/login?path=${location.pathname}` : `/login`}
+              />
+            );
         }
       }}
     />

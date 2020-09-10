@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/camelcase */
+
 const colorScheme = {
   black: '#000000',
   gray1: '#333333',

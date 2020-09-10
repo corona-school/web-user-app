@@ -48,6 +48,7 @@ const Modal: React.FC<
   const modalContext = useContext(ModalContext);
   return (
     <StyledReactModal
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       isOpen={modalContext.openedModal === identifier}
     >

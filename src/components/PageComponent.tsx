@@ -5,7 +5,7 @@ import Header from './Header';
 
 const PageWrapper = styled.div`
   display: flex;
-  overflow-x: hidden;
+  width: auto;
 `;
 interface MenuProps {
   readonly isMenuOpen: boolean;
@@ -13,9 +13,9 @@ interface MenuProps {
 
 const MenuBackground = styled.div<MenuProps>`
   position: fixed;
-  width: 100vw;
-  height: 100vh;
-  z-index: 299;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
   overflow: auto;
   top: 0px;
   left: 0;
@@ -28,15 +28,15 @@ const MenuBackground = styled.div<MenuProps>`
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  min-height: 100vh;
   position: relative;
+  flex-shrink: 1;
+  flex-grow: 1;
+  min-width: 0;
 
   .content {
-    max-height: 100vh;
     height: 100%;
-    overflow-y: scroll;
     align-items: center;
+    overflow-x: hidden;
 
     display: flex;
     flex-direction: column;

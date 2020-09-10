@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
-import Images from '../../assets/images';
+import ClipLoader from 'react-spinners/ClipLoader';
 import { Input, message } from 'antd';
+import Images from '../../assets/images';
 import { Title, Text } from '../Typography';
 import Button from '../button';
 
@@ -51,6 +52,16 @@ const CourseMessageModal: React.FC<Props> = (props) => {
       });
   };
 
+  if (loading) {
+    return (
+      <StyledReactModal
+        isOpen={modalContext.openedModal === 'courseMessageModal'}
+      >
+        <ClipLoader size={100} color="#123abc" loading />
+      </StyledReactModal>
+    );
+  }
+
   return (
     <StyledReactModal
       isOpen={modalContext.openedModal === 'courseMessageModal'}
@@ -68,7 +79,7 @@ const CourseMessageModal: React.FC<Props> = (props) => {
           onChange={(e) => setTitle(e.target.value)}
           style={{ margin: '8px 0px' }}
           placeholder="Betreff: Nachricht"
-        ></Input>
+        />
         <Text className={classes.label}>Nachricht:</Text>
         <Input.TextArea
           value={text}
@@ -76,7 +87,7 @@ const CourseMessageModal: React.FC<Props> = (props) => {
           autoSize={{ minRows: 5, maxRows: 5 }}
           style={{ margin: '8px 0px' }}
           placeholder="Hier deine Nachricht"
-        ></Input.TextArea>
+        />
         <div className={classes.buttonContainer}>
           <Button
             backgroundColor="#fa3d7f"

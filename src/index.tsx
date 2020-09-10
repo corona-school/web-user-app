@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import './normalize.css';
 import HttpsRedirect from 'react-https-redirect';
-import theme from './theme';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter } from 'react-router-dom';
+
+import theme from './theme';
 import { ApiProvider } from './context/ApiContext';
 import { AuthProvider } from './context/AuthContext';
 import { UserProvider } from './context/UserContext';

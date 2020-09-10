@@ -44,6 +44,8 @@ const CardWrapper: React.FC<{
         return theme.color.cardHighlightGreen;
       case 'blue':
         return theme.color.cardHighlightBlue;
+      default:
+        return theme.color.cardHighlightRed;
     }
   })();
 

@@ -10,12 +10,13 @@ const Header = (props: Props) => {
   return (
     <div className={classes.header}>
       <Icons.WirVsVirusLogo />
-      <div
+      <button
+        type="button"
         className={classes.mobileNav}
         onClick={() => props.setMenuOpen(true)}
       >
         <Icons.MenuIcon />
-      </div>
+      </button>
     </div>
   );
 };

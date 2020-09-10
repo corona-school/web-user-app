@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
+import { Input, message } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Title, Text } from '../Typography';
 import Button from '../button';
@@ -7,7 +8,6 @@ import { ModalContext } from '../../context/ModalContext';
 
 import classes from './BecomeInstructorModal.module.scss';
 import { User } from '../../types';
-import { Input, message } from 'antd';
 import { ApiContext } from '../../context/ApiContext';
 import { BecomeInstructor } from '../../types/Instructor';
 import { UserContext } from '../../context/UserContext';
@@ -17,7 +17,7 @@ interface Props {
   user: User;
 }
 
-const BecomeInstructorModal: React.FC<Props> = (props) => {
+const BecomeInstructorModal: React.FC<Props> = () => {
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState<string | null>(null);
 
@@ -63,7 +63,7 @@ const BecomeInstructorModal: React.FC<Props> = (props) => {
       >
         <div className={classes.modal}>
           <Title size="h2">Kursleiter*in werden</Title>
-          <ClipLoader size={100} color={'#123abc'} loading={true} />
+          <ClipLoader size={100} color="#123abc" loading />
           <div className={classes.buttonContainer}>
             <Button backgroundColor="#F4F6FF" color="#4E6AE6">
               Anmelden
@@ -88,7 +88,7 @@ const BecomeInstructorModal: React.FC<Props> = (props) => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           autoSize={{ minRows: 6 }}
-          placeholder={'Kursthema, Zielgruppe, Kursgröße, Interaktion'}
+          placeholder="Kursthema, Zielgruppe, Kursgröße, Interaktion"
         />
         <div className={classes.buttonContainer}>
           <Button

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { message } from 'antd';
 
 import Button from '../button';
 import Icons from '../../assets/icons';
@@ -11,13 +12,13 @@ import CardBase from '../base/CardBase';
 import classes from './OpenRequestCard.module.scss';
 import { Text, Title } from '../Typography';
 import CardNewBase from '../base/CardNewBase';
-import { message } from 'antd';
 
 interface Props {
   type: 'pending' | 'new';
+  userType: 'student' | 'pupil';
 }
 
-const OpenRequestCard: React.FC<Props> = ({ type }) => {
+const OpenRequestCard: React.FC<Props> = ({ type, userType }) => {
   const [loading, setLoading] = useState(false);
   const { credentials } = useContext(Context.Auth);
   const { user, fetchUserData } = useContext(Context.User);
@@ -35,7 +36,7 @@ const OpenRequestCard: React.FC<Props> = ({ type }) => {
         setLoading(false);
         fetchUserData();
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false);
         message.error(
           'Es ist etwas schief gegangen. Versuche es später erneut.'
@@ -43,9 +44,9 @@ const OpenRequestCard: React.FC<Props> = ({ type }) => {
       });
   };
 
-  if (type === 'pending')
+  if (type === 'pending') {
     return (
-      <CardBase highlightColor={'#FCD95C'} className={classes.pendingContainer}>
+      <CardBase highlightColor="#FCD95C" className={classes.pendingContainer}>
         <Title size="h4">Offene Anfrage</Title>
         <Text>
           Wir sind auf der Suche nach einem bzw. einer Lernpartner*in für dich
@@ -62,35 +63,37 @@ const OpenRequestCard: React.FC<Props> = ({ type }) => {
         </div>
       </CardBase>
     );
-  else
-    return (
-      <div
-        onClick={() => {
-          if (!loading) {
-            modifyMatchesRequested((x) => x + 1);
-          }
-        }}
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        if (!loading) {
+          modifyMatchesRequested((x) => x + 1);
+        }
+      }}
+    >
+      <CardNewBase
+        highlightColor={theme.color.cardHighlightBlue}
+        className={classes.pendingContainer}
       >
-        <CardNewBase
-          highlightColor={theme.color.cardHighlightBlue}
-          className={classes.pendingContainer}
-        >
-          <div className={classes.titleContainer}>
-            <Icons.Add height="20px" />
-            <Title size="h4">Neue Anfrage</Title>
-          </div>
-          {loading ? (
-            <ClipLoader size={100} color={'#123abc'} loading={true} />
-          ) : (
-            <Text>
-              Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner
-              zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen
-              möchtest.
-            </Text>
-          )}
-        </CardNewBase>
-      </div>
-    );
+        <div className={classes.titleContainer}>
+          <Icons.Add height="20px" />
+          <Title size="h4">Neue Anfrage</Title>
+        </div>
+        {loading ? (
+          <ClipLoader size={100} color="#123abc" loading />
+        ) : (
+          <Text className={classes.newTextContainer}>
+            {userType === 'student'
+              ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen möchtest.'
+              : 'Hier kannst du eine*n neue*n Student*in anfordern, die dich beim Lernen unterstützt.'}
+          </Text>
+        )}
+      </CardNewBase>
+    </button>
+  );
 };
 
 export default OpenRequestCard;

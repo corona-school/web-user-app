@@ -91,6 +91,7 @@ const IconsList = {
   Palm,
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Icons: { [I in keyof typeof IconsList]: any } = IconsList;
 
 export default Icons;

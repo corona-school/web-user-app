@@ -1,7 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { Select, DatePicker, InputNumber, message } from 'antd';
+import moment from 'moment';
 
 import context from '../../context';
 import classes from './CertificateModal.module.scss';
@@ -9,8 +10,6 @@ import { Title, Text } from '../Typography';
 import Button from '../button';
 import Icons from '../../assets/icons';
 import { User } from '../../types';
-import { Select, DatePicker, InputNumber, message } from 'antd';
-import moment from 'moment';
 import ActivityForm from '../forms/ActivityForm';
 
 const { Option } = Select;
@@ -66,16 +65,23 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
       const weekCount = a.diff(b, 'week');
       setCertificateData({
         ...certificateData,
-        weekCount: weekCount,
+        weekCount,
         hoursTotal: certificateData.hoursPerWeek * weekCount,
       });
     }
   }, [
-    user.matches,
     certificateData.hoursPerWeek,
     certificateData.endDate,
     certificateData.student,
   ]);
+
+  const isWorkloadAllowedNumber = () => {
+    return (
+      certificateData.hoursPerWeek % 0.25 === 0 &&
+      certificateData.hoursPerWeek >= 0.25 &&
+      certificateData.hoursPerWeek <= 40.0
+    );
+  };
 
   const renderIntroduction = () => {
     return (
@@ -86,7 +92,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           du bei einer Bewerbung beilegen oder bei deiner Universität einreichen
           kannst.
         </Text>
-        <br></br>
+        <br />
         <Title size="h5" bold>
           Wie funktioniert’s?
         </Title>
@@ -103,11 +109,9 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           durch deine*n Schüler*in bestätigt. Um den Prozess so einfach wie
           möglich zu gestalten, kannst du auf der folgenden Seite
           <li>das zeitliche Ausmaß der ehrenamtlichen Tätigkeit</li>
-          <li>
-            die genauen Inhalte und Aufgaben der ehrenamtlichen Tätigkeit
-          </li>
-          angeben. Daraus erstellen wir dir ein fertiges PDF, welches du an deine*n
-          Schüler*in zum Unterschreiben schicken kannst.
+          <li>die genauen Inhalte und Aufgaben der ehrenamtlichen Tätigkeit</li>
+          angeben. Daraus erstellen wir dir ein fertiges PDF, welches du an
+          deine*n Schüler*in zum Unterschreiben schicken kannst.
         </Text>
       </>
     );
@@ -136,25 +140,28 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           Schritt 1: Allgemeine Informationen eintragen
         </Text>
         <Title size="h5" bold>
-          Schüler
+          Schüler*in
         </Title>
         <div className={classes.inputField}>
           <Select
-            placeholder={'Wähle deinen Schüler'}
+            placeholder="Wähle deine*n Schüler*in"
             value={certificateData.student}
             onChange={(v) => {
               setCertificateData({
                 ...certificateData,
                 student: v,
                 subjects: [],
-                endDate: moment().unix(), //reset this, such that it does not get an invalid value (otherwise an invalid value for the end date may occur if the current certificateData.endDate value from a previously selected pupil is no longer valid for the now selected pupil because certificateData.endDate was a date before the match with the now selected pupil was created)
+                endDate: moment().unix(), // reset this, such that it does not get an invalid value (otherwise an invalid value for the end date may occur if the current certificateData.endDate value from a previously selected pupil is no longer valid for the now selected pupil because certificateData.endDate was a date before the match with the now selected pupil was created)
               });
             }}
             style={{ width: '200px' }}
           >
             {allMatches.map((m) => {
               return (
-                <Option value={m.uuid}>{`${m.firstname} ${m.lastname}`}</Option>
+                <Option
+                  key={m.uuid}
+                  value={m.uuid}
+                >{`${m.firstname} ${m.lastname}`}</Option>
               );
             })}
           </Select>
@@ -209,7 +216,11 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
             style={{ width: '100%' }}
           >
             {selectedPupil?.subjects.map((s) => {
-              return <Option value={s}>{s}</Option>;
+              return (
+                <Option key={s} value={s}>
+                  {s}
+                </Option>
+              );
             })}
           </Select>
         </div>
@@ -230,7 +241,11 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
             }}
           >
             {MediaTypes.map((m) => {
-              return <Option value={m}>{m}</Option>;
+              return (
+                <Option key={m} value={m}>
+                  {m}
+                </Option>
+              );
             })}
           </Select>
         </div>
@@ -248,6 +263,11 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
                 setCertificateData({ ...certificateData, hoursPerWeek: v });
               }
             }}
+            className={
+              !isWorkloadAllowedNumber()
+                ? classes.workloadInputFieldError
+                : null
+            }
           />{' '}
           h/Woche (insgesamt {certificateData.hoursTotal} h)
         </div>
@@ -282,9 +302,9 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
         link.click();
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         message.error(
-          'Ein Fehler ist aufgetreten. Versuche er später nochmal.'
+          'Ein Fehler ist aufgetreten. Versuche es später nochmal.'
         );
         setLoading(false);
       });
@@ -305,7 +325,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
             onClick={downloadPDF}
           >
             {loading ? (
-              <ClipLoader size={20} color={'#ffffff'} loading={loading} />
+              <ClipLoader size={20} color="#ffffff" loading={loading} />
             ) : (
               <>
                 <Icons.DownloadWeb />
@@ -331,12 +351,14 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     if (step === 3) {
       return renderDownloadPage();
     }
+
+    return renderIntroduction();
   };
 
   const onClick = (newStep: number) => {
     if (newStep < STEPS && newStep >= 0) {
       if (newStep === 2 && !certificateData.student) {
-        message.info('Ein Schüler muss ausgewählt sein.');
+        message.info('Ein*e Schüler*in muss ausgewählt sein.');
         return;
       }
       if (newStep === 2 && certificateData.subjects.length === 0) {
@@ -345,6 +367,12 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
       }
       if (newStep === 2 && !certificateData.mediaType) {
         message.info('Ein Medium muss ausgewählt sein.');
+        return;
+      }
+      if (newStep === 2 && !isWorkloadAllowedNumber()) {
+        message.info(
+          'Deine wöchentliche Arbeitszeit darf nur in 15-Minuten-Schritten angegeben werden. Sie muss mindestens 15 Minuten betragen und darf nicht größer als 40 Stunden sein.'
+        );
         return;
       }
       if (newStep === 3 && certificateData.activities.length === 0) {

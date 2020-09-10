@@ -76,6 +76,8 @@ export const getStatus = (user: User) => {
   if (user.matches.length > 0 && hasRequests(user)) {
     return StatusTexts.get('waitingForMatch');
   }
+
+  return null;
 };
 
 interface Step {
@@ -223,6 +225,7 @@ export const getNextSteps = (user: User) => {
   if (user.matches.length > 0) {
     return NextSteps.get('hasMatch');
   }
+  return null;
 };
 
 const StudentNews = [
@@ -233,8 +236,15 @@ const StudentNews = [
   },
   {
     headline: 'Mentoring Programm',
-    text:
-      'Du möchtest dich mit anderen Studierenden oder unseren Mentor*innen austauschen? facebook.com/groups/coronaschoolgermany',
+    text: (
+      <span>
+        Du möchtest dich mit anderen Studierenden oder unseren Mentor*innen
+        austauschen?{' '}
+        <a href="https://www.facebook.com/groups/coronaschoolgermany/">
+          https://www.facebook.com/groups/coronaschoolgermany/
+        </a>
+      </span>
+    ),
   },
 ];
 
@@ -243,6 +253,7 @@ const PupilNews = [
     headline: 'Sommer AGs',
     text:
       'Der Sommerurlaub fällt aus? Wir bieten spannende digitale und kostenfreie AGs in den Sommerferien an.',
+    withLink: false,
   },
   {
     headline: 'Repetitorien',

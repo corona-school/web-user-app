@@ -11,7 +11,7 @@ export const redeemVerificationToken = (
 ): Promise<string> =>
   new Promise((resolve, reject) => {
     axios
-      .post(apiURL + '/token', {
+      .post(`${apiURL}/token`, {
         token: verificationToken,
       })
       .then((response) => resolve(response.data.token))
@@ -24,7 +24,7 @@ export const redeemVerificationToken = (
 export const getUserId = (token: string): Promise<string> =>
   new Promise((resolve, reject) => {
     axios
-      .get(apiURL + '/user', {
+      .get(`${apiURL}/user`, {
         headers: { token },
       })
       .then((response) => {
@@ -65,9 +65,14 @@ export const putUser = (
 // ========================================================================
 
 export const axiosGetUser = (id: string, token: string): Promise<User> => {
-  return axios.get(`${apiURL}/user/${id}`, {
-    headers: { Token: token },
-  });
+  return new Promise((resolve, reject) =>
+    axios
+      .get(`${apiURL}/user/${id}`, {
+        headers: { Token: token },
+      })
+      .then((res) => resolve(res.data))
+      .catch((err) => reject(err))
+  );
 };
 
 export const axiosDissolveMatch = (
@@ -91,16 +96,19 @@ export const axiosDissolveMatch = (
   });
 };
 
-export const axiosRequestNewToken = (email: string): Promise<void> => {
+export const axiosRequestNewToken = (
+  email: string,
+  redirectTo: string
+): Promise<void> => {
   const url = `${apiURL}/token`;
   return new Promise((resolve, reject) => {
     axios
       .get(url, {
-        params: { email },
+        params: { email, redirectTo },
       })
       .then(() => resolve())
       .catch((error) => {
-        reject();
+        reject(error?.response?.status);
         if (dev) console.error('requestNewToken failed:', error);
       });
   });
@@ -145,9 +153,10 @@ export const axiosGetCertificate = (
   id: string,
   token: string,
   certificateDate: CertificateData
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<AxiosResponse<any>> => {
   const url = `${apiURL}/certificate/${id}/${certificateDate.student}`;
-  console.log(url);
+
   return new Promise((resolve, reject) => {
     const params = new URLSearchParams();
     params.append('subjects', certificateDate.subjects.join(','));
@@ -286,6 +295,8 @@ export const axiosGetMyCourses = (
       params.append('participant', participant);
     }
 
+    params.append('onlyJoinableCourses', 'false');
+
     axios
       .get(url, { headers: { token }, params })
       .then((response) => {
@@ -362,8 +373,6 @@ export const axiosCreateCourse = (
   token: string,
   course: Course
 ): Promise<number> => {
-  console.log(course);
-
   return new Promise((resolve, reject) => {
     axios
       .post(`${apiURL}/course`, course, { headers: { token } })
@@ -441,6 +450,8 @@ export const axiosCreateSubCourse = (
   subCourse: SubCourse
 ): Promise<number> => {
   return new Promise((resolve, reject) => {
+    console.log(subCourse);
+
     axios
       .post(`${apiURL}/course/${courseId}/subcourse`, subCourse, {
         headers: { token },
@@ -473,6 +484,26 @@ export const axiosCancelSubCourse = (
   });
 };
 
+export const axiosEditSubCourse = (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  subCourse: SubCourse
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(`${apiURL}/course/${courseId}/subcourse/${subCourseId}`, subCourse, {
+        headers: { token },
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export const axiosCreateLecture = (
   token: string,
   courseId: number,
@@ -483,6 +514,31 @@ export const axiosCreateLecture = (
     axios
       .post(
         `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture`,
+        lecture,
+        {
+          headers: { token },
+        }
+      )
+      .then((response) => {
+        resolve(response.data.id);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosEditLecture = (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  lectureId: number,
+  lecture: Lecture
+): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(
+        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture/${lectureId}`,
         lecture,
         {
           headers: { token },
@@ -559,6 +615,26 @@ export const axiosBecomeInstructor = (
       )
       .then(() => {
         resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosJoinBBBmeeting = (
+  token: string,
+  courseId: number,
+  subcourseId: number
+): Promise<CourseOverview> => {
+  const url = `${apiURL}/course/${courseId}/meeting/join`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(url, { subcourseId }, { headers: { token } })
+      .then((response) => {
+        console.log(response);
+        resolve(response.data);
       })
       .catch((error) => {
         reject(error);

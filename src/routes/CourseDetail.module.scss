@@ -47,6 +47,21 @@
         background-size: 130px;
       }
     }
+
+    .actionContainer {
+      display: flex;
+      flex-direction: column;
+      .videochatAction {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+      }
+      .shareAction {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+      }
+    }
   }
 
   .newsContainer {

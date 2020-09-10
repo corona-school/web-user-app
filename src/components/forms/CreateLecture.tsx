@@ -1,24 +1,16 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useContext } from 'react';
+import { Form, InputNumber, List, DatePicker, TimePicker, message } from 'antd';
+import moment from 'moment';
 import Button from '../button';
-import {
-  Form,
-  InputNumber,
-  List,
-  Select,
-  DatePicker,
-  TimePicker,
-  message,
-} from 'antd';
 import Context from '../../context';
 import { Lecture } from '../../types/Course';
 import { CompletedCourse, CompletedLecture } from '../../routes/CourseForm';
-import moment from 'moment';
 
 import classes from './CreateLecture.module.scss';
 import { CompletedSubCourse } from './CreateCourse';
-
-const { Option } = Select;
 
 interface Props {
   lectures: CompletedLecture[];
@@ -30,11 +22,11 @@ interface Props {
 }
 
 export const CreateLecture: React.FC<Props> = (props) => {
-  const [start, setStart] = useState<moment.Moment>(moment());
+  const [start, setStart] = useState<moment.Moment>(moment().add(2, 'days'));
   const [duration, setDuration] = useState<number | null>(null);
 
   const [loading, setLoading] = useState(false);
-  const [selectedSubCourseId, setSelectedSubCourseId] = useState(null);
+
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
 
@@ -45,7 +37,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
           className={classes.formItem}
           name="class"
           rules={[
-            (_) => ({
+            () => ({
               validator() {
                 if (start && duration) {
                   return Promise.resolve();
@@ -57,11 +49,19 @@ export const CreateLecture: React.FC<Props> = (props) => {
         >
           Der Kurs ist am
           <DatePicker
+            disabledDate={(date) => {
+              return (
+                moment(new Date())
+                  .startOf('day')
+                  .add(2, 'days')
+                  .diff(date.clone().startOf('day'), 'days') >= 1
+              );
+            }}
             value={start}
             onChange={(v) => setStart(v)}
             style={{ margin: '0px 4px' }}
             placeholder="25.06.2020"
-            format={'DD.MM.YYYY'}
+            format="DD.MM.YYYY"
           />{' '}
           um
           <TimePicker
@@ -70,13 +70,13 @@ export const CreateLecture: React.FC<Props> = (props) => {
             value={start}
             style={{ margin: '0px 4px' }}
             defaultOpenValue={moment('00:00:00', 'HH:mm')}
-            format={'HH:mm'}
+            format="HH:mm"
           />
           und dauert
           <InputNumber
             value={duration}
             step={5}
-            min={0}
+            min={15}
             onChange={(v: number) => setDuration(v)}
             style={{ margin: '0px 4px', width: '64px' }}
             placeholder="45"
@@ -113,7 +113,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
       props.onSuccess({
         ...lecture,
         id: lectureId,
-        subCourseId: selectedSubCourseId,
+        subCourseId: props.subCourse.id,
       });
     } catch (err) {
       setLoading(false);
@@ -140,7 +140,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
         className={classes.listContainer}
         itemLayout="horizontal"
         header="Erstelle hier deine Lektionen"
-        dataSource={props.lectures}
+        dataSource={props.lectures ? props.lectures : []}
         loading={loading}
         bordered
         footer={
@@ -179,9 +179,11 @@ export const CreateLecture: React.FC<Props> = (props) => {
           >
             <List.Item.Meta
               title={props.course.name}
-              description={`Der Kurse ist am ${moment(item.start * 1000).format(
-                'HH:mm DD.MM.YYYY'
-              )} und dauert ${item.duration} min.`}
+              description={`Der Kurs ist am ${moment
+                .unix(item.start)
+                .format('DD.MM.YYYY')} um ${moment
+                .unix(item.start)
+                .format('HH:mm')} Uhr und dauert ${item.duration} min.`}
             />
           </List.Item>
         )}

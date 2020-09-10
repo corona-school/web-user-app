@@ -36,6 +36,7 @@ const ImageList = {
   MentoringPic
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Images: { [I in keyof typeof ImageList]: any } = ImageList;
 
 export default Images;

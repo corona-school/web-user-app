@@ -25,6 +25,7 @@ import RegisterTutee from './routes/RegisterTutee';
 import RegisterTutor from './routes/RegisterTutor';
 import { CourseForm } from './routes/CourseForm';
 import CourseDetail from './routes/CourseDetail';
+import PublicCourseDetail from './routes/PublicCourseDetail';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -32,8 +33,7 @@ const GlobalStyle = createGlobalStyle`
   html {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 14px;
-    overflow: hidden;
-
+    height: 100%;
   }
 
   *{
@@ -77,12 +77,18 @@ const App: React.FC = () => {
         <Route path="/register">
           <Register />
         </Route>
-        <Route path="/public/courses">
+        <Route exact path="/public/courses">
           <PublicCourse />
+        </Route>
+        <Route exact path="/public/courses/:id">
+          <PublicCourseDetail />
         </Route>
         <Route path="/verify">
           <Verify />
         </Route>
+        <PrivateRoute path="/courses/edit/:id">
+          <CourseForm />
+        </PrivateRoute>
         <PrivateRoute path="/courses/create">
           <CourseForm />
         </PrivateRoute>
@@ -94,7 +100,7 @@ const App: React.FC = () => {
             <Dashboard />
           </PrivateRoute>
           <Switch>
-            <PrivateRoute path="/courses/:id">
+            <PrivateRoute path="/courses/:id" comeback>
               <CourseDetail />
             </PrivateRoute>
             <PrivateRoute

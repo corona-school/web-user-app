@@ -40,6 +40,8 @@ const Settings: React.FC = () => {
   const modalContext = useContext(Context.Modal);
   const userContext = useContext(Context.User);
 
+  const { setOpenedModal } = modalContext;
+
   useEffect(() => {
     if (
       userContext.user.screeningStatus === ScreeningStatus.Unscreened ||
@@ -47,33 +49,46 @@ const Settings: React.FC = () => {
         userContext.user.instructorScreeningStatus ===
           ScreeningStatus.Unscreened)
     ) {
-      modalContext.setOpenedModal('accountNotScreened');
+      setOpenedModal('accountNotScreened');
     }
-  }, [userContext.user.screeningStatus]);
+  }, [
+    setOpenedModal,
+    userContext.user.instructorScreeningStatus,
+    userContext.user.isInstructor,
+    userContext.user.screeningStatus,
+  ]);
+
+  const renderSubjects = () => {
+    return (
+      <>
+        <Title size="h3" className={classes.subjectTitle}>
+          Deine Fächer
+        </Title>
+        <div>
+          <Wrapper>
+            {userContext.user.subjects.map((subject) => (
+              <SubjectCard
+                key={subject.name}
+                subject={subject}
+                type={userContext.user.type}
+              />
+            ))}
+            <AddSubjectCard
+              type={userContext.user.type}
+              subjects={userContext.user.subjects.map((s) => s.name)}
+            />
+          </Wrapper>
+        </div>
+      </>
+    );
+  };
 
   return (
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
       <SettingsCard user={userContext.user} />
 
-      <Title size="h3" className={classes.subjectTitle}>
-        Deine Fächer
-      </Title>
-      <div>
-        <Wrapper>
-          {userContext.user.subjects.map((subject) => (
-            <SubjectCard
-              key={subject.name}
-              subject={subject}
-              type={userContext.user.type}
-            />
-          ))}
-          <AddSubjectCard
-            type={userContext.user.type}
-            subjects={userContext.user.subjects.map((s) => s.name)}
-          />
-        </Wrapper>
-      </div>
+      {renderSubjects()}
       <StyledReactModal
         isOpen={modalContext.openedModal === 'accountNotScreened'}
       >

@@ -1,14 +1,14 @@
 import React, { useState, useContext } from 'react';
+import { Form, Input, Checkbox, Select, message } from 'antd';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { useHistory, Link, useLocation } from 'react-router-dom';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
-import { Form, Input, Checkbox, Select, message } from 'antd';
 import Button from '../components/button';
-import ClipLoader from 'react-spinners/ClipLoader';
 
 import classes from './RegisterTutee.module.scss';
 import { Subject } from '../types';
-import { useHistory, Link } from 'react-router-dom';
 import Context from '../context';
 import { Tutee } from '../types/Registration';
 
@@ -30,6 +30,10 @@ interface FormData {
   newsletter?: boolean;
 }
 
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+};
+
 const RegisterTutee = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -41,6 +45,8 @@ const RegisterTutee = () => {
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
+
+  const redirectTo = useQuery().get('redirectTo');
 
   const renderStart = () => {
     return (
@@ -86,7 +92,7 @@ const RegisterTutee = () => {
           name="additional"
           label="Wie können wir dir helfen?"
           rules={[
-            (_) => ({
+            () => ({
               validator() {
                 if (isGroups || isTutee) {
                   return Promise.resolve();
@@ -141,7 +147,7 @@ const RegisterTutee = () => {
             <Option value="Realschule">Realschule</Option>
             <Option value="Gymnasium">Gymnasium</Option>
             <Option value="Förderschule">Förderschule</Option>
-            <Option value="Sonstige">Sonstige</Option>
+            <Option value="other">Sonstige</Option>
           </Select>
         </Form.Item>
         <Form.Item
@@ -208,7 +214,7 @@ const RegisterTutee = () => {
                 message:
                   'Bitte trage die Fächer ein, in denen du Unterstützung benötigst',
               },
-              ({ getFieldValue }) => ({
+              () => ({
                 validator(rule, value) {
                   if (value.length < 6) {
                     return Promise.resolve();
@@ -273,7 +279,7 @@ const RegisterTutee = () => {
           name="newsletter"
         >
           <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox value={'newsletter'} defaultChecked={formData.newsletter}>
+            <Checkbox value="newsletter" defaultChecked={formData.newsletter}>
               Ich möchte den Newsletter der Corona School erhalten und über
               Angebote, Aktionen und weitere Unterstützungsmöglichkeiten per
               E-Mail informiert werden.
@@ -372,6 +378,8 @@ const RegisterTutee = () => {
     if (formState === 'done') {
       return renderDone();
     }
+
+    return renderStart();
   };
 
   const back = () => {
@@ -383,62 +391,6 @@ const RegisterTutee = () => {
     }
     if (formState === 'done') {
       setFormState('start');
-    }
-  };
-
-  const nextStep = async (event: React.MouseEvent) => {
-    event.preventDefault();
-
-    if (formState === 'done') {
-      history.push('/login');
-      return;
-    }
-
-    try {
-      const formValues = await form.validateFields();
-      console.log(formValues);
-
-      if (formState === 'start') {
-        setFormData({
-          ...formData,
-          firstname: formValues.firstname,
-          lastname: formValues.lastname,
-          email: formValues.email,
-          isTutee: isTutee,
-        });
-
-        setFormState('detail');
-      }
-      if (formState === 'detail') {
-        setFormData({
-          ...formData,
-          state: formValues.state,
-          school: formValues.school,
-          grade: parseInt(formValues.grade),
-          subjects: isTutee
-            ? formValues.subjects.map((s) => ({
-                name: s,
-                minGrade: 1,
-                maxGrade: 13,
-              }))
-            : undefined,
-          msg: formValues.msg,
-        });
-        setFormState('finnish');
-      }
-
-      if (formState === 'finnish') {
-        const data = {
-          ...formData,
-          newsletter: formValues.newsletter?.includes('newsletter') || false,
-        };
-        console.log(data);
-
-        setFormData(data);
-        register(data);
-      }
-    } catch (e) {
-      console.log(e);
     }
   };
 
@@ -463,13 +415,14 @@ const RegisterTutee = () => {
       state: data.state.toLowerCase(),
       newsletter: !!data.newsletter,
       msg: data.msg || '',
+      redirectTo,
     };
   };
 
   const register = (data: FormData) => {
     const tutee = mapFormDataToTutee(data);
     if (!tutee) {
-      message.error('Es ein Fehler aufgetreten.');
+      message.error('Es ist ein Fehler aufgetreten.');
       return;
     }
     console.log(tutee);
@@ -499,8 +452,65 @@ const RegisterTutee = () => {
           return;
         }
         setLoading(false);
-        message.error('Es ein Fehler aufgetreten.');
+        message.error('Es ist ein Fehler aufgetreten.');
       });
+  };
+
+  const nextStep = async (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    if (formState === 'done') {
+      history.push('/login');
+      return;
+    }
+
+    try {
+      const formValues = await form.validateFields();
+      console.log(formValues);
+
+      if (formState === 'start') {
+        setFormData({
+          ...formData,
+          firstname: formValues.firstname,
+          lastname: formValues.lastname,
+          email: formValues.email,
+          isTutee,
+        });
+
+        setFormState('detail');
+      }
+      if (formState === 'detail') {
+        setFormData({
+          ...formData,
+          state: formValues.state,
+          school: formValues.school,
+
+          grade: parseInt(formValues.grade),
+          subjects: isTutee
+            ? formValues.subjects.map((s) => ({
+                name: s,
+                minGrade: 1,
+                maxGrade: 13,
+              }))
+            : undefined,
+          msg: formValues.msg,
+        });
+        setFormState('finnish');
+      }
+
+      if (formState === 'finnish') {
+        const data = {
+          ...formData,
+          newsletter: formValues.newsletter?.includes('newsletter') || false,
+        };
+        console.log(data);
+
+        setFormData(data);
+        register(data);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -538,7 +548,7 @@ const RegisterTutee = () => {
           renderFormItems()
         ) : (
           <div className={classes.loadingContainer}>
-            <ClipLoader size={100} color={'#123abc'} loading={true} />
+            <ClipLoader size={100} color="#123abc" loading />
           </div>
         )}
 
