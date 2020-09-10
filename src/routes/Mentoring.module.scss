@@ -1,0 +1,56 @@
+.container {
+    min-height: fit-content;
+    display: flex;
+    flex-direction: column;
+    padding-top: 60px;
+    padding-left: 40px;
+    width: 100%;
+    &::after {
+      flex: 0 0 20px;
+      visibility: hidden;
+      content: 'spacer';
+    }
+  
+    @media only screen and (max-width: 600px) {
+      padding: 16px;
+    }
+  
+    .subjectTitle {
+      margin-top: 32px;
+    }
+  }
+  
+  .screeningModalContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: white;
+    padding: 32px;
+  
+    .title {
+      margin-top: -20px;
+    }
+    .text {
+      max-width: 400px;
+      margin-top: -8px;
+    }
+  
+    .buttonContainer {
+      display: flex;
+      margin-top: 16px;
+  
+      a,
+      button {
+        margin: 8px;
+      }
+    }
+  }
+
+  .buttonMoreInfo{
+    background-color: rgb(255, 204, 18) ;
+    color: white;
+    display: flex;
+    float: right;
+  }
+  

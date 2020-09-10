@@ -8,6 +8,8 @@ import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './routes/Dashboard';
 import Matches from './routes/Matches';
 import Settings from './routes/Settings';
+import Mentoring from './routes/Mentoring';
+import Support from './routes/Support';
 import Feedback from './routes/Feedback';
 import Help from './routes/Help';
 import Login from './routes/Login';
@@ -118,6 +120,12 @@ const App: React.FC = () => {
           </PrivateRoute>
           <PrivateRoute path="/settings">
             <Settings />
+          </PrivateRoute>
+          <PrivateRoute path="/mentoring">
+            <Mentoring />
+          </PrivateRoute>
+          <PrivateRoute path="/support">
+            <Support/>
           </PrivateRoute>
           <PrivateRoute path="/feedback">
             <Feedback />
