@@ -3,8 +3,6 @@
     display: flex;
     flex-direction: column;
     padding-top: 60px;
-    padding-left: 40px;
-    padding-right: 40px;
     width: 100%;
     &::after {
       flex: 0 0 20px;
@@ -16,12 +14,16 @@
       padding: 16px;
     }
 
+    .header {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+
     .materials {
       display: grid;
       grid-gap: 10px;
       margin-top: 20px;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding: 10px 40px;
       min-height: fit-content;
       width: 100%;
       background-color: rgba(242, 111, 99, 0.06);
@@ -35,9 +37,18 @@
       }
     }
 
-    .subjectTitle {
-      margin-top: 32px;
+    .videos {
+      padding-top: 60px;
+      padding-left: 40px;
+      padding-right: 40px;
+
+      .videoCards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 450px);
+        grid-gap: 40px;
+      }
     }
+
   }
 
   .screeningModalContainer {

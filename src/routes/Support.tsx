@@ -9,6 +9,7 @@ import { headerText, cardText1, cardText2 } from '../assets/supportTexts';
 
 import classes from './Support.module.scss';
 import { FileButton } from '../components/button/FileButton';
+import { VideoCard } from '../components/cards/VideoCard';
 
 const Wrapper = styled.div`
   display: flex;
@@ -61,8 +62,10 @@ const Support: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      <Title>Hilfestellungen</Title>
-      <Text large>{headerText}</Text>
+      <div className={classes.header}>
+        <Title>Hilfestellungen</Title>
+        <Text large>{headerText}</Text>
+      </div>
       <div className={classes.materials}>
         <SupportCard>
           <MaterialCard1 />
@@ -72,19 +75,46 @@ const Support: React.FC = () => {
         </SupportCard>
       </div>
 
-      <Title>
-        Hilfreiche Videos <Title size="h3">Playlist</Title>
-      </Title>
-      <div>
-        <Wrapper>
-          {userContext.user.subjects.map((subject) => (
-            <MentorCard
-              key={subject.name}
-              subject={subject}
-              // type={userContext.user.type}
-            />
-          ))}
-        </Wrapper>
+      <div className={classes.videos}>
+        <Title>Hilfreiche Videos</Title>
+        <Title size="h3">Playlist</Title>
+        <div className={classes.videoCards}>
+          <VideoCard
+            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
+            title="THE ELDER SCROLLS"
+            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
+          />
+          <VideoCard
+            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
+            title="THE ELDER SCROLLS"
+            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
+          />
+          <VideoCard
+            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
+            title="THE ELDER SCROLLS"
+            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
+          />
+          <VideoCard
+            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
+            title="THE ELDER SCROLLS"
+            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
+          />
+          <VideoCard
+            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
+            title="THE ELDER SCROLLS"
+            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
+          />
+          <VideoCard
+            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
+            title="THE ELDER SCROLLS"
+            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
+          />
+          <VideoCard
+            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
+            title="THE ELDER SCROLLS"
+            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
+          />
+        </div>
       </div>
     </div>
   );
