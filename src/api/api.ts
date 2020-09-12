@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Credentials, User, Subject } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
-import { Tutee, Tutor } from '../types/Registration';
+import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
@@ -352,6 +352,23 @@ export const axiosRegisterTutee = (tutee: Tutee): Promise<void> => {
   });
 };
 
+export const axiosRegisterStateTutee = (tutee: Tutee): Promise<void> => {
+  if (!isValidTutee(tutee)) {
+    throw new Error('Tutee is not valid');
+  }
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${apiURL}/register/tutee/state`, tutee)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export const axiosRegisterTutor = (tutor: Tutor): Promise<void> => {
   if (!isValidTutor(tutor)) {
     throw new Error('Tutor is not valid');
@@ -634,6 +651,23 @@ export const axiosJoinBBBmeeting = (
       .post(url, { subcourseId }, { headers: { token } })
       .then((response) => {
         console.log(response);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosGetCooperatingSchool = (
+  state: string
+): Promise<SchoolInfo[]> => {
+  const url = `${apiURL}/register/${state}/schools`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then((response) => {
         resolve(response.data);
       })
       .catch((error) => {
