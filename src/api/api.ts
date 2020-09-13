@@ -5,6 +5,7 @@ import { Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
+import { Material } from '../types/Material';
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -639,5 +640,20 @@ export const axiosJoinBBBmeeting = (
       .catch((error) => {
         reject(error);
       });
+  });
+};
+
+export const axiosGetMentoringMaterial = (
+  token: string,
+  type: string,
+  location: string
+): Promise<Material[]> => {
+  const url = `${apiURL}/mentoring/material`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(url, { type, location }, { headers: { token } })
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error));
   });
 };

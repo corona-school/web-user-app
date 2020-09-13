@@ -10,6 +10,7 @@ import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { CompletedSubCourse } from '../components/forms/CreateCourse';
 import { CompletedLecture } from '../routes/CourseForm';
+import { Material } from '../types/Material';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
@@ -77,6 +78,7 @@ interface IApiContext {
     courseId: number,
     subcourseId: number
   ) => Promise<CourseOverview>;
+  getMentoringMaterial: (type: string, location: string) => Promise<Material[]>;
 }
 
 export const ApiContext = React.createContext<IApiContext>({
@@ -110,6 +112,7 @@ export const ApiContext = React.createContext<IApiContext>({
   registerTutor: (tutor) => Promise.reject(),
   sendCourseGroupMail: (id, subCourseId, subject, body) => Promise.reject(),
   joinBBBmeeting: (courseId, subcourseId) => Promise.reject(),
+  getMentoringMaterial: (type, location) => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -243,6 +246,9 @@ export const ApiProvider: React.FC = ({ children }) => {
   const joinBBBmeeting = (courseId: number, subcourseId: number) =>
     api.axiosJoinBBBmeeting(token, courseId, subcourseId);
 
+  const getMentoringMaterial = (type: string, location: string) =>
+    api.axiosGetMentoringMaterial(token, type, location);
+
   return (
     <ApiContext.Provider
       value={{
@@ -270,6 +276,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         cancelLecture,
         publishSubCourse,
         joinBBBmeeting,
+        getMentoringMaterial,
         editCourse,
         editSubCourse,
         editLecture,
