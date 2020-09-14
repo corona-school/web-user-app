@@ -8,8 +8,10 @@ const Highlight = styled.div`
   height: 8px;
 `;
 
-export const VideoCard = ({ url, title, caption }) => {
+export const VideoCard = ({ title, caption, id }) => {
   const theme = useContext(ThemeContext);
+
+  const url = `https://www.youtube-nocookie.com/embed/${id}`;
 
   return (
     <div className={classes.container}>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Context from '../context';
 import { ScreeningStatus } from '../types';
@@ -10,6 +10,8 @@ import { headerText, cardText1, cardText2 } from '../assets/supportTexts';
 import classes from './Support.module.scss';
 import { FileButton } from '../components/button/FileButton';
 import { VideoCard } from '../components/cards/VideoCard';
+import { ApiContext } from '../context/ApiContext';
+import { Material } from '../types/Material';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,6 +19,140 @@ const Wrapper = styled.div`
   width: 100%;
   margin: 0 !important;
 `;
+
+const MaterialCard1 = () => {
+  const [files, setFiles] = useState<Material[]>([]);
+  const [loading, setLoading] = useState(false);
+  const apiContext = useContext(ApiContext);
+
+  useEffect(() => {
+    setLoading(true);
+    apiContext
+      .getMentoringMaterial('files', 'pdf_entry')
+      .then((f) => setFiles(f))
+      .then(() => console.log(files))
+      .catch((err) =>
+        console.warn(
+          `Error when loading entry files for mentoring: ${err.message}`
+        )
+      )
+      .finally(() => setLoading(false));
+  }, [apiContext]);
+
+  return (
+    <div>
+      <Title size="h4">
+        <b>Materialien</b> für einen erfolgreichen Einstieg
+      </Title>
+      <Text>{cardText1}</Text>
+      <div className={classes.links}>
+        {files.map((f) => (
+          <FileButton name={f.name} linkToFile={f.link} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const MaterialCard2 = () => {
+  const [files, setFiles] = useState<Material[]>([]);
+  const [loading, setLoading] = useState(false);
+  const apiContext = useContext(ApiContext);
+
+  useEffect(() => {
+    setLoading(true);
+    apiContext
+      .getMentoringMaterial('files', 'pdf_class')
+      .then((f) => setFiles(f))
+      .then(() => console.log(files))
+      .catch((err) =>
+        console.warn(
+          `Error when loading class files for mentoring: ${err.message}`
+        )
+      )
+      .finally(() => setLoading(false));
+  }, [apiContext]);
+
+  return (
+    <div>
+      <Title size="h4">
+        <b>Materialien</b> zur Unterrichtsgestaltung
+      </Title>
+      <Text>{cardText2}</Text>
+      <div className={classes.links}>
+        {files.map((f) => (
+          <FileButton name={f.name} linkToFile={f.link} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ToolsPlaylist = () => {
+  const [videos, setVideos] = useState<Material[]>([]);
+  const [loading, setLoading] = useState(false);
+  const apiContext = useContext(ApiContext);
+
+  useEffect(() => {
+    setLoading(true);
+    apiContext
+      .getMentoringMaterial('playlist', 'playlist_tools')
+      .then((v) => setVideos(v))
+      .catch((err) =>
+        console.warn(
+          `Error when loading tools videos for mentoring: ${err.message}`
+        )
+      )
+      .finally(() => setLoading(false));
+  }, [apiContext]);
+
+  return (
+    <div className={classes.videoCards}>
+      {videos.map((v) => (
+        <VideoCard title={v.title} caption={v.description} id={v.id} />
+      ))}
+    </div>
+  );
+};
+
+const InstructionsPlaylist = () => {
+  const [videos, setVideos] = useState<Material[]>([]);
+  const [loading, setLoading] = useState(false);
+  const apiContext = useContext(ApiContext);
+
+  useEffect(() => {
+    setLoading(true);
+    apiContext
+      .getMentoringMaterial('playlist', 'playlist_instructions')
+      .then((v) => setVideos(v))
+      .catch((err) =>
+        console.warn(
+          `Error when loading instructions videos for mentoring: ${err.message}`
+        )
+      )
+      .finally(() => setLoading(false));
+  }, [apiContext]);
+
+  return (
+    <div className={classes.videoCards}>
+      {videos.map((v) => (
+        <VideoCard title={v.title} caption={v.description} id={v.id} />
+      ))}
+    </div>
+  );
+};
+
+const Playlists = () => {
+  return (
+    <div className={classes.videos}>
+      <Title>Hilfreiche Videos</Title>
+      <Title size="h3">Tools für die Online-Nachhilfe</Title>
+      <ToolsPlaylist />
+      <Title size="h3">Erklärvideos</Title>
+      <InstructionsPlaylist />
+    </div>
+  );
+};
 
 const Support: React.FC = () => {
   const modalContext = useContext(Context.Modal);
@@ -33,33 +169,6 @@ const Support: React.FC = () => {
     }
   }, [userContext.user.screeningStatus]);
 
-  const MaterialCard1 = () => {
-    return (
-      <div>
-        <Title size="h4">
-          <b>Materialien</b> für einen erfolgreichen Einstieg
-        </Title>
-        <Text>{cardText1}</Text>
-      </div>
-    );
-  };
-
-  const MaterialCard2 = () => {
-    return (
-      <div>
-        <Title size="h4">
-          <b>Materialien</b> zur Unterrichtsgestaltung
-        </Title>
-        <Text>{cardText2}</Text>
-        <div className={classes.links}>
-          <FileButton name="Test2" linkToFile="abc.de" />
-          <FileButton name="Test1" linkToFile="google.de" />
-          <FileButton name="Test2" linkToFile="abc.de" />
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -74,48 +183,7 @@ const Support: React.FC = () => {
           <MaterialCard2 />
         </SupportCard>
       </div>
-
-      <div className={classes.videos}>
-        <Title>Hilfreiche Videos</Title>
-        <Title size="h3">Playlist</Title>
-        <div className={classes.videoCards}>
-          <VideoCard
-            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
-            title="THE ELDER SCROLLS"
-            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
-          />
-          <VideoCard
-            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
-            title="THE ELDER SCROLLS"
-            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
-          />
-          <VideoCard
-            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
-            title="THE ELDER SCROLLS"
-            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
-          />
-          <VideoCard
-            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
-            title="THE ELDER SCROLLS"
-            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
-          />
-          <VideoCard
-            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
-            title="THE ELDER SCROLLS"
-            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
-          />
-          <VideoCard
-            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
-            title="THE ELDER SCROLLS"
-            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
-          />
-          <VideoCard
-            url="https://www.youtube-nocookie.com/embed/y7Ulq5dvTpo"
-            title="THE ELDER SCROLLS"
-            caption="Explore the snow capped peaks of Western Skyrim and the subterranean underworld of Blackreach, uncover an ancient supernat"
-          />
-        </div>
-      </div>
+      <Playlists />
     </div>
   );
 };

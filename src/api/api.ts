@@ -650,9 +650,13 @@ export const axiosGetMentoringMaterial = (
 ): Promise<Material[]> => {
   const url = `${apiURL}/mentoring/material`;
 
+  const params = new URLSearchParams();
+  params.append('type', type);
+  params.append('location', location);
+
   return new Promise((resolve, reject) => {
     axios
-      .post(url, { type, location }, { headers: { token } })
+      .get(url, { headers: { token }, params })
       .then((response) => resolve(response.data))
       .catch((error) => reject(error));
   });
