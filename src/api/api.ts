@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { Simulate } from 'react-dom/test-utils';
 import { Credentials, User, Subject } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { Tutee, Tutor } from '../types/Registration';
@@ -6,6 +7,8 @@ import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { Material } from '../types/Material';
+import { FeedbackCall } from '../types/FeedbackCall';
+import error = Simulate.error;
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -657,6 +660,17 @@ export const axiosGetMentoringMaterial = (
   return new Promise((resolve, reject) => {
     axios
       .get(url, { headers: { token }, params })
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error));
+  });
+};
+
+export const axiosGetFeedbackCallData = (
+  token: string
+): Promise<FeedbackCall> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${apiURL}/mentoring/feedbackCall`, { headers: { token } })
       .then((response) => resolve(response.data))
       .catch((error) => reject(error));
   });
