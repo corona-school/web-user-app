@@ -214,11 +214,6 @@ const DissolveMatchModal: React.FC<{
                 Vielen Dank für deine Rückmeldung!
                 <br />
                 <br />
-                Sobald du die Zusammenarbeit beendest, werden wir {matchFirstname} darüber
-                per E-Mail informieren. {matchFirstname} hat dann die Möglichkeit, sich
-                bei Bedarf neu verbinden zu lassen.
-                <br />
-                <br />
                 Sobald du die Zusammenarbeit endgültig beendest, werden wir{' '}
                 {matchFirstname} darüber per E-Mail informieren.{' '}
                 {matchFirstname} hat dann die Möglichkeit sich bei Bedarf neu
