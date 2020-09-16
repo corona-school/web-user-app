@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './FileButton.module.scss';
 import Icons from '../../assets/icons';
+import { Text } from '../Typography';
 
 export const FileButton = ({ name, linkToFile }) => {
   return (
@@ -11,7 +12,7 @@ export const FileButton = ({ name, linkToFile }) => {
       onClick={() => window.open(linkToFile, '_blank')}
     >
       <Icons.Pdf />
-      <div className={classes.text}>{name}</div>
+      <Text className={classes.text}>{name}</Text>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 .container {
   display: flex;
-  height: 60px;
-  width: 200px;
+  height: 72px;
+  width: 300px;
 
   cursor: pointer;
 
@@ -14,15 +14,11 @@
   }
 
   .text {
-    padding-left: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    height: 100%;
-    width: 100%;
-    margin-top: auto;
-    margin-bottom: auto;
+    padding: 10px 0px 10px 10px;
+    margin: 0px;
+    -webkit-column-width: 247px;
+    width: 247px;
     overflow: hidden;
-    text-overflow: clip;
   }
 
 }
