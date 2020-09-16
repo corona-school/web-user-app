@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Spin } from 'antd';
+import { useHistory } from 'react-router-dom';
 import Context from '../context';
 import { ScreeningStatus } from '../types';
 import SupportCard from '../components/cards/SupportCard';
@@ -90,8 +91,12 @@ const Playlist = ({ location }) => {
 const Support: React.FC = () => {
   const modalContext = useContext(Context.Modal);
   const userContext = useContext(Context.User);
+  const history = useHistory();
 
   useEffect(() => {
+    if (userContext.user.type !== 'student') {
+      history.push('/');
+    }
     if (
       userContext.user.screeningStatus === ScreeningStatus.Unscreened ||
       (userContext.user.isInstructor &&
