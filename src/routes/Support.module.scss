@@ -11,10 +11,6 @@
     content: 'spacer';
   }
 
-  @media only screen and (max-width: 600px) {
-    padding: 16px;
-  }
-
   .header {
     padding-left: 40px;
     padding-right: 40px;
@@ -29,12 +25,15 @@
     width: 100%;
     background-color: rgba(242, 111, 99, 0.06);
 
+    @media only screen and (max-width: 600px) {
+      padding: 20px 0px;
+      margin-left: 0px;
+    }
 
     .links {
-      margin-left: 8px;
-      margin-top: 20px;
+      margin: 20px 8px 0px;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fill, 300px);
       grid-gap: 10px;
     }
   }
@@ -44,11 +43,21 @@
     padding-left: 40px;
     padding-right: 40px;
 
+    @media only screen and (max-width: 600px){
+      padding: 10px 0px;
+    }
+
     .videoCards {
       display: grid;
       grid-template-columns: repeat(auto-fill, 450px);
       grid-gap: 40px;
       margin-bottom: 40px;
+
+      @media only screen and (max-width: 600px) {
+        grid-template-columns: repeat(auto-fill, 360px);
+        grid-gap: 10px;
+        justify-content: center;
+      }
     }
   }
 

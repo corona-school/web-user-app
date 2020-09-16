@@ -9,7 +9,9 @@
   margin: 8px;
 
   @media only screen and (max-width: 600px) {
-    margin-top: 16px;
+    width: 360px;
+    height: fit-content;
+    margin: 0px;
   }
 
   .cardContent {
@@ -27,6 +29,11 @@
     .video {
       width: 400px;
       height: 225px;
+
+      @media only screen and (max-width: 600px) {
+        width: 310px;
+        height: 174px;
+      }
     }
 
     .caption {
