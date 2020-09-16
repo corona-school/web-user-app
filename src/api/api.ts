@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-import { Simulate } from 'react-dom/test-utils';
 import { Credentials, User, Subject } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { Tutee, Tutor } from '../types/Registration';
@@ -8,7 +7,6 @@ import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { Material } from '../types/Material';
 import { FeedbackCall } from '../types/FeedbackCall';
-import error = Simulate.error;
 
 export const redeemVerificationToken = (
   verificationToken: string
