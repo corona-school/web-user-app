@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { Spin } from 'antd';
 import Context from '../context';
 import { ScreeningStatus } from '../types';
-import MentorCard from '../components/cards/MentorCard';
 import SupportCard from '../components/cards/SupportCard';
 import { Text, Title } from '../components/Typography';
 import { headerText, cardText1, cardText2 } from '../assets/supportTexts';
@@ -13,14 +12,7 @@ import { VideoCard } from '../components/cards/VideoCard';
 import { ApiContext } from '../context/ApiContext';
 import { Material } from '../types/Material';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  margin: 0 !important;
-`;
-
-const MaterialCard1 = () => {
+const MaterialCard = ({ location, title, description }) => {
   const [files, setFiles] = useState<Material[]>([]);
   const [loading, setLoading] = useState(false);
   const apiContext = useContext(ApiContext);
@@ -28,67 +20,38 @@ const MaterialCard1 = () => {
   useEffect(() => {
     setLoading(true);
     apiContext
-      .getMentoringMaterial('files', 'pdf_entry')
+      .getMentoringMaterial('files', location)
       .then((f) => setFiles(f))
       .then(() => console.log(files))
       .catch((err) =>
         console.warn(
-          `Error when loading entry files for mentoring: ${err.message}`
+          `Error when loading ${location} for mentoring: ${err.message}`
         )
       )
       .finally(() => setLoading(false));
   }, [apiContext]);
 
   return (
-    <div>
-      <Title size="h4">
-        <b>Materialien</b> für einen erfolgreichen Einstieg
-      </Title>
-      <Text>{cardText1}</Text>
-      <div className={classes.links}>
-        {files.map((f) => (
-          <FileButton name={f.name} linkToFile={f.link} />
-        ))}
-      </div>
-    </div>
+    <SupportCard>
+      <Title size="h4">{title}</Title>
+      <Text>{description}</Text>
+      {loading && (
+        <div className={classes.spin}>
+          <Spin />
+        </div>
+      )}
+      {!loading && (
+        <div className={classes.links}>
+          {files.map((f) => (
+            <FileButton name={f.name} linkToFile={f.link} />
+          ))}
+        </div>
+      )}
+    </SupportCard>
   );
 };
 
-const MaterialCard2 = () => {
-  const [files, setFiles] = useState<Material[]>([]);
-  const [loading, setLoading] = useState(false);
-  const apiContext = useContext(ApiContext);
-
-  useEffect(() => {
-    setLoading(true);
-    apiContext
-      .getMentoringMaterial('files', 'pdf_class')
-      .then((f) => setFiles(f))
-      .then(() => console.log(files))
-      .catch((err) =>
-        console.warn(
-          `Error when loading class files for mentoring: ${err.message}`
-        )
-      )
-      .finally(() => setLoading(false));
-  }, [apiContext]);
-
-  return (
-    <div>
-      <Title size="h4">
-        <b>Materialien</b> zur Unterrichtsgestaltung
-      </Title>
-      <Text>{cardText2}</Text>
-      <div className={classes.links}>
-        {files.map((f) => (
-          <FileButton name={f.name} linkToFile={f.link} />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const ToolsPlaylist = () => {
+const Playlist = ({ location }) => {
   const [videos, setVideos] = useState<Material[]>([]);
   const [loading, setLoading] = useState(false);
   const apiContext = useContext(ApiContext);
@@ -96,60 +59,30 @@ const ToolsPlaylist = () => {
   useEffect(() => {
     setLoading(true);
     apiContext
-      .getMentoringMaterial('playlist', 'playlist_tools')
+      .getMentoringMaterial('playlist', location)
       .then((v) => setVideos(v))
       .catch((err) =>
         console.warn(
-          `Error when loading tools videos for mentoring: ${err.message}`
+          `Error when loading playlist ${location} for mentoring: ${err.message}`
         )
       )
       .finally(() => setLoading(false));
   }, [apiContext]);
 
   return (
-    <div className={classes.videoCards}>
-      {videos.map((v) => (
-        <VideoCard title={v.title} caption={v.description} id={v.id} />
-      ))}
-    </div>
-  );
-};
-
-const InstructionsPlaylist = () => {
-  const [videos, setVideos] = useState<Material[]>([]);
-  const [loading, setLoading] = useState(false);
-  const apiContext = useContext(ApiContext);
-
-  useEffect(() => {
-    setLoading(true);
-    apiContext
-      .getMentoringMaterial('playlist', 'playlist_instructions')
-      .then((v) => setVideos(v))
-      .catch((err) =>
-        console.warn(
-          `Error when loading instructions videos for mentoring: ${err.message}`
-        )
-      )
-      .finally(() => setLoading(false));
-  }, [apiContext]);
-
-  return (
-    <div className={classes.videoCards}>
-      {videos.map((v) => (
-        <VideoCard title={v.title} caption={v.description} id={v.id} />
-      ))}
-    </div>
-  );
-};
-
-const Playlists = () => {
-  return (
-    <div className={classes.videos}>
-      <Title>Hilfreiche Videos</Title>
-      <Title size="h3">Tools für die Online-Nachhilfe</Title>
-      <ToolsPlaylist />
-      <Title size="h3">Erklärvideos</Title>
-      <InstructionsPlaylist />
+    <div>
+      {loading && (
+        <div className={classes.spin}>
+          <Spin />
+        </div>
+      )}
+      {!loading && (
+        <div className={classes.videoCards}>
+          {videos.map((v) => (
+            <VideoCard title={v.title} caption={v.description} id={v.id} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -176,14 +109,32 @@ const Support: React.FC = () => {
         <Text large>{headerText}</Text>
       </div>
       <div className={classes.materials}>
-        <SupportCard>
-          <MaterialCard1 />
-        </SupportCard>
-        <SupportCard>
-          <MaterialCard2 />
-        </SupportCard>
+        <MaterialCard
+          location="pdf_entry"
+          title={
+            <div>
+              <b>Materialien</b> für einen erfolgreichen Einstieg
+            </div>
+          }
+          description={cardText1}
+        />
+        <MaterialCard
+          location="pdf_class"
+          title={
+            <div>
+              <b>Materialien</b> zur Unterrichtsgestaltung
+            </div>
+          }
+          description={cardText2}
+        />
       </div>
-      <Playlists />
+      <div className={classes.videos}>
+        <Title>Hilfreiche Videos</Title>
+        <Title size="h3">Tools für die Online-Nachhilfe</Title>
+        <Playlist location="playlist_tools" />
+        <Title size="h3">Erklärvideos</Title>
+        <Playlist location="playlist_instructions" />
+      </div>
     </div>
   );
 };
