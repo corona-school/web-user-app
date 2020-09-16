@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 
@@ -7,29 +7,68 @@ import Button, { LinkButton } from '../button';
 
 import classes from './FeedbackCallCard.module.scss';
 import { User } from '../../types';
+import {FeedbackCall} from "../../types/FeedbackCall";
+import {ApiContext} from "../../context/ApiContext";
+import moment from "moment";
+import  { Tooltip } from "antd";
 
 interface Props {
     user: User;
   }
 
 const FeedbackCallCard: React.FC<Props> = ({ user }) => {
+  const [feedbackCall, setFeedbackCall] = useState<FeedbackCall>({});
+  const [linkActive, setLinkActive] = useState(false);
+  const apiContext = useContext(ApiContext);
+
+  useEffect(() => {
+    apiContext
+      .getFeedbackCallData()
+      .then((res) => {
+        setFeedbackCall(res);
+        return res;
+      })
+      .then((res) => {
+        if (!res.link) {
+          setLinkActive(false);
+        }
+        if (new Date(res.time).getTime() - new Date().getTime() <= 3600000) {
+          setLinkActive(true);
+        }
+      })
+      .catch((err) =>
+        console.warn(`Error when loading feedback call data: ${err.message}`)
+      );
+  }, [apiContext]);
+
+  console.log(linkActive);
+
   return (
     <CardBase highlightColor="#F4486D" className={classes.baseContainer}>
         <Title size="h4" bold>Feedback Call</Title>
-        <Text style={{ color: 'rgb(244, 72, 109)' }}>10.06.2020 17:30 Uhr</Text>
+        <Text style={{ color: 'rgb(244, 72, 109)' }}>{feedbackCall.time ? moment(feedbackCall.time).format("DD.MM.YYYY hh:mm") : "Momentan ist leider kein Feedback-Call geplant."}</Text>
         <Text>Du hast Lust, dich mit anderen Studierenden über deine Erfahrungen und Herausforderungen bei der Online-Nachhilfe auszutauschen?
             Dann bist du herzlich zu unseren gemeinsamen Feedback-Calls eingeladen. Der passende Link wird immer am Tag des Calls
             veröffentlicht.
         </Text>
+      {linkActive && (
         <LinkButton
-              className={classes.buttonParticipate}
-              href={'https://meet.jit.si/corona-school-33fb9iu9348w258d2'}  
-              target="_blank"
-              style={{ margin: '4px' }}
-             
-            >
-              Teilnehmen
-            </LinkButton>
+          className={classes.buttonParticipate}
+          href={feedbackCall.link}
+          target="_blank"
+          style={{ margin: '4px' }}
+        >
+          Teilnehmen
+        </LinkButton>
+      )}
+      {!linkActive && (
+        <LinkButton
+          className={classes.inactiveButtonParticipate}
+          style={{ margin: '4px' }}
+        >
+          Teilnehmen
+        </LinkButton>
+      )}
     </CardBase>
   );
 };

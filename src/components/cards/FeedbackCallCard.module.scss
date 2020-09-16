@@ -1,17 +1,27 @@
 .baseContainer {
-    max-width: 493px !important;
-    width: 100%;
-   // min-height: 260px;
-    height: 150;
-  
-  }
+  max-width: 493px !important;
+  width: 100%;
+  // min-height: 260px;
+  height: 150;
 
   .buttonParticipate {
     background-color: rgb(244, 72, 109);
     color: white;
     display: flex;
     float: right;
+
     &:hover {
       color: white;
     }
+  }
+
+  .inactiveButtonParticipate {
+    background-color: #dadada;
+    color: white;
+    display: flex;
+    float: right;
+
+    pointer-events: none;
+  }
+
 }
