@@ -5,7 +5,7 @@
   -moz-box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
   box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
   width: 450px;
-  height: 550px;
+  height: 565px;
   margin: 8px;
 
   @media only screen and (max-width: 600px) {
@@ -15,21 +15,25 @@
   .cardContent {
     background: #ffffff;
     border-radius: 4px;
-    padding: 8px 20px;
+    padding: 8px 25px;
+
+    .title {
+      margin: 20px 0px;
+      height: 56px;
+      -webkit-column-width: 400px;
+      overflow: hidden;
+    }
 
     .video {
       width: 400px;
-      height: 220px;
-      padding: 8px;
+      height: 225px;
     }
 
     .caption {
-      height: 225px;
-      width: 100%;
-      padding: 8px;
-
+      max-height: 172px;
+      -webkit-column-width: 400px;
+      margin: 20px 0px;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
   }
 }

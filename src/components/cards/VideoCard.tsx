@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
 import classes from './VideoCard.module.scss';
-import { Title } from '../Typography';
+import { Title, Text } from '../Typography';
 
 const Highlight = styled.div`
   background-color: ${(props) => props.color};
@@ -17,7 +17,11 @@ export const VideoCard = ({ title, caption, id }) => {
     <div className={classes.container}>
       <Highlight color={theme.color.cardHighlightBlue} />
       <div className={classes.cardContent}>
-        {title && <Title size="h4">{title}</Title>}
+        {title && (
+          <Title className={classes.title} size="h4">
+            {title}
+          </Title>
+        )}
         <iframe
           className={classes.video}
           title={url}
@@ -26,7 +30,7 @@ export const VideoCard = ({ title, caption, id }) => {
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         />
-        {caption && <div className={classes.caption}>{caption}</div>}
+        {caption && <Text className={classes.caption}>{caption}</Text>}
       </div>
     </div>
   );
