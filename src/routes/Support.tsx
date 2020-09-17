@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import { Spin } from 'antd';
 import { useHistory } from 'react-router-dom';
 import Context from '../context';
@@ -14,7 +14,15 @@ import { ApiContext } from '../context/ApiContext';
 import { Material } from '../types/Material';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
 
-const MaterialCard = ({ location, title, description }) => {
+const MaterialCard = ({
+  location,
+  title,
+  description,
+}: {
+  location: string;
+  title: ReactNode;
+  description: string;
+}) => {
   const [files, setFiles] = useState<Material[]>([]);
   const [loading, setLoading] = useState(false);
   const apiContext = useContext(ApiContext);
@@ -53,7 +61,7 @@ const MaterialCard = ({ location, title, description }) => {
   );
 };
 
-const Playlist = ({ location }) => {
+const Playlist = ({ location }: { location: string }) => {
   const [videos, setVideos] = useState<Material[]>([]);
   const [loading, setLoading] = useState(false);
   const apiContext = useContext(ApiContext);
