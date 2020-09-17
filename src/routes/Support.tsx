@@ -12,6 +12,7 @@ import { FileButton } from '../components/button/FileButton';
 import { VideoCard } from '../components/cards/VideoCard';
 import { ApiContext } from '../context/ApiContext';
 import { Material } from '../types/Material';
+import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
 
 const MaterialCard = ({ location, title, description }) => {
   const [files, setFiles] = useState<Material[]>([]);
@@ -140,6 +141,7 @@ const Support: React.FC = () => {
         <Title size="h3">Erklärvideos</Title>
         <Playlist location="playlist_instructions" />
       </div>
+      <AccountNotScreenedModal />
     </div>
   );
 };
