@@ -24,6 +24,10 @@
       height: 56px;
       -webkit-column-width: 400px;
       overflow: hidden;
+
+      @media only screen and (max-width: 600px) {
+        height: fit-content;
+      }
     }
 
     .video {
