@@ -18,7 +18,7 @@ export const VideoCard = ({ title, caption, id }) => {
       <Highlight color={theme.color.cardHighlightBlue} />
       <div className={classes.cardContent}>
         {title && (
-          <Title className={classes.title} size="h4">
+          <Title className={classes.title} size="h5" bold>
             {title}
           </Title>
         )}
