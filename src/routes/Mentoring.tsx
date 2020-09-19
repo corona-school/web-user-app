@@ -46,7 +46,13 @@ const Mentoring: React.FC = () => {
           und wertvolle Tipps für gute, digitale Zusammenarbeit erhalten. Darüber hinaus kannst du dich mit anderen Studierenden bei
           Feedback-Calls oder in der Facebook-Gruppe austauschen.
       </Text>
-      <Button className={classes.buttonMoreInfo}>Weitere Informationen</Button>
+      <LinkButton
+        className={classes.buttonMoreInfo}
+        href="https://drive.google.com/file/d/1UvrOSlS3nF_Bk-0hGlnBwzf0xWBm3cKQ/view"
+        target="_blank"
+      >
+        Weitere Informationen
+      </LinkButton>
       <Wrapper>
           <MentoringCard user={userContext.user} />
           <div>
@@ -55,8 +61,8 @@ const Mentoring: React.FC = () => {
           </div>
       </Wrapper>
 
-      
-     
+
+
     </div>
   );
 };
