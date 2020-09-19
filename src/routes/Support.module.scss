@@ -35,6 +35,11 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, 300px);
       grid-gap: 10px;
+
+      @media only screen and (max-width: 600px) {
+        justify-content: center;
+        justify-items: center;
+      }
     }
   }
 
@@ -45,6 +50,15 @@
 
     @media only screen and (max-width: 600px){
       padding: 10px 0px;
+    }
+
+    .headlines {
+      @media only screen and (max-width: 600px) and (min-width: 450px){
+        padding-left: 40px;
+      }
+      @media only screen and (max-width: 450px){
+        margin-left: 25px;
+      }
     }
 
     .videoCards {

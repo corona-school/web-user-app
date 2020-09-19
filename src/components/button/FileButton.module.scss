@@ -3,6 +3,10 @@
   height: 72px;
   width: 300px;
 
+  @media only screen and (max-width: 600px){
+    width: 200px;
+  }
+
   cursor: pointer;
 
   &:hover {
@@ -19,6 +23,11 @@
     -webkit-column-width: 247px;
     width: 247px;
     overflow: hidden;
+
+    @media only screen and (max-width: 600px){
+      -webkit-column-width: 147px;
+      width: 147px;
+    }
   }
 
 }

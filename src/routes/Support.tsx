@@ -143,10 +143,14 @@ const Support: React.FC = () => {
         />
       </div>
       <div className={classes.videos}>
-        <Title>Hilfreiche Videos</Title>
-        <Title size="h3">Tools für die Online-Nachhilfe</Title>
+        <Title className={classes.headlines}>Hilfreiche Videos</Title>
+        <Title size="h3" className={classes.headlines}>
+          Tools für die Online-Nachhilfe
+        </Title>
         <Playlist location="playlist_tools" />
-        <Title size="h3">Erklärvideos</Title>
+        <Title size="h3" className={classes.headlines}>
+          Erklärvideos
+        </Title>
         <Playlist location="playlist_instructions" />
       </div>
       <AccountNotScreenedModal />
