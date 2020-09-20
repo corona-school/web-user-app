@@ -48,56 +48,55 @@ const Navigation: React.FC<Props> = (props) => {
         Corona School
       </div>
       <div className={classes.navigationGroup}>
-        <Welcome user={user} />
-        <div className={classes.section}>Menü</div>
-        {(type === 'pupil' || isTutor) && (
+        <div className={classes.menu}>
+          {(type === 'pupil' || isTutor) && (
+            <NavButton
+              to="/dashboard"
+              icon={<Icons.Home />}
+              onClick={() => props.setMenuOpen(false)}
+            >
+              Startseite
+            </NavButton>
+          )}
+          {(type === 'pupil' || isInstructor) && (
+            <NavButton
+              to="/courses"
+              icon={<Icons.Palm />}
+              active={
+                type === 'pupil' ||
+                instructorScreeningStatus === ScreeningStatus.Accepted
+              }
+              onClick={() => props.setMenuOpen(false)}
+            >
+              Kurse
+            </NavButton>
+          )}
+          {(type === 'pupil' || isTutor) && (
+            <NavButton
+              to="/matches"
+              icon={<Icons.Match />}
+              active={
+                type === 'pupil' || screeningStatus === ScreeningStatus.Accepted
+              }
+              onClick={() => props.setMenuOpen(false)}
+            >
+              Zuordnung
+            </NavButton>
+          )}
           <NavButton
-            to="/dashboard"
-            icon={<Icons.Home />}
+            to="/settings"
+            icon={<Icons.Settings />}
             onClick={() => props.setMenuOpen(false)}
           >
-            Startseite
+            Verwaltung
           </NavButton>
-        )}
-        {(type === 'pupil' || isInstructor) && (
-          <NavButton
-            to="/courses"
-            icon={<Icons.Palm />}
-            active={
-              type === 'pupil' ||
-              instructorScreeningStatus === ScreeningStatus.Accepted
-            }
-            onClick={() => props.setMenuOpen(false)}
-          >
-            Kurse
-          </NavButton>
-        )}
-        {(type === 'pupil' || isTutor) && (
-          <NavButton
-            to="/matches"
-            icon={<Icons.Match />}
-            active={
-              type === 'pupil' || screeningStatus === ScreeningStatus.Accepted
-            }
-            onClick={() => props.setMenuOpen(false)}
-          >
-            Zuordnung
-          </NavButton>
-        )}
-        <NavButton
-          to="/settings"
-          icon={<Icons.Settings />}
-          onClick={() => props.setMenuOpen(false)}
-        >
-          Verwaltung
-        </NavButton>
-        {/* <NavButton to="/feedback" icon={<Icons.Feedback />}>
+          {/* <NavButton to="/feedback" icon={<Icons.Feedback />}>
           Feedback
         </NavButton>
         <NavButton to="/help" icon={<Icons.Help />}>
           Hilfe
         </NavButton> */}
-        <div className={classes.section}>Social Media</div>
+        </div>
         <div className={classes.socialMediaButtons}>
           <SocialMediaButton
             icon="FacebookIcon"
@@ -121,11 +120,6 @@ const Navigation: React.FC<Props> = (props) => {
             onClick={() => props.setMenuOpen(false)}
           />
         </div>
-      </div>
-      <div className={classes.logoutContainer}>
-        <NavActionButton icon={<Icons.Logout />} onClick={handleLogoutClick}>
-          Ausloggen
-        </NavActionButton>
       </div>
     </div>
   );
