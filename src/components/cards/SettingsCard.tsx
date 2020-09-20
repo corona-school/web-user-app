@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
 
 import { message } from 'antd';
@@ -37,6 +37,16 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
     schoolType: user.schoolType,
     university: user.university,
   });
+
+  useEffect(() => {
+    setEditableUserSettings({
+      state: user.state,
+      grade: user.grade,
+      schoolType: user.schoolType,
+      university: user.university,
+    });
+  }, [user.state, user.grade, user.schoolType, user.university]);
+
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
