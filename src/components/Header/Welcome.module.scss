@@ -1,6 +1,6 @@
 @import '../../theme';
 
-.navigationUser {
+.welcome {
   display: flex;
   flex-direction: row;
   height: 62px;
@@ -12,11 +12,8 @@
     }
   }
 
-  .navigationName {
+  .nameDisplay {
     margin-right: 24px;
     align-self: center;
-  }
-  .navigationUserType {
-
   }
 }
