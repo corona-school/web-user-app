@@ -65,8 +65,8 @@ const SocialStyled = styled.a`
   cursor: pointer;
   display: flex;
   justify-content: center;
-  height: 20px;
-  width: 20px;
+  height: 2em;
+  width: 2em;
   object-fit: cover;
   margin: 0px 6px;
 

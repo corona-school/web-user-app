@@ -1,14 +1,11 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 import classnames from 'classnames';
 
-import { AuthContext } from '../../context/AuthContext';
 import { UserContext } from '../../context/UserContext';
 import Icons from '../../assets/icons';
 import { ScreeningStatus } from '../../types';
 import classes from './index.module.scss';
-import { NavButton, NavActionButton } from './NavButton';
-import Welcome from '../Header/Welcome';
+import { NavButton } from './NavButton';
 import { SocialMediaButton } from '../button/IconButton';
 
 interface Props {
@@ -17,7 +14,6 @@ interface Props {
 }
 
 const Navigation: React.FC<Props> = (props) => {
-  const authContext = useContext(AuthContext);
   const {
     user: {
       type,
@@ -26,16 +22,7 @@ const Navigation: React.FC<Props> = (props) => {
       isInstructor,
       isTutor,
     },
-    user,
   } = useContext(UserContext);
-  const history = useHistory();
-
-  const handleLogoutClick = () => {
-    authContext.setCredentials({ id: '', token: '' });
-    authContext.setStatus('missing');
-    authContext.deleteStoredCredentials();
-    history.push('/login');
-  };
 
   return (
     <div
