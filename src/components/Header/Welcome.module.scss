@@ -1,0 +1,22 @@
+@import '../../theme';
+
+.navigationUser {
+  display: flex;
+  flex-direction: row;
+  height: 62px;
+
+  .icon {
+    padding: 8px;
+    svg {
+      height: 100%
+    }
+  }
+
+  .navigationName {
+    margin-right: 24px;
+    align-self: center;
+  }
+  .navigationUserType {
+
+  }
+}

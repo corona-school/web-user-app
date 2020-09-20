@@ -3,6 +3,7 @@ import classes from './Welcome.module.scss';
 import Icons from '../../assets/icons';
 import { User } from '../../types';
 import { getUserType } from '../../utils/UserUtils';
+import {Text, Title} from "../Typography";
 
 interface Props {
   user: User;
@@ -14,10 +15,11 @@ const Welcome = (props: Props) => {
   return (
     <div className={classes.navigationUser}>
       <div className={classes.icon}>
-        <Icons.DefaultProfile width="100%" />
+        <Icons.DefaultProfile />
       </div>
-      <div className={classes.navigationName}>Hallo {user.firstname}</div>
-      <div className={classes.navigationUserType}>{getUserType(user)}</div>
+      <Title size="h4" className={classes.navigationName}>
+        {`${user.firstname} ${user.lastname}`}
+      </Title>
     </div>
   );
 };

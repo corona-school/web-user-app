@@ -8,7 +8,7 @@ import Icons from '../../assets/icons';
 import { ScreeningStatus } from '../../types';
 import classes from './index.module.scss';
 import { NavButton, NavActionButton } from './NavButton';
-import Welcome from './Welcome';
+import Welcome from '../Header/Welcome';
 import { SocialMediaButton } from '../button/IconButton';
 
 interface Props {

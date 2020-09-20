@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Navigation from './Navigation';
-import Header from './Header';
+import Header from './Header/Header';
 
 const PageWrapper = styled.div`
   display: flex;
