@@ -78,7 +78,10 @@ const RegisterTutee = () => {
           className={classes.formItem}
           label="E-Mail"
           name="email"
-          rules={[{ required: true, message: 'Bitte trage deine E-Mail ein!' }]}
+          rules={[
+            { required: true, message: 'Bitte trage deine E-Mail ein!' },
+            { type: 'email', message: 'Bitte trage eine gültige E-Mail ein!'}
+          ]}
         >
           <Input
             type="email"
