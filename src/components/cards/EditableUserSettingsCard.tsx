@@ -1,10 +1,11 @@
 import React from 'react';
-import { Input, Select } from 'antd';
+import { Select } from 'antd';
 import { Text } from '../Typography';
 
 import { StatesMap } from '../../assets/states';
 import classes from './EditableUserSettingsCard.module.scss';
 import { SchoolTypesMap } from '../../assets/schoolTypes';
+import UniSelect from '../forms/select/UniSelect';
 
 const SettingWrapper: React.FC<{
   title: string;
@@ -49,15 +50,15 @@ const EditableUserSettingsCard: React.FC<Props> = ({
           value={editableUserSettings.university}
           isEditing={isEditing}
         >
-          <Input
-            placeholder="Duale Hochschule Musterstadt"
-            value={editableUserSettings.university}
-            onChange={(e) => {
+          <UniSelect
+            className={classes.settingEditAreaSelect}
+            onChange={(v) => {
               onSettingChanges({
                 ...editableUserSettings,
-                university: e.target.value,
+                university: v,
               });
             }}
+            defaultValue={editableUserSettings.university}
           />
         </SettingWrapper>
       )}

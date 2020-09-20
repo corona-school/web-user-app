@@ -12,6 +12,7 @@ import { UserContext } from '../../context/UserContext';
 import { dev } from '../../api/config';
 
 import classes from './BecomeInternModal.module.scss';
+import UniSelect from '../forms/select/UniSelect';
 
 const { Option } = Select;
 
@@ -19,7 +20,7 @@ interface Props {
   user: User;
 }
 
-const BecomeInternModal: React.FC<Props> = () => {
+const BecomeInternModal: React.FC<Props> = ({ user }) => {
   const [loading, setLoading] = useState(false);
 
   const modalContext = useContext(ModalContext);
@@ -103,6 +104,7 @@ const BecomeInternModal: React.FC<Props> = () => {
             rules={[
               { required: true, message: 'Bitte trage dein Bundesland ein' },
             ]}
+            initialValue={user.state.toUpperCase()}
           >
             <Select
               showSearch
@@ -127,7 +129,7 @@ const BecomeInternModal: React.FC<Props> = () => {
               <Option value="ST">Sachsen-Anhalt</Option>
               <Option value="SH">Schleswig-Holstein</Option>
               <Option value="TH">Thüringen</Option>
-              <Option value="other">anderes Bundesland</Option>
+              <Option value="OTHER">anderes Bundesland</Option>
             </Select>
           </Form.Item>
 
@@ -178,8 +180,9 @@ const BecomeInternModal: React.FC<Props> = () => {
             rules={[
               { required: true, message: 'Bitte trage deine Universität ein' },
             ]}
+            initialValue={user.university}
           >
-            <Input placeholder="Duale Hochschule Musterstadt" />
+            <UniSelect />
           </Form.Item>
 
           <Form.Item
