@@ -13,12 +13,12 @@ const Welcome = (props: Props) => {
 
   return (
     <div className={classes.welcome}>
-      <div className={classes.icon}>
-        <Icons.DefaultProfile />
-      </div>
       <Title size="h4" className={classes.nameDisplay}>
         {`${user.firstname} ${user.lastname}`}
       </Title>
+      <div className={classes.icon}>
+        <Icons.DefaultProfile />
+      </div>
     </div>
   );
 };
