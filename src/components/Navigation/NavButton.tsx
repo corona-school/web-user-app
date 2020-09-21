@@ -10,7 +10,7 @@ export const StyledNavLink = styled(NavLink).withConfig({
   align-items: center;
   color: ${(props) => props.theme.color.navigationText};
   display: flex;
-  font-size: 16px;
+  font-size: 18px;
   padding: 16px 10px;
   text-decoration: none;
   border-radius: 40px;
@@ -18,8 +18,8 @@ export const StyledNavLink = styled(NavLink).withConfig({
 
   svg {
     fill: ${(props) => props.theme.color.navigationText};
-    height: 2em;
-    width: 2em;
+    height: 2.5em;
+    width: 2.5em;
 
     margin: 0px 12px 0px 12px;
   }

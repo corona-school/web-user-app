@@ -65,10 +65,15 @@ const SocialStyled = styled.a`
   cursor: pointer;
   display: flex;
   justify-content: center;
-  height: 2em;
-  width: 2em;
+  height: 2.5em;
+  width: 2.5em;
   object-fit: cover;
-  margin: 0px 6px;
+  margin: 0px 16px;
+
+  svg {
+    height: 2.5em;
+    width: 2.5em;
+  }
 
   :active {
     background: ${(props) =>
