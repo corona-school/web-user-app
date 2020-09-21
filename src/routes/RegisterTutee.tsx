@@ -80,7 +80,11 @@ const RegisterTutee = () => {
           name="email"
           rules={[
             { required: true, message: 'Bitte trage deine E-Mail ein!' },
-            { type: 'email', message: 'Bitte trage eine gültige E-Mail ein!'}
+            {
+              type: 'email',
+              message: 'Bitte trage eine gültige E-Mail ein!',
+              validateTrigger: 'onSubmit',
+            },
           ]}
         >
           <Input

@@ -95,7 +95,11 @@ const RegisterTutor: React.FC<Props> = (props) => {
           name="email"
           rules={[
             { required: true, message: 'Bitte trage deine Uni-E-Mail ein!' },
-            { type: 'email', message: 'Bitte trage eine gültige E-Mail ein!'}
+            {
+              type: 'email',
+              message: 'Bitte trage eine gültige E-Mail ein!',
+              validateTrigger: 'onSubmit',
+            },
           ]}
         >
           <Input
