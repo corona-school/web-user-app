@@ -1,4 +1,5 @@
 import React from 'react';
+import { DownOutlined } from '@ant-design/icons';
 import classes from './Welcome.module.scss';
 import Icons from '../../assets/icons';
 import { User } from '../../types';
@@ -19,6 +20,7 @@ const Welcome = (props: Props) => {
       <div className={classes.icon}>
         <Icons.DefaultProfile />
       </div>
+      <DownOutlined className={classes.downIcon} />
     </div>
   );
 };
