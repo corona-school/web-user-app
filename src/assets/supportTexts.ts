@@ -1,13 +1,12 @@
 export const headerText =
-  'Lorem ipsum dolor sit amet, consetetur sadipscing ' +
-  'elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna ' +
-  'aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo ' +
-  'dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus ' +
-  'est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur ' +
-  'sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et ' +
-  'dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et ' +
-  'justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata ' +
-  'sanctus est Lorem ipsum dolor sit amet.';
+  'Hier findest du Materialien, die dich während deiner gesamten Zeit in der ' +
+  'Corona School unterstützen sollen. Insbesondere haben wir verschiedene ' +
+  'Leitfäden entwickelt, die dir den Einstieg erleichtern sollen. Welche ' +
+  'digitalen Tools kann ich für den Online-Unterricht sinnvoll nutzen? Wie ' +
+  'motiviere ich meine*n Schüler*in zum Lernen? Wie schaffe ich eine gute ' +
+  'Lernatmosphäre? Oder wo kann ich kostenlos weiteres Unterrichtsmaterial ' +
+  'finden? Wir haben Antworten auf deine Fragen zusammengetragen und hier ' +
+  'zur Verfügung gestellt.';
 
 export const cardText1 =
   'Um dich optimal auf dein erstes Kennenlerngespräch ' +
