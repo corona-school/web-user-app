@@ -1,3 +1,7 @@
+.formContent {
+
+}
+
 .buttonSend {
   background-color:rgb(244, 72, 109) ;
   display: flex;
@@ -7,8 +11,8 @@
     color: white;
   }
 
-  
-  
+
+
 }
 
 .baseContainer {
@@ -16,7 +20,7 @@
     width: 100%;
     min-height: 400px;
   }
-  
+
   .container {
     display: flex;
     width: 100%;
@@ -24,8 +28,8 @@
     justify-content: flex-start;
     align-items: flex-start;
   }
-  
-  
+
+
 /*  .mainButtonContainer {
     display: flex;
     flex-direction: row;
@@ -45,7 +49,7 @@
 .checkbox {
   color: rgb(244, 72, 109);
 }
-  
+
   /*.modal {
     display: flex;
     flex-direction: column;
@@ -53,8 +57,8 @@
     background: white;
     max-width: 500px;
     align-items: center;
-  
-   
+
+
   }*/
 
   .buttonContainer {
@@ -66,5 +70,4 @@
     }
   }
 
-  
-  
+

@@ -1,9 +1,10 @@
 import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import { Spin } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { ThemeContext } from 'styled-components';
 import Context from '../context';
 import { ScreeningStatus } from '../types';
-import SupportCard from '../components/cards/SupportCard';
+import { FlexibleHighlightCard } from '../components/cards/FlexibleHighlightCard';
 import { Text, Title } from '../components/Typography';
 import { headerText, cardText1, cardText2 } from '../assets/supportPageAssests';
 
@@ -26,6 +27,7 @@ const MaterialCard = ({
   const [files, setFiles] = useState<Mentoring[]>([]);
   const [loading, setLoading] = useState(false);
   const apiContext = useContext(ApiContext);
+  const theme = useContext(ThemeContext);
 
   useEffect(() => {
     setLoading(true);
@@ -42,7 +44,7 @@ const MaterialCard = ({
   }, [apiContext]);
 
   return (
-    <SupportCard>
+    <FlexibleHighlightCard highlightColor={theme.color.cardHighlightRed}>
       <Title size="h4">{title}</Title>
       <Text>{description}</Text>
       {loading && (
@@ -57,7 +59,7 @@ const MaterialCard = ({
           ))}
         </div>
       )}
-    </SupportCard>
+    </FlexibleHighlightCard>
   );
 };
 

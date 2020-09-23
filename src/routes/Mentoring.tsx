@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, {useContext, useEffect} from 'react';
 import styled from 'styled-components';
 import Context from '../context';
 
-import Button, { LinkButton } from '../components/button';
+import Button, {LinkButton} from '../components/button';
 //import Icons from '../assets/icons';
-import { ScreeningStatus } from '../types';
-import MentoringCard from '../components/cards/MentoringCard';
+import {ScreeningStatus} from '../types';
+import ContactCard from '../components/cards/ContactCard';
 import FeedbackCallCard from '../components/cards/FeedbackCallCard';
 import MentorCard from '../components/cards/MentorCard';
-import { Text, Title } from '../components/Typography';
+import {Text, Title} from '../components/Typography';
 //import Images from '../assets/images';
 
 import classes from './Mentoring.module.scss';
@@ -35,7 +35,7 @@ const Mentoring: React.FC = () => {
       userContext.user.screeningStatus === ScreeningStatus.Unscreened ||
       (userContext.user.isInstructor &&
         userContext.user.instructorScreeningStatus ===
-          ScreeningStatus.Unscreened)
+        ScreeningStatus.Unscreened)
     ) {
       modalContext.setOpenedModal('accountNotScreened');
     }
@@ -43,25 +43,28 @@ const Mentoring: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      <Title>Mentoring</Title>
-      <Text>{headerText}</Text>
-      <LinkButton
-        className={classes.buttonMoreInfo}
-        href={moreInformationButtonLink}
-        target="_blank"
-      >
-        Weitere Informationen
-      </LinkButton>
-      <Wrapper>
-          <MentoringCard />
-          <div>
-          <FeedbackCallCard user={userContext.user}/>
-          <FacebookCard user={userContext.user}/>
-          </div>
-      </Wrapper>
-
-
-
+      <div className={classes.header}>
+        <Title>Mentoring</Title>
+        <Text>{headerText}</Text>
+        <LinkButton
+          className={classes.buttonMoreInfo}
+          href={moreInformationButtonLink}
+          target="_blank"
+        >
+          Weitere Informationen
+        </LinkButton>
+      </div>
+      <div className={classes.cards}>
+        <div className={classes.contactCard}>
+          <ContactCard />
+        </div>
+        <div className={classes.feedbackCall}>
+          <FeedbackCallCard user={userContext.user} />
+        </div>
+        <div className={classes.facebookCard}>
+          <FacebookCard user={userContext.user} />
+        </div>
+      </div>
     </div>
   );
 };

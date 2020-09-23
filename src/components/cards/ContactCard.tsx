@@ -1,19 +1,19 @@
-import React, {useContext, useState} from 'react';
-import styled from 'styled-components';
-import {Checkbox} from 'antd';
+import React, { useContext, useState } from 'react';
+import styled, { ThemeContext } from 'styled-components';
+import { Checkbox } from 'antd';
 import Button from '../button';
 import Images from '../../assets/images';
 // import Icons from '../../assets/icons';
-import CardBase from '../base/CardBase';
-import {Text, Title} from '../Typography';
+import { Text, Title } from '../Typography';
 // import CertificateModal from '../Modals/CerificateModal';
 // import { Tag } from '../Tag';
 import classes from './MentoringCard.module.scss';
 // import BecomeInstructorModal from '../Modals/BecomeInstructorModal';
 // import BecomeInternModal from '../Modals/BecomeInternModal';
-import {messageLabels} from "../../assets/mentoringPageAssets";
-import {MentoringCategory} from "../../types/Mentoring";
-import {ApiContext} from "../../context/ApiContext";
+import { messageLabels } from '../../assets/mentoringPageAssets';
+import { MentoringCategory } from '../../types/Mentoring';
+import { ApiContext } from '../../context/ApiContext';
+import { TopHighlightCard } from './FlexibleHighlightCard';
 
 const SelectStyle = styled.select`
   width: 310px;
@@ -42,11 +42,14 @@ enum FormStates {
   FAILED,
 }
 
-const MentoringCard = () => {
+const ContactCard = () => {
   const apiContext = useContext(ApiContext);
+  const theme = useContext(ThemeContext);
 
   const [formState, setFormState] = useState<FormStates>(FormStates.INIT);
-  const [category, setCategory] = useState<MentoringCategory>(MentoringCategory.LANGUAGE);
+  const [category, setCategory] = useState<MentoringCategory>(
+    MentoringCategory.LANGUAGE
+  );
   const [message, setMessage] = useState<string>('');
   const [agreementChecked, setAgreementChecked] = useState(false);
 
@@ -61,9 +64,9 @@ const MentoringCard = () => {
     }
   };
 
-  return (
-    <>
-      <CardBase highlightColor="#F4486D" className={classes.baseContainer}>
+  const FormContent = () => {
+    return (
+      <div className={classes.formContent}>
         <div className={classes.container}>
           <div>
             <Title size="h4" bold>
@@ -80,14 +83,13 @@ const MentoringCard = () => {
                   <option value={c}>{messageLabels.get(c)}</option>
                 ))}
               </SelectStyle>
-
-              <Images.MentoringPic
-                width="120px"
-                height="120px"
-                marginLeft="auto"
-                padding="5px"
-              />
             </SelectWrapper>
+            <Images.MentoringPic
+              width="120px"
+              height="120px"
+              marginLeft="auto"
+              padding="5px"
+            />
           </div>
 
           <div>
@@ -110,9 +112,17 @@ const MentoringCard = () => {
         <Button className={classes.buttonSend} onClick={SendMessage}>
           Abschicken
         </Button>
-      </CardBase>
-    </>
+      </div>
+    );
+  };
+
+  return (
+    <TopHighlightCard highlightColor={theme.color.cardHighlightRed}>
+      {(formState === FormStates.INIT || formState === FormStates.REVISE) && (
+        <FormContent />
+      )}
+    </TopHighlightCard>
   );
 };
 
-export default MentoringCard;
+export default ContactCard;

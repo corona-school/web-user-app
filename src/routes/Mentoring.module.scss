@@ -1,56 +1,86 @@
 .container {
-    min-height: fit-content;
-    display: flex;
-    flex-direction: column;
-    padding-top: 60px;
-    padding-left: 40px;
-    width: 100%;
-    &::after {
-      flex: 0 0 20px;
-      visibility: hidden;
-      content: 'spacer';
-    }
-  
-    @media only screen and (max-width: 600px) {
-      padding: 16px;
-    }
-  
-    .subjectTitle {
-      margin-top: 32px;
-    }
+  min-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  width: 100%;
+
+  &::after {
+    flex: 0 0 20px;
+    visibility: hidden;
+    content: 'spacer';
   }
-  
-  .screeningModalContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    background: white;
-    padding: 32px;
-  
-    .title {
-      margin-top: -20px;
+
+  .header {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .cards {
+    margin-top: 20px;
+    padding: 20px 40px;
+    background-color: rgba(242, 111, 99, 0.06);
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-auto-rows: 1fr 1fr;
+
+    .contactCard {
+      grid-column: 1;
+      grid-row: 1 / 3;
     }
-    .text {
-      max-width: 400px;
-      margin-top: -8px;
+
+    .feedbackCall {
+      grid-column: 2;
+      grid-row: 1;
     }
-  
-    .buttonContainer {
-      display: flex;
-      margin-top: 16px;
-  
-      a,
-      button {
-        margin: 8px;
-      }
+
+    .facebookCard {
+      grid-column: 2;
+      grid-row: 2;
     }
   }
 
-  .buttonMoreInfo{
-    background-color: rgb(255, 204, 18) ;
-    color: white;
-    display: flex;
-    float: right;
+  .subjectTitle {
+    margin-top: 32px;
   }
-  
+}
+
+.screeningModalContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: white;
+  padding: 32px;
+
+  .title {
+    margin-top: -20px;
+  }
+
+  .text {
+    max-width: 400px;
+    margin-top: -8px;
+  }
+
+  .buttonContainer {
+    display: flex;
+    margin-top: 16px;
+
+    a,
+    button {
+      margin: 8px;
+    }
+  }
+}
+
+.buttonMoreInfo {
+  background-color: rgb(255, 204, 18);
+  color: white;
+  display: flex;
+  float: right;
+
+  &:hover {
+    color: white;
+  }
+}
