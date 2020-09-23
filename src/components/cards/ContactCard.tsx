@@ -3,13 +3,8 @@ import styled, { ThemeContext } from 'styled-components';
 import { Checkbox } from 'antd';
 import Button from '../button';
 import Images from '../../assets/images';
-// import Icons from '../../assets/icons';
 import { Text, Title } from '../Typography';
-// import CertificateModal from '../Modals/CerificateModal';
-// import { Tag } from '../Tag';
-import classes from './MentoringCard.module.scss';
-// import BecomeInstructorModal from '../Modals/BecomeInstructorModal';
-// import BecomeInternModal from '../Modals/BecomeInternModal';
+import classes from './ContactCard.module.scss';
 import { messageLabels } from '../../assets/mentoringPageAssets';
 import { MentoringCategory } from '../../types/Mentoring';
 import { ApiContext } from '../../context/ApiContext';
@@ -26,13 +21,6 @@ const SelectStyle = styled.select`
   letter-spacing: -0.333333px;
   color: border-color: rgb(244, 72, 109);
   border-color: rgb(244, 72, 109)
-`;
-
-const SelectWrapper = styled.div`
-  align-items: center;
-  align-self: stretch;
-  display: flex;
-  justify-content: space-evenly;
 `;
 
 enum FormStates {
@@ -53,6 +41,16 @@ const ContactCard = () => {
   const [message, setMessage] = useState<string>('');
   const [agreementChecked, setAgreementChecked] = useState(false);
 
+  const PrintWarnings = () => {
+    if (message.length === 0) {
+      return 'Das Textfeld ist leer.';
+    }
+    if (!agreementChecked) {
+      return 'Bitte bestätige noch das Agreement.';
+    }
+    return '';
+  };
+
   const SendMessage = async () => {
     if (message.length === 0 || !agreementChecked) {
       setFormState(FormStates.REVISE);
@@ -67,60 +65,57 @@ const ContactCard = () => {
   const FormContent = () => {
     return (
       <div className={classes.formContent}>
-        <div className={classes.container}>
-          <div>
-            <Title size="h4" bold>
-              Du hast Fragen?
-            </Title>
-
-            <SelectWrapper>
-              <Text large> Kategorie: </Text>
-              <SelectStyle
-                onChange={(e) => setCategory(MentoringCategory[e.target.value])}
-                value={category}
-              >
-                {Object.values(MentoringCategory).map((c) => (
-                  <option value={c}>{messageLabels.get(c)}</option>
-                ))}
-              </SelectStyle>
-            </SelectWrapper>
-            <Images.MentoringPic
-              width="120px"
-              height="120px"
-              marginLeft="auto"
-              padding="5px"
-            />
-          </div>
-
-          <div>
-            <textarea
-              id="questionsMentoring"
-              required
-              className={classes.inputfield}
-              onChange={(e) => setMessage(e.target.value)}
-              value={message}
-            />
-          </div>
+        <div className={classes.title}>
+          <Title size="h3">Du hast Fragen?</Title>
         </div>
-        <Checkbox
-          className={classes.checkbox}
-          value={agreementChecked}
-          onChange={(e) => setAgreementChecked(e.target.checked)}
-        >
-          Agreement
-        </Checkbox>
-        <Button className={classes.buttonSend} onClick={SendMessage}>
-          Abschicken
-        </Button>
+        <div className={classes.categorySelect}>
+          <Text large> Kategorie: </Text>
+          <SelectStyle
+            onChange={(e) => setCategory(MentoringCategory[e.target.value])}
+            value={category}
+          >
+            {Object.values(MentoringCategory).map((c) => (
+              <option value={c}>{messageLabels.get(c)}</option>
+            ))}
+          </SelectStyle>
+        </div>
+        <div className={classes.image}>
+          <Images.MentoringPic />
+        </div>
+        <div className={classes.input}>
+          <textarea
+            id="questionsMentoring"
+            required
+            className={classes.inputField}
+            onChange={(e) => setMessage(e.target.value)}
+            value={message}
+          />
+        </div>
+        <div className={classes.checkboxCell}>
+          <Checkbox
+            className={classes.checkbox}
+            value={agreementChecked}
+            onChange={(e) => setAgreementChecked(e.target.checked)}
+          >
+            Agreement
+          </Checkbox>
+        </div>
+        <div className={classes.warning}>
+          {formState === FormStates.REVISE && `${PrintWarnings()}`}
+        </div>
+        <div className={classes.buttonCell}>
+          <Button className={classes.button} onClick={SendMessage}>
+            Abschicken
+          </Button>
+        </div>
       </div>
     );
   };
 
   return (
     <TopHighlightCard highlightColor={theme.color.cardHighlightRed}>
-      {(formState === FormStates.INIT || formState === FormStates.REVISE) && (
-        <FormContent />
-      )}
+      {(formState === FormStates.INIT || formState === FormStates.REVISE) &&
+        FormContent()}
     </TopHighlightCard>
   );
 };
