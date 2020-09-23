@@ -53,7 +53,7 @@ const Mentoring: React.FC = () => {
         Weitere Informationen
       </LinkButton>
       <Wrapper>
-          <MentoringCard user={userContext.user} />
+          <MentoringCard />
           <div>
           <FeedbackCallCard user={userContext.user}/>
           <FacebookCard user={userContext.user}/>

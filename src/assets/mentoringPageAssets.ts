@@ -1,3 +1,5 @@
+import { MentoringCategory } from '../types/Mentoring';
+
 export const headerText =
   'Online-Nachhilfe ist möglicherweise auch für dich eine neue Erfahrung, ' +
   'welche viele Fragen und Schwierigkeiten aufwirft. Damit bist du nicht ' +
@@ -10,3 +12,15 @@ export const headerText =
 
 export const moreInformationButtonLink =
   'https://drive.google.com/file/d/1UvrOSlS3nF_Bk-0hGlnBwzf0xWBm3cKQ/view';
+
+export const messageLabels = new Map([
+  [MentoringCategory.DIDACTIC, 'Pädagogische und didaktische Hilfestellungen'],
+  [MentoringCategory.LANGUAGE, 'Sprachschwierigkeiten und Kommunikation'],
+  [MentoringCategory.OTHER, 'Sonstiges'],
+  [MentoringCategory.SELFORGA, 'Organisatorisches und Selbststrukturierung'],
+  [
+    MentoringCategory.SUBJECTS,
+    'Inhaltliche Kompetenzen in bestimmten Unterrichtsfächern',
+  ],
+  [MentoringCategory.TECH, 'Technische Unterstützung'],
+]);

@@ -1,21 +1,19 @@
-import React, { useContext } from 'react';
-import StyledReactModal from 'styled-react-modal';
+import React, {useContext, useState} from 'react';
+import styled from 'styled-components';
+import {Checkbox} from 'antd';
 import Button from '../button';
 import Images from '../../assets/images';
-//import Icons from '../../assets/icons';
+// import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
-import { Text, Title } from '../Typography';
-//import CertificateModal from '../Modals/CerificateModal';
-import styled from 'styled-components';
-
-//import { Tag } from '../Tag';
-import context from '../../context';
-
+import {Text, Title} from '../Typography';
+// import CertificateModal from '../Modals/CerificateModal';
+// import { Tag } from '../Tag';
 import classes from './MentoringCard.module.scss';
-//import BecomeInstructorModal from '../Modals/BecomeInstructorModal';
-//import BecomeInternModal from '../Modals/BecomeInternModal';
-import { Checkbox, Dropdown } from 'antd';
-import { User } from '../../types';
+// import BecomeInstructorModal from '../Modals/BecomeInstructorModal';
+// import BecomeInternModal from '../Modals/BecomeInternModal';
+import {messageLabels} from "../../assets/mentoringPageAssets";
+import {MentoringCategory} from "../../types/Mentoring";
+import {ApiContext} from "../../context/ApiContext";
 
 const SelectStyle = styled.select`
   width: 310px;
@@ -30,91 +28,88 @@ const SelectStyle = styled.select`
   border-color: rgb(244, 72, 109)
 `;
 
-
-
 const SelectWrapper = styled.div`
-   align-items: center; 
+  align-items: center;
   align-self: stretch;
   display: flex;
   justify-content: space-evenly;
 `;
 
-
-interface Props {
-  user: User;
+enum FormStates {
+  INIT,
+  REVISE,
+  SUCCESS,
+  FAILED,
 }
 
-const MentoringCard: React.FC<Props> = ({ user }) => {
-  //const modalContext = useContext(context.Modal);
- // const ApiContext = useContext(context.Api);
+const MentoringCard = () => {
+  const apiContext = useContext(ApiContext);
 
- /* const renderCourseButton = () => {
-    if (user.type !== 'student') {
-      return;
+  const [formState, setFormState] = useState<FormStates>(FormStates.INIT);
+  const [category, setCategory] = useState<MentoringCategory>(MentoringCategory.LANGUAGE);
+  const [message, setMessage] = useState<string>('');
+  const [agreementChecked, setAgreementChecked] = useState(false);
+
+  const SendMessage = async () => {
+    if (message.length === 0 || !agreementChecked) {
+      setFormState(FormStates.REVISE);
+    } else {
+      await apiContext
+        .postContactMentor({ category, emailText: message })
+        .then(() => setFormState(FormStates.SUCCESS))
+        .catch(() => setFormState(FormStates.FAILED));
     }
-
-    if (user.isInstructor) {
-      return;
-    }
-
-    
-  };*/
-
-  const handleOnChangeCategory = (value: number): void => {
-    if (value === 1){
-      console.log("1");
-    } else if(value === 2){
-        console.log("2");
-    } else if(value === 3){
-
-    } else if(value === 4){
-
-    } else{
-      
-    }
-
   };
-  
 
   return (
     <>
-      <CardBase highlightColor="#F4486D"   className={classes.baseContainer}>
+      <CardBase highlightColor="#F4486D" className={classes.baseContainer}>
         <div className={classes.container}>
           <div>
-          <Title size="h4" bold>
+            <Title size="h4" bold>
               Du hast Fragen?
             </Title>
-           
-            
+
             <SelectWrapper>
-            <Text large > Kategorie: </Text>
-            <SelectStyle
-                  
-                  onChange={(e) =>
-                    handleOnChangeCategory(Number(e.target.value))
-                  }
-                >
-                  <option value="1" > Sprachschwierigkeiten und Kommunikation</option>
-                  <option value="2"> Inhaltliche Kompetenzen in bestimmten Unterrichtsfächern</option>
-                  <option value="3">Pädagogische und didaktische Hilfestellungen</option>
-                  <option value="4">Organisatorisches und Selbststrukturierung</option>
-                  <option value="5">Sonstiges</option>
-                </SelectStyle>
-             
-              
-                   <Images.MentoringPic width="120px" height="120px" marginLeft='auto' padding="5px"/>
-              
-                </SelectWrapper>
+              <Text large> Kategorie: </Text>
+              <SelectStyle
+                onChange={(e) => setCategory(MentoringCategory[e.target.value])}
+                value={category}
+              >
+                {Object.values(MentoringCategory).map((c) => (
+                  <option value={c}>{messageLabels.get(c)}</option>
+                ))}
+              </SelectStyle>
+
+              <Images.MentoringPic
+                width="120px"
+                height="120px"
+                marginLeft="auto"
+                padding="5px"
+              />
+            </SelectWrapper>
           </div>
-         
-          <div >
-           <textarea id="questionsMentoring" required className = {classes.inputfield} />
+
+          <div>
+            <textarea
+              id="questionsMentoring"
+              required
+              className={classes.inputfield}
+              onChange={(e) => setMessage(e.target.value)}
+              value={message}
+            />
           </div>
-          </div>
-            <Checkbox className={classes.checkbox}> Agreement</Checkbox>
-            <Button className={classes.buttonSend}>Abschicken</Button>
-         
-        
+        </div>
+        <Checkbox
+          className={classes.checkbox}
+          value={agreementChecked}
+          onChange={(e) => setAgreementChecked(e.target.checked)}
+        >
+          Agreement
+        </Checkbox>
+        <Button className={classes.buttonSend} onClick={SendMessage}>
+          Abschicken
+        </Button>
       </CardBase>
     </>
   );
