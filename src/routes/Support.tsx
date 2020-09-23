@@ -11,7 +11,7 @@ import classes from './Support.module.scss';
 import { FileButton } from '../components/button/FileButton';
 import { VideoCard } from '../components/cards/VideoCard';
 import { ApiContext } from '../context/ApiContext';
-import { Material } from '../types/Material';
+import { Mentoring } from '../types/Mentoring';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
 
 const MaterialCard = ({
@@ -23,7 +23,7 @@ const MaterialCard = ({
   title: ReactNode;
   description: string;
 }) => {
-  const [files, setFiles] = useState<Material[]>([]);
+  const [files, setFiles] = useState<Mentoring[]>([]);
   const [loading, setLoading] = useState(false);
   const apiContext = useContext(ApiContext);
 
@@ -62,7 +62,7 @@ const MaterialCard = ({
 };
 
 const Playlist = ({ location }: { location: string }) => {
-  const [videos, setVideos] = useState<Material[]>([]);
+  const [videos, setVideos] = useState<Mentoring[]>([]);
   const [loading, setLoading] = useState(false);
   const apiContext = useContext(ApiContext);
 

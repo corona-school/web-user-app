@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useContext } from 'react';
 import { AxiosResponse } from 'axios';
+import { message } from 'antd';
 import { AuthContext } from './AuthContext';
 import { User, Subject } from '../types';
 import * as api from '../api/api';
@@ -10,7 +11,7 @@ import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { CompletedSubCourse } from '../components/forms/CreateCourse';
 import { CompletedLecture } from '../routes/CourseForm';
-import { Material } from '../types/Material';
+import { MenteeMessage, Mentoring } from '../types/Mentoring';
 import { FeedbackCall } from '../types/FeedbackCall';
 
 interface IApiContext {
@@ -79,8 +80,12 @@ interface IApiContext {
     courseId: number,
     subcourseId: number
   ) => Promise<CourseOverview>;
-  getMentoringMaterial: (type: string, location: string) => Promise<Material[]>;
+  getMentoringMaterial: (
+    type: string,
+    location: string
+  ) => Promise<Mentoring[]>;
   getFeedbackCallData: () => Promise<FeedbackCall>;
+  postContactMentor: (message: MenteeMessage) => Promise<void>;
 }
 
 export const ApiContext = React.createContext<IApiContext>({
@@ -116,6 +121,7 @@ export const ApiContext = React.createContext<IApiContext>({
   joinBBBmeeting: (courseId, subcourseId) => Promise.reject(),
   getMentoringMaterial: (type, location) => Promise.reject(),
   getFeedbackCallData: () => Promise.reject(),
+  postContactMentor: (message) => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -254,6 +260,9 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const getFeedbackCallData = () => api.axiosGetFeedbackCallData(token);
 
+  const postContactMentor = (message: MenteeMessage) =>
+    api.axiosPostContactMentor(token, message);
+
   return (
     <ApiContext.Provider
       value={{
@@ -283,6 +292,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         joinBBBmeeting,
         getMentoringMaterial,
         getFeedbackCallData,
+        postContactMentor,
         editCourse,
         editSubCourse,
         editLecture,

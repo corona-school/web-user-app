@@ -5,7 +5,7 @@ import { Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
-import { Material } from '../types/Material';
+import { MenteeMessage, Mentoring } from '../types/Mentoring';
 import { FeedbackCall } from '../types/FeedbackCall';
 
 export const redeemVerificationToken = (
@@ -648,7 +648,7 @@ export const axiosGetMentoringMaterial = (
   token: string,
   type: string,
   location: string
-): Promise<Material[]> => {
+): Promise<Mentoring[]> => {
   const url = `${apiURL}/mentoring/material`;
 
   const params = new URLSearchParams();
@@ -671,5 +671,17 @@ export const axiosGetFeedbackCallData = (
       .get(`${apiURL}/mentoring/feedbackCall`, { headers: { token } })
       .then((response) => resolve(response.data))
       .catch((error) => reject(error));
+  });
+};
+
+export const axiosPostContactMentor = (
+  token: string,
+  message: MenteeMessage
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/mentoring/contact`, message, { headers: { token } })
+      .then(() => resolve())
+      .catch((err) => reject(err));
   });
 };
