@@ -5,7 +5,7 @@ import Context from '../context';
 import { ScreeningStatus } from '../types';
 import SupportCard from '../components/cards/SupportCard';
 import { Text, Title } from '../components/Typography';
-import { headerText, cardText1, cardText2 } from '../assets/supportTexts';
+import { headerText, cardText1, cardText2 } from '../assets/supportPageAssests';
 
 import classes from './Support.module.scss';
 import { FileButton } from '../components/button/FileButton';
