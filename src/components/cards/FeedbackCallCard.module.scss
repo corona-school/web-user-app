@@ -16,6 +16,9 @@
   display: flex;
   float: right;
 
-  pointer-events: none;
+  &:hover {
+    color: white;
+    cursor: default;
+  }
 }
 

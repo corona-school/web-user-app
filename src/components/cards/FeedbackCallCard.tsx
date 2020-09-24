@@ -45,8 +45,6 @@ const FeedbackCallCard: React.FC<Props> = ({ user }) => {
       );
   }, [apiContext]);
 
-  console.log(linkActive);
-
   return (
     <LeftHighlightCard highlightColor={theme.color.cardHighlightRed}>
       <Title size="h3">Feedback Call</Title>
@@ -67,12 +65,21 @@ const FeedbackCallCard: React.FC<Props> = ({ user }) => {
         </LinkButton>
       )}
       {!linkActive && (
-        <LinkButton
-          className={classes.inactiveButtonParticipate}
-          style={{ margin: '4px' }}
+        <Tooltip
+          title={
+            feedbackCall.link
+              ? 'Der Link wird 30 Minuten vor dem Call freigeschaltet'
+              : 'Aktuell gibt es keinen Link.'
+          }
+          placement="topRight"
         >
-          Teilnehmen
-        </LinkButton>
+          <LinkButton
+            className={classes.inactiveButtonParticipate}
+            style={{ margin: '4px' }}
+          >
+            Teilnehmen
+          </LinkButton>
+        </Tooltip>
       )}
     </LeftHighlightCard>
   );
