@@ -63,64 +63,24 @@
     margin-right: 0;
     grid-column: 2;
     grid-row: 5;
-
-    .button {
-      background-color: rgb(244, 72, 109);
-      display: flex;
-      float: right;
-      color: white;
-
-      &:hover {
-        color: white;
-      }
-    }
   }
 }
 
-
-.baseContainer {
-  max-width: 600px !important;
-  width: 100%;
-  min-height: 400px;
+.failedContent {
+  padding: 20px;
 }
 
-.container {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+.successContent {
+  padding: 20px;
 }
 
-
-/*  .mainButtonContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    @media only screen and (max-width: 500px) {
-      flex-direction: column;
-    }
-  }*/
-
-/*.modal {
+.button {
+  background-color: rgb(244, 72, 109);
   display: flex;
-  flex-direction: column;
-  padding: 16px;
-  background: white;
-  max-width: 500px;
-  align-items: center;
+  float: right;
+  color: white;
 
-
-}*/
-
-.buttonContainer {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-
-  button {
-    margin: 8px;
+  &:hover {
+    color: white;
   }
 }
-
-

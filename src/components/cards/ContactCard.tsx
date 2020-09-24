@@ -41,6 +41,13 @@ const ContactCard = () => {
   const [message, setMessage] = useState<string>('');
   const [agreementChecked, setAgreementChecked] = useState(false);
 
+  const Reset = () => {
+    setFormState(FormStates.INIT);
+    setCategory(MentoringCategory.LANGUAGE);
+    setMessage('');
+    setAgreementChecked(false);
+  };
+
   const PrintWarnings = () => {
     if (message.length === 0) {
       return 'Das Textfeld ist leer.';
@@ -94,7 +101,7 @@ const ContactCard = () => {
         <div className={classes.checkboxCell}>
           <Checkbox
             className={classes.checkbox}
-            value={agreementChecked}
+            checked={agreementChecked}
             onChange={(e) => setAgreementChecked(e.target.checked)}
           >
             Agreement
@@ -112,10 +119,37 @@ const ContactCard = () => {
     );
   };
 
+  const FailedContent = () => {
+    return (
+      <div className={classes.failedContent}>
+        <Title size="h3">Etwas ist schief gelaufen...</Title>
+        <Button
+          className={classes.button}
+          onClick={() => setFormState(FormStates.INIT)}
+        >
+          Nochmal versuchen
+        </Button>
+      </div>
+    );
+  };
+
+  const SuccessContent = () => {
+    return (
+      <div className={classes.successContent}>
+        <Title size="h3">Vielen Dank für deine Nachricht!</Title>
+        <Button className={classes.button} onClick={Reset}>
+          Noch eine Nachricht senden
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <TopHighlightCard highlightColor={theme.color.cardHighlightRed}>
       {(formState === FormStates.INIT || formState === FormStates.REVISE) &&
         FormContent()}
+      {formState === FormStates.FAILED && <FailedContent />}
+      {formState === FormStates.SUCCESS && <SuccessContent />}
     </TopHighlightCard>
   );
 };
