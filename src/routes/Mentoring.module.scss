@@ -22,12 +22,15 @@
     background-color: rgba(242, 111, 99, 0.06);
 
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-auto-rows: 1fr 1fr;
+    grid-template-columns: 3fr 2fr;
+    grid-auto-rows: min-content;
+    grid-gap: 20px;
+    grid-column-gap: 40px;
 
     .contactCard {
       grid-column: 1;
       grid-row: 1 / 3;
+      height: 100%;
     }
 
     .feedbackCall {

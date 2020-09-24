@@ -11,6 +11,9 @@ import {FeedbackCall} from "../../types/FeedbackCall";
 import {ApiContext} from "../../context/ApiContext";
 import moment from "moment";
 import  { Tooltip } from "antd";
+import {feedbackCallText} from "../../assets/mentoringPageAssets";
+import {LeftHighlightCard} from "./FlexibleHighlightCard";
+import {ThemeContext} from "styled-components";
 
 interface Props {
     user: User;
@@ -20,6 +23,7 @@ const FeedbackCallCard: React.FC<Props> = ({ user }) => {
   const [feedbackCall, setFeedbackCall] = useState<FeedbackCall>({});
   const [linkActive, setLinkActive] = useState(false);
   const apiContext = useContext(ApiContext);
+  const theme = useContext(ThemeContext);
 
   useEffect(() => {
     apiContext
@@ -44,13 +48,14 @@ const FeedbackCallCard: React.FC<Props> = ({ user }) => {
   console.log(linkActive);
 
   return (
-    <CardBase highlightColor="#F4486D" className={classes.baseContainer}>
-        <Title size="h4" bold>Feedback Call</Title>
-        <Text style={{ color: 'rgb(244, 72, 109)' }}>{feedbackCall.time ? moment(feedbackCall.time).format("DD.MM.YYYY hh:mm") : "Momentan ist leider kein Feedback-Call geplant."}</Text>
-        <Text>Du hast Lust, dich mit anderen Studierenden über deine Erfahrungen und Herausforderungen bei der Online-Nachhilfe auszutauschen?
-            Dann bist du herzlich zu unseren gemeinsamen Feedback-Calls eingeladen. Der passende Link wird immer am Tag des Calls
-            veröffentlicht.
-        </Text>
+    <LeftHighlightCard highlightColor={theme.color.cardHighlightRed}>
+      <Title size="h3">Feedback Call</Title>
+      <Text style={{ color: 'rgb(244, 72, 109)' }}>
+        {feedbackCall.time
+          ? moment(feedbackCall.time).format('DD.MM.YYYY hh:mm')
+          : 'Momentan ist leider kein Feedback-Call geplant.'}
+      </Text>
+      <Text>{feedbackCallText}</Text>
       {linkActive && (
         <LinkButton
           className={classes.buttonParticipate}
@@ -69,7 +74,7 @@ const FeedbackCallCard: React.FC<Props> = ({ user }) => {
           Teilnehmen
         </LinkButton>
       )}
-    </CardBase>
+    </LeftHighlightCard>
   );
 };
 

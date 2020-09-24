@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { ThemeContext } from 'styled-components';
 import Context from '../context';
 import { ScreeningStatus } from '../types';
-import { FlexibleHighlightCard } from '../components/cards/FlexibleHighlightCard';
+import { LeftHighlightCard } from '../components/cards/FlexibleHighlightCard';
 import { Text, Title } from '../components/Typography';
 import { headerText, cardText1, cardText2 } from '../assets/supportPageAssests';
 
@@ -44,7 +44,7 @@ const MaterialCard = ({
   }, [apiContext]);
 
   return (
-    <FlexibleHighlightCard highlightColor={theme.color.cardHighlightRed}>
+    <LeftHighlightCard highlightColor={theme.color.cardHighlightRed}>
       <Title size="h4">{title}</Title>
       <Text>{description}</Text>
       {loading && (
@@ -59,7 +59,7 @@ const MaterialCard = ({
           ))}
         </div>
       )}
-    </FlexibleHighlightCard>
+    </LeftHighlightCard>
   );
 };
 

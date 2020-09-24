@@ -3,7 +3,7 @@ import Highlight, { TopHighlight } from '../Highlight';
 
 import classes from './FlexibleHighlightCard.module.scss';
 
-export const FlexibleHighlightCard: React.FC<{
+export const LeftHighlightCard: React.FC<{
   highlightColor: string;
   children: React.AllHTMLAttributes<HTMLDivElement>;
 }> = ({ highlightColor, children }) => {
