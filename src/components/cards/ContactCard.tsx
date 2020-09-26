@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-import { Checkbox } from 'antd';
+import {Checkbox, message} from 'antd';
 import Button from '../button';
 import Images from '../../assets/images';
 import { Text, Title } from '../Typography';
@@ -10,63 +10,36 @@ import { MentoringCategory } from '../../types/Mentoring';
 import { ApiContext } from '../../context/ApiContext';
 import { TopHighlightCard } from './FlexibleHighlightCard';
 
-const SelectStyle = styled.select`
-  height: 28px;
-  padding: 2px 5px;
-  border: 1px solid ${(props) => props.theme.colorScheme.gray1};
-  font-size: 15px;
-  line-height: 22px;
-  letter-spacing: -0.333333px;
-  color: border-color: rgb(244, 72, 109);
-  border-color: rgb(244, 72, 109);
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-`;
-
-enum FormStates {
-  INIT,
-  REVISE,
-  SUCCESS,
-  FAILED,
-}
-
 const ContactCard = () => {
   const apiContext = useContext(ApiContext);
   const theme = useContext(ThemeContext);
 
-  const [formState, setFormState] = useState<FormStates>(FormStates.INIT);
   const [category, setCategory] = useState<MentoringCategory>(
     MentoringCategory.LANGUAGE
   );
-  const [message, setMessage] = useState<string>('');
+  const [emailText, setEmailText] = useState<string>('');
   const [agreementChecked, setAgreementChecked] = useState(false);
 
   const Reset = () => {
-    setFormState(FormStates.INIT);
     setCategory(MentoringCategory.LANGUAGE);
-    setMessage('');
+    setEmailText('');
     setAgreementChecked(false);
   };
 
-  const PrintWarnings = () => {
-    if (message.length === 0) {
-      return 'Das Textfeld ist leer.';
+  const SendMessage = async () => {
+    if (emailText.length === 0) {
+      message.error('Der Text der Nachricht fehlt.');
     }
     if (!agreementChecked) {
-      return 'Bitte bestätige noch das Agreement.';
-    }
-    return '';
-  };
-
-  const SendMessage = async () => {
-    if (message.length === 0 || !agreementChecked) {
-      setFormState(FormStates.REVISE);
+      message.error('Bitte bestätige noch das Agreement');
     } else {
       await apiContext
-        .postContactMentor({ category, emailText: message })
-        .then(() => setFormState(FormStates.SUCCESS))
-        .catch(() => setFormState(FormStates.FAILED));
+        .postContactMentor({ category, emailText })
+        .then(() => {
+          message.success('Nachricht wurde versendet.');
+          Reset();
+        })
+        .catch(() => message.error('Es ist ein Fehler aufgetreten.'));
     }
   };
 
@@ -96,8 +69,8 @@ const ContactCard = () => {
             id="questionsMentoring"
             required
             className={classes.inputField}
-            onChange={(e) => setMessage(e.target.value)}
-            value={message}
+            onChange={(e) => setEmailText(e.target.value)}
+            value={emailText}
             rows={10}
           />
         </div>
@@ -110,9 +83,6 @@ const ContactCard = () => {
             Agreement
           </Checkbox>
         </div>
-        <div className={classes.warning}>
-          {formState === FormStates.REVISE && `${PrintWarnings()}`}
-        </div>
         <div className={classes.buttonCell}>
           <Button className={classes.button} onClick={SendMessage}>
             Abschicken
@@ -122,37 +92,9 @@ const ContactCard = () => {
     );
   };
 
-  const FailedContent = () => {
-    return (
-      <div className={classes.failedContent}>
-        <Title size="h3">Etwas ist schief gelaufen...</Title>
-        <Button
-          className={classes.button}
-          onClick={() => setFormState(FormStates.INIT)}
-        >
-          Nochmal versuchen
-        </Button>
-      </div>
-    );
-  };
-
-  const SuccessContent = () => {
-    return (
-      <div className={classes.successContent}>
-        <Title size="h3">Vielen Dank für deine Nachricht!</Title>
-        <Button className={classes.button} onClick={Reset}>
-          Noch eine Nachricht senden
-        </Button>
-      </div>
-    );
-  };
-
   return (
     <TopHighlightCard highlightColor={theme.color.cardHighlightRed}>
-      {(formState === FormStates.INIT || formState === FormStates.REVISE) &&
-        FormContent()}
-      {formState === FormStates.FAILED && <FailedContent />}
-      {formState === FormStates.SUCCESS && <SuccessContent />}
+      {FormContent()}
     </TopHighlightCard>
   );
 };
