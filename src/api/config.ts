@@ -2,6 +2,7 @@ const liveDomains = [
   'dashboard.corona-school.de',
   'my.corona-school.de',
   'web-user-app-live.herokuapp.com',
+  'nrw.corona-school.de',
 ];
 
 const devAPI =
