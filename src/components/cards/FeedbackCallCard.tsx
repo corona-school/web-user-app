@@ -62,7 +62,7 @@ const FeedbackCallCard = () => {
         <Tooltip
           title={
             feedbackCall.link
-              ? 'Der Link wird 30 Minuten vor dem Call freigeschaltet'
+              ? 'Der Link wird 30 Minuten vor dem Call freigeschaltet.'
               : 'Aktuell gibt es keinen Link.'
           }
           placement="topRight"
