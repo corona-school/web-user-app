@@ -14,6 +14,7 @@ import { VideoCard } from '../components/cards/VideoCard';
 import { ApiContext } from '../context/ApiContext';
 import { Mentoring } from '../types/Mentoring';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
+import StudentCheck from "../components/StudentCheck";
 
 const MaterialCard = ({
   location,
@@ -100,23 +101,7 @@ const Playlist = ({ location }: { location: string }) => {
 };
 
 const Support: React.FC = () => {
-  const modalContext = useContext(Context.Modal);
-  const userContext = useContext(Context.User);
-  const history = useHistory();
-
-  useEffect(() => {
-    if (userContext.user.type !== 'student') {
-      history.push('/');
-    }
-    if (
-      userContext.user.screeningStatus === ScreeningStatus.Unscreened ||
-      (userContext.user.isInstructor &&
-        userContext.user.instructorScreeningStatus ===
-          ScreeningStatus.Unscreened)
-    ) {
-      modalContext.setOpenedModal('accountNotScreened');
-    }
-  }, [userContext.user.screeningStatus]);
+  StudentCheck();
 
   return (
     <div className={classes.container}>

@@ -17,6 +17,9 @@ import {
   headerText,
   moreInformationButtonLink
 } from "../assets/mentoringPageAssets";
+import StudentCheck from "../components/StudentCheck";
+import AccountNotScreenedModal
+  from "../components/Modals/AccountNotScreenedModal";
 
 const Wrapper = styled.div`
   display: flex;
@@ -27,19 +30,7 @@ const Wrapper = styled.div`
 
 
 const Mentoring: React.FC = () => {
-  const modalContext = useContext(Context.Modal);
-  const userContext = useContext(Context.User);
-
-  useEffect(() => {
-    if (
-      userContext.user.screeningStatus === ScreeningStatus.Unscreened ||
-      (userContext.user.isInstructor &&
-        userContext.user.instructorScreeningStatus ===
-        ScreeningStatus.Unscreened)
-    ) {
-      modalContext.setOpenedModal('accountNotScreened');
-    }
-  }, [userContext.user.screeningStatus]);
+  StudentCheck();
 
   return (
     <div className={classes.container}>
@@ -65,6 +56,7 @@ const Mentoring: React.FC = () => {
           <FacebookCard />
         </div>
       </div>
+      <AccountNotScreenedModal />
     </div>
   );
 };
