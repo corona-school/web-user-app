@@ -644,11 +644,11 @@ export const axiosJoinBBBmeeting = (
   courseId: number,
   subcourseId: number
 ): Promise<CourseOverview> => {
-  const url = `${apiURL}/course/${courseId}/meeting/join`;
+  const url = `${apiURL}/course/${courseId}/subcourse/${subcourseId}/meeting/join`;
 
   return new Promise((resolve, reject) => {
     axios
-      .post(url, { subcourseId }, { headers: { token } })
+      .get(url, { headers: { token } })
       .then((response) => {
         console.log(response);
         resolve(response.data);
