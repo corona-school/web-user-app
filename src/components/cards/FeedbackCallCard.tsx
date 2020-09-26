@@ -45,7 +45,7 @@ const FeedbackCallCard = () => {
       <Title size="h3">Feedback Call</Title>
       <Text style={{ color: 'rgb(244, 72, 109)' }}>
         {feedbackCall.time
-          ? moment(feedbackCall.time).format('DD.MM.YYYY hh:mm')
+          ? moment(feedbackCall.time).format('DD.MM.YYYY HH:mm')
           : 'Momentan ist leider kein Feedback-Call geplant.'}
       </Text>
       <Text>{feedbackCallText}</Text>
