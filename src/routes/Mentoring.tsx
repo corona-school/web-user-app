@@ -1,33 +1,18 @@
-import React, {useContext, useEffect} from 'react';
-import styled from 'styled-components';
-import Context from '../context';
+import React from 'react';
 
-import Button, {LinkButton} from '../components/button';
-//import Icons from '../assets/icons';
-import {ScreeningStatus} from '../types';
+import { LinkButton } from '../components/button';
 import ContactCard from '../components/cards/ContactCard';
 import FeedbackCallCard from '../components/cards/FeedbackCallCard';
-import MentorCard from '../components/cards/MentorCard';
-import {Text, Title} from '../components/Typography';
-//import Images from '../assets/images';
+import { Text, Title } from '../components/Typography';
 
 import classes from './Mentoring.module.scss';
 import FacebookCard from '../components/cards/FacebookCard';
 import {
   headerText,
-  moreInformationButtonLink
-} from "../assets/mentoringPageAssets";
-import StudentCheck from "../components/StudentCheck";
-import AccountNotScreenedModal
-  from "../components/Modals/AccountNotScreenedModal";
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  margin: 0 !important;
-`;
-
+  moreInformationButtonLink,
+} from '../assets/mentoringPageAssets';
+import StudentCheck from '../components/StudentCheck';
+import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
 
 const Mentoring: React.FC = () => {
   StudentCheck();
