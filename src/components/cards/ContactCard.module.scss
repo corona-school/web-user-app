@@ -1,40 +1,83 @@
 .formContent {
+  min-height: 544px;
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  grid-template-rows: repeat(5, auto);
-  grid-auto-rows: minmax(10px, auto);
+  grid-template-columns: auto min-content;
+  grid-template-rows: min-content min-content auto min-content min-content;
   grid-gap: 10px;
+
+  @media only screen and (min-width: 600px) and (max-width: 1560px) {
+    min-height: 726px;
+  }
+
+  @media only screen and (max-width: 600px) {
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+  }
 
   .title {
     margin-top: 0px;
     margin-left: 0px;
     grid-column: 1;
     grid-row: 1;
+
+    @media only screen and (max-width: 1560px) {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
   }
 
   .categorySelect {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     grid-column: 1;
     grid-row: 2;
+
+    @media only screen and (max-width: 1560px) {
+      grid-column: 1 / 3;
+    }
+
+    .selectElement {
+      height: 28px;
+      padding: 2px 5px;
+      font-size: 15px;
+      line-height: 22px;
+      letter-spacing: -0.333333px;
+      border: 1px solid rgb(244, 72, 109);
+
+      @media only screen and (max-width: 600px) {
+        width: 100%;
+      }
+    }
   }
 
   .image {
-    margin-right: 0;
-    margin-left: auto;
     grid-column: 2;
     grid-row: 1 / 3;
+
+    @media only screen and (min-width: 600px) and (max-width: 1560px){
+      grid-row: 1;
+    }
+
+    @media only screen and (max-width: 600px) {
+      display: none;
+    }
   }
 
   .input {
     display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
     grid-column: 1 / 3;
     grid-row: 3;
 
     .inputField {
       width: 100%;
+      min-height: 100%;
       border-radius: 5px;
       border-color: rgb(244, 72, 109);
     }

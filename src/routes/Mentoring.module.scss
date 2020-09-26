@@ -22,10 +22,23 @@
     background-color: rgba(242, 111, 99, 0.06);
 
     display: grid;
-    grid-template-columns: 3fr 2fr;
+    grid-template-columns: auto 460px;
     grid-auto-rows: min-content;
     grid-gap: 20px;
     grid-column-gap: 40px;
+
+    @media only screen and (min-width: 930px) and (max-width: 1560px) {
+      grid-template-columns: auto 300px;
+    }
+
+    @media only screen and (max-width: 930px) {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media only screen and (max-width: 600px) {
+      padding: 20px 0px;
+    }
 
     .contactCard {
       grid-column: 1;
