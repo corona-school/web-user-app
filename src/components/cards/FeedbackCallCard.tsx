@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
-import  { Tooltip } from "antd";
+import { Tooltip } from 'antd';
 import { ThemeContext } from 'styled-components';
 import { Text, Title } from '../Typography';
 
@@ -11,7 +11,6 @@ import { FeedbackCall } from '../../types/FeedbackCall';
 import { ApiContext } from '../../context/ApiContext';
 import { feedbackCallText } from '../../assets/mentoringPageAssets';
 import { LeftHighlightCard } from './FlexibleHighlightCard';
-
 
 const FeedbackCallCard = () => {
   const [feedbackCall, setFeedbackCall] = useState<FeedbackCall>({});
@@ -29,8 +28,10 @@ const FeedbackCallCard = () => {
       .then((res) => {
         if (!res.link) {
           setLinkActive(false);
-        }
-        if (new Date(res.time).getTime() - new Date().getTime() <= 3600000) {
+        } else if (
+          new Date(res.time).getTime() - new Date().getTime() <=
+          1800000
+        ) {
           setLinkActive(true);
         }
       })
