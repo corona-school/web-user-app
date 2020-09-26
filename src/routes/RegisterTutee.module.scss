@@ -23,6 +23,15 @@
       fill: white;
     }
   }
+  .stateLogo {
+    min-height: 70px;
+    min-width: 70px;
+    height: 70px;
+    width: 70px;
+    left: 50%; 
+    top: 10%; 
+    position: absolute;
+  }
 }
 
 .formContainer {

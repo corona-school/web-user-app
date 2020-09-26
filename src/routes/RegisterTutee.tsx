@@ -10,7 +10,9 @@ import Button from '../components/button';
 import classes from './RegisterTutee.module.scss';
 import { Subject } from '../types';
 import Context from '../context';
-import { Tutee } from '../types/Registration';
+import { SchoolInfo, Tutee } from '../types/Registration';
+import { StateCooperationInfo } from '../assets/supportedStateCooperations';
+import { emailDomainIsEqual } from '../utils/EmailUtils';
 
 const { Option } = Select;
 
@@ -28,13 +30,18 @@ interface FormData {
   school?: string;
   msg?: string;
   newsletter?: boolean;
+  teacherEmail?: string;
 }
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
-const RegisterTutee = () => {
+interface Props {
+  stateCooperationInfo?: StateCooperationInfo;
+}
+
+const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState<
@@ -48,6 +55,24 @@ const RegisterTutee = () => {
 
   const redirectTo = useQuery().get('redirectTo');
 
+  const [schoolInfo, setSchoolInfo] = useState<SchoolInfo[]>(null);
+
+  if (stateCooperationInfo && !loading && schoolInfo == null) {
+    // load school info
+    setLoading(true);
+    apiContext
+      .getCooperatingSchools(stateCooperationInfo.abbrev)
+      .then((schools) => {
+        setSchoolInfo(schools);
+        setLoading(false);
+      })
+      .catch(() => {
+        // in case of an error, do not check school's email domain at input time
+        setLoading(false);
+        setSchoolInfo([]);
+      });
+  }
+
   const renderStart = () => {
     return (
       <>
@@ -59,8 +84,9 @@ const RegisterTutee = () => {
             rules={[
               { required: true, message: 'Bitte trage deinen Vornamen ein' },
             ]}
+            initialValue={formData.firstname}
           >
-            <Input placeholder="Max" defaultValue={formData.firstname} />
+            <Input placeholder="Max" />
           </Form.Item>
           <Form.Item
             className={classes.formItem}
@@ -69,8 +95,9 @@ const RegisterTutee = () => {
             rules={[
               { required: true, message: 'Bitte trage deinen Nachnamen ein' },
             ]}
+            initialValue={formData.lastname}
           >
-            <Input placeholder="Mustermann" defaultValue={formData.lastname} />
+            <Input placeholder="Mustermann" />
           </Form.Item>
         </div>
 
@@ -78,6 +105,7 @@ const RegisterTutee = () => {
           className={classes.formItem}
           label="E-Mail"
           name="email"
+          initialValue={formData.email}
           rules={[
             { required: true, message: 'Bitte trage deine E-Mail ein!' },
             {
@@ -87,11 +115,7 @@ const RegisterTutee = () => {
             },
           ]}
         >
-          <Input
-            type="email"
-            placeholder="max.musterman@email.com"
-            defaultValue={formData.email}
-          />
+          <Input type="email" placeholder="max.musterman@email.com" />
         </Form.Item>
 
         <Form.Item
@@ -139,24 +163,27 @@ const RegisterTutee = () => {
   const renderDetail = () => {
     return (
       <>
-        <Form.Item
-          className={classes.formItem}
-          label="Schulform"
-          name="school"
-          rules={[
-            { required: true, message: 'Bitte trage deine Schulform ein' },
-          ]}
-        >
-          <Select placeholder="Grundschule.." defaultValue={formData.school}>
-            <Option value="Grundschule">Grundschule</Option>
-            <Option value="Gesamtschule">Gesamtschule</Option>
-            <Option value="Hauptschule">Hauptschule</Option>
-            <Option value="Realschule">Realschule</Option>
-            <Option value="Gymnasium">Gymnasium</Option>
-            <Option value="Förderschule">Förderschule</Option>
-            <Option value="other">Sonstige</Option>
-          </Select>
-        </Form.Item>
+        {!stateCooperationInfo && (
+          <Form.Item
+            className={classes.formItem}
+            label="Schulform"
+            name="school"
+            rules={[
+              { required: true, message: 'Bitte trage deine Schulform ein' },
+            ]}
+            initialValue={formData.school}
+          >
+            <Select placeholder="Grundschule..">
+              <Option value="Grundschule">Grundschule</Option>
+              <Option value="Gesamtschule">Gesamtschule</Option>
+              <Option value="Hauptschule">Hauptschule</Option>
+              <Option value="Realschule">Realschule</Option>
+              <Option value="Gymnasium">Gymnasium</Option>
+              <Option value="Förderschule">Förderschule</Option>
+              <Option value="other">Sonstige</Option>
+            </Select>
+          </Form.Item>
+        )}
         <Form.Item
           className={classes.formItem}
           label="Bundesland"
@@ -164,8 +191,14 @@ const RegisterTutee = () => {
           rules={[
             { required: true, message: 'Bitte trage dein Bundesland ein' },
           ]}
+          initialValue={
+            stateCooperationInfo?.abbrev.toUpperCase() ?? formData.state
+          }
         >
-          <Select placeholder="Baden-Württemberg" defaultValue={formData.state}>
+          <Select
+            disabled={!!stateCooperationInfo}
+            placeholder="Baden-Württemberg"
+          >
             <Option value="BW"> Baden-Württemberg</Option>
             <Option value="BY"> Bayern</Option>
             <Option value="BE"> Berlin</Option>
@@ -190,11 +223,9 @@ const RegisterTutee = () => {
           label="Klasse"
           name="grade"
           rules={[{ required: true, message: 'Bitte trage deine Klasse ein!' }]}
+          initialValue={formData.grade ? `${formData.grade}` : undefined}
         >
-          <Select
-            placeholder="Bitte wähle deine Klasse aus"
-            defaultValue={formData.grade ? `${formData.grade}` : undefined}
-          >
+          <Select placeholder="Bitte wähle deine Klasse aus">
             <Option value="1">1. Klasse</Option>
             <Option value="2">2. Klasse</Option>
             <Option value="3">3. Klasse</Option>
@@ -232,14 +263,14 @@ const RegisterTutee = () => {
                 },
               }),
             ]}
+            initialValue={
+              formData.subjects
+                ? formData.subjects.map((s) => s.name)
+                : undefined
+            }
           >
             <Select
               mode="multiple"
-              defaultValue={
-                formData.subjects
-                  ? formData.subjects.map((s) => s.name)
-                  : undefined
-              }
               placeholder="Bitte, wähle deine Fächer aus."
             >
               <Option value="Deutsch">Deutsch</Option>
@@ -267,11 +298,51 @@ const RegisterTutee = () => {
             </Select>
           </Form.Item>
         )}
-        <Form.Item className={classes.formItem} label="Nachricht" name="msg">
-          <Input.TextArea
-            placeholder="Hier deine Nachricht"
-            defaultValue={formData.msg}
-          />
+        {!!stateCooperationInfo && (
+          <Form.Item
+            className={classes.formItem}
+            label="E-Mail Lehrer*in"
+            name="teacherEmail"
+            rules={[
+              {
+                required: true,
+                type: 'email',
+                message: 'Bitte nutze eine gültige E-Mail-Adresse.',
+                validateTrigger: 'onSubmit',
+              },
+              {
+                required: true,
+                validateTrigger: 'onSubmit',
+                validator: (rule, value) => {
+                  if (
+                    schoolInfo?.length === 0 || // then check if submitted to server
+                    schoolInfo
+                      .map((s) => s.emailDomain)
+                      .some((d) => emailDomainIsEqual(value, d))
+                  ) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    'Diese E-Mail-Adresse muss einer Lehrkraft an einer der teilnehmenden Partnerschulen gehören!'
+                  );
+                },
+              },
+            ]}
+            initialValue={formData.teacherEmail}
+          >
+            <Input
+              placeholder="Hier die E-Mail deines/deiner Lehrer*in"
+              type="email"
+            />
+          </Form.Item>
+        )}
+        <Form.Item
+          className={classes.formItem}
+          label="Nachricht"
+          name="msg"
+          initialValue={formData.msg}
+        >
+          <Input.TextArea placeholder="Hier deine Nachricht" />
         </Form.Item>
       </>
     );
@@ -418,10 +489,11 @@ const RegisterTutee = () => {
       isTutee: data.isTutee,
       subjects: data.subjects || [],
       grade: data.grade,
-      school: data.school.toLowerCase(),
-      state: data.state.toLowerCase(),
+      school: data.school?.toLowerCase(),
+      state: data.state?.toLowerCase(),
       newsletter: !!data.newsletter,
       msg: data.msg || '',
+      teacherEmail: data.teacherEmail,
       redirectTo,
     };
   };
@@ -434,9 +506,12 @@ const RegisterTutee = () => {
     }
     console.log(tutee);
 
+    const registerAPICall = stateCooperationInfo
+      ? apiContext.registerStateTutee
+      : apiContext.registerTutee;
+
     setLoading(true);
-    apiContext
-      .registerTutee(tutee)
+    registerAPICall(tutee)
       .then(() => {
         setLoading(false);
         setFormState('done');
@@ -453,7 +528,7 @@ const RegisterTutee = () => {
         form.resetFields();
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response?.status === 401) {
           setLoading(false);
           message.error('Du bist schon als Schüler*in bei uns eingetragen.');
           return;
@@ -501,6 +576,7 @@ const RegisterTutee = () => {
               }))
             : undefined,
           msg: formValues.msg,
+          teacherEmail: formValues.teacherEmail,
         });
         setFormState('finnish');
       }
@@ -521,7 +597,7 @@ const RegisterTutee = () => {
   };
 
   return (
-    <SignupContainer>
+    <SignupContainer shouldShowBackButton={!stateCooperationInfo}>
       <div className={classes.signupContainer}>
         <a
           rel="noopener noreferrer"
@@ -529,6 +605,10 @@ const RegisterTutee = () => {
           target="_blank"
         >
           <Icons.Logo className={classes.logo} />
+          {stateCooperationInfo?.coatOfArms &&
+            React.createElement(stateCooperationInfo.coatOfArms, {
+              className: classes.stateLogo,
+            })}
           <Title size="h2" bold>
             Corona School
           </Title>
