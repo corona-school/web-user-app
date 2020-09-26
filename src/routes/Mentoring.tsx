@@ -59,7 +59,7 @@ const Mentoring: React.FC = () => {
           <ContactCard />
         </div>
         <div className={classes.feedbackCall}>
-          <FeedbackCallCard user={userContext.user} />
+          <FeedbackCallCard />
         </div>
         <div className={classes.facebookCard}>
           <FacebookCard />

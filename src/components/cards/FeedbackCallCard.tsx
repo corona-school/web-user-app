@@ -1,25 +1,19 @@
-import React, {useContext, useEffect, useState} from 'react';
-import CardBase from '../base/CardBase';
+import React, { useContext, useEffect, useState } from 'react';
+import moment from 'moment';
+import  { Tooltip } from "antd";
+import { ThemeContext } from 'styled-components';
 import { Text, Title } from '../Typography';
 
-import Button, { LinkButton } from '../button';
-//import { CourseOverview } from '../../types/Course';
+import { LinkButton } from '../button';
 
 import classes from './FeedbackCallCard.module.scss';
-import { User } from '../../types';
-import {FeedbackCall} from "../../types/FeedbackCall";
-import {ApiContext} from "../../context/ApiContext";
-import moment from "moment";
-import  { Tooltip } from "antd";
-import {feedbackCallText} from "../../assets/mentoringPageAssets";
-import {LeftHighlightCard} from "./FlexibleHighlightCard";
-import {ThemeContext} from "styled-components";
+import { FeedbackCall } from '../../types/FeedbackCall';
+import { ApiContext } from '../../context/ApiContext';
+import { feedbackCallText } from '../../assets/mentoringPageAssets';
+import { LeftHighlightCard } from './FlexibleHighlightCard';
 
-interface Props {
-    user: User;
-  }
 
-const FeedbackCallCard: React.FC<Props> = ({ user }) => {
+const FeedbackCallCard = () => {
   const [feedbackCall, setFeedbackCall] = useState<FeedbackCall>({});
   const [linkActive, setLinkActive] = useState(false);
   const apiContext = useContext(ApiContext);
