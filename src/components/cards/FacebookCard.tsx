@@ -23,7 +23,7 @@ const FacebookCard = () => {
         target="_blank"
         style={{ margin: '4px' }}
       >
-        Teilnehmen
+        Ansehen
       </LinkButton>
     </LeftHighlightCard>
   );
