@@ -47,7 +47,13 @@ const ContactCard = () => {
     return (
       <div className={classes.formContent}>
         <div className={classes.title}>
-          <Title size="h3">Du hast Fragen?</Title>
+          <Title size="h3" style={{ marginBottom: '8px' }}>
+            Du hast Fragen?
+          </Title>
+          <Text large style={{ marginTop: '0px' }}>
+            Wähle eine Kategorie für dein Anliegen aus und bekomme
+            Hilfestellungen von unseren Expert*innen.
+          </Text>
         </div>
         <div className={classes.categorySelect}>
           <Text large> Kategorie: </Text>
