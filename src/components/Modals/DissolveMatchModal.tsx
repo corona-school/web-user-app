@@ -183,7 +183,7 @@ const DissolveMatchModal: React.FC<{
               />
             </div>
           </Question>
-          {supportSuccessful === true && (
+          {(supportSuccessful === true && ownType === 'student') && (
             <>
               <Message>
                 Wir möchten uns bei dir für deine Hilfe bedanken!
@@ -192,6 +192,26 @@ const DissolveMatchModal: React.FC<{
                 Ohne dich wäre dieses Projekt nicht möglich. Danke, dass du in
                 dieser schwierigen Zeit gesellschaftliche Verantwortung
                 übernommen hast!
+                <br />
+                <br />
+                Sobald du die Zusammenarbeit endgültig beendest, werden wir{' '}
+                {matchFirstname} darüber per E-Mail informieren.{' '}
+                {matchFirstname} hat dann die Möglichkeit sich bei Bedarf neu
+                verbinden zu lassen.
+              </Message>
+              <ButtonDestructive
+                onClick={() =>
+                  endCollaboration().then(() => setDissolved(true))
+                }
+              >
+                Zusammenarbeit endgültig beenden
+              </ButtonDestructive>
+            </>
+          )}
+          {(supportSuccessful === true && ownType === 'pupil') && (
+            <>
+              <Message>
+                Vielen Dank für deine Rückmeldung!
                 <br />
                 <br />
                 Sobald du die Zusammenarbeit endgültig beendest, werden wir{' '}
