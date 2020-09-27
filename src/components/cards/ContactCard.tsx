@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
-import styled, { ThemeContext } from 'styled-components';
-import {Checkbox, message} from 'antd';
+import { ThemeContext } from 'styled-components';
+import { Checkbox, message } from 'antd';
 import Button from '../button';
 import Images from '../../assets/images';
 import { Text, Title } from '../Typography';
 import classes from './ContactCard.module.scss';
-import { messageLabels } from '../../assets/mentoringPageAssets';
+import { AgreementText, messageLabels } from '../../assets/mentoringPageAssets';
 import { MentoringCategory } from '../../types/Mentoring';
 import { ApiContext } from '../../context/ApiContext';
 import { TopHighlightCard } from './FlexibleHighlightCard';
@@ -31,7 +31,7 @@ const ContactCard = () => {
       message.error('Der Text der Nachricht fehlt.');
     }
     if (!agreementChecked) {
-      message.error('Bitte bestätige noch das Agreement');
+      message.error('Bitte bestätige noch die Datenschutzerklärung.');
     } else {
       await apiContext
         .postContactMentor({ category, emailText })
@@ -76,12 +76,10 @@ const ContactCard = () => {
         </div>
         <div className={classes.checkboxCell}>
           <Checkbox
-            className={classes.checkbox}
             checked={agreementChecked}
             onChange={(e) => setAgreementChecked(e.target.checked)}
-          >
-            Agreement
-          </Checkbox>
+          />
+          <Text className={classes.checkbox}>{AgreementText}</Text>
         </div>
         <div className={classes.buttonCell}>
           <Button className={classes.button} onClick={SendMessage}>

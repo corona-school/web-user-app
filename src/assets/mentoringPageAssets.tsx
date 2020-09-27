@@ -1,3 +1,4 @@
+import React from 'react';
 import { MentoringCategory } from '../types/Mentoring';
 
 export const headerText =
@@ -38,3 +39,12 @@ export const messageLabels = new Map([
   ],
   [MentoringCategory.TECH, 'Technische Unterstützung'],
 ]);
+
+export const AgreementText = (
+  <>
+    Ich habe die{' '}
+    <a href="https://www.corona-school.de/datenschutz">Datenschutzerklärung</a>{' '}
+    zur Kenntnis genommen. Ich stimme einer elektronischen Speicherung und
+    Verarbeitung meiner eingegebenen Daten zur Beantwortung meiner Anfrage zu.
+  </>
+);
