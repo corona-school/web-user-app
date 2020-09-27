@@ -9,10 +9,16 @@ export interface Tutee {
   // isTutee
   subjects?: Subject[];
   state: string;
-  school: string;
+  school?: string;
   msg?: string;
   newsletter: boolean;
   redirectTo?: string;
+  teacherEmail?: string;
+}
+
+export interface SchoolInfo {
+  name: string;
+  emailDomain: string;
 }
 
 export interface Tutor {

@@ -7,13 +7,19 @@ import { useHistory } from 'react-router-dom';
 import classes from './SignupContainer.module.scss';
 import Images from '../../assets/images';
 
-const SignupContainer: React.FC = (props) => {
+interface Props {
+  shouldShowBackButton?: boolean;
+}
+const SignupContainer: React.FC<React.PropsWithChildren<Props>> = ({
+  children,
+  shouldShowBackButton = true,
+}) => {
   const history = useHistory();
 
   return (
     <div className={classes.container}>
       <div className={classes.content}>
-        {history.location.pathname !== '/login' && (
+        {history.location.pathname !== '/login' && shouldShowBackButton && (
           <a
             className={classes.backButton}
             onClick={(e) => {
@@ -31,7 +37,7 @@ const SignupContainer: React.FC = (props) => {
           </a>
         )}
 
-        {props.children}
+        {children}
       </div>
       <div className={classes.background1}>
         <Images.SignupBackground1 />
