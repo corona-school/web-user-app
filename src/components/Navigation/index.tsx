@@ -84,6 +84,24 @@ const Navigation: React.FC<Props> = (props) => {
             Zuordnung
           </NavButton>
         )}
+        {type === 'student' && (
+          <NavButton
+            to="/mentoring"
+            icon={<Icons.Mentoring />}
+            onClick={() => props.setMenuOpen(false)}
+          >
+            Mentoring
+          </NavButton>
+        )}
+        {type === 'student' && (
+          <NavButton
+            to="/support"
+            icon={<Icons.Support />}
+            onClick={() => props.setMenuOpen(false)}
+          >
+            Hilfestellungen
+          </NavButton>
+        )}
         <NavButton
           to="/settings"
           icon={<Icons.Settings />}
@@ -97,6 +115,7 @@ const Navigation: React.FC<Props> = (props) => {
         <NavButton to="/help" icon={<Icons.Help />}>
           Hilfe
         </NavButton> */}
+
         <div className={classes.section}>Social Media</div>
         <div className={classes.socialMediaButtons}>
           <SocialMediaButton

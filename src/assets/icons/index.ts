@@ -10,6 +10,9 @@ import { ReactComponent as Logout } from './ico-logout.svg';
 import { ReactComponent as Match } from './ico-match.svg';
 import { ReactComponent as Save } from './ico-save.svg';
 import { ReactComponent as Settings } from './ico-settings.svg';
+import { ReactComponent as Support } from './ico-support.svg';
+import { ReactComponent as Mentoring } from './ico-mentoring.svg';
+import { ReactComponent as Pdf } from "./ico-pdf.svg";
 import { ReactComponent as Undo } from './ico-undo.svg';
 import { ReactComponent as VideoChat } from './ico-videoChat.svg';
 import { ReactComponent as Logo } from './logo.svg';
@@ -57,6 +60,9 @@ const IconsList = {
   Match,
   Save,
   Settings,
+  Support,
+  Mentoring,
+  Pdf,
   Undo,
   VideoChat,
   Logo,

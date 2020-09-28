@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  -webkit-box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
+  -moz-box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
+  box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
+  width: 450px;
+  height: 565px;
+  margin: 8px;
+
+  @media only screen and (max-width: 600px) {
+    width: 360px;
+    height: fit-content;
+    margin: 0px;
+  }
+
+  .cardContent {
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 8px 25px;
+
+    .title {
+      margin: 20px 0px;
+      height: 56px;
+      -webkit-column-width: 400px;
+      overflow: hidden;
+
+      @media only screen and (max-width: 600px) {
+        height: fit-content;
+      }
+    }
+
+    .video {
+      width: 400px;
+      height: 225px;
+
+      @media only screen and (max-width: 600px) {
+        width: 310px;
+        height: 174px;
+      }
+    }
+
+    .caption {
+      max-height: 172px;
+      -webkit-column-width: 400px;
+      margin: 20px 0px;
+      overflow: hidden;
+    }
+  }
+}
