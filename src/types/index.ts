@@ -16,6 +16,11 @@ export interface User {
   dissolvedMatches: Match[];
   screeningStatus: ScreeningStatus;
   instructorScreeningStatus: ScreeningStatus;
+  state?: string;
+  university?: string;
+  schoolType?: string;
+  lastUpdatedSettingsViaBlocker: number;
+  registrationDate: number;
 }
 
 export enum ScreeningStatus {

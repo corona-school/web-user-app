@@ -1,13 +1,47 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import moment from 'moment';
 import { Title, Text } from '../components/Typography';
 import classes from './Dashboard.module.scss';
 import { Tag } from '../components/Tag';
 import { getStatus, getNextSteps, getNews } from '../utils/DashboardUtils';
 import { UserContext } from '../context/UserContext';
 import { ColumnCard } from '../components/Card';
+import UpdateInformationBlockerModal, {
+  MODAL_IDENTIFIER as UpdateInformationBlockerModalIdentifier,
+} from '../components/Modals/UpdateInformationBlockerModal';
+import Context from '../context';
+import { nextDateOfYearAfterDate } from '../utils/DateUtils';
 
 const Dashboard: React.FC = () => {
+  const { setOpenedModal } = useContext(Context.Modal);
   const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    const shouldShowUpdateInformationBlocker =
+      (!user.lastUpdatedSettingsViaBlocker &&
+        moment().isAfter(
+          nextDateOfYearAfterDate(1, 8, moment.unix(user.registrationDate))
+        )) ||
+      (user.lastUpdatedSettingsViaBlocker &&
+        moment().isAfter(
+          // always show blocker on 09-01 in following year after settings were last updated via the blocker
+          nextDateOfYearAfterDate(
+            1,
+            8,
+            moment.unix(user.lastUpdatedSettingsViaBlocker)
+          )
+        ));
+
+    if (shouldShowUpdateInformationBlocker) {
+      setOpenedModal(UpdateInformationBlockerModalIdentifier);
+    } else {
+      setOpenedModal(null);
+    }
+  }, [
+    setOpenedModal,
+    user.lastUpdatedSettingsViaBlocker,
+    user.registrationDate,
+  ]);
 
   const renderStatusText = () => {
     const status = getStatus(user);
@@ -52,9 +86,14 @@ const Dashboard: React.FC = () => {
 
     return steps.map((s) => {
       return (
-        <ColumnCard title={s.title} image={s.image} button={s.action}>
+        <ColumnCard
+          key={s.title}
+          title={s.title}
+          image={s.image}
+          button={s.action}
+        >
           {s.texts.map((text) => {
-            return <Text>{text}</Text>;
+            return <Text key={text}>{text}</Text>;
           })}
         </ColumnCard>
       );
@@ -66,7 +105,7 @@ const Dashboard: React.FC = () => {
 
     return news.map((n) => {
       return (
-        <div className={classes.newsContent}>
+        <div className={classes.newsContent} key={n.headline + n.text}>
           <div className={classes.newsHeadline}>
             <Tag>NEU</Tag>
             <Title bold size="h5">
@@ -97,6 +136,7 @@ const Dashboard: React.FC = () => {
         </Title>
         <div className={classes.bottomGrid}>{renderNextSteps()}</div>
       </div>
+      <UpdateInformationBlockerModal user={user} />
     </div>
   );
 };

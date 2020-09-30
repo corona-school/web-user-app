@@ -94,11 +94,12 @@ export const Title: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = (
   );
 };
 
-export const Text = styled.div<{ large?: boolean }>`
+export const Text = styled.div<{ large?: boolean; bold?: boolean }>`
   margin: 8px 8px;
   padding: 0px;
   line-height: ${(props) => (props.large ? '30px' : '26px')};
   font-size: ${(props) => (props.large ? '15px' : '13px')};
+  font-weight: ${(props) => (props.bold ? 'bold' : 'normal')};
   color: #373e47;
   a {
     text-decoration: 'underline';

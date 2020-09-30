@@ -11,6 +11,7 @@ import Context from '../context';
 import { Tutor } from '../types/Registration';
 
 import classes from './RegisterTutor.module.scss';
+import UniSelect from '../components/forms/select/UniSelect';
 
 const { Option } = Select;
 
@@ -205,43 +206,41 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const renderDetail = () => {
     return (
       <>
-        {isOfficial && (
-          <Form.Item
-            className={classes.formItem}
-            label="Derzeitiges Bundesland"
-            name="state"
-            rules={[
-              { required: true, message: 'Bitte trage dein Bundesland ein' },
-            ]}
+        <Form.Item
+          className={classes.formItem}
+          label="Derzeitiges Bundesland"
+          name="state"
+          rules={[
+            { required: true, message: 'Bitte trage dein Bundesland ein' },
+          ]}
+        >
+          <Select
+            showSearch
+            placeholder="Baden-Württemberg"
+            defaultValue={formData.state}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
           >
-            <Select
-              showSearch
-              placeholder="Baden-Württemberg"
-              defaultValue={formData.state}
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              <Option value="BW">Baden-Württemberg</Option>
-              <Option value="BY">Bayern</Option>
-              <Option value="BE">Berlin</Option>
-              <Option value="BB">Brandenburg</Option>
-              <Option value="HB">Bremen</Option>
-              <Option value="HH">Hamburg</Option>
-              <Option value="HE">Hessen</Option>
-              <Option value="MV">Mecklenburg-Vorpommern</Option>
-              <Option value="NI">Niedersachsen</Option>
-              <Option value="NW">Nordrhein-Westfalen</Option>
-              <Option value="RP">Rheinland-Pfalz</Option>
-              <Option value="SL">Saarland</Option>
-              <Option value="SN">Sachsen</Option>
-              <Option value="ST">Sachsen-Anhalt</Option>
-              <Option value="SH">Schleswig-Holstein</Option>
-              <Option value="TH">Thüringen</Option>
-              <Option value="other">anderes Bundesland</Option>
-            </Select>
-          </Form.Item>
-        )}
+            <Option value="BW">Baden-Württemberg</Option>
+            <Option value="BY">Bayern</Option>
+            <Option value="BE">Berlin</Option>
+            <Option value="BB">Brandenburg</Option>
+            <Option value="HB">Bremen</Option>
+            <Option value="HH">Hamburg</Option>
+            <Option value="HE">Hessen</Option>
+            <Option value="MV">Mecklenburg-Vorpommern</Option>
+            <Option value="NI">Niedersachsen</Option>
+            <Option value="NW">Nordrhein-Westfalen</Option>
+            <Option value="RP">Rheinland-Pfalz</Option>
+            <Option value="SL">Saarland</Option>
+            <Option value="SN">Sachsen</Option>
+            <Option value="ST">Sachsen-Anhalt</Option>
+            <Option value="SH">Schleswig-Holstein</Option>
+            <Option value="TH">Thüringen</Option>
+            <Option value="other">anderes Bundesland</Option>
+          </Select>
+        </Form.Item>
         {isTutor && (
           <Form.Item
             className={classes.formItem}
@@ -289,21 +288,17 @@ const RegisterTutor: React.FC<Props> = (props) => {
           </Form.Item>
         )}
 
-        {isOfficial && (
-          <Form.Item
-            className={classes.formItem}
-            label="Universität/Hochschule"
-            name="university"
-            rules={[
-              { required: true, message: 'Bitte trage deine Universität ein' },
-            ]}
-          >
-            <Input
-              placeholder="Duale Hochschule Musterstadt"
-              defaultValue={formData.university}
-            />
-          </Form.Item>
-        )}
+        <Form.Item
+          className={classes.formItem}
+          label="Universität/Hochschule"
+          name="university"
+          rules={[
+            { required: true, message: 'Bitte trage deine Universität ein' },
+          ]}
+          initialValue={formData.university}
+        >
+          <UniSelect />
+        </Form.Item>
 
         {isOfficial && (
           <Form.Item

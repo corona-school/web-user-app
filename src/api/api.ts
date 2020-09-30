@@ -50,6 +50,10 @@ export const putUser = (
     lastname?: string;
     grade?: number;
     matchesRequested?: number;
+    state?: string;
+    university?: string;
+    schoolType?: string;
+    lastUpdatedSettingsViaBlocker: number;
   }
 ): Promise<void> =>
   new Promise((resolve, reject) => {

@@ -31,6 +31,7 @@ const OpenRequestCard: React.FC<Props> = ({ type, userType }) => {
       lastname: user.lastname,
       matchesRequested: f(user.matchesRequested),
       grade: user.grade,
+      lastUpdatedSettingsViaBlocker: user.lastUpdatedSettingsViaBlocker,
     })
       .then(() => {
         setLoading(false);
