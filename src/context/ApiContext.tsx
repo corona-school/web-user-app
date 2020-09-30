@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useContext } from 'react';
 import { AxiosResponse } from 'axios';
+import { message } from 'antd';
 import { AuthContext } from './AuthContext';
 import { User, Subject } from '../types';
 import * as api from '../api/api';
 import { CertificateData } from '../components/Modals/CerificateModal';
-import { Tutee, Tutor } from '../types/Registration';
+import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { CompletedSubCourse } from '../components/forms/CreateCourse';
 import { CompletedLecture } from '../routes/CourseForm';
+import { MenteeMessage, Mentoring } from '../types/Mentoring';
+import { FeedbackCall } from '../types/FeedbackCall';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
@@ -67,6 +70,7 @@ interface IApiContext {
     lectureId: number
   ) => Promise<void>;
   registerTutee: (tutee: Tutee) => Promise<void>;
+  registerStateTutee: (tutee: Tutee) => Promise<void>;
   registerTutor: (tutor: Tutor) => Promise<void>;
   sendCourseGroupMail: (
     courseId: number,
@@ -78,6 +82,13 @@ interface IApiContext {
     courseId: number,
     subcourseId: number
   ) => Promise<CourseOverview>;
+  getCooperatingSchools: (state: string) => Promise<SchoolInfo[]>;
+  getMentoringMaterial: (
+    type: string,
+    location: string
+  ) => Promise<Mentoring[]>;
+  getFeedbackCallData: () => Promise<FeedbackCall>;
+  postContactMentor: (message: MenteeMessage) => Promise<void>;
 }
 
 export const ApiContext = React.createContext<IApiContext>({
@@ -109,9 +120,14 @@ export const ApiContext = React.createContext<IApiContext>({
   editLecture: (id, subCourseId, lecture) => Promise.reject(),
   cancelLecture: (id, subCourseId, lectureId) => Promise.reject(),
   registerTutee: (tutee) => Promise.reject(),
+  registerStateTutee: (tutee) => Promise.reject(),
   registerTutor: (tutor) => Promise.reject(),
   sendCourseGroupMail: (id, subCourseId, subject, body) => Promise.reject(),
   joinBBBmeeting: (courseId, subcourseId) => Promise.reject(),
+  getCooperatingSchools: (state) => Promise.reject(),
+  getMentoringMaterial: (type, location) => Promise.reject(),
+  getFeedbackCallData: () => Promise.reject(),
+  postContactMentor: (message) => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -216,6 +232,9 @@ export const ApiProvider: React.FC = ({ children }) => {
   const registerTutee = (tutee: Tutee): Promise<void> =>
     api.axiosRegisterTutee(tutee);
 
+  const registerStateTutee = (tutee: Tutee): Promise<void> =>
+    api.axiosRegisterStateTutee(tutee);
+
   const registerTutor = (tutor: Tutor): Promise<void> =>
     api.axiosRegisterTutor(tutor);
 
@@ -248,6 +267,17 @@ export const ApiProvider: React.FC = ({ children }) => {
   const joinBBBmeeting = (courseId: number, subcourseId: number) =>
     api.axiosJoinBBBmeeting(token, courseId, subcourseId);
 
+  const getCooperatingSchools = (state: string): Promise<SchoolInfo[]> =>
+    api.axiosGetCooperatingSchool(state);
+
+  const getMentoringMaterial = (type: string, location: string) =>
+    api.axiosGetMentoringMaterial(token, type, location);
+
+  const getFeedbackCallData = () => api.axiosGetFeedbackCallData(token);
+
+  const postContactMentor = (message: MenteeMessage) =>
+    api.axiosPostContactMentor(token, message);
+
   return (
     <ApiContext.Provider
       value={{
@@ -263,6 +293,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         getCourse,
         getMyCourses,
         registerTutee,
+        registerStateTutee,
         registerTutor,
         sendCourseGroupMail,
         joinCourse,
@@ -276,9 +307,13 @@ export const ApiProvider: React.FC = ({ children }) => {
         cancelLecture,
         publishSubCourse,
         joinBBBmeeting,
+        getMentoringMaterial,
+        getFeedbackCallData,
+        postContactMentor,
         editCourse,
         editSubCourse,
         editLecture,
+        getCooperatingSchools,
       }}
     >
       {children}

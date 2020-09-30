@@ -41,6 +41,9 @@ const PublicCourse = () => {
   const [indeterminate3, setIndeterminate3] = useState(false);
   const [checkAll3, setCheckAll3] = useState(true);
 
+  // no tags
+  const [checkAll4, setCheckAll4] = useState(true);
+
   const apiContext = useContext(Context.Api);
   // eslint-disable-next-line @typescript-eslint/ban-types
   const [options, setOptions] = useState<SelectProps<object>['options']>([]);
@@ -125,16 +128,16 @@ const PublicCourse = () => {
     if (key === '2') {
       setCheckedList2(checkedList);
       setIndeterminate2(
-        !!checkedList.length && checkedList.length < default1.length
+        !!checkedList.length && checkedList.length < default2.length
       );
-      setCheckAll2(checkedList.length === default1.length);
+      setCheckAll2(checkedList.length === default2.length);
     }
     if (key === '3') {
       setCheckedList3(checkedList);
       setIndeterminate3(
-        !!checkedList.length && checkedList.length < default1.length
+        !!checkedList.length && checkedList.length < default3.length
       );
-      setCheckAll3(checkedList.length === default1.length);
+      setCheckAll3(checkedList.length === default3.length);
     }
   };
 
@@ -153,6 +156,9 @@ const PublicCourse = () => {
       setCheckedList3(e.target.checked ? default3 : []);
       setIndeterminate3(false);
       setCheckAll3(e.target.checked);
+    }
+    if (key === '4') {
+      setCheckAll4(e.target.checked);
     }
   };
 
@@ -192,13 +198,15 @@ const PublicCourse = () => {
         </div>
 
         {courses
-          .filter((c) =>
-            c.tags.find(
-              (t) =>
-                checkedList1.includes(t.name) ||
-                checkedList2.includes(t.name) ||
-                checkedList3.includes(t.name)
-            )
+          .filter(
+            (c) =>
+              c.tags.find(
+                (t) =>
+                  checkedList1.includes(t.name) ||
+                  checkedList2.includes(t.name) ||
+                  checkedList3.includes(t.name)
+              ) ||
+              (c.tags.length === 0 && checkAll4)
           )
           .map((c) => {
             return (
@@ -282,6 +290,15 @@ const PublicCourse = () => {
             value={checkedList3}
             onChange={(checkedList: string[]) => onChange(checkedList, '3')}
           />
+        </div>
+        <div className={classes.checkboxContainer}>
+          <Checkbox
+            indeterminate={false}
+            onChange={(e) => onCheckAllChange(e, '4')}
+            checked={checkAll4}
+          >
+            Sonstige
+          </Checkbox>
         </div>
       </div>
     </div>

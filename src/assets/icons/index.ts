@@ -10,6 +10,9 @@ import { ReactComponent as Logout } from './ico-logout.svg';
 import { ReactComponent as Match } from './ico-match.svg';
 import { ReactComponent as Save } from './ico-save.svg';
 import { ReactComponent as Settings } from './ico-settings.svg';
+import { ReactComponent as Support } from './ico-support.svg';
+import { ReactComponent as Mentoring } from './ico-mentoring.svg';
+import { ReactComponent as Pdf } from "./ico-pdf.svg";
 import { ReactComponent as Undo } from './ico-undo.svg';
 import { ReactComponent as VideoChat } from './ico-videoChat.svg';
 import { ReactComponent as Logo } from './logo.svg';
@@ -42,6 +45,8 @@ import { ReactComponent as SignupNumber3 } from './signup/number-3.svg';
 import { ReactComponent as SignupSchoolBag } from './signup/school-bag.svg';
 import { ReactComponent as SignupTutor } from './signup/tutor.svg';
 
+import { ReactComponent as CoatOfArmsNRW } from './states/nrw.svg';
+
 const IconsList = {
   Edit,
   Add,
@@ -55,6 +60,9 @@ const IconsList = {
   Match,
   Save,
   Settings,
+  Support,
+  Mentoring,
+  Pdf,
   Undo,
   VideoChat,
   Logo,
@@ -85,6 +93,7 @@ const IconsList = {
   SignupSchoolBag,
   SignupTutor,
   Palm,
+  CoatOfArmsNRW,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

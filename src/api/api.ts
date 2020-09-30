@@ -1,10 +1,12 @@
 import axios, { AxiosResponse } from 'axios';
 import { Credentials, User, Subject } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
-import { Tutee, Tutor } from '../types/Registration';
+import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
 import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
 import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
+import { MenteeMessage, Mentoring } from '../types/Mentoring';
+import { FeedbackCall } from '../types/FeedbackCall';
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -356,6 +358,23 @@ export const axiosRegisterTutee = (tutee: Tutee): Promise<void> => {
   });
 };
 
+export const axiosRegisterStateTutee = (tutee: Tutee): Promise<void> => {
+  if (!isValidTutee(tutee)) {
+    throw new Error('Tutee is not valid');
+  }
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${apiURL}/register/tutee/state`, tutee)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
 export const axiosRegisterTutor = (tutor: Tutor): Promise<void> => {
   if (!isValidTutor(tutor)) {
     throw new Error('Tutor is not valid');
@@ -631,11 +650,11 @@ export const axiosJoinBBBmeeting = (
   courseId: number,
   subcourseId: number
 ): Promise<CourseOverview> => {
-  const url = `${apiURL}/course/${courseId}/meeting/join`;
+  const url = `${apiURL}/course/${courseId}/subcourse/${subcourseId}/meeting/join`;
 
   return new Promise((resolve, reject) => {
     axios
-      .post(url, { subcourseId }, { headers: { token } })
+      .get(url, { headers: { token } })
       .then((response) => {
         console.log(response);
         resolve(response.data);
@@ -643,5 +662,64 @@ export const axiosJoinBBBmeeting = (
       .catch((error) => {
         reject(error);
       });
+  });
+};
+
+export const axiosGetCooperatingSchool = (
+  state: string
+): Promise<SchoolInfo[]> => {
+  const url = `${apiURL}/register/${state}/schools`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosGetMentoringMaterial = (
+  token: string,
+  type: string,
+  location: string
+): Promise<Mentoring[]> => {
+  const url = `${apiURL}/mentoring/material`;
+
+  const params = new URLSearchParams();
+  params.append('type', type);
+  params.append('location', location);
+
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url, { headers: { token }, params })
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error));
+  });
+};
+
+export const axiosGetFeedbackCallData = (
+  token: string
+): Promise<FeedbackCall> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${apiURL}/mentoring/feedbackCall`, { headers: { token } })
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error));
+  });
+};
+
+export const axiosPostContactMentor = (
+  token: string,
+  message: MenteeMessage
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/mentoring/contact`, message, { headers: { token } })
+      .then(() => resolve())
+      .catch((err) => reject(err));
   });
 };

@@ -1,0 +1,24 @@
+
+.buttonParticipate {
+  background-color: rgb(244, 72, 109);
+  color: white;
+  display: flex;
+  float: right;
+
+  &:hover {
+    color: white;
+  }
+}
+
+.inactiveButtonParticipate {
+  background-color: #dadada;
+  color: white;
+  display: flex;
+  float: right;
+
+  &:hover {
+    color: white;
+    cursor: default;
+  }
+}
+

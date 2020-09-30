@@ -20,7 +20,7 @@ ReactDOM.render(
         <ApiProvider>
           <UserProvider>
             <ModalProvider>
-              <HttpsRedirect>
+              <HttpsRedirect disabled={process.env.REACT_APP_MODE === 'LOCAL'}>
                 <BrowserRouter>
                   <App />
                 </BrowserRouter>

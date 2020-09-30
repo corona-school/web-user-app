@@ -56,7 +56,7 @@ const MatchCard: React.FC<Props> = ({
         </div>
         <div className={classes.tagContainer}>
           <Tag background="#4E555C" color="#ffffff">
-            {type === 'pupil' ? `${match.grade}. Klasse` : `Stundent*in`}
+            {type === 'pupil' ? `${match.grade}. Klasse` : `Student*in`}
           </Tag>
         </div>
         <div className={classes.subjectContainer}>

@@ -8,6 +8,8 @@ import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './routes/Dashboard';
 import Matches from './routes/Matches';
 import Settings from './routes/Settings';
+import Mentoring from './routes/Mentoring';
+import Support from './routes/Support';
 import Feedback from './routes/Feedback';
 import Help from './routes/Help';
 import Login from './routes/Login';
@@ -24,6 +26,11 @@ import RegisterTutor from './routes/RegisterTutor';
 import { CourseForm } from './routes/CourseForm';
 import CourseDetail from './routes/CourseDetail';
 import PublicCourseDetail from './routes/PublicCourseDetail';
+import { getDomainComponents } from './utils/DomainUtils';
+import {
+  isSupportedStateSubdomain,
+  stateInfoForStateSubdomain,
+} from './assets/supportedStateCooperations';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -49,6 +56,29 @@ const GlobalStyle = createGlobalStyle`
 
 const App: React.FC = () => {
   const userContext = useContext(UserContext);
+
+  const domainComponents = getDomainComponents();
+  if (
+    domainComponents?.length > 0 &&
+    isSupportedStateSubdomain(domainComponents[0])
+  ) {
+    // render the special page for cooperations with states of Germany
+    return (
+      <>
+        <GlobalStyle />
+        <Switch>
+          <Route exact path="/">
+            <RegisterTutee
+              stateCooperationInfo={stateInfoForStateSubdomain(
+                domainComponents[0]
+              )}
+            />
+          </Route>
+          <Route component={NotFound} />
+        </Switch>
+      </>
+    );
+  }
 
   return (
     <>
@@ -124,6 +154,12 @@ const App: React.FC = () => {
           </PrivateRoute>
           <PrivateRoute path="/settings">
             <Settings />
+          </PrivateRoute>
+          <PrivateRoute path="/mentoring">
+            <Mentoring />
+          </PrivateRoute>
+          <PrivateRoute path="/support">
+            <Support/>
           </PrivateRoute>
           <PrivateRoute path="/feedback">
             <Feedback />
