@@ -15,6 +15,7 @@ const UniSelect: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = (
     <Select
       className={props.className}
       showSearch
+      virtual={false}
       filterOption={(input, option) => {
         const u = uniByUUID(option.key.toString());
         return (
