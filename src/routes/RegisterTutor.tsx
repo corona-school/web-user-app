@@ -292,9 +292,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           className={classes.formItem}
           label="Universität/Hochschule"
           name="university"
-          rules={[
-            { required: true, message: 'Bitte trage deine Universität ein' },
-          ]}
+          rules={[{ required: false }]}
           initialValue={formData.university}
         >
           <UniSelect />
