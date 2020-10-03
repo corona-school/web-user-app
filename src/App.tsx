@@ -159,7 +159,7 @@ const App: React.FC = () => {
             <Mentoring />
           </PrivateRoute>
           <PrivateRoute path="/support">
-            <Support/>
+            <Support />
           </PrivateRoute>
           <PrivateRoute path="/feedback">
             <Feedback />

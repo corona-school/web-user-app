@@ -4,6 +4,8 @@ export type StateCooperationInfo = {
   name: string;
   abbrev: string;
   subdomain: string;
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   coatOfArms?: any;
 };
 

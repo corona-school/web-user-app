@@ -5,6 +5,8 @@ import { Text } from '../Typography';
 
 export const FileButton = ({ name, linkToFile }) => {
   return (
+    // TODO
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div
       role="button"
       tabIndex={0}

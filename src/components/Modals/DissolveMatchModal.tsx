@@ -161,16 +161,16 @@ const DissolveMatchModal: React.FC<{
       ) : (
         <>
           <Question>
-            {ownType === 'student' &&
+            {ownType === 'student' && (
               <p className="question">
                 Konntest du {matchFirstname} erfolgreich unterstützen?
               </p>
-            }
-            {ownType === 'pupil' &&
+            )}
+            {ownType === 'pupil' && (
               <p className="question">
                 Konnte dich {matchFirstname} erfolgreich unterstützen?
               </p>
-            }
+            )}
             <div>
               <CheckboxButton
                 label="Ja"
@@ -184,7 +184,7 @@ const DissolveMatchModal: React.FC<{
               />
             </div>
           </Question>
-          {(supportSuccessful === true && ownType === 'student') && (
+          {supportSuccessful === true && ownType === 'student' && (
             <>
               <Message>
                 Wir möchten uns bei dir für deine Hilfe bedanken!
@@ -209,7 +209,7 @@ const DissolveMatchModal: React.FC<{
               </ButtonDestructive>
             </>
           )}
-          {(supportSuccessful === true && ownType === 'pupil') && (
+          {supportSuccessful === true && ownType === 'pupil' && (
             <>
               <Message>
                 Vielen Dank für deine Rückmeldung!
@@ -232,18 +232,18 @@ const DissolveMatchModal: React.FC<{
           {supportSuccessful === false && (
             <>
               <Question>
-                {ownType === 'student' &&
+                {ownType === 'student' && (
                   <p className="question">
                     Warum konntest du {matchFirstname} nicht erfolgreich
                     unterstützen?
                   </p>
-                }
-                {ownType === 'pupil' &&
+                )}
+                {ownType === 'pupil' && (
                   <p className="question">
                     Warum konnte dich {matchFirstname} nicht erfolgreich
                     unterstützen?
                   </p>
-                }
+                )}
                 {Object.entries(reasonOptions).map(([key, value]) => (
                   <CheckboxButton
                     key={key}

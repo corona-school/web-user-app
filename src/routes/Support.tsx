@@ -1,9 +1,6 @@
 import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import { Spin } from 'antd';
-import { useHistory } from 'react-router-dom';
 import { ThemeContext } from 'styled-components';
-import Context from '../context';
-import { ScreeningStatus } from '../types';
 import { LeftHighlightCard } from '../components/cards/FlexibleHighlightCard';
 import { Text, Title } from '../components/Typography';
 import { headerText, cardText1, cardText2 } from '../assets/supportPageAssests';
@@ -14,7 +11,7 @@ import { VideoCard } from '../components/cards/VideoCard';
 import { ApiContext } from '../context/ApiContext';
 import { Mentoring } from '../types/Mentoring';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
-import StudentCheck from "../components/StudentCheck";
+import StudentCheck from '../components/StudentCheck';
 
 const MaterialCard = ({
   location,

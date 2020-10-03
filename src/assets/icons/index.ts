@@ -12,7 +12,7 @@ import { ReactComponent as Save } from './ico-save.svg';
 import { ReactComponent as Settings } from './ico-settings.svg';
 import { ReactComponent as Support } from './ico-support.svg';
 import { ReactComponent as Mentoring } from './ico-mentoring.svg';
-import { ReactComponent as Pdf } from "./ico-pdf.svg";
+import { ReactComponent as Pdf } from './ico-pdf.svg';
 import { ReactComponent as Undo } from './ico-undo.svg';
 import { ReactComponent as VideoChat } from './ico-videoChat.svg';
 import { ReactComponent as Logo } from './logo.svg';

@@ -33,7 +33,7 @@ const ImageList = {
   SignupBackgroundCircle2,
   SignupBackgroundZickZack,
   Celebration,
-  MentoringPic
+  MentoringPic,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
