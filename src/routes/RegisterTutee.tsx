@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Form, Input, Checkbox, Select, message } from 'antd';
+import { Form, Input, Checkbox, Select, message, Radio } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { useHistory, Link, useLocation } from 'react-router-dom';
 import Icons from '../assets/icons';
@@ -23,6 +23,9 @@ interface FormData {
   email?: string;
   grade?: number;
   isTutee?: boolean;
+  isJufo?: boolean;
+  project?: string[];
+  jufoParticipation?: string;
   // isTutee
   subjects?: Subject[];
   // finnish
@@ -49,6 +52,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
   >('start');
   const [isTutee, setTutee] = useState(false);
   const [isGroups, setGroups] = useState(false);
+  const [isJufo, setJufo] = useState(false);
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
@@ -125,7 +129,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
           rules={[
             () => ({
               validator() {
-                if (isGroups || isTutee) {
+                if (isGroups || isTutee || isJufo) {
                   return Promise.resolve();
                 }
                 return Promise.reject('Bitte wähle eine Option aus.');
@@ -154,6 +158,16 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
           >
             Ich möchte an Gruppenkursen der Corona School teilnehmen (z.B.
             Sommer-AG, Repetitorium, Lerncoaching)
+          </Checkbox>
+          <Checkbox
+            onChange={() => {
+              setJufo(!isJufo);
+            }}
+            value="isJufo"
+            style={{ lineHeight: '32px' }}
+            checked={isJufo}
+          >
+            Ich möchte Unterstützung für mein Projekt (bspw. Jugend-Forscht).
           </Checkbox>
         </Form.Item>
       </>
@@ -241,6 +255,70 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             <Option value="13">13. Klasse</Option>
           </Select>
         </Form.Item>
+        {isJufo && (
+          <Form.Item
+            className={classes.formItem}
+            label="Fachgebiet deines Projekts"
+            name="project"
+            rules={[
+              () => ({
+                required: true,
+                validator(_, value) {
+                  if (!value) {
+                    return Promise.reject(
+                      'Bitte wähle min. ein Fachgebiet aus.'
+                    );
+                  }
+                  if (value.length <= 2) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    'Du darfst maximal 2 Fachgebiete auswählen!'
+                  );
+                },
+              }),
+            ]}
+            initialValue={formData.project ? `${formData.project}` : undefined}
+          >
+            <Select
+              placeholder="Bitte wähle min. ein Fachgebiet aus"
+              mode="multiple"
+              allowClear
+            >
+              <Option value="business">Arbeitswelt</Option>
+              <Option value="biology">Biologie</Option>
+              <Option value="chemie">Chemie</Option>
+              <Option value="mathematics">Mathematik/Informatik</Option>
+              <Option value="earth-science">Geo- und Raumwissenschaften</Option>
+              <Option value="physics">Physik</Option>
+              <Option value="engineering">Technik</Option>
+            </Select>
+          </Form.Item>
+        )}
+        {isJufo && (
+          <Form.Item
+            className={classes.formItem}
+            label="Nimmst du an Jugend Forscht teil?"
+            name="jufoParticipation"
+            rules={[
+              {
+                required: true,
+                message: 'Bitte wähle eine Option aus.',
+              },
+            ]}
+            initialValue={
+              formData.jufoParticipation
+                ? `${formData.jufoParticipation}`
+                : 'yes'
+            }
+          >
+            <Radio.Group>
+              <Radio.Button value="yes">Ja</Radio.Button>
+              <Radio.Button value="no">Nein</Radio.Button>
+              <Radio.Button value="idk">Weiß noch nicht</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        )}
         {isTutee && (
           <Form.Item
             className={classes.formItem}
@@ -557,6 +635,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
           lastname: formValues.lastname,
           email: formValues.email,
           isTutee,
+          isJufo,
         });
 
         setFormState('detail');
@@ -566,7 +645,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
           ...formData,
           state: formValues.state,
           school: formValues.school,
-
+          project: formValues.project || [],
           grade: parseInt(formValues.grade),
           subjects: isTutee
             ? formValues.subjects.map((s) => ({
@@ -577,6 +656,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             : undefined,
           msg: formValues.msg,
           teacherEmail: formValues.teacherEmail,
+          jufoParticipation: formValues.jufoParticipation,
         });
         setFormState('finnish');
       }

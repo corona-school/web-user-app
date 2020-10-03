@@ -1,6 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { useHistory, Link, useLocation } from 'react-router-dom';
-import { Form, Input, Checkbox, InputNumber, Select, message } from 'antd';
+import {
+  Form,
+  Input,
+  Checkbox,
+  InputNumber,
+  Select,
+  message,
+  Radio,
+} from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/container/SignupContainer';
@@ -23,6 +31,10 @@ interface FormData {
   isOfficial?: boolean;
   isInstructor?: boolean;
   isTutor?: boolean;
+  isJufo?: boolean;
+  // isJufo
+  project?: string[];
+  jufoParticipation?: string;
   // isOfficial
   state?: string;
   university?: string;
@@ -55,6 +67,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [isGroups, setGroups] = useState(
     props.isInternship || props.isClub || false
   );
+  const [isJufo, setJufo] = useState(false);
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'finnish' | 'done'
   >('start');
@@ -118,7 +131,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             () => ({
               required: true,
               validator() {
-                if (isGroups || isTutor) {
+                if (isGroups || isTutor || isJufo) {
                   return Promise.resolve();
                 }
                 return Promise.reject('Bitte wähle eine Option aus.');
@@ -152,6 +165,16 @@ const RegisterTutor: React.FC<Props> = (props) => {
           >
             Ich möchte einen Gruppenkurs in der Corona School anbieten (z.B.
             Sommer-AG, Repetitorium, Lerncoaching)
+          </Checkbox>
+          <Checkbox
+            onChange={() => {
+              setJufo(!isJufo);
+            }}
+            value="isJufo"
+            style={{ lineHeight: '32px' }}
+            checked={isJufo}
+          >
+            Ich möchte Schüler*in im 1-zu-1 Projektcoaching unterstützen
           </Checkbox>
         </Form.Item>
         <Form.Item
@@ -241,6 +264,70 @@ const RegisterTutor: React.FC<Props> = (props) => {
             <Option value="other">anderes Bundesland</Option>
           </Select>
         </Form.Item>
+        {isJufo && (
+          <Form.Item
+            className={classes.formItem}
+            label="Fachgebiet deines Projekts"
+            name="project"
+            rules={[
+              () => ({
+                required: true,
+                validator(_, value) {
+                  if (!value) {
+                    return Promise.reject(
+                      'Bitte wähle min. ein Fachgebiet aus.'
+                    );
+                  }
+                  if (value.length <= 2) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    'Du darfst maximal 2 Fachgebiete auswählen!'
+                  );
+                },
+              }),
+            ]}
+            initialValue={formData.project ? `${formData.project}` : undefined}
+          >
+            <Select
+              placeholder="Bitte wähle min. ein Fachgebiet aus"
+              mode="multiple"
+              allowClear
+            >
+              <Option value="business">Arbeitswelt</Option>
+              <Option value="biology">Biologie</Option>
+              <Option value="chemie">Chemie</Option>
+              <Option value="mathematics">Mathematik/Informatik</Option>
+              <Option value="earth-science">Geo- und Raumwissenschaften</Option>
+              <Option value="physics">Physik</Option>
+              <Option value="engineering">Technik</Option>
+            </Select>
+          </Form.Item>
+        )}
+        {isJufo && (
+          <Form.Item
+            className={classes.formItem}
+            label="Nimmst du an Jugend Forscht teil?"
+            name="jufoParticipation"
+            rules={[
+              {
+                required: true,
+                message: 'Bitte wähle eine Option aus.',
+              },
+            ]}
+            initialValue={
+              formData.jufoParticipation
+                ? `${formData.jufoParticipation}`
+                : 'yes'
+            }
+          >
+            <Radio.Group>
+              <Radio.Button value="yes">Ja</Radio.Button>
+              <Radio.Button value="no">Nein</Radio.Button>
+              <Radio.Button value="idk">Weiß noch nicht</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        )}
         {isTutor && (
           <Form.Item
             className={classes.formItem}
@@ -321,8 +408,11 @@ const RegisterTutor: React.FC<Props> = (props) => {
         <Form.Item
           className={classes.formItem}
           label={
+            // eslint-disable-next-line no-nested-ternary
             isGroups
               ? 'Beschreibe die Inhalte deines Gruppenkurses bzw. deiner Gruppenkurse (3-5 Sätze)'
+              : isJufo
+              ? 'Stelle dich kurz vor'
               : 'Nachricht hinzufügen'
           }
           name="msg"
@@ -330,8 +420,11 @@ const RegisterTutor: React.FC<Props> = (props) => {
           <Input.TextArea
             autoSize={{ minRows: isGroups ? 6 : 4 }}
             placeholder={
+              // eslint-disable-next-line no-nested-ternary
               isGroups
                 ? 'Kursthema, Zielgruppe, Kursgröße, Interaktion'
+                : isJufo
+                ? 'Stelle dich kurz vor'
                 : 'Hier deine Nachricht für uns.'
             }
           />
@@ -544,6 +637,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           isOfficial,
           isTutor,
           isInstructor: isGroups,
+          isJufo,
         });
 
         setFormState('detail');
@@ -563,6 +657,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
           university: formValues.university,
           module: 'internship',
           hours: formValues.hours,
+          project: formValues.project || [],
+          jufoParticipation: formValues.jufoParticipation,
         });
         setFormState('finnish');
       }
