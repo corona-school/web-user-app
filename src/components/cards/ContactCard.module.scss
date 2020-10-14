@@ -1,17 +1,17 @@
 .formContent {
-  min-height: 554px;
+  min-height: 612px;
   padding: 20px;
   display: grid;
   grid-template-columns: auto min-content;
   grid-template-rows: min-content min-content auto min-content min-content;
   grid-gap: 10px;
 
-  @media only screen and (min-width: 600px) and (max-width: 1560px) {
-    min-height: 738px;
+
+  @media only screen and (max-width: 1365px) {
+    min-height: auto;
   }
 
-  @media only screen and (max-width: 600px) {
-    min-height: auto;
+  @media only screen and (max-width: 600px){
     display: flex;
     flex-direction: column;
   }
@@ -91,7 +91,9 @@
 
     .checkbox {
       margin-top: 0px;
-      color: rgb(244, 72, 109);
+      a {
+        color: rgb(244, 72, 109);
+      }
     }
   }
 

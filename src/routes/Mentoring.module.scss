@@ -22,16 +22,12 @@
     background-color: rgba(242, 111, 99, 0.06);
 
     display: grid;
-    grid-template-columns: auto 460px;
+    grid-template-columns: auto 400px;
     grid-auto-rows: min-content;
     grid-gap: 20px;
     grid-column-gap: 40px;
 
-    @media only screen and (min-width: 930px) and (max-width: 1560px) {
-      grid-template-columns: auto 300px;
-    }
-
-    @media only screen and (max-width: 930px) {
+    @media only screen and (max-width: 1365px) {
       display: flex;
       flex-direction: column;
     }
