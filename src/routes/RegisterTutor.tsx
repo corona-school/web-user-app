@@ -269,7 +269,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         {isJufo && (
           <Form.Item
             className={classes.formItem}
-            label="Fachgebiet deines Projekts"
+            label="Fachgebiet, in dem du ein Projekt unterstützen möchtest"
             name="project"
             rules={[
               () => ({
