@@ -24,8 +24,9 @@ interface FormData {
   grade?: number;
   isTutee?: boolean;
   isJufo?: boolean;
+  // isProjectMentee
   project?: string[];
-  jufoParticipation?: string;
+  isJufoParticipant?: 'yes' | 'no' | 'unsure' | 'neverheard';
   // isTutee
   subjects?: Subject[];
   // finnish
@@ -285,13 +286,17 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
               mode="multiple"
               allowClear
             >
-              <Option value="business">Arbeitswelt</Option>
-              <Option value="biology">Biologie</Option>
-              <Option value="chemie">Chemie</Option>
-              <Option value="mathematics">Mathematik/Informatik</Option>
-              <Option value="earth-science">Geo- und Raumwissenschaften</Option>
-              <Option value="physics">Physik</Option>
-              <Option value="engineering">Technik</Option>
+              <Option value="Arbeitswelt">Arbeitswelt</Option>
+              <Option value="Biologie">Biologie</Option>
+              <Option value="Chemie">Chemie</Option>
+              <Option value="Mathematik/Informatik">
+                Mathematik/Informatik
+              </Option>
+              <Option value="Geo-und-Raumwissenschaften">
+                Geo- und Raumwissenschaften
+              </Option>
+              <Option value="Physik">Physik</Option>
+              <Option value="Technik">Technik</Option>
             </Select>
           </Form.Item>
         )}
@@ -299,7 +304,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
           <Form.Item
             className={classes.formItem}
             label="Nimmst du an Jugend Forscht teil?"
-            name="jufoParticipation"
+            name="isJufoParticipant"
             rules={[
               {
                 required: true,
@@ -307,15 +312,24 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
               },
             ]}
             initialValue={
-              formData.jufoParticipation
-                ? `${formData.jufoParticipation}`
+              formData.isJufoParticipant
+                ? `${formData.isJufoParticipant}`
                 : 'yes'
             }
           >
             <Radio.Group>
               <Radio.Button value="yes">Ja</Radio.Button>
               <Radio.Button value="no">Nein</Radio.Button>
-              <Radio.Button value="idk">Weiß noch nicht</Radio.Button>
+              <Radio.Button value="unsure">Weiß noch nicht</Radio.Button>
+              <Radio.Button value="neverheard">
+                Weiß nicht, was das ist{' '}
+                <span
+                  role="img"
+                  aria-label="Emoji mit hochgezogener Augenbraue"
+                >
+                  🤨
+                </span>
+              </Radio.Button>
             </Radio.Group>
           </Form.Item>
         )}
@@ -569,6 +583,9 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
       grade: data.grade,
       school: data.school?.toLowerCase(),
       state: data.state?.toLowerCase(),
+      isProjectMentee: data.isJufo,
+      isJufoParticipant: data.isJufoParticipant,
+      projectFields: data.project,
       newsletter: !!data.newsletter,
       msg: data.msg || '',
       teacherEmail: data.teacherEmail,
@@ -656,7 +673,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             : undefined,
           msg: formValues.msg,
           teacherEmail: formValues.teacherEmail,
-          jufoParticipation: formValues.jufoParticipation,
+          isJufoParticipant: formValues.isJufoParticipant,
         });
         setFormState('finnish');
       }

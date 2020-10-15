@@ -34,7 +34,8 @@ interface FormData {
   isJufo?: boolean;
   // isJufo
   project?: string[];
-  jufoParticipation?: string;
+  wasJufoParticipant?: 'yes' | 'no' | 'idk';
+  isUniversityStudent?: 'yes' | 'no';
   // isOfficial
   state?: string;
   university?: string;
@@ -68,6 +69,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
     props.isInternship || props.isClub || false
   );
   const [isJufo, setJufo] = useState(false);
+  const [isUniversityStudent, setIsUniversityStudent] = useState(true);
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'finnish' | 'done'
   >('start');
@@ -105,10 +107,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
 
         <Form.Item
           className={classes.formItem}
-          label="Uni E-Mail"
+          label={isJufo ? 'E-Mail' : 'Uni E-Mail'}
           name="email"
           rules={[
-            { required: true, message: 'Bitte trage deine Uni-E-Mail ein!' },
+            { required: true, message: 'Bitte trage deine (Uni-)E-Mail ein!' },
             {
               type: 'email',
               message: 'Bitte trage eine gültige E-Mail ein!',
@@ -174,7 +176,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             style={{ lineHeight: '32px' }}
             checked={isJufo}
           >
-            Ich möchte Schüler*in im 1-zu-1 Projektcoaching unterstützen
+            Ich möchte Schüler*innen im 1-zu-1 Projektcoaching unterstützen
           </Checkbox>
         </Form.Item>
         <Form.Item
@@ -294,21 +296,25 @@ const RegisterTutor: React.FC<Props> = (props) => {
               mode="multiple"
               allowClear
             >
-              <Option value="business">Arbeitswelt</Option>
-              <Option value="biology">Biologie</Option>
-              <Option value="chemie">Chemie</Option>
-              <Option value="mathematics">Mathematik/Informatik</Option>
-              <Option value="earth-science">Geo- und Raumwissenschaften</Option>
-              <Option value="physics">Physik</Option>
-              <Option value="engineering">Technik</Option>
+              <Option value="Arbeitswelt">Arbeitswelt</Option>
+              <Option value="Biologie">Biologie</Option>
+              <Option value="Chemie">Chemie</Option>
+              <Option value="Mathematik/Informatik">
+                Mathematik/Informatik
+              </Option>
+              <Option value="Geo-und-Raumwissenschaften">
+                Geo- und Raumwissenschaften
+              </Option>
+              <Option value="Physik">Physik</Option>
+              <Option value="Technik">Technik</Option>
             </Select>
           </Form.Item>
         )}
         {isJufo && (
           <Form.Item
             className={classes.formItem}
-            label="Nimmst du an Jugend Forscht teil?"
-            name="jufoParticipation"
+            label="Hast du früher an Jugend forscht teilgenommen?"
+            name="wasJufoParticipant"
             rules={[
               {
                 required: true,
@@ -316,15 +322,53 @@ const RegisterTutor: React.FC<Props> = (props) => {
               },
             ]}
             initialValue={
-              formData.jufoParticipation
-                ? `${formData.jufoParticipation}`
+              formData.wasJufoParticipant
+                ? `${formData.wasJufoParticipant}`
                 : 'yes'
             }
           >
             <Radio.Group>
               <Radio.Button value="yes">Ja</Radio.Button>
               <Radio.Button value="no">Nein</Radio.Button>
-              <Radio.Button value="idk">Weiß noch nicht</Radio.Button>
+              <Radio.Button value="idk">Weiß nicht mehr</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        )}
+        {isJufo && (
+          <Form.Item
+            className={classes.formItem}
+            label="Bist du offiziell als Student*in eingeschrieben?"
+            name="isUniversityStudent"
+            rules={[
+              {
+                required: true,
+                message: 'Bitte wähle eine Option aus.',
+              },
+              () => ({
+                required: true,
+                validateTrigger: 'onSubmit',
+                validator() {
+                  if (
+                    form.getFieldValue('isUniversityStudent') === 'yes' ||
+                    form.getFieldValue('wasJufoParticipant') === 'yes'
+                  ) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    'Du musst entweder an Jugend forscht teilgenommen haben oder noch offiziell als Student*in eingeschrieben sein!'
+                  );
+                },
+              }),
+            ]}
+            initialValue={isUniversityStudent ? 'yes' : 'no'}
+          >
+            <Radio.Group
+              onChange={(e) => {
+                setIsUniversityStudent(e.target.value === 'yes');
+              }}
+            >
+              <Radio.Button value="yes">Ja</Radio.Button>
+              <Radio.Button value="no">Nein</Radio.Button>
             </Radio.Group>
           </Form.Item>
         )}
@@ -375,15 +419,17 @@ const RegisterTutor: React.FC<Props> = (props) => {
           </Form.Item>
         )}
 
-        <Form.Item
-          className={classes.formItem}
-          label="Universität/Hochschule"
-          name="university"
-          rules={[{ required: false }]}
-          initialValue={formData.university}
-        >
-          <UniSelect />
-        </Form.Item>
+        {(isUniversityStudent || !isJufo) && (
+          <Form.Item
+            className={classes.formItem}
+            label="Universität/Hochschule"
+            name="university"
+            rules={[{ required: false }]}
+            initialValue={formData.university}
+          >
+            <UniSelect />
+          </Form.Item>
+        )}
 
         {isOfficial && (
           <Form.Item
@@ -542,6 +588,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
       university: data.university,
       module: data.module,
       hours: data.hours,
+      isProjectCoach: data.isJufo,
+      isUniversityStudent: data.isUniversityStudent === 'yes',
+      wasJufoParticipant: data.wasJufoParticipant,
+      projectFields: data.project,
       newsletter: !!data.newsletter,
       msg: data.msg || '',
       state: data.state?.toLowerCase(),
@@ -658,7 +708,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
           module: 'internship',
           hours: formValues.hours,
           project: formValues.project || [],
-          jufoParticipation: formValues.jufoParticipation,
+          wasJufoParticipant: formValues.wasJufoParticipant,
+          isUniversityStudent: formValues.isUniversityStudent,
         });
         setFormState('finnish');
       }
