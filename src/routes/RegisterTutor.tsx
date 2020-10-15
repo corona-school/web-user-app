@@ -280,12 +280,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
                       'Bitte wähle min. ein Fachgebiet aus.'
                     );
                   }
-                  if (value.length <= 2) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    'Du darfst maximal 2 Fachgebiete auswählen!'
-                  );
+                  return Promise.resolve();
                 },
               }),
             ]}
