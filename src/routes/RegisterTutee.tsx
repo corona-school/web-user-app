@@ -1,5 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { Form, Input, Checkbox, Select, message, Radio } from 'antd';
+import {
+  Form,
+  Input,
+  Checkbox,
+  Select,
+  message,
+  Radio,
+  InputNumber,
+} from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { useHistory, Link, useLocation } from 'react-router-dom';
 import Icons from '../assets/icons';
@@ -27,6 +35,7 @@ interface FormData {
   // isProjectMentee
   project?: string[];
   isJufoParticipant?: 'yes' | 'no' | 'unsure' | 'neverheard';
+  projectMemberCount?: number;
   // isTutee
   subjects?: Subject[];
   // finnish
@@ -333,6 +342,34 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             </Radio.Group>
           </Form.Item>
         )}
+        {isJufo && (
+          <Form.Item
+            label="Wie viele Personen (inklusive dir) arbeiten an dem Projekt?"
+            className={classes.formItem}
+            name="projectMemberCount"
+            initialValue={1}
+            rules={[
+              () => ({
+                required: true,
+                validator(_, value) {
+                  if (!value || value < 1 || value > 3) {
+                    return Promise.reject(
+                      'Maximal 3 Personen dürfen an einem Projekt arbeiten!'
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              }),
+            ]}
+            extra="Hinweis für Gruppen: Meldet ein Projekt immer nur einmal an. Die Anmeldung sollte euer*e Gruppensprecher*in ausfüllen, um am Projektcoaching teilzunehmen."
+          >
+            <InputNumber
+              style={{ margin: '0px 4px', width: '64px' }}
+              min={1}
+              max={3}
+            />
+          </Form.Item>
+        )}
         {isTutee && (
           <Form.Item
             className={classes.formItem}
@@ -586,6 +623,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
       isProjectMentee: data.isJufo,
       isJufoParticipant: data.isJufoParticipant,
       projectFields: data.project,
+      projectMemberCount: data.projectMemberCount,
       newsletter: !!data.newsletter,
       msg: data.msg || '',
       teacherEmail: data.teacherEmail,
@@ -674,6 +712,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
           msg: formValues.msg,
           teacherEmail: formValues.teacherEmail,
           isJufoParticipant: formValues.isJufoParticipant,
+          projectMemberCount: formValues.projectMemberCount,
         });
         setFormState('finnish');
       }

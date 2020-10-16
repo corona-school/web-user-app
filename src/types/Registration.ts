@@ -14,6 +14,7 @@ export interface Tutee {
   isProjectMentee: boolean;
   isJufoParticipant?: 'yes' | 'no' | 'unsure' | 'neverheard';
   projectFields?: string[];
+  projectMemberCount?: number;
   msg?: string;
   newsletter: boolean;
   redirectTo?: string;
