@@ -10,8 +10,8 @@ export interface Tutee {
   subjects?: Subject[];
   state: string;
   school?: string;
-  // isProjectMentee
-  isProjectMentee: boolean;
+  // isProjectCoachee
+  isProjectCoachee: boolean;
   isJufoParticipant?: 'yes' | 'no' | 'unsure' | 'neverheard';
   projectFields?: string[];
   projectMemberCount?: number;

@@ -32,7 +32,7 @@ interface FormData {
   grade?: number;
   isTutee?: boolean;
   isJufo?: boolean;
-  // isProjectMentee
+  // isProjectCoachee
   project?: string[];
   isJufoParticipant?: 'yes' | 'no' | 'unsure' | 'neverheard';
   projectMemberCount?: number;
@@ -620,7 +620,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
       grade: data.grade,
       school: data.school?.toLowerCase(),
       state: data.state?.toLowerCase(),
-      isProjectMentee: data.isJufo,
+      isProjectCoachee: data.isJufo,
       isJufoParticipant: data.isJufoParticipant,
       projectFields: data.project,
       projectMemberCount: data.projectMemberCount,
