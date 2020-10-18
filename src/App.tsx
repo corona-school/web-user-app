@@ -31,6 +31,7 @@ import {
   isSupportedStateSubdomain,
   stateInfoForStateSubdomain,
 } from './assets/supportedStateCooperations';
+import ProjectCoach from './routes/ProjectCoach';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -151,6 +152,9 @@ const App: React.FC = () => {
             }
           >
             <Matches />
+          </PrivateRoute>
+          <PrivateRoute path="/project-coaching">
+            <ProjectCoach />
           </PrivateRoute>
           <PrivateRoute path="/settings">
             <Settings />

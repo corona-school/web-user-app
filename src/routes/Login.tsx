@@ -14,6 +14,10 @@ import { Title, Text } from '../components/Typography';
 
 import classes from './Login.module.scss';
 import PageLoading from '../components/PageLoading';
+import {
+  isProjectCoachButNotTutor,
+  isProjectCoacheeButNotPupil,
+} from '../utils/UserUtils';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -34,6 +38,7 @@ const Login: React.FC = () => {
   const redirectPath = query.get('path');
 
   const authContext = useContext(Context.Auth);
+  const userContext = useContext(Context.User);
   const apiContext = useContext(Context.Api);
 
   useEffect(() => {
@@ -112,6 +117,14 @@ const Login: React.FC = () => {
     case 'success':
       if (redirectPath && redirectPath !== '') {
         return <Redirect to={redirectPath} />;
+      }
+      console.log(userContext.user);
+
+      if (
+        isProjectCoachButNotTutor(userContext.user) ||
+        isProjectCoacheeButNotPupil(userContext.user)
+      ) {
+        return <Redirect to="/project-coaching" />;
       }
       return <Redirect to="/dashboard" />;
 

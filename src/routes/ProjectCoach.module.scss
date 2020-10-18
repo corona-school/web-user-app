@@ -1,0 +1,26 @@
+.wipContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.title {
+  margin-bottom: 8px !important;
+}
+.text {
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+}
+
+.container {
+  min-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  padding-left: 40px;
+  width: 100%;
+
+  @media only screen and (max-width: 600px) {
+    padding: 16px;
+  }
+}
