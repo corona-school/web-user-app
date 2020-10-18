@@ -46,6 +46,7 @@ export interface Tutor {
   isUniversityStudent?: boolean;
   wasJufoParticipant?: 'yes' | 'no' | 'idk';
   projectFields?: string[];
+  hasJufoCertificate?: boolean;
   // finnish
   newsletter: boolean;
   redirectTo?: string;

@@ -36,6 +36,7 @@ interface FormData {
   project?: string[];
   wasJufoParticipant?: 'yes' | 'no' | 'idk';
   isUniversityStudent?: 'yes' | 'no';
+  hasJufoCertificate?: boolean;
   // isOfficial
   state?: string;
   university?: string;
@@ -69,6 +70,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
     props.isInternship || props.isClub || false
   );
   const [isJufo, setJufo] = useState(false);
+  const [wasJufoParticipant, setWasJufoParticipant] = useState(true);
   const [isUniversityStudent, setIsUniversityStudent] = useState(true);
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'finnish' | 'done'
@@ -322,7 +324,11 @@ const RegisterTutor: React.FC<Props> = (props) => {
                 : 'yes'
             }
           >
-            <Radio.Group>
+            <Radio.Group
+              onChange={(e) => {
+                setWasJufoParticipant(e.target.value === 'yes');
+              }}
+            >
               <Radio.Button value="yes">Ja</Radio.Button>
               <Radio.Button value="no">Nein</Radio.Button>
               <Radio.Button value="idk">Weiß nicht mehr</Radio.Button>
@@ -362,6 +368,25 @@ const RegisterTutor: React.FC<Props> = (props) => {
                 setIsUniversityStudent(e.target.value === 'yes');
               }}
             >
+              <Radio.Button value="yes">Ja</Radio.Button>
+              <Radio.Button value="no">Nein</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        )}
+        {isJufo && wasJufoParticipant && !isUniversityStudent && (
+          <Form.Item
+            className={classes.formItem}
+            label="Hast du eine Urkunde oder einen ähnlichen Nachweis deiner Tätigkeit im Rahmen von Jugend forscht und könntest uns diesen vorlegen?"
+            name="hasJufoCertificate"
+            rules={[
+              {
+                required: wasJufoParticipant && !isUniversityStudent,
+                message: 'Bitte wähle eine Option aus.',
+              },
+            ]}
+            initialValue={formData.hasJufoCertificate ? 'yes' : 'no'}
+          >
+            <Radio.Group>
               <Radio.Button value="yes">Ja</Radio.Button>
               <Radio.Button value="no">Nein</Radio.Button>
             </Radio.Group>
@@ -476,6 +501,31 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const renderFinnish = () => {
     return (
       <>
+        {formData.hasJufoCertificate === false && (
+          <Form.Item
+            className={classes.formItem}
+            label="Datenübermittlung an Jugend forscht"
+            name="jufoDataExchange"
+            rules={[
+              {
+                required: formData.hasJufoCertificate === false,
+                message: `Die Übermittlung der Daten ist für deine Teilnahme 
+                zwingend notwendig. Alternativ kannst du uns auch bei deinem 
+                Kennenlerngespräch mit uns einen anderen Nachweis vorlegen. 
+                In diesem Fall gehe bitte noch einmal einen Schritt zurück.`,
+              },
+            ]}
+          >
+            <Checkbox.Group className={classes.checkboxGroup}>
+              <Checkbox value="dataprotection">
+                Ich bin damit einverstanden, dass meine Daten an die Stiftung
+                Jugend forscht e. V., Baumwall 3, 20459 Hamburg, zum Zwecke der
+                Überprüfung meiner Tätigkeit im Rahmen verganener von dieser
+                ausgerichteter Wettbewerbe übermittelt werden.
+              </Checkbox>
+            </Checkbox.Group>
+          </Form.Item>
+        )}
         <Form.Item
           className={classes.formItem}
           label="Newsletter"
@@ -587,6 +637,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       isUniversityStudent: data.isUniversityStudent === 'yes',
       wasJufoParticipant: data.wasJufoParticipant,
       projectFields: data.project,
+      hasJufoCertificate: data.hasJufoCertificate,
       newsletter: !!data.newsletter,
       msg: data.msg || '',
       state: data.state?.toLowerCase(),
@@ -705,6 +756,11 @@ const RegisterTutor: React.FC<Props> = (props) => {
           project: formValues.project || [],
           wasJufoParticipant: formValues.wasJufoParticipant,
           isUniversityStudent: formValues.isUniversityStudent,
+          hasJufoCertificate:
+            formValues.wasJufoParticipant === 'yes' &&
+            formValues.isUniversityStudent === 'no'
+              ? formValues.hasJufoCertificate === 'yes'
+              : undefined,
         });
         setFormState('finnish');
       }
