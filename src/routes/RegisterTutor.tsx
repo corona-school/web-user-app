@@ -268,7 +268,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             <Option value="ST">Sachsen-Anhalt</Option>
             <Option value="SH">Schleswig-Holstein</Option>
             <Option value="TH">Thüringen</Option>
-            <Option value="other">anderes Bundesland</Option>
+            <Option value="other">anderer Wohnort</Option>
           </Select>
         </Form.Item>
         {isJufo && (

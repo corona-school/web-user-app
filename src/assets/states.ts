@@ -15,5 +15,5 @@ export const StatesMap = {
   ST: 'Sachsen-Anhalt',
   SH: 'Schleswig-Holstein',
   TH: 'Thüringen',
-  OTHER: 'anderes Bundesland',
+  OTHER: 'anderer Wohnort',
 };
