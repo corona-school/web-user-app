@@ -46,7 +46,7 @@ const Register = () => {
         >
           <Icons.SignupTutor width="100%" height="100px" />
           <Title size="h2" className={classes.userTitle}>
-            Tutor*in
+            Helfer*in
           </Title>
         </Link>
       </div>
