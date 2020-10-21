@@ -117,14 +117,17 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
 
         <Form.Item
           className={classes.formItem}
-          label="E-Mail"
+          label="E-Mail-Adresse"
           name="email"
           initialValue={formData.email}
           rules={[
-            { required: true, message: 'Bitte trage deine E-Mail ein!' },
+            {
+              required: true,
+              message: 'Bitte trage deine E-Mail-Adresse ein!',
+            },
             {
               type: 'email',
-              message: 'Bitte trage eine gültige E-Mail ein!',
+              message: 'Bitte trage eine gültige E-Mail-Adresse ein!',
               validateTrigger: 'onSubmit',
             },
           ]}
@@ -430,7 +433,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
         {!!stateCooperationInfo && (
           <Form.Item
             className={classes.formItem}
-            label="E-Mail Lehrer*in"
+            label="E-Mail-Adresse Lehrer*in"
             name="teacherEmail"
             rules={[
               {
@@ -460,7 +463,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             initialValue={formData.teacherEmail}
           >
             <Input
-              placeholder="Hier die E-Mail deines/deiner Lehrer*in"
+              placeholder="Hier die E-Mail-Adresse deines/deiner Lehrer*in"
               type="email"
             />
           </Form.Item>

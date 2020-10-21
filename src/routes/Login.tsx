@@ -193,7 +193,7 @@ const Login: React.FC = () => {
 
         {loginState !== 'success' && (
           <div className={classes.inputContainer}>
-            <Text className={classes.description}>E-Mail</Text>
+            <Text className={classes.description}>E-Mail-Adresse</Text>
             <Input
               onKeyUp={(e) => {
                 if (e.keyCode === 13) {
@@ -203,7 +203,7 @@ const Login: React.FC = () => {
               className={classnames(classes.inputField, {
                 [classes.errorInput]: loginState === 'error',
               })}
-              placeholder="E-Mail"
+              placeholder="E-Mail-Adresse"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
