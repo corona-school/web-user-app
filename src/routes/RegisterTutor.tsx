@@ -157,7 +157,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             style={{ lineHeight: '32px', marginLeft: '8px' }}
             checked={isTutor}
           >
-            Ich möchte eine*n Schüler*in im 1:1-Format unterstützen
+            Ich möchte eine*n Schüler*in im 1:1-Format unterstützen.
           </Checkbox>
           <Checkbox
             onChange={() => {
@@ -170,8 +170,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
             style={{ lineHeight: '32px' }}
             checked={isGroups}
           >
-            Ich möchte einen Gruppenkurs in der Corona School anbieten (z.B.
-            Sommer-AG, Repetitorium, Lerncoaching)
+            Ich möchte einen Gruppenkurs in der Corona School anbieten (z. B.
+            Sommer-AG, Repetitorium, Lerncoaching).
           </Checkbox>
           <Checkbox
             onChange={() => {
@@ -181,7 +181,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
             style={{ lineHeight: '32px' }}
             checked={isJufo}
           >
-            Ich möchte Schüler*innen im 1:1-Projektcoaching unterstützen
+            Ich möchte Schüler*innen im 1:1-Projektcoaching (z. B. im Rahmen von
+            Jugend forscht) unterstützen.
           </Checkbox>
         </Form.Item>
         <Form.Item
@@ -299,11 +300,11 @@ const RegisterTutor: React.FC<Props> = (props) => {
               <Option value="Arbeitswelt">Arbeitswelt</Option>
               <Option value="Biologie">Biologie</Option>
               <Option value="Chemie">Chemie</Option>
-              <Option value="Mathematik/Informatik">
-                Mathematik/Informatik
-              </Option>
               <Option value="Geo-und-Raumwissenschaften">
                 Geo- und Raumwissenschaften
+              </Option>
+              <Option value="Mathematik/Informatik">
+                Mathematik/Informatik
               </Option>
               <Option value="Physik">Physik</Option>
               <Option value="Technik">Technik</Option>
@@ -379,7 +380,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         {isJufo && wasJufoParticipant && !isUniversityStudent && (
           <Form.Item
             className={classes.formItem}
-            label="Hast du eine Urkunde oder einen ähnlichen Nachweis deiner Tätigkeit im Rahmen von Jugend forscht und könntest uns diesen vorlegen?"
+            label="Hast du eine Urkunde oder einen ähnlichen Nachweis deiner Teilnahme an Jugend forscht und könntest uns diesen vorlegen?"
             name="hasJufoCertificate"
             rules={[
               {
@@ -481,7 +482,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             isGroups
               ? 'Beschreibe die Inhalte deines Gruppenkurses bzw. deiner Gruppenkurse (3-5 Sätze)'
               : isJufo
-              ? 'Stelle dich kurz vor'
+              ? 'Stelle dich kurz vor.'
               : 'Nachricht hinzufügen'
           }
           name="msg"
@@ -493,7 +494,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
               isGroups
                 ? 'Kursthema, Zielgruppe, Kursgröße, Interaktion'
                 : isJufo
-                ? 'Stelle dich kurz vor'
+                ? 'Stelle dich kurz vor.'
                 : 'Hier deine Nachricht für uns.'
             }
           />
@@ -521,10 +522,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
           >
             <Checkbox.Group className={classes.checkboxGroup}>
               <Checkbox value="dataprotection">
-                Ich bin damit einverstanden, dass meine Daten an die Stiftung
-                Jugend forscht e. V., Baumwall 3, 20459 Hamburg, zum Zwecke der
-                Überprüfung meiner Tätigkeit im Rahmen verganener von dieser
-                ausgerichteter Wettbewerbe übermittelt werden.
+                Ich bin damit einverstanden, dass meine Daten zum Zweck der
+                Überprüfung meines Status als Alumna*Alumnus des Wettbewerbs
+                Jugend forscht/Schüler experimentieren an die Stiftung Jugend
+                forscht e. V., Baumwall 3, 20459 Hamburg übermittelt werden.
               </Checkbox>
             </Checkbox.Group>
           </Form.Item>
@@ -546,7 +547,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         </Form.Item>
         <Form.Item
           className={classes.formItem}
-          label="Datenschutzerklärung"
+          label="Datenschutzrechtliche Einwilligung"
           name="dataprotection"
           rules={[
             {
@@ -580,7 +581,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
               <br />
               Mir ist außerdem bekannt, dass meine Einwilligung freiwillig und
               jederzeit mit Wirkung für die Zukunft widerruflich ist. Ein
-              Widerruf der Einwilligung kann formlos erfolgen (beispielsweise an{' '}
+              Widerruf der Einwilligung kann formlos erfolgen (bspw. an{' '}
               <a href="mailto:datenschutz@corona-school.de">
                 datenschutz@corona-school.de
               </a>

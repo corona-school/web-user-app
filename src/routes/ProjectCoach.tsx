@@ -24,12 +24,11 @@ const ProjectCoach: React.FC = () => {
         </Title>
         {user.type === 'student' ? (
           <Text large className={classes.text}>
-            Hier kannst du bald Schüler im 1 zu 1 Project Coaching unterstützen
+            Hier kannst du bald Schüler im 1:1-Projektcoaching unterstützen
           </Text>
         ) : (
           <Text>
-            Hier kannst du bald Unterstützung für 1 zu 1 Project Coaching
-            anfordern
+            Hier kannst du bald Unterstützung für 1:1-Projektcoaching anfordern
           </Text>
         )}
         <Button

@@ -169,8 +169,8 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             style={{ lineHeight: '32px' }}
             checked={isGroups}
           >
-            Ich möchte an Gruppenkursen der Corona School teilnehmen (z.B.
-            Sommer-AG, Repetitorium, Lerncoaching)
+            Ich möchte an Gruppenkursen der Corona School teilnehmen (z. B.
+            Sommer-AG, Repetitorium, Lerncoaching).
           </Checkbox>
           <Checkbox
             onChange={() => {
@@ -180,7 +180,8 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             style={{ lineHeight: '32px' }}
             checked={isJufo}
           >
-            Ich möchte Unterstützung für mein Projekt (bspw. Jugend-Forscht).
+            Ich suche Unterstützung bei der Erarbeitung eines Projekts (zum
+            Beispiel im Rahmen einer Teilnahme an Jugend forscht).
           </Checkbox>
         </Form.Item>
       </>
@@ -271,7 +272,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
         {isJufo && (
           <Form.Item
             className={classes.formItem}
-            label="Fachgebiet deines Projekts"
+            label="Welchem Fachgebiet ist dein Projekt zuzuordnen?"
             name="project"
             rules={[
               () => ({
@@ -301,11 +302,11 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
               <Option value="Arbeitswelt">Arbeitswelt</Option>
               <Option value="Biologie">Biologie</Option>
               <Option value="Chemie">Chemie</Option>
-              <Option value="Mathematik/Informatik">
-                Mathematik/Informatik
-              </Option>
               <Option value="Geo-und-Raumwissenschaften">
                 Geo- und Raumwissenschaften
+              </Option>
+              <Option value="Mathematik/Informatik">
+                Mathematik/Informatik
               </Option>
               <Option value="Physik">Physik</Option>
               <Option value="Technik">Technik</Option>
@@ -315,7 +316,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
         {isJufo && (
           <Form.Item
             className={classes.formItem}
-            label="Nimmst du an Jugend Forscht teil?"
+            label="Nimmst du an Jugend forscht teil?"
             name="isJufoParticipant"
             rules={[
               {
@@ -364,7 +365,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
                 },
               }),
             ]}
-            extra="Hinweis für Gruppen: Meldet ein Projekt immer nur einmal an. Die Anmeldung sollte euer*e Gruppensprecher*in ausfüllen, um am Projektcoaching teilzunehmen."
+            extra="Hinweis für Gruppen: Es muss sich nur euer*e Gruppensprecher*in anmelden, wenn ihr als Team teilnehmen möchtet."
           >
             <InputNumber
               style={{ margin: '0px 4px', width: '64px' }}
@@ -498,7 +499,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
         </Form.Item>
         <Form.Item
           className={classes.formItem}
-          label="Datenschutzerklärung"
+          label="Datenschutzrechtliche Einwilligung"
           name="dataprotection"
           rules={[
             {
@@ -532,7 +533,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
               <br />
               Mir ist außerdem bekannt, dass meine Einwilligung freiwillig und
               jederzeit mit Wirkung für die Zukunft widerruflich ist. Ein
-              Widerruf der Einwilligung kann formlos erfolgen (beispielsweise an{' '}
+              Widerruf der Einwilligung kann formlos erfolgen (bspw. an{' '}
               <a href="mailto:datenschutz@corona-school.de">
                 datenschutz@corona-school.de
               </a>
