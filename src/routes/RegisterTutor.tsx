@@ -505,6 +505,21 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const renderFinnish = () => {
     return (
       <>
+        <Form.Item
+          className={classes.formItem}
+          label="Newsletter"
+          name="newsletter"
+        >
+          <Checkbox.Group className={classes.checkboxGroup}>
+            <Checkbox value="newsletter" defaultChecked={formData.newsletter}>
+              Ich möchte über weitere Aktionen, Angebote und
+              Unterstützungsmöglichkeiten der Corona School per E-Mail
+              informiert werden. Dazu gehören Möglichkeiten zur Vernetzung mit
+              anderen registrierten Studierenden, Mentoring und Nachrichten aus
+              dem Organisationsteam.
+            </Checkbox>
+          </Checkbox.Group>
+        </Form.Item>
         {formData.hasJufoCertificate === false && (
           <Form.Item
             className={classes.formItem}
@@ -530,21 +545,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
             </Checkbox.Group>
           </Form.Item>
         )}
-        <Form.Item
-          className={classes.formItem}
-          label="Newsletter"
-          name="newsletter"
-        >
-          <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox value="newsletter" defaultChecked={formData.newsletter}>
-              Ich möchte über weitere Aktionen, Angebote und
-              Unterstützungsmöglichkeiten der Corona School per E-Mail
-              informiert werden. Dazu gehören Möglichkeiten zur Vernetzung mit
-              anderen registrierten Studierenden, Mentoring und Nachrichten aus
-              dem Organisationsteam.
-            </Checkbox>
-          </Checkbox.Group>
-        </Form.Item>
         <Form.Item
           className={classes.formItem}
           label="Datenschutzrechtliche Einwilligung"
