@@ -16,7 +16,7 @@ const ProjectCoach: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      <Title size="h1">Project Coaching</Title>
+      <Title size="h1">Projektcoaching</Title>
       <div className={classes.wipContainer}>
         <WorkInProgress />
         <Title size="h2" className={classes.title}>

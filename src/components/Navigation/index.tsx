@@ -96,7 +96,7 @@ const Navigation: React.FC<Props> = (props) => {
             active
             onClick={() => props.setMenuOpen(false)}
           >
-            Project-Coaching
+            Projektcoaching
           </NavButton>
         )}
         {(isTutor || isInstructor) && (
