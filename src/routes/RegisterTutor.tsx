@@ -281,7 +281,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
               () => ({
                 required: true,
                 validator(_, value) {
-                  if (!value) {
+                  if (!value || value.length === 0) {
                     return Promise.reject(
                       'Bitte wähle min. ein Fachgebiet aus.'
                     );
