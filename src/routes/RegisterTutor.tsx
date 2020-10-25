@@ -659,9 +659,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
               <br />
               <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
               <span style={{ fontStyle: 'italic' }}>
-                Für den Fall, dass die einwilligende Person noch nicht 18 Jahre
-                alt ist, hat der Träger der elterlichen Verantwortung für die
-                Person die Einwilligung zu erklären.
+                Für den Fall, dass die einwilligende Person das 18. Lebensjahr
+                noch nicht vollendet hat, hat der Träger der elterlichen
+                Verantwortung für die Person die Einwilligung zu erklären.
               </span>
             </Checkbox>
           </Checkbox.Group>
