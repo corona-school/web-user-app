@@ -208,6 +208,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
               <Option value="Realschule">Realschule</Option>
               <Option value="Gymnasium">Gymnasium</Option>
               <Option value="Förderschule">Förderschule</Option>
+              {isJufo && <Option value="Berufsschule">Berufsschule</Option>}
               <Option value="other">Sonstige</Option>
             </Select>
           </Form.Item>
