@@ -45,6 +45,8 @@ export interface Tutor {
   isProjectCoach: boolean;
   isUniversityStudent?: boolean;
   wasJufoParticipant?: 'yes' | 'no' | 'idk';
+  jufoParticipationYear?: number;
+  jufoParticipationTopic?: string;
   projectFields?: string[];
   hasJufoCertificate?: boolean;
   // finnish

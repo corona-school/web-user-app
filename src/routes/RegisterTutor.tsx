@@ -8,8 +8,10 @@ import {
   Select,
   message,
   Radio,
+  DatePicker,
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
+import moment from 'moment';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text } from '../components/Typography';
@@ -37,6 +39,8 @@ interface FormData {
   wasJufoParticipant?: 'yes' | 'no' | 'idk';
   isUniversityStudent?: 'yes' | 'no';
   hasJufoCertificate?: boolean;
+  jufoParticipationYear?: number;
+  jufoParticipationTopic?: string;
   // isOfficial
   state?: string;
   university?: string;
@@ -72,6 +76,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [isJufo, setJufo] = useState(false);
   const [wasJufoParticipant, setWasJufoParticipant] = useState(true);
   const [isUniversityStudent, setIsUniversityStudent] = useState(true);
+  const [hasJufoCertificate, setHasJufoCertificate] = useState(false);
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'finnish' | 'done'
   >('start');
@@ -387,14 +392,67 @@ const RegisterTutor: React.FC<Props> = (props) => {
                 message: 'Bitte wähle eine Option aus.',
               },
             ]}
-            initialValue={formData.hasJufoCertificate ? 'yes' : 'no'}
+            initialValue={hasJufoCertificate ? 'yes' : 'no'}
           >
-            <Radio.Group>
+            <Radio.Group
+              onChange={(e) => {
+                setHasJufoCertificate(e.target.value === 'yes');
+              }}
+            >
               <Radio.Button value="yes">Ja</Radio.Button>
               <Radio.Button value="no">Nein</Radio.Button>
             </Radio.Group>
           </Form.Item>
         )}
+        {isJufo &&
+          wasJufoParticipant &&
+          !isUniversityStudent &&
+          !hasJufoCertificate && (
+            <>
+              <Form.Item
+                className={classes.formItem}
+                label="In welchem Jahr hast du an Jugend forscht teilgenommen?"
+                name="jufoParticipationYear"
+                rules={[
+                  {
+                    required: wasJufoParticipant && !isUniversityStudent,
+                    message: 'Bitte wähle ein Jahr aus.',
+                  },
+                ]}
+                initialValue={
+                  formData.jufoParticipationYear
+                    ? moment([formData.jufoParticipationYear])
+                    : moment().subtract(1, 'year')
+                }
+              >
+                <DatePicker
+                  picker="year"
+                  placeholder="Wähle ein Jahr aus"
+                  disabledDate={(date) => {
+                    return (
+                      date.isAfter(moment(), 'year') ||
+                      date.isBefore(moment([1966]))
+                    ); // first jufo competition in 1966
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                className={classes.formItem}
+                label="Mit welchem Thema hast du damals bei Jugend forscht teilgenommen?"
+                name="jufoParticipationTopic"
+                rules={[
+                  {
+                    required: wasJufoParticipant && !isUniversityStudent,
+                    message: 'Bitte gebe ein Thema an oder beschreibe es.',
+                  },
+                ]}
+                initialValue={formData.jufoParticipationTopic}
+                extra="Bei mehreren Teilnahmen reicht die Angabe eines Jahres mit entsprechendem Thema."
+              >
+                <Input placeholder="Thema deines Jugend forscht Projekts" />
+              </Form.Item>
+            </>
+          )}
         {isTutor && (
           <Form.Item
             className={classes.formItem}
@@ -641,6 +699,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
       wasJufoParticipant: data.wasJufoParticipant,
       projectFields: data.project,
       hasJufoCertificate: data.hasJufoCertificate,
+      jufoParticipationYear: data.jufoParticipationYear,
+      jufoParticipationTopic: data.jufoParticipationTopic,
       newsletter: !!data.newsletter,
       msg: data.msg || '',
       state: data.state?.toLowerCase(),
@@ -764,6 +824,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
             formValues.isUniversityStudent === 'no'
               ? formValues.hasJufoCertificate === 'yes'
               : undefined,
+          jufoParticipationYear: formValues.jufoParticipationYear
+            ? moment(formValues.jufoParticipationYear).year()
+            : undefined,
+          jufoParticipationTopic: formValues.jufoParticipationTopic,
         });
         setFormState('finnish');
       }
