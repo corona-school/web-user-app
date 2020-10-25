@@ -71,6 +71,8 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
 
   const [schoolInfo, setSchoolInfo] = useState<SchoolInfo[]>(null);
 
+  const isOnlyJufo = isJufo && !isTutee && !isGroups;
+
   if (stateCooperationInfo && !loading && schoolInfo == null) {
     // load school info
     setLoading(true);
@@ -251,7 +253,9 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
           className={classes.formItem}
           label="Klasse"
           name="grade"
-          rules={[{ required: true, message: 'Bitte trage deine Klasse ein!' }]}
+          rules={[
+            { required: !isOnlyJufo, message: 'Bitte trage deine Klasse ein!' },
+          ]}
           initialValue={formData.grade ? `${formData.grade}` : undefined}
         >
           <Select placeholder="Bitte wähle deine Klasse aus">
@@ -268,6 +272,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             <Option value="11">11. Klasse</Option>
             <Option value="12">12. Klasse</Option>
             <Option value="13">13. Klasse</Option>
+            {isOnlyJufo && <Option value={undefined}>Keine Angabe</Option>}
           </Select>
         </Form.Item>
         {isJufo && (
@@ -611,7 +616,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
       !data.firstname ||
       !data.lastname ||
       !data.email ||
-      !data.grade ||
+      (!data.grade && !isOnlyJufo) ||
       !data.state
     ) {
       return null;
