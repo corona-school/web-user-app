@@ -335,7 +335,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
             >
               <Radio.Button value="yes">Ja</Radio.Button>
               <Radio.Button value="no">Nein</Radio.Button>
-              <Radio.Button value="idk">Weiß nicht mehr</Radio.Button>
             </Radio.Group>
           </Form.Item>
         )}
