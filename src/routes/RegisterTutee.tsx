@@ -527,15 +527,15 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
               des Corona School e.V. zur Kenntnis genommen und willige in die
               Verarbeitung personenbezogener Daten zu den angegebenen Zwecken
               ein. Mir ist insbesondere bekannt, dass meine Angaben an geeignete
-              Lernpartner*innen übermittelt werden. Die Verarbeitung der
+              Matchingpartner*innen übermittelt werden. Die Verarbeitung der
               personenbezogenen Daten erfolgt auf privaten IT-Geräten der
-              Lernpartner*innen. Es kann im Rahmen der Übermittlung dazu kommen,
-              dass personenbezogene Daten an E-Mail Server (bspw. google-mail
-              oder @me.com) außerhalb der Europäischen Union übermittelt werden.
-              In Ländern außerhalb der Europäischen Union besteht ggf. kein
-              adäquates Datenschutzniveau. Zudem kann die Durchsetzung von
-              Rechten erschwert bzw. ausgeschlossen sein. Mir sind diese Risiken
-              bewusst und bekannt.
+              Matchingpartner*innen. Es kann im Rahmen der Übermittlung dazu
+              kommen, dass personenbezogene Daten an E-Mail Server (bspw.
+              google-mail oder @me.com) außerhalb der Europäischen Union
+              übermittelt werden. In Ländern außerhalb der Europäischen Union
+              besteht ggf. kein adäquates Datenschutzniveau. Zudem kann die
+              Durchsetzung von Rechten erschwert bzw. ausgeschlossen sein. Mir
+              sind diese Risiken bewusst und bekannt.
               <br />
               Mir ist außerdem bekannt, dass meine Einwilligung freiwillig und
               jederzeit mit Wirkung für die Zukunft widerruflich ist. Ein
@@ -546,7 +546,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
               ). Mir ist bewusst, dass der Widerruf nur für die Zukunft gilt und
               daher Datenverarbeitungen bis zum Widerruf, insbesondere die
               Weitergabe von meinen personenbezogenen Daten an geeignete
-              Lernpartner*innen bis zum Zeitpunkt des Widerrufs unberührt
+              Matchingpartner*innen bis zum Zeitpunkt des Widerrufs unberührt
               bleiben. Weitere Datenschutzinformationen sind abrufbar unter{' '}
               <a
                 href="https://www.corona-school.de/datenschutz"
