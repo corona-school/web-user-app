@@ -180,8 +180,8 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             style={{ lineHeight: '32px' }}
             checked={isJufo}
           >
-            Ich suche Unterstützung bei der Erarbeitung eines Projekts (zum
-            Beispiel im Rahmen einer Teilnahme an Jugend forscht).
+            Ich suche Unterstützung bei der Erarbeitung eines Projekts (z. B. im
+            Rahmen einer Teilnahme an Jugend forscht).
           </Checkbox>
         </Form.Item>
       </>
