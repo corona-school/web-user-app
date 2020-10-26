@@ -115,7 +115,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           setGroups(!isGroups);
         }}
         value="isGroups"
-        style={{ lineHeight: '32px' }}
+        style={{ lineHeight: '32px', marginLeft: '8px' }}
         checked={isGroups}
       >
         Ich möchte einen Gruppenkurs in der Corona School anbieten (z.{' '}B.
@@ -132,11 +132,17 @@ const RegisterTutor: React.FC<Props> = (props) => {
           setJufo(!isJufo);
         }}
         value="isJufo"
-        style={{ lineHeight: '32px' }}
+        style={{ lineHeight: '32px', marginLeft: '8px' }}
+        className={props.isJufoSubdomain ? classes.disabledCheckbox : undefined}
         checked={isJufo}
       >
-        Ich möchte Schüler*innen im 1:1-Projektcoaching (z.{' '}B. im Rahmen von
-        Jugend forscht) unterstützen.
+        Ich möchte Schüler*innen im 1:1-Projektcoaching (z.{' '}B. im Rahmen von{' '}
+        <span
+          style={{ fontWeight: props.isJufoSubdomain ? 'bolder' : 'normal' }}
+        >
+          Jugend forscht
+        </span>
+        ) unterstützen.
       </Checkbox>
     );
   };
@@ -214,8 +220,13 @@ const RegisterTutor: React.FC<Props> = (props) => {
         </Form.Item>
         <Form.Item
           className={classes.formItem}
+          style={{ marginTop: '30px' }}
           name="additional"
-          label="Möchtest du noch mehr helfen?"
+          label={
+            <span style={{ fontWeight: 'bold' }}>
+              Möchtest du noch mehr helfen?
+            </span>
+          }
           extra={
             <div style={{ marginLeft: '8px' }}>
               Sofern du auch offiziell als Student*in immatrikuliert bist,

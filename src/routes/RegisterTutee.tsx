@@ -134,6 +134,7 @@ const RegisterTutee: React.FC<Props> = ({
         }}
         value="isJufo"
         style={{ lineHeight: '32px', marginLeft: '8px' }}
+        className={isJufoSubdomain ? classes.disabledCheckbox : undefined}
         checked={isJufo}
       >
         Ich suche Unterstützung bei der Erarbeitung eines Projekts (z.{' '}B. im
@@ -168,7 +169,12 @@ const RegisterTutee: React.FC<Props> = ({
         <Form.Item
           className={classes.formItem}
           name="additional"
-          label="Wobei können wir dir noch helfen?"
+          label={
+            <span style={{ fontWeight: 'bold' }}>
+              Wobei können wir dir noch helfen?
+            </span>
+          }
+          style={{ marginTop: '30px' }}
           extra={
             <div style={{ marginLeft: '8px' }}>
               Neben individueller Unterstützung bei der Erarbeitung eines
