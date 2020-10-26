@@ -173,7 +173,7 @@ const RegisterTutee: React.FC<Props> = ({
             <div style={{ marginLeft: '8px' }}>
               Neben individueller Unterstützung bei der Erarbeitung eines
               Projekts, besteht die Möglichkeit, dass du dich zusätzlich noch
-              für eines dieser zwei Angebote anmeldest.
+              für weitere Angebote anmeldest.
             </div>
           }
         >
