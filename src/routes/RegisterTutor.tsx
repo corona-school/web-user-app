@@ -118,7 +118,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         style={{ lineHeight: '32px' }}
         checked={isGroups}
       >
-        Ich möchte einen Gruppenkurs in der Corona School anbieten (z. B.
+        Ich möchte einen Gruppenkurs in der Corona School anbieten (z.{' '}B.
         Sommer-AG, Repetitorium, Lerncoaching).
       </Checkbox>
     );
@@ -135,7 +135,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         style={{ lineHeight: '32px' }}
         checked={isJufo}
       >
-        Ich möchte Schüler*innen im 1:1-Projektcoaching (z. B. im Rahmen von
+        Ich möchte Schüler*innen im 1:1-Projektcoaching (z.{' '}B. im Rahmen von
         Jugend forscht) unterstützen.
       </Checkbox>
     );

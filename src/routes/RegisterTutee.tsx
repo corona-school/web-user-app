@@ -119,7 +119,7 @@ const RegisterTutee: React.FC<Props> = ({
         style={{ lineHeight: '32px', marginLeft: '8px' }}
         checked={isGroups}
       >
-        Ich möchte an Gruppenkursen der Corona School teilnehmen (z. B.
+        Ich möchte an Gruppenkursen der Corona School teilnehmen (z.{' '}B.
         Sommer-AG, Repetitorium, Lerncoaching).
       </Checkbox>
     );
@@ -136,7 +136,7 @@ const RegisterTutee: React.FC<Props> = ({
         style={{ lineHeight: '32px', marginLeft: '8px' }}
         checked={isJufo}
       >
-        Ich suche Unterstützung bei der Erarbeitung eines Projekts (z. B. im
+        Ich suche Unterstützung bei der Erarbeitung eines Projekts (z.{' '}B. im
         Rahmen einer Teilnahme an{' '}
         <span style={{ fontWeight: isJufoSubdomain ? 'bolder' : 'normal' }}>
           Jugend forscht
