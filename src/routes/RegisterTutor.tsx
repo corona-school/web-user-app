@@ -413,7 +413,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             </Radio.Group>
           </Form.Item>
         )}
-        {isJufo && (
+        {isJufo && !isTutor && (
           <Form.Item
             className={classes.formItem}
             label="Bist du offiziell als Student*in eingeschrieben?"
@@ -451,7 +451,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             </Radio.Group>
           </Form.Item>
         )}
-        {isJufo && wasJufoParticipant && !isUniversityStudent && (
+        {isJufo && !isTutor && wasJufoParticipant && !isUniversityStudent && (
           <Form.Item
             className={classes.formItem}
             label="Hast du eine Urkunde oder einen ähnlichen Nachweis deiner Teilnahme an Jugend forscht und könntest uns diesen vorlegen?"
@@ -475,6 +475,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           </Form.Item>
         )}
         {isJufo &&
+          !isTutor &&
           wasJufoParticipant &&
           !isUniversityStudent &&
           !hasJufoCertificate && (
@@ -836,7 +837,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         form.resetFields();
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err?.response?.status === 401) {
           setLoading(false);
           message.error('Du bist schon als Tutor*in bei uns eingetragen.');
           return;
