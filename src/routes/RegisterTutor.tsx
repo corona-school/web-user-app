@@ -57,6 +57,7 @@ interface Props {
   isInternship?: boolean;
   isClub?: boolean;
   isStudent?: boolean;
+  isJufoSubdomain?: boolean;
 }
 
 const useQuery = () => {
@@ -73,7 +74,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [isGroups, setGroups] = useState(
     props.isInternship || props.isClub || false
   );
-  const [isJufo, setJufo] = useState(false);
+  const [isJufo, setJufo] = useState(props.isJufoSubdomain ?? false);
   const [wasJufoParticipant, setWasJufoParticipant] = useState(true);
   const [isUniversityStudent, setIsUniversityStudent] = useState(true);
   const [hasJufoCertificate, setHasJufoCertificate] = useState(false);
@@ -85,6 +86,174 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const apiContext = useContext(Context.Api);
 
   const redirectTo = useQuery().get('redirectTo');
+
+  const renderIsTutorCheckbox = () => {
+    return (
+      <Checkbox
+        onChange={() => {
+          if (props.isInternship) {
+            return;
+          }
+          setTutor(!isTutor);
+        }}
+        value="isTutor"
+        style={{ lineHeight: '32px', marginLeft: '8px' }}
+        checked={isTutor}
+      >
+        Ich möchte eine*n Schüler*in im 1:1-Format unterstützen.
+      </Checkbox>
+    );
+  };
+
+  const renderIsGroupsCheckbox = () => {
+    return (
+      <Checkbox
+        onChange={() => {
+          if (props.isInternship) {
+            return;
+          }
+          setGroups(!isGroups);
+        }}
+        value="isGroups"
+        style={{ lineHeight: '32px' }}
+        checked={isGroups}
+      >
+        Ich möchte einen Gruppenkurs in der Corona School anbieten (z. B.
+        Sommer-AG, Repetitorium, Lerncoaching).
+      </Checkbox>
+    );
+  };
+
+  const renderIsJufoCheckbox = () => {
+    return (
+      <Checkbox
+        disabled={props.isJufoSubdomain}
+        onChange={() => {
+          setJufo(!isJufo);
+        }}
+        value="isJufo"
+        style={{ lineHeight: '32px' }}
+        checked={isJufo}
+      >
+        Ich möchte Schüler*innen im 1:1-Projektcoaching (z. B. im Rahmen von
+        Jugend forscht) unterstützen.
+      </Checkbox>
+    );
+  };
+
+  const renderDLLFormItem = () => {
+    return (
+      <Form.Item
+        className={classes.formItem}
+        name="official"
+        label={
+          <span>
+            Für Lehramtsstudierende: Möchtest du dich für unser{' '}
+            <a
+              href="https://www.corona-school.de/digital-lehren-lernen"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              digitales Praktikum
+            </a>{' '}
+            anmelden?
+          </span>
+        }
+        rules={[
+          () => ({
+            required: props.isInternship,
+            validator() {
+              if ((!isGroups || !isTutor) && isOfficial) {
+                return Promise.reject(
+                  'Um am Praktikum teilzunehmen, musst du sowohl Schüler*innen im 1:1-Format als auch in Gruppenkursen helfen.'
+                );
+              }
+              if (!props.isInternship) {
+                return Promise.resolve();
+              }
+              if (props.isInternship && isOfficial) {
+                return Promise.resolve();
+              }
+              return Promise.reject('Bitte wähle eine Option aus.');
+            },
+          }),
+        ]}
+      >
+        <Checkbox
+          onChange={() => {
+            setOfficial(!isOfficial);
+          }}
+          style={{ lineHeight: '32px', marginLeft: '8px' }}
+          checked={isOfficial}
+        >
+          Ja
+        </Checkbox>
+      </Form.Item>
+    );
+  };
+
+  const renderOfferPickerForJufo = () => {
+    return (
+      <>
+        <Form.Item
+          className={classes.formItem}
+          name="jufoDefault"
+          rules={[
+            () => ({
+              required: true,
+              validator() {
+                if (isJufo) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('Bitte wähle eine Option aus.');
+              },
+            }),
+          ]}
+        >
+          {renderIsJufoCheckbox()}
+        </Form.Item>
+        <Form.Item
+          className={classes.formItem}
+          name="additional"
+          label="Möchtest du noch mehr helfen?"
+          extra={
+            <div style={{ marginLeft: '8px' }}>
+              Sofern du auch offiziell als Student*in immatrikuliert bist,
+              kannst du ehrenamtlich Schüler*innen mit diesem zusätzlichen
+              Engagement unterstützen
+            </div>
+          }
+        >
+          {renderIsTutorCheckbox()}
+          {renderIsGroupsCheckbox()}
+        </Form.Item>
+      </>
+    );
+  };
+  const renderOfferPickerNormal = () => {
+    return (
+      <Form.Item
+        className={classes.formItem}
+        name="additional"
+        label="Auf welche Art möchtest du Schüler*innen unterstützen?"
+        rules={[
+          () => ({
+            required: true,
+            validator() {
+              if (isGroups || isTutor || isJufo) {
+                return Promise.resolve();
+              }
+              return Promise.reject('Bitte wähle eine Option aus.');
+            },
+          }),
+        ]}
+      >
+        {renderIsTutorCheckbox()}
+        {renderIsGroupsCheckbox()}
+        {renderIsJufoCheckbox()}
+      </Form.Item>
+    );
+  };
 
   const renderStart = () => {
     return (
@@ -134,108 +303,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
             defaultValue={formData.email}
           />
         </Form.Item>
-
-        <Form.Item
-          className={classes.formItem}
-          name="additional"
-          label="Auf welche Art möchtest du Schüler*innen unterstützen?"
-          rules={[
-            () => ({
-              required: true,
-              validator() {
-                if (isGroups || isTutor || isJufo) {
-                  return Promise.resolve();
-                }
-                return Promise.reject('Bitte wähle eine Option aus.');
-              },
-            }),
-          ]}
-        >
-          <Checkbox
-            onChange={() => {
-              if (props.isInternship) {
-                return;
-              }
-              setTutor(!isTutor);
-            }}
-            value="isTutor"
-            style={{ lineHeight: '32px', marginLeft: '8px' }}
-            checked={isTutor}
-          >
-            Ich möchte eine*n Schüler*in im 1:1-Format unterstützen.
-          </Checkbox>
-          <Checkbox
-            onChange={() => {
-              if (props.isInternship) {
-                return;
-              }
-              setGroups(!isGroups);
-            }}
-            value="isGroups"
-            style={{ lineHeight: '32px' }}
-            checked={isGroups}
-          >
-            Ich möchte einen Gruppenkurs in der Corona School anbieten (z. B.
-            Sommer-AG, Repetitorium, Lerncoaching).
-          </Checkbox>
-          <Checkbox
-            onChange={() => {
-              setJufo(!isJufo);
-            }}
-            value="isJufo"
-            style={{ lineHeight: '32px' }}
-            checked={isJufo}
-          >
-            Ich möchte Schüler*innen im 1:1-Projektcoaching (z. B. im Rahmen von
-            Jugend forscht) unterstützen.
-          </Checkbox>
-        </Form.Item>
-        <Form.Item
-          className={classes.formItem}
-          name="official"
-          label={
-            <span>
-              Für Lehramtsstudierende: Möchtest du dich für unser{' '}
-              <a
-                href="https://www.corona-school.de/digital-lehren-lernen"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                digitales Praktikum
-              </a>{' '}
-              anmelden?
-            </span>
-          }
-          rules={[
-            () => ({
-              required: props.isInternship,
-              validator() {
-                if ((!isGroups || !isTutor) && isOfficial) {
-                  return Promise.reject(
-                    'Um am Praktikum teilzunehmen, musst du sowohl Schüler*innen im 1:1-Format als auch in Gruppenkursen helfen.'
-                  );
-                }
-                if (!props.isInternship) {
-                  return Promise.resolve();
-                }
-                if (props.isInternship && isOfficial) {
-                  return Promise.resolve();
-                }
-                return Promise.reject('Bitte wähle eine Option aus.');
-              },
-            }),
-          ]}
-        >
-          <Checkbox
-            onChange={() => {
-              setOfficial(!isOfficial);
-            }}
-            style={{ lineHeight: '32px', marginLeft: '8px' }}
-            checked={isOfficial}
-          >
-            Ja
-          </Checkbox>
-        </Form.Item>
+        {(props.isJufoSubdomain && renderOfferPickerForJufo()) ||
+          renderOfferPickerNormal()}
+        {renderDLLFormItem()}
       </>
     );
   };

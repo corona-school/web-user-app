@@ -52,9 +52,13 @@ const useQuery = () => {
 
 interface Props {
   stateCooperationInfo?: StateCooperationInfo;
+  isJufoSubdomain?: boolean;
 }
 
-const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
+const RegisterTutee: React.FC<Props> = ({
+  stateCooperationInfo,
+  isJufoSubdomain,
+}) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState<
@@ -62,7 +66,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
   >('start');
   const [isTutee, setTutee] = useState(false);
   const [isGroups, setGroups] = useState(false);
-  const [isJufo, setJufo] = useState(false);
+  const [isJufo, setJufo] = useState(isJufoSubdomain ?? false);
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
@@ -88,6 +92,121 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
         setSchoolInfo([]);
       });
   }
+
+  const renderIsTuteeCheckbox = () => {
+    return (
+      <Checkbox
+        onChange={() => {
+          setTutee(!isTutee);
+        }}
+        style={{ lineHeight: '32px', marginLeft: '8px' }}
+        checked={isTutee}
+        defaultChecked={formData.isTutee}
+      >
+        Ich möchte Unterstützung im 1:1-Format von einem/einer Student*in
+        erhalten.
+      </Checkbox>
+    );
+  };
+
+  const renderIsGroupsCheckbox = () => {
+    return (
+      <Checkbox
+        onChange={() => {
+          setGroups(!isGroups);
+        }}
+        value="isGroups"
+        style={{ lineHeight: '32px', marginLeft: '8px' }}
+        checked={isGroups}
+      >
+        Ich möchte an Gruppenkursen der Corona School teilnehmen (z. B.
+        Sommer-AG, Repetitorium, Lerncoaching).
+      </Checkbox>
+    );
+  };
+
+  const renderIsJufoCheckbox = () => {
+    return (
+      <Checkbox
+        disabled={isJufoSubdomain}
+        onChange={() => {
+          setJufo(!isJufo);
+        }}
+        value="isJufo"
+        style={{ lineHeight: '32px', marginLeft: '8px' }}
+        checked={isJufo}
+      >
+        Ich suche Unterstützung bei der Erarbeitung eines Projekts (z. B. im
+        Rahmen einer Teilnahme an{' '}
+        <span style={{ fontWeight: isJufoSubdomain ? 'bolder' : 'normal' }}>
+          Jugend forscht
+        </span>
+        ).
+      </Checkbox>
+    );
+  };
+
+  const renderOfferPickerForJufo = () => {
+    return (
+      <>
+        <Form.Item
+          className={classes.formItem}
+          name="jufoDefault"
+          rules={[
+            () => ({
+              validator() {
+                if (isJufo) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('Bitte wähle eine Option aus.');
+              },
+            }),
+          ]}
+        >
+          {renderIsJufoCheckbox()}
+        </Form.Item>
+        <Form.Item
+          className={classes.formItem}
+          name="additional"
+          label="Wobei können wir dir noch helfen?"
+          extra={
+            <div style={{ marginLeft: '8px' }}>
+              Neben individueller Unterstützung bei der Erarbeitung eines
+              Projekts, besteht die Möglichkeit, dass du dich zusätzlich noch
+              für eines dieser zwei Angebote anmeldest.
+            </div>
+          }
+        >
+          {renderIsTuteeCheckbox()}
+          {renderIsGroupsCheckbox()}
+        </Form.Item>
+      </>
+    );
+  };
+
+  const renderOfferPickerNormal = () => {
+    return (
+      <Form.Item
+        className={classes.formItem}
+        name="additional"
+        label="Wie können wir dir helfen?"
+        rules={[
+          () => ({
+            validator() {
+              if (isGroups || isTutee || isJufo) {
+                return Promise.resolve();
+              }
+              return Promise.reject('Bitte wähle eine Option aus.');
+            },
+          }),
+        ]}
+      >
+        {renderIsTuteeCheckbox()}
+        {renderIsGroupsCheckbox()}
+        {renderIsJufoCheckbox()}
+      </Form.Item>
+    );
+  };
 
   const renderStart = () => {
     return (
@@ -137,55 +256,8 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
           <Input type="email" placeholder="max.musterman@email.com" />
         </Form.Item>
 
-        <Form.Item
-          className={classes.formItem}
-          name="additional"
-          label="Wie können wir dir helfen?"
-          rules={[
-            () => ({
-              validator() {
-                if (isGroups || isTutee || isJufo) {
-                  return Promise.resolve();
-                }
-                return Promise.reject('Bitte wähle eine Option aus.');
-              },
-            }),
-          ]}
-        >
-          <Checkbox
-            onChange={() => {
-              setTutee(!isTutee);
-            }}
-            style={{ lineHeight: '32px', marginLeft: '8px' }}
-            checked={isTutee}
-            defaultChecked={formData.isTutee}
-          >
-            Ich möchte Unterstützung im 1:1-Format von einem/einer Student*in
-            erhalten.
-          </Checkbox>
-          <Checkbox
-            onChange={() => {
-              setGroups(!isGroups);
-            }}
-            value="isGroups"
-            style={{ lineHeight: '32px' }}
-            checked={isGroups}
-          >
-            Ich möchte an Gruppenkursen der Corona School teilnehmen (z. B.
-            Sommer-AG, Repetitorium, Lerncoaching).
-          </Checkbox>
-          <Checkbox
-            onChange={() => {
-              setJufo(!isJufo);
-            }}
-            value="isJufo"
-            style={{ lineHeight: '32px' }}
-            checked={isJufo}
-          >
-            Ich suche Unterstützung bei der Erarbeitung eines Projekts (z. B. im
-            Rahmen einer Teilnahme an Jugend forscht).
-          </Checkbox>
-        </Form.Item>
+        {(isJufoSubdomain && renderOfferPickerForJufo()) ||
+          renderOfferPickerNormal()}
       </>
     );
   };
@@ -340,15 +412,17 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
               <Radio.Button value="yes">Ja</Radio.Button>
               <Radio.Button value="no">Nein</Radio.Button>
               <Radio.Button value="unsure">Weiß noch nicht</Radio.Button>
-              <Radio.Button value="neverheard">
-                Weiß nicht, was das ist{' '}
-                <span
-                  role="img"
-                  aria-label="Emoji mit hochgezogener Augenbraue"
-                >
-                  🤨
-                </span>
-              </Radio.Button>
+              {!isJufoSubdomain && (
+                <Radio.Button value="neverheard">
+                  Weiß nicht, was das ist{' '}
+                  <span
+                    role="img"
+                    aria-label="Emoji mit hochgezogener Augenbraue"
+                  >
+                    🤨
+                  </span>
+                </Radio.Button>
+              )}
             </Radio.Group>
           </Form.Item>
         )}
