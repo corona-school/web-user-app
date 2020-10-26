@@ -283,7 +283,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
 
         <Form.Item
           className={classes.formItem}
-          label={isJufo ? 'E-Mail-Adresse' : 'Uni E-Mail-Adresse'}
+          label={isJufo && !isTutor ? 'E-Mail-Adresse' : 'Uni E-Mail-Adresse'}
           name="email"
           rules={[
             {
