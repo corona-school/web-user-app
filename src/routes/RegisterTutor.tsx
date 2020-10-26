@@ -100,7 +100,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         style={{ lineHeight: '32px', marginLeft: '8px' }}
         checked={isTutor}
       >
-        Ich möchte eine*n Schüler*in im 1:1-Format unterstützen.
+        Ich möchte eine*n Schüler*in im 1:1-Format beim Lernen unterstützen.
       </Checkbox>
     );
   };
@@ -165,7 +165,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             validator() {
               if ((!isGroups || !isTutor) && isOfficial) {
                 return Promise.reject(
-                  'Um am Praktikum teilzunehmen, musst du sowohl Schüler*innen im 1:1-Format als auch in Gruppenkursen helfen.'
+                  'Um am Praktikum teilzunehmen, musst du sowohl Schüler*innen im 1:1-Format beim Lernen als auch in Gruppenkursen helfen.'
                 );
               }
               if (!props.isInternship) {

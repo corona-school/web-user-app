@@ -103,7 +103,7 @@ const RegisterTutee: React.FC<Props> = ({
         checked={isTutee}
         defaultChecked={formData.isTutee}
       >
-        Ich möchte Unterstützung im 1:1-Format von einem/einer Student*in
+        Ich möchte Lernunterstützung im 1:1-Format von einem/einer Student*in
         erhalten.
       </Checkbox>
     );
