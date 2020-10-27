@@ -343,7 +343,17 @@ const RegisterTutee: React.FC<Props> = ({
           label="Klasse"
           name="grade"
           rules={[
-            { required: !isOnlyJufo, message: 'Bitte trage deine Klasse ein!' },
+            {
+              required: true,
+              validator(_, value) {
+                if ((isOnlyJufo && value !== undefined) || value) {
+                  // accept everything, including undefined/no explicit grade information
+                  return Promise.resolve();
+                }
+
+                return Promise.reject('Bitte trage deine Klasse ein!');
+              },
+            },
           ]}
           initialValue={formData.grade ? `${formData.grade}` : undefined}
         >
@@ -361,7 +371,7 @@ const RegisterTutee: React.FC<Props> = ({
             <Option value="11">11. Klasse</Option>
             <Option value="12">12. Klasse</Option>
             <Option value="13">13. Klasse</Option>
-            {isOnlyJufo && <Option value={undefined}>Keine Angabe</Option>}
+            {isOnlyJufo && <Option value={null}>Keine Angabe</Option>}
           </Select>
         </Form.Item>
         {isJufo && (
