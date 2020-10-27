@@ -12,7 +12,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import { useHistory, Link, useLocation } from 'react-router-dom';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/container/SignupContainer';
-import { Title, Text } from '../components/Typography';
+import { Title, Text, LinkText } from '../components/Typography';
 import Button from '../components/button';
 
 import classes from './RegisterTutee.module.scss';
@@ -103,8 +103,13 @@ const RegisterTutee: React.FC<Props> = ({
         checked={isTutee}
         defaultChecked={formData.isTutee}
       >
-        Ich möchte Lernunterstützung im 1:1-Format von einem/einer Student*in
-        erhalten.
+        Ich möchte{' '}
+        <LinkText
+          text="Lernunterstützung im 1:1-Format"
+          href="https://www.corona-school.de/1-zu-1-lernbetreuung"
+          enableLink={isJufoSubdomain}
+        />{' '}
+        von einem/einer Student*in erhalten.
       </Checkbox>
     );
   };
@@ -119,8 +124,14 @@ const RegisterTutee: React.FC<Props> = ({
         style={{ lineHeight: '32px', marginLeft: '8px' }}
         checked={isGroups}
       >
-        Ich möchte an Gruppenkursen der Corona School teilnehmen (z.{' '}B.
-        Sommer-AG, Repetitorium, Lerncoaching).
+        Ich möchte an{' '}
+        <LinkText
+          text="Gruppenkursen"
+          href="https://www.corona-school.de/sommer-ags"
+          enableLink={isJufoSubdomain}
+        />{' '}
+        der Corona School teilnehmen (z.{' '}B. Sommer-AG, Repetitorium,
+        Lerncoaching).
       </Checkbox>
     );
   };

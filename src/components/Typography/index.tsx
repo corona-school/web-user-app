@@ -106,3 +106,21 @@ export const Text = styled.div<{ large?: boolean; bold?: boolean }>`
     color: #373e47;
   }
 `;
+
+export const LinkText = ({
+  text,
+  href,
+  enableLink,
+}: {
+  text: string;
+  href: string;
+  enableLink: boolean;
+}) => {
+  return enableLink ? (
+    <a href={href} rel="noopener noreferrer" target="_blank">
+      {text}
+    </a>
+  ) : (
+    <>{text}</>
+  );
+};

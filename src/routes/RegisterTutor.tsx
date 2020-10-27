@@ -14,7 +14,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/container/SignupContainer';
-import { Title, Text } from '../components/Typography';
+import { Title, Text, LinkText } from '../components/Typography';
 import Button from '../components/button';
 import { Subject } from '../types';
 import Context from '../context';
@@ -100,7 +100,13 @@ const RegisterTutor: React.FC<Props> = (props) => {
         style={{ lineHeight: '32px', marginLeft: '8px' }}
         checked={isTutor}
       >
-        Ich möchte eine*n Schüler*in im 1:1-Format beim Lernen unterstützen.
+        Ich möchte eine*n Schüler*in im{' '}
+        <LinkText
+          text="1:1-Format beim Lernen"
+          href="https://www.corona-school.de/1-zu-1-lernbetreuung"
+          enableLink={props.isJufoSubdomain}
+        />{' '}
+        unterstützen.
       </Checkbox>
     );
   };
@@ -118,8 +124,14 @@ const RegisterTutor: React.FC<Props> = (props) => {
         style={{ lineHeight: '32px', marginLeft: '8px' }}
         checked={isGroups}
       >
-        Ich möchte einen Gruppenkurs in der Corona School anbieten (z.{' '}B.
-        Sommer-AG, Repetitorium, Lerncoaching).
+        Ich möchte einen{' '}
+        <LinkText
+          text="Gruppenkurs"
+          href="https://www.corona-school.de/sommer-ags"
+          enableLink={props.isJufoSubdomain}
+        />{' '}
+        in der Corona School anbieten (z.{' '}B. Sommer-AG, Repetitorium,
+        Lerncoaching).
       </Checkbox>
     );
   };
