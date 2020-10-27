@@ -97,13 +97,13 @@ const RegisterTutor: React.FC<Props> = (props) => {
         style={{ lineHeight: '32px', marginLeft: '8px' }}
         checked={isTutor}
       >
-        Ich möchte eine*n Schüler*in im{' '}
+        Ich möchte{' '}
         <LinkText
-          text="1:1-Format beim Lernen"
+          text="1:1-Lernunterstützung"
           href="https://www.corona-school.de/1-zu-1-lernbetreuung"
           enableLink={props.isJufoSubdomain}
         />{' '}
-        unterstützen.
+        für Schülerinnen anbieten.
       </Checkbox>
     );
   };
