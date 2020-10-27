@@ -8,10 +8,8 @@ import {
   Select,
   message,
   Radio,
-  DatePicker,
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
-import moment from 'moment';
 import Icons from '../assets/icons';
 import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text, LinkText } from '../components/Typography';
@@ -39,8 +37,7 @@ interface FormData {
   wasJufoParticipant?: 'yes' | 'no' | 'idk';
   isUniversityStudent?: 'yes' | 'no';
   hasJufoCertificate?: boolean;
-  jufoParticipationYear?: number;
-  jufoParticipationTopic?: string;
+  jufoPastParticipationInfo?: string;
   // isOfficial
   state?: string;
   university?: string;
@@ -506,45 +503,26 @@ const RegisterTutor: React.FC<Props> = (props) => {
             <>
               <Form.Item
                 className={classes.formItem}
-                label="In welchem Jahr hast du an Jugend forscht teilgenommen?"
-                name="jufoParticipationYear"
+                label="Was kannst du uns noch über deine damalige Teilnahme an Jugend forscht berichten?"
+                name="jufoPastParticipationInfo"
                 rules={[
                   {
                     required: wasJufoParticipant && !isUniversityStudent,
-                    message: 'Bitte wähle ein Jahr aus.',
+                    message:
+                      'Bitte gib hier ein paar Infos an! Normalerweise reichen schon wenige Informationen aus.',
                   },
                 ]}
-                initialValue={
-                  formData.jufoParticipationYear
-                    ? moment([formData.jufoParticipationYear])
-                    : moment().subtract(1, 'year')
-                }
+                initialValue={formData.jufoPastParticipationInfo}
+                extra={`Wir benötigen diese Informationen im Zusammenhang mit deinem Namen, um dich 
+                eindeutig unter allen ehemaligen Jugend forscht Teilnehmer*innen identifizieren zu können. 
+                So hilfst du uns, dich schneller verifizieren und freischalten zu können. 
+                Beispiele wären: Jahr deiner Teilnahme oder das (ungefähre) Thema deines damaligen Projekts. 
+                Aber auch dein Geburtsdatum oder das Bundesland, in dem du angetreten bist, helfen uns.`}
               >
-                <DatePicker
-                  picker="year"
-                  placeholder="Wähle ein Jahr aus"
-                  disabledDate={(date) => {
-                    return (
-                      date.isAfter(moment(), 'year') ||
-                      date.isBefore(moment([1966]))
-                    ); // first jufo competition in 1966
-                  }}
+                <Input.TextArea
+                  autoSize={{ minRows: isGroups ? 6 : 4 }}
+                  placeholder="Gib hier kurz und informal ein paar Infos an, die uns helfen können, deine frühere Teilnahme an Jugend forscht zu verifizieren."
                 />
-              </Form.Item>
-              <Form.Item
-                className={classes.formItem}
-                label="Mit welchem Thema hast du damals bei Jugend forscht teilgenommen?"
-                name="jufoParticipationTopic"
-                rules={[
-                  {
-                    required: wasJufoParticipant && !isUniversityStudent,
-                    message: 'Bitte gebe ein Thema an oder beschreibe es.',
-                  },
-                ]}
-                initialValue={formData.jufoParticipationTopic}
-                extra="Bei mehreren Teilnahmen reicht die Angabe eines Jahres mit entsprechendem Thema."
-              >
-                <Input placeholder="Thema deines Jugend forscht Projekts" />
               </Form.Item>
             </>
           )}
@@ -794,8 +772,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       wasJufoParticipant: data.wasJufoParticipant,
       projectFields: data.project,
       hasJufoCertificate: data.hasJufoCertificate,
-      jufoParticipationYear: data.jufoParticipationYear,
-      jufoParticipationTopic: data.jufoParticipationTopic,
+      jufoPastParticipationInfo: data.jufoPastParticipationInfo,
       newsletter: !!data.newsletter,
       msg: data.msg || '',
       state: data.state?.toLowerCase(),
@@ -919,10 +896,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             formValues.isUniversityStudent === 'no'
               ? formValues.hasJufoCertificate === 'yes'
               : undefined,
-          jufoParticipationYear: formValues.jufoParticipationYear
-            ? moment(formValues.jufoParticipationYear).year()
-            : undefined,
-          jufoParticipationTopic: formValues.jufoParticipationTopic,
+          jufoPastParticipationInfo: formValues.jufoPastParticipationInfo,
         });
         setFormState('finnish');
       }
