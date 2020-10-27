@@ -241,9 +241,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
           }
           extra={
             <div style={{ marginLeft: '8px' }}>
-              Sofern du auch offiziell als Student*in immatrikuliert bist,
-              kannst du ehrenamtlich Schüler*innen mit diesem zusätzlichen
-              Engagement unterstützen
+              Mit diesem zusätzlichem Engagement kannst du Schüler*innen
+              ehrenamtlich über das 1:1-Projektcoaching hinaus unterstützen.
+              Gruppenkurse erlauben es dir beispielsweise, einer ganzen Gruppe
+              Wissen zu vermitteln.
             </div>
           }
         >
