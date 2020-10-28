@@ -148,12 +148,12 @@ const RegisterTutee: React.FC<Props> = ({
         className={isJufoSubdomain ? classes.disabledCheckbox : undefined}
         checked={isJufo}
       >
-        Ich suche Unterstützung bei der Erarbeitung eines Projekts (z.{' '}B. im
-        Rahmen einer Teilnahme an{' '}
+        Ich suche Unterstützung bei der Erarbeitung meines (Forschungs-)Projekts
+        (z.{' '}B. im Rahmen einer Teilnahme an{' '}
         <span style={{ fontWeight: isJufoSubdomain ? 'bolder' : 'normal' }}>
           Jugend forscht
         </span>
-        ).
+        ) und möchte am 1:1-Projektcoaching teilnehmen.
       </Checkbox>
     );
   };

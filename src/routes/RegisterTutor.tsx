@@ -513,11 +513,20 @@ const RegisterTutor: React.FC<Props> = (props) => {
                   },
                 ]}
                 initialValue={formData.jufoPastParticipationInfo}
-                extra={`Wir benötigen diese Informationen im Zusammenhang mit deinem Namen, um dich 
-                eindeutig unter allen ehemaligen Jugend forscht Teilnehmer*innen identifizieren zu können. 
-                So hilfst du uns, dich schneller verifizieren und freischalten zu können. 
-                Beispiele wären: Jahr deiner Teilnahme oder das (ungefähre) Thema deines damaligen Projekts. 
-                Aber auch dein Geburtsdatum oder das Bundesland, in dem du angetreten bist, helfen uns.`}
+                extra={
+                  <>
+                    Wenn dir deine Jugend forscht Urkunde nicht mehr vorliegt,
+                    gib nachfolgend bitte an,{' '}
+                    <span style={{ fontWeight: 'bold' }}>
+                      in welchem Jahr, welchem Bundesland und mit welchem
+                      Projekt (Titel) du an Jugend forscht teilgenommen hast
+                    </span>
+                    . Diese Informationen benötigen wir, um dich eindeutig unter
+                    allen ehemaligen Jugend forscht Teilnehmer*innen
+                    identifizieren zu können. So hilfst du uns, dich schneller
+                    verifizieren und freischalten zu können.
+                  </>
+                }
               >
                 <Input.TextArea
                   autoSize={{ minRows: isGroups ? 6 : 4 }}
