@@ -145,7 +145,13 @@ const RegisterTutor: React.FC<Props> = (props) => {
         className={props.isJufoSubdomain ? classes.disabledCheckbox : undefined}
         checked={isJufo}
       >
-        Ich möchte Schüler*innen im 1:1-Projektcoaching (z.{' '}B. im Rahmen von{' '}
+        Ich möchte Schüler*innen im{' '}
+        <LinkText
+          text="1:1-Projektcoaching"
+          href="https://www.corona-school.de/1-zu-1-projektcoaching"
+          enableLink={props.isJufoSubdomain}
+        />{' '}
+        (z.{' '}B. im Rahmen von{' '}
         <span
           style={{ fontWeight: props.isJufoSubdomain ? 'bolder' : 'normal' }}
         >

@@ -153,7 +153,13 @@ const RegisterTutee: React.FC<Props> = ({
         <span style={{ fontWeight: isJufoSubdomain ? 'bolder' : 'normal' }}>
           Jugend forscht
         </span>
-        ) und möchte am 1:1-Projektcoaching teilnehmen.
+        ) und möchte am{' '}
+        <LinkText
+          text="1:1-Projektcoaching"
+          href="https://www.corona-school.de/1-zu-1-projektcoaching"
+          enableLink={isJufoSubdomain}
+        />{' '}
+        teilnehmen.
       </Checkbox>
     );
   };
