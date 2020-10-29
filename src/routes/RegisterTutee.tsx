@@ -51,6 +51,7 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
   const [isGroups, setGroups] = useState(false);
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
+  const [understoodHint, setUnderstoodHint] = useState<boolean>(false);
   const apiContext = useContext(Context.Api);
 
   const redirectTo = useQuery().get('redirectTo');
@@ -144,6 +145,26 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             Ich möchte Unterstützung im 1-zu-1-Format von einem/einer Student*in
             erhalten.
           </Checkbox>
+          {!understoodHint && isTutee && (
+            <div className={classes.registrationHint}>
+              <Title size="h5" bold>
+                Hinweis zur Registrierung
+              </Title>
+              <Text>
+                Dieses Angebot richtet sich an Schül;er*innen, die eine
+                individuelle Lernunterstützung aufgrund persönlicher, sozialer
+                oder finanzieller Ressourcen nicht oder nur schwer wahrnehmen
+                können. Unsere anderen Angebote stehen hingegen für alle
+                Schüler*innen offen.
+              </Text>
+              <Button
+                className={classes.understoodButton}
+                onClick={() => setUnderstoodHint(true)}
+              >
+                Verstanden
+              </Button>
+            </div>
+          )}
           <Checkbox
             onChange={() => {
               setGroups(!isGroups);
@@ -551,6 +572,11 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
       console.log(formValues);
 
       if (formState === 'start') {
+        if (!understoodHint && isTutee) {
+          message.error('Bitte bestätige den Hinweis zur Registrierung');
+          return;
+        }
+
         setFormData({
           ...formData,
           firstname: formValues.firstname,
