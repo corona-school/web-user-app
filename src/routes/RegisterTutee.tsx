@@ -144,6 +144,20 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
             Ich möchte Unterstützung im 1-zu-1-Format von einem/einer Student*in
             erhalten.
           </Checkbox>
+          {isTutee && (
+            <div className={classes.registrationHint}>
+              <Title size="h5" bold>
+                Hinweis zur Registrierung
+              </Title>
+              <Text>
+                Dieses Angebot richtet sich an Schül;er*innen, die eine
+                individuelle Lernunterstützung aufgrund persönlicher, sozialer
+                oder finanzieller Ressourcen nicht oder nur schwer wahrnehmen
+                können. Unsere anderen Angebote stehen hingegen für alle
+                Schüler*innen offen.
+              </Text>
+            </div>
+          )}
           <Checkbox
             onChange={() => {
               setGroups(!isGroups);
