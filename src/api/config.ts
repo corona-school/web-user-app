@@ -5,6 +5,7 @@ const liveDomains = [
   'my.corona-school.de',
   'web-user-app-live.herokuapp.com',
   'nrw.corona-school.de',
+  'jufo.corona-school.de',
 ];
 
 export const env = runtimeEnv();
