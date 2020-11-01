@@ -147,14 +147,13 @@ const RegisterTutee: React.FC<Props> = ({ stateCooperationInfo }) => {
           {isTutee && (
             <div className={classes.registrationHint}>
               <Title size="h5" bold>
-                Hinweis zur Registrierung
+                Hinweis bei der Registrierung
               </Title>
               <Text>
-                Dieses Angebot richtet sich an Schül;er*innen, die eine
-                individuelle Lernunterstützung aufgrund persönlicher, sozialer
-                oder finanzieller Ressourcen nicht oder nur schwer wahrnehmen
-                können. Unsere anderen Angebote stehen hingegen für alle
-                Schüler*innen offen.
+                Bitte melde dich nur an, wenn du individuelle Unterstützung beim
+                Lernen aus persönlichen, sozialen, kulturellen oder finanziellen
+                Gründen nicht oder nur schwer wahrnehmen kannst. Unsere anderen
+                Angebote stehen weiterhin für alle Schüler*innen offen.
               </Text>
             </div>
           )}
