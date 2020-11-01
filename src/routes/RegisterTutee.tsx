@@ -95,22 +95,37 @@ const RegisterTutee: React.FC<Props> = ({
 
   const renderIsTuteeCheckbox = () => {
     return (
-      <Checkbox
-        onChange={() => {
-          setTutee(!isTutee);
-        }}
-        style={{ lineHeight: '32px', marginLeft: '8px' }}
-        checked={isTutee}
-        defaultChecked={formData.isTutee}
-      >
-        Ich möchte{' '}
-        <LinkText
-          text="Lernunterstützung im 1:1-Format"
-          href="https://www.corona-school.de/1-zu-1-lernbetreuung"
-          enableLink={isJufoSubdomain}
-        />{' '}
-        von einem/einer Student*in erhalten.
-      </Checkbox>
+      <>
+        <Checkbox
+          onChange={() => {
+            setTutee(!isTutee);
+          }}
+          style={{ lineHeight: '32px', marginLeft: '8px' }}
+          checked={isTutee}
+          defaultChecked={formData.isTutee}
+        >
+          Ich möchte{' '}
+          <LinkText
+            text="Lernunterstützung im 1:1-Format"
+            href="https://www.corona-school.de/1-zu-1-lernbetreuung"
+            enableLink={isJufoSubdomain}
+          />{' '}
+          von einem/einer Student*in erhalten.
+        </Checkbox>
+        {isTutee && (
+          <div className={classes.registrationHint}>
+            <Title size="h5" bold>
+              Hinweis bei der Registrierung
+            </Title>
+            <Text>
+              Bitte melde dich nur an, wenn du individuelle Unterstützung beim
+              Lernen aus persönlichen, sozialen, kulturellen oder finanziellen
+              Gründen nicht oder nur schwer wahrnehmen kannst. Unsere anderen
+              Angebote stehen weiterhin für alle Schüler*innen offen.
+            </Text>
+          </div>
+        )}
+      </>
     );
   };
 

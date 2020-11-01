@@ -28,8 +28,8 @@
     min-width: 70px;
     height: 70px;
     width: 70px;
-    left: 50%; 
-    top: 10%; 
+    left: 50%;
+    top: 10%;
     position: absolute;
   }
 }
@@ -137,6 +137,15 @@
   .link {
     color: #4e6ae6 !important;
   }
+}
+
+.registrationHint {
+  width: 100%;
+  height: fit-content;
+  background-color: rgba(255, 210, 46, 0.6);
+  border: rgb(255, 210, 46) solid 2px;
+  border-radius: 15px;
+  padding: 8px;
 }
 
 .disabledCheckbox {
