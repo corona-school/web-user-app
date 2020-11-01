@@ -1,3 +1,5 @@
+import runtimeEnv from '@mars/heroku-js-runtime-env';
+
 const liveDomains = [
   'dashboard.corona-school.de',
   'my.corona-school.de',
@@ -5,10 +7,12 @@ const liveDomains = [
   'nrw.corona-school.de',
 ];
 
+export const env = runtimeEnv();
+
 const devAPI =
   process.env.REACT_APP_MODE === 'LOCAL'
     ? 'http://localhost:5000/api'
-    : 'https://dev.api.corona-school.de/api';
+    : env.REACT_APP_BACKEND_URL ?? 'https://dev.api.corona-school.de/api';
 
 export const apiURL = liveDomains.includes(window.location.host)
   ? 'https://api.corona-school.de/api'

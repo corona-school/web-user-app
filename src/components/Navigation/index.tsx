@@ -24,7 +24,11 @@ const Navigation: React.FC<Props> = (props) => {
       screeningStatus,
       instructorScreeningStatus,
       isInstructor,
+      isProjectCoach,
+      isParticipant,
+      isProjectCoachee,
       isTutor,
+      isPupil,
     },
     user,
   } = useContext(UserContext);
@@ -50,7 +54,7 @@ const Navigation: React.FC<Props> = (props) => {
       <div className={classes.navigationGroup}>
         <Welcome user={user} />
         <div className={classes.section}>Menü</div>
-        {(type === 'pupil' || isTutor) && (
+        {(isPupil || isTutor) && (
           <NavButton
             to="/dashboard"
             icon={<Icons.Home />}
@@ -59,7 +63,7 @@ const Navigation: React.FC<Props> = (props) => {
             Startseite
           </NavButton>
         )}
-        {(type === 'pupil' || isInstructor) && (
+        {(isParticipant || isInstructor) && (
           <NavButton
             to="/courses"
             icon={<Icons.Palm />}
@@ -72,7 +76,7 @@ const Navigation: React.FC<Props> = (props) => {
             Kurse
           </NavButton>
         )}
-        {(type === 'pupil' || isTutor) && (
+        {(isPupil || isTutor) && (
           <NavButton
             to="/matches"
             icon={<Icons.Match />}
@@ -84,7 +88,18 @@ const Navigation: React.FC<Props> = (props) => {
             Zuordnung
           </NavButton>
         )}
-        {type === 'student' && (
+        {(isProjectCoachee || isProjectCoach) && (
+          <NavButton
+            to="/project-coaching"
+            icon={<Icons.ProjectCoachingIcon />}
+            // type === 'pupil' || screeningStatus === ScreeningStatus.Accepted
+            active
+            onClick={() => props.setMenuOpen(false)}
+          >
+            Projektcoaching
+          </NavButton>
+        )}
+        {(isTutor || isInstructor) && (
           <NavButton
             to="/mentoring"
             icon={<Icons.Mentoring />}
@@ -93,7 +108,7 @@ const Navigation: React.FC<Props> = (props) => {
             Mentoring
           </NavButton>
         )}
-        {type === 'student' && (
+        {(isTutor || isInstructor) && (
           <NavButton
             to="/support"
             icon={<Icons.Support />}

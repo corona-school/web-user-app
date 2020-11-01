@@ -129,7 +129,7 @@ const BecomeInternModal: React.FC<Props> = ({ user }) => {
               <Option value="ST">Sachsen-Anhalt</Option>
               <Option value="SH">Schleswig-Holstein</Option>
               <Option value="TH">Thüringen</Option>
-              <Option value="OTHER">anderes Bundesland</Option>
+              <Option value="OTHER">anderer Wohnort</Option>
             </Select>
           </Form.Item>
 

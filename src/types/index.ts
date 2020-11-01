@@ -1,5 +1,21 @@
 import { subjectOptions } from '../assets/subjects';
 
+export enum ProjectField {
+  ARBEITSWELT = 'Arbeitswelt',
+  BIOLOGIE = 'Biologie',
+  CHEMIE = 'Chemie',
+  GEO_RAUM = 'Geo-und-Raumwissenschaften', // don't use spaces here due to a typeorm issue, see https://github.com/typeorm/typeorm/issues/5275
+  MATHE_INFO = 'Mathematik/Informatik',
+  PHYSIK = 'Physik',
+  TECHNIK = 'Technik',
+}
+
+interface ProjectInformation {
+  name: ProjectField;
+  min: number;
+  max: number;
+}
+
 export interface User {
   id: string;
   firstname: string;
@@ -11,6 +27,11 @@ export interface User {
   matchesRequested?: number;
   isInstructor?: boolean;
   isTutor?: boolean;
+  isProjectCoachee?: boolean;
+  isPupil?: boolean;
+  isParticipant?: boolean;
+  isProjectCoach?: boolean;
+  projectFields?: ProjectInformation[];
   subjects: Subject[];
   matches: Match[];
   dissolvedMatches: Match[];

@@ -13,5 +13,15 @@ export const getUserType = (user: User) => {
     return 'Tutor*in';
   }
 
+  if (user.isProjectCoach) {
+    return 'Project-Coach';
+  }
+
   return `Student*in`;
 };
+
+export const isProjectCoachButNotTutor = (user: User) =>
+  !user.isTutor && user.isProjectCoach;
+
+export const isProjectCoacheeButNotPupil = (user: User) =>
+  !user.isPupil && user.isProjectCoachee;

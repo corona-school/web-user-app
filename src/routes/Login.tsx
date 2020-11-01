@@ -14,6 +14,10 @@ import { Title, Text } from '../components/Typography';
 
 import classes from './Login.module.scss';
 import PageLoading from '../components/PageLoading';
+import {
+  isProjectCoachButNotTutor,
+  isProjectCoacheeButNotPupil,
+} from '../utils/UserUtils';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -34,6 +38,7 @@ const Login: React.FC = () => {
   const redirectPath = query.get('path');
 
   const authContext = useContext(Context.Auth);
+  const userContext = useContext(Context.User);
   const apiContext = useContext(Context.Api);
 
   useEffect(() => {
@@ -113,6 +118,14 @@ const Login: React.FC = () => {
       if (redirectPath && redirectPath !== '') {
         return <Redirect to={redirectPath} />;
       }
+      console.log(userContext.user);
+
+      if (
+        isProjectCoachButNotTutor(userContext.user) ||
+        isProjectCoacheeButNotPupil(userContext.user)
+      ) {
+        return <Redirect to="/project-coaching" />;
+      }
       return <Redirect to="/dashboard" />;
 
     // have a token in the url and querying the api to verify the token and log in
@@ -180,7 +193,7 @@ const Login: React.FC = () => {
 
         {loginState !== 'success' && (
           <div className={classes.inputContainer}>
-            <Text className={classes.description}>E-Mail</Text>
+            <Text className={classes.description}>E-Mail-Adresse</Text>
             <Input
               onKeyUp={(e) => {
                 if (e.keyCode === 13) {
@@ -190,7 +203,7 @@ const Login: React.FC = () => {
               className={classnames(classes.inputField, {
                 [classes.errorInput]: loginState === 'error',
               })}
-              placeholder="E-Mail"
+              placeholder="E-Mail-Adresse"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />

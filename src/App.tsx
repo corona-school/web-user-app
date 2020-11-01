@@ -31,6 +31,7 @@ import {
   isSupportedStateSubdomain,
   stateInfoForStateSubdomain,
 } from './assets/supportedStateCooperations';
+import ProjectCoach from './routes/ProjectCoach';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -58,10 +59,8 @@ const App: React.FC = () => {
   const userContext = useContext(UserContext);
 
   const domainComponents = getDomainComponents();
-  if (
-    domainComponents?.length > 0 &&
-    isSupportedStateSubdomain(domainComponents[0])
-  ) {
+  const subdomain = domainComponents?.length > 0 && domainComponents[0];
+  if (subdomain && isSupportedStateSubdomain(subdomain)) {
     // render the special page for cooperations with states of Germany
     return (
       <>
@@ -79,6 +78,8 @@ const App: React.FC = () => {
       </>
     );
   }
+  // jufo cooperation
+  const isJufoSubdomain = subdomain === 'jufo';
 
   return (
     <>
@@ -88,19 +89,19 @@ const App: React.FC = () => {
           <Login />
         </Route>
         <Route path="/register/tutee">
-          <RegisterTutee />
+          <RegisterTutee isJufoSubdomain={isJufoSubdomain} />
         </Route>
         <Route path="/register/internship">
           <RegisterTutor isInternship />
         </Route>
         <Route path="/register/club">
-          <RegisterTutor isClub />
+          <RegisterTutor isClub isJufoSubdomain={isJufoSubdomain} />
         </Route>
         <Route path="/register/student">
-          <RegisterTutor isStudent />
+          <RegisterTutor isStudent isJufoSubdomain={isJufoSubdomain} />
         </Route>
         <Route path="/register/tutor">
-          <RegisterTutor />
+          <RegisterTutor isJufoSubdomain={isJufoSubdomain} />
         </Route>
         <Route path="/register">
           <Register />
@@ -151,6 +152,9 @@ const App: React.FC = () => {
             }
           >
             <Matches />
+          </PrivateRoute>
+          <PrivateRoute path="/project-coaching">
+            <ProjectCoach />
           </PrivateRoute>
           <PrivateRoute path="/settings">
             <Settings />

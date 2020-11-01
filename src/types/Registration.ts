@@ -10,6 +10,11 @@ export interface Tutee {
   subjects?: Subject[];
   state: string;
   school?: string;
+  // isProjectCoachee
+  isProjectCoachee: boolean;
+  isJufoParticipant?: 'yes' | 'no' | 'unsure' | 'neverheard';
+  projectFields?: string[];
+  projectMemberCount?: number;
   msg?: string;
   newsletter: boolean;
   redirectTo?: string;
@@ -36,6 +41,13 @@ export interface Tutor {
   // isTutor
   subjects?: Subject[];
   msg?: string;
+  // isProjectCoach
+  isProjectCoach: boolean;
+  isUniversityStudent?: boolean;
+  wasJufoParticipant?: 'yes' | 'no' | 'idk';
+  jufoPastParticipationInfo?: string;
+  projectFields?: string[];
+  hasJufoCertificate?: boolean;
   // finnish
   newsletter: boolean;
   redirectTo?: string;

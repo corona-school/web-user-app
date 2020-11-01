@@ -5,5 +5,6 @@ export const SchoolTypesMap = {
   realschule: 'Realschule',
   gymnasium: 'Gymnasium',
   förderschule: 'Förderschule',
+  berufsschule: 'Berufsschule',
   other: 'Sonstige',
 };
