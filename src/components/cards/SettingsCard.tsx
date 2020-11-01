@@ -8,7 +8,7 @@ import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import CertificateModal from '../Modals/CerificateModal';
-import { getUserType } from '../../utils/UserUtils';
+import { getUserType, isProjectCoachButNotTutor } from '../../utils/UserUtils';
 
 import { Tag } from '../Tag';
 import context from '../../context';
@@ -68,6 +68,10 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
       return null;
     }
 
+    if (isProjectCoachButNotTutor(user)) {
+      return null;
+    }
+
     if (user.isInstructor) {
       return null;
     }
@@ -116,22 +120,34 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
               {getUserType(user)}
             </Tag>
           </div>
-          <div className={classes.subjectContainer}>
-            <Text large>
-              <b>Fächer</b>
-            </Text>
-            <Text className={classes.emailText} large>
-              {user.subjects.map((s, i) =>
-                i !== user.subjects.length - 1 ? `${s.name}, ` : s.name
-              )}
-            </Text>
-          </div>
-          <EditableUserSettingsCard
-            editableUserSettings={editableUserSettings}
-            onSettingChanges={setEditableUserSettings}
-            isEditing={isEditing}
-            personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
-          />
+          {user.isProjectCoach && (
+            <div className={classes.subjectContainer}>
+              <Text large>
+                <b>Fachgebiete</b>
+              </Text>
+              <Text className={classes.emailText} large>
+                {user.projectFields.map((s) => s.name).join(', ')}
+              </Text>
+            </div>
+          )}
+          {!isProjectCoachButNotTutor(user) && (
+            <div className={classes.subjectContainer}>
+              <Text large>
+                <b>Fächer</b>
+              </Text>
+              <Text className={classes.emailText} large>
+                {user.subjects.map((s) => s.name).join(', ')}
+              </Text>
+            </div>
+          )}
+          {!isProjectCoachButNotTutor(user) && (
+            <EditableUserSettingsCard
+              editableUserSettings={editableUserSettings}
+              onSettingChanges={setEditableUserSettings}
+              isEditing={isEditing}
+              personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
+            />
+          )}
           <div className={classes.mainButtonContainer}>
             {renderCourseButton()}
 
@@ -156,17 +172,19 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             >
               <Icons.Delete /> Deaktivieren
             </Button>
-            <SaveEditButton
-              isEditing={isEditing}
-              isLoading={isSaving}
-              onEditChange={(nowEditing) => {
-                if (!nowEditing) {
-                  saveUserChanges();
-                } else {
-                  setIsEditing(nowEditing);
-                }
-              }}
-            />
+            {!user.isProjectCoach && !user.isProjectCoachee && (
+              <SaveEditButton
+                isEditing={isEditing}
+                isLoading={isSaving}
+                onEditChange={(nowEditing) => {
+                  if (!nowEditing) {
+                    saveUserChanges();
+                  } else {
+                    setIsEditing(nowEditing);
+                  }
+                }}
+              />
+            )}
           </div>
         </div>
       </CardBase>

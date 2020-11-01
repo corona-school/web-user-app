@@ -9,6 +9,7 @@ import { Title } from '../components/Typography';
 
 import classes from './Settings.module.scss';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
+import { isProjectCoachButNotTutor } from '../utils/UserUtils';
 
 const Wrapper = styled.div`
   display: flex;
@@ -68,7 +69,7 @@ const Settings: React.FC = () => {
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
       <SettingsCard user={userContext.user} />
-      {renderSubjects()}
+      {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
       <AccountNotScreenedModal />
     </div>
   );
