@@ -172,17 +172,19 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             >
               <Icons.Delete /> Deaktivieren
             </Button>
-            <SaveEditButton
-              isEditing={isEditing}
-              isLoading={isSaving}
-              onEditChange={(nowEditing) => {
-                if (!nowEditing) {
-                  saveUserChanges();
-                } else {
-                  setIsEditing(nowEditing);
-                }
-              }}
-            />
+            {!user.isProjectCoach && !user.isProjectCoachee && (
+              <SaveEditButton
+                isEditing={isEditing}
+                isLoading={isSaving}
+                onEditChange={(nowEditing) => {
+                  if (!nowEditing) {
+                    saveUserChanges();
+                  } else {
+                    setIsEditing(nowEditing);
+                  }
+                }}
+              />
+            )}
           </div>
         </div>
       </CardBase>
