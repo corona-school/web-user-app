@@ -53,13 +53,7 @@ const AccountNotScreenedModal = () => {
             backgroundColor="#FFF7DB"
             color="#FFCC12"
             target="_blank"
-            href={
-              userContext.user.isInstructor
-                ? `https://go.oncehub.com/CourseReview?name=${encodeURI(
-                    userContext.user.firstname + userContext.user.lastname
-                  )}&email=${encodeURI(userContext.user.email)}&skip=1`
-                : 'https://authentication.corona-school.de'
-            }
+            href="https://authentication.corona-school.de"
           >
             Kennenlernen
           </LinkButton>
