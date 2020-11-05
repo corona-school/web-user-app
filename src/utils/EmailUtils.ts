@@ -8,5 +8,5 @@ export function domainFromEmail(emailAddress: string) {
   return components.slice(-1)[0];
 }
 export function emailDomainIsEqual(emailAddress: string, domain: string) {
-  return domainFromEmail(emailAddress) === domain;
+  return domainFromEmail(emailAddress).toLowerCase() === domain.toLowerCase();
 }
