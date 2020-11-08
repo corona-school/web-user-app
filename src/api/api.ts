@@ -735,7 +735,7 @@ export const axiosPostUserRoleProjectCoach = (
       .post(`${apiURL}/user/${id}/role/projectcoach`, projectCoachData, {
         headers: { token },
       })
-      .then(() => resolve)
+      .then(() => resolve())
       .catch((err) => reject(err));
   });
 };

@@ -20,6 +20,7 @@ import EditableUserSettingsCard, {
   EditableUserSettings,
 } from './EditableUserSettingsCard';
 import SaveEditButton from '../button/SaveEditButton';
+import BecomeProjectCoachModal from '../Modals/BecomeProjectCoachModal';
 
 interface Props {
   user: User;
@@ -150,7 +151,18 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
           )}
           <div className={classes.mainButtonContainer}>
             {renderCourseButton()}
-
+            {!user.isProjectCoach && (
+              <Button
+                onClick={() =>
+                  modalContext.setOpenedModal('becomeProjectCoach')
+                }
+                color="#ffffff"
+                backgroundColor="#4E6AE6"
+                style={{ margin: '4px' }}
+              >
+                Jugend-Forscht-Coach werden
+              </Button>
+            )}
             {user.isTutor && (
               <Button
                 disabled={
@@ -191,6 +203,7 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
       <CertificateModal user={user} />
       <BecomeInstructorModal user={user} />
       <BecomeInternModal user={user} />
+      <BecomeProjectCoachModal />
       <StyledReactModal
         isOpen={modalContext.openedModal === 'deactivateAccount'}
       >
