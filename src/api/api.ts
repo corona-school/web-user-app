@@ -7,6 +7,7 @@ import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
 import { FeedbackCall } from '../types/FeedbackCall';
+import { BecomeProjectCoach } from '../types/ProjectCoach';
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -720,6 +721,21 @@ export const axiosPostContactMentor = (
     axios
       .post(`${apiURL}/mentoring/contact`, message, { headers: { token } })
       .then(() => resolve())
+      .catch((err) => reject(err));
+  });
+};
+
+export const axiosPostUserRoleProjectCoach = (
+  token: string,
+  id: string,
+  projectCoachData: BecomeProjectCoach
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/user/${id}/role/projectcoach`, projectCoachData, {
+        headers: { token },
+      })
+      .then(() => resolve)
       .catch((err) => reject(err));
   });
 };
