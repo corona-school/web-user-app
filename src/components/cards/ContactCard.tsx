@@ -59,7 +59,7 @@ const ContactCard = () => {
           <Text large> Kategorie: </Text>
           <select
             className={classes.selectElement}
-            onChange={(e) => setCategory(MentoringCategory[e.target.value])}
+            onChange={(e) => setCategory(e.target.value as MentoringCategory)}
             value={category}
           >
             {Object.values(MentoringCategory).map((c) => (
