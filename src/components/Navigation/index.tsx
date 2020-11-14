@@ -88,7 +88,7 @@ const Navigation: React.FC<Props> = (props) => {
             Zuordnung
           </NavButton>
         )}
-        {(isProjectCoachee || isProjectCoach) && (
+        {(isProjectCoachee || isPupil || isProjectCoach || isTutor) && (
           <NavButton
             to="/project-coaching"
             icon={<Icons.ProjectCoachingIcon />}
