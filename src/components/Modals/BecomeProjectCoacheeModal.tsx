@@ -9,12 +9,12 @@ import classes from './BecomeProjectCoacheeModal.module.scss';
 import { Title } from '../Typography';
 import {
   BecomeProjectCoachee,
-  ProjectField,
   TuteeJufoParticipationIndication,
 } from '../../types/ProjectCoach';
 import Button from '../button';
 import { UserContext } from '../../context/UserContext';
 import { dev } from '../../api/config';
+import { ProjectField } from '../../types';
 
 const BecomeProjectCoacheeModal = () => {
   const [loading, setLoading] = useState(false);
@@ -97,9 +97,9 @@ const BecomeProjectCoacheeModal = () => {
             <Select
               mode="multiple"
               placeholder="Bitte wähle einen Themenbereich aus."
-              options={Object.entries(ProjectField).map((e) => ({
-                label: e[1],
-                value: e[1],
+              options={Object.values(ProjectField).map((e) => ({
+                label: e,
+                value: e,
               }))}
             />
           </Form.Item>
