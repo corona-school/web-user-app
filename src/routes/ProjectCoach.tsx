@@ -10,6 +10,7 @@ import BecomeProjectCoachModal from '../components/Modals/BecomeProjectCoachModa
 import BecomeProjectCoacheeModal from '../components/Modals/BecomeProjectCoacheeModal';
 import { UserContext } from '../context/UserContext';
 import { ProjectMatchCard } from '../components/cards/MatchCard';
+import OpenRequestCard from '../components/cards/OpenRequestCard';
 
 const ProjectCoach: React.FC = () => {
   const { user } = useContext(context.User);
@@ -87,6 +88,69 @@ const ProjectCoach: React.FC = () => {
   const Matches = () => {
     const userContext = useContext(UserContext);
 
+    const openRequests = (() => {
+      if (userContext.user.type === 'pupil') {
+        if (userContext.user.projectMatches.length === 1) {
+          return (
+            <Empty description="Du hast im Moment keine offenen Anfragen." />
+          );
+        }
+        if (userContext.user.projectMatchesRequested === 0) {
+          return (
+            <OpenRequestCard
+              type="new"
+              userType={userContext.user.type}
+              projectCoaching
+            />
+          );
+        }
+        if (userContext.user.matchesRequested >= 1) {
+          return (
+            <>
+              {[...Array(userContext.user.projectMatchesRequested).keys()].map(
+                () => (
+                  <OpenRequestCard
+                    type="pending"
+                    userType={userContext.user.type}
+                    projectCoaching
+                  />
+                )
+              )}
+            </>
+          );
+        }
+      }
+
+      if (userContext.user.matchesRequested === 0) {
+        return (
+          <OpenRequestCard
+            type="new"
+            userType={userContext.user.type}
+            projectCoaching
+          />
+        );
+      }
+
+      return (
+        <>
+          {[...Array(userContext.user.projectMatchesRequested).keys()].map(
+            () => (
+              <OpenRequestCard
+                type="pending"
+                userType={userContext.user.type}
+                projectCoaching
+              />
+            )
+          )}
+          <OpenRequestCard
+            type="new"
+            userType={userContext.user.type}
+            projectCoaching
+          />
+        </>
+      );
+    })();
+
     const currentMatches = userContext.user.projectMatches.map((match) => (
       <React.Fragment key={match.uuid}>
         <ProjectMatchCard
@@ -99,6 +163,7 @@ const ProjectCoach: React.FC = () => {
 
     return (
       <div>
+        {openRequests}
         <Title size="h2">Deine Zuordnungen</Title>
         {currentMatches.length === 0 && (
           <Empty

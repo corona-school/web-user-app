@@ -54,6 +54,7 @@ export const putUser = (
     lastname?: string;
     grade?: number;
     matchesRequested?: number;
+    projectMatchesRequested?: number;
     state?: string;
     university?: string;
     schoolType?: string;

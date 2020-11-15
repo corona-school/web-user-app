@@ -16,9 +16,14 @@ import CardNewBase from '../base/CardNewBase';
 interface Props {
   type: 'pending' | 'new';
   userType: 'student' | 'pupil';
+  projectCoaching: boolean;
 }
 
-const OpenRequestCard: React.FC<Props> = ({ type, userType }) => {
+const OpenRequestCard: React.FC<Props> = ({
+  type,
+  userType,
+  projectCoaching,
+}) => {
   const [loading, setLoading] = useState(false);
   const { credentials } = useContext(Context.Auth);
   const { user, fetchUserData } = useContext(Context.User);
@@ -29,7 +34,12 @@ const OpenRequestCard: React.FC<Props> = ({ type, userType }) => {
     putUser(credentials, {
       firstname: user.firstname,
       lastname: user.lastname,
-      matchesRequested: f(user.matchesRequested),
+      matchesRequested: projectCoaching
+        ? user.matchesRequested
+        : f(user.matchesRequested),
+      projectMatchesRequested: projectCoaching
+        ? f(user.projectMatchesRequested)
+        : user.projectMatchesRequested,
       grade: user.grade,
       lastUpdatedSettingsViaBlocker: user.lastUpdatedSettingsViaBlocker,
     })
@@ -50,8 +60,10 @@ const OpenRequestCard: React.FC<Props> = ({ type, userType }) => {
       <CardBase highlightColor="#FCD95C" className={classes.pendingContainer}>
         <Title size="h4">Offene Anfrage</Title>
         <Text>
-          Wir sind auf der Suche nach einem bzw. einer Lernpartner*in für dich
-          und werden uns schnellstmöglich bei dir melden.
+          {`Wir sind auf der Suche nach einem ${
+            projectCoaching ? 'Coach' : 'bzw. einer Lernpartner*in'
+          } für dich
+            und werden uns schnellstmöglich bei dir melden.`}
         </Text>
         <div className={classes.buttonContainer}>
           <Button
@@ -89,7 +101,11 @@ const OpenRequestCard: React.FC<Props> = ({ type, userType }) => {
           <Text className={classes.newTextContainer}>
             {userType === 'student'
               ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen möchtest.'
-              : 'Hier kannst du eine*n neue*n Student*in anfordern, die dich beim Lernen unterstützt.'}
+              : `Hier kannst du ${
+                  projectCoaching
+                    ? 'einen neuen Coach'
+                    : 'eine*n neue*n Student*in'
+                } anfordern, die dich beim Lernen unterstützt.`}
           </Text>
         )}
       </CardNewBase>

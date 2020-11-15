@@ -27,6 +27,7 @@ export interface User {
   active: boolean;
   grade?: number;
   matchesRequested?: number;
+  projectMatchesRequested?: number;
   isInstructor?: boolean;
   isTutor?: boolean;
   isProjectCoachee?: boolean;
