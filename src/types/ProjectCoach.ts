@@ -7,7 +7,7 @@ export interface BecomeProjectCoach {
 }
 
 export interface BecomeProjectCoachee {
-  projectFields: ApiProjectFieldInfo[];
+  projectFields: string[];
   isJufoParticipant: TuteeJufoParticipationIndication;
   projectMemberCount: number;
 }

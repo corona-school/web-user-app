@@ -8,6 +8,7 @@ import context from '../context';
 import classes from './ProjectCoach.module.scss';
 import { LeftHighlightCard } from '../components/cards/FlexibleHighlightCard';
 import BecomeProjectCoachModal from '../components/Modals/BecomeProjectCoachModal';
+import BecomeProjectCoacheeModal from '../components/Modals/BecomeProjectCoacheeModal';
 
 const ProjectCoach: React.FC = () => {
   const { user } = useContext(context.User);
@@ -49,8 +50,38 @@ const ProjectCoach: React.FC = () => {
     );
   }
 
-  if (!user.isProjectCoach && !user.isProjectCoachee) {
-    return null;
+  if (!user.isProjectCoachee && user.isPupil) {
+    return (
+      <div className={classes.container}>
+        <Title size="h1">Projektcoaching</Title>
+        <LeftHighlightCard highlightColor={theme.color.cardHighlightYellow}>
+          <Title size="h3">Lorem Ipsum</Title>
+          <Text>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+            et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+            no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+            dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+            voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+            Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
+            dolor sit amet.
+          </Text>
+          <Button
+            className={classes.buttonParticipate}
+            onClick={() => modalContext.setOpenedModal('becomeProjectCoachee')}
+          >
+            Unterstützung anfordern
+          </Button>
+        </LeftHighlightCard>
+        <BecomeProjectCoacheeModal />
+      </div>
+    );
   }
 
   return (

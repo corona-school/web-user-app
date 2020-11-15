@@ -750,10 +750,13 @@ export const axiosPostUserRoleProjectCoachee = (
 ): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     axios
-      .post(`${apiURL}/user/${id}/projectCoachee`, projectCoacheeData, {
-        headers: token,
+      .post(`${apiURL}/user/${id}/role/projectCoachee`, projectCoacheeData, {
+        headers: { token },
       })
       .then(() => resolve())
-      .catch((err) => reject(err));
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
   });
 };
