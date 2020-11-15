@@ -7,7 +7,10 @@ import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
 import { FeedbackCall } from '../types/FeedbackCall';
-import { BecomeProjectCoach } from '../types/ProjectCoach';
+import {
+  BecomeProjectCoach,
+  BecomeProjectCoachee,
+} from '../types/ProjectCoach';
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -732,8 +735,23 @@ export const axiosPostUserRoleProjectCoach = (
 ): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     axios
-      .post(`${apiURL}/user/${id}/role/projectcoach`, projectCoachData, {
+      .post(`${apiURL}/user/${id}/role/projectCoach`, projectCoachData, {
         headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => reject(err));
+  });
+};
+
+export const axiosPostUserRoleProjectCoachee = (
+  token: string,
+  id: string,
+  projectCoacheeData: BecomeProjectCoachee
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/user/${id}/projectCoachee`, projectCoacheeData, {
+        headers: token,
       })
       .then(() => resolve())
       .catch((err) => reject(err));
