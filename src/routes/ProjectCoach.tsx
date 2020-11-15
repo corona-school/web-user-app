@@ -152,26 +152,28 @@ const ProjectCoach: React.FC = () => {
       );
     })();
 
-    const currentMatches = userContext.user.projectMatches.map((match) => (
-      <React.Fragment key={match.uuid}>
-        <ProjectMatchCard
-          match={match}
-          type={userContext.user.type === 'student' ? 'coachee' : 'coach'}
-          handleDissolveMatch={() => {
-            modalContext.setOpenedModal(
-              `dissolveProjectMatchModal${match.uuid}`
-            );
-          }}
-        />
-        <DissolveMatchModal
-          identifier={`dissolveProjectMatchModal${match.uuid}`}
-          matchFirstname={match.firstname}
-          matchUuid={match.uuid}
-          ownType={userContext.user.type}
-          projectCoaching
-        />
-      </React.Fragment>
-    ));
+    const currentMatches = userContext.user.projectMatches
+      .filter((match) => !match.dissolved)
+      .map((match) => (
+        <React.Fragment key={match.uuid}>
+          <ProjectMatchCard
+            match={match}
+            type={userContext.user.type === 'student' ? 'coachee' : 'coach'}
+            handleDissolveMatch={() => {
+              modalContext.setOpenedModal(
+                `dissolveProjectMatchModal${match.uuid}`
+              );
+            }}
+          />
+          <DissolveMatchModal
+            identifier={`dissolveProjectMatchModal${match.uuid}`}
+            matchFirstname={match.firstname}
+            matchUuid={match.uuid}
+            ownType={userContext.user.type}
+            projectCoaching
+          />
+        </React.Fragment>
+      ));
 
     return (
       <div>
