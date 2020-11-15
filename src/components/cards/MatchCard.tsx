@@ -11,7 +11,6 @@ import {
   TuteeJufoParticipationIndicationMap,
   TutorJufoParticipationIndicationMap,
 } from '../../assets/jufoParticipationStatus';
-import { TuteeJufoParticipationIndication } from '../../types/ProjectCoach';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -120,8 +119,6 @@ export const ProjectMatchCard: React.FC<ProjectProps> = ({
   type,
   handleDissolveMatch,
 }) => {
-  console.log(match.jufoParticipation as TuteeJufoParticipationIndication);
-
   return (
     <CardBase
       highlightColor={setHighlightColor(match.dissolved)}
@@ -165,7 +162,7 @@ export const ProjectMatchCard: React.FC<ProjectProps> = ({
           </Text>
         </div>
         <div>
-          {type === 'coach' &&
+          {type === 'coachee' &&
             match.projectMemberCount &&
             `Projekt hat ${match.projectMemberCount} Teilnehmer.`}
         </div>

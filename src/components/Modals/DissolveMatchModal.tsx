@@ -96,7 +96,10 @@ const DissolveMatchModal: React.FC<{
   const { user, fetchUserData } = useContext(Context.User);
 
   const requestNewMatch = () => {
-    if (typeof user.matchesRequested !== 'number') return;
+    if (projectCoaching && typeof user.projectMatchesRequested !== 'number') {
+      return;
+    }
+    if (!projectCoaching && typeof user.matchesRequested !== 'number') return;
     putUser(credentials, {
       firstname: user.firstname,
       lastname: user.lastname,
@@ -129,6 +132,12 @@ const DissolveMatchModal: React.FC<{
     );
   };
 
+  const closeModal = () => {
+    if (newMatchWanted) requestNewMatch();
+    else fetchUserData();
+    modalContext.setOpenedModal(null);
+  };
+
   let reasonOptions: { [key: string]: string };
 
   if (projectCoaching && ownType === 'student')
@@ -149,7 +158,6 @@ const DissolveMatchModal: React.FC<{
           ? 'Die Zusammenarbeit wurde erfolgreich beendet!'
           : 'Schade, dass du die Zusammenarbeit beenden möchtest.'
       }
-      beforeClose={newMatchWanted ? requestNewMatch : fetchUserData}
     >
       {dissolved ? (
         <>
@@ -178,9 +186,7 @@ const DissolveMatchModal: React.FC<{
           {newMatchWanted !== null && (
             <>
               <div style={{ height: '20px', flexShrink: 0 }} />
-              <ButtonNonDestructive
-                onClick={() => modalContext.setOpenedModal(null)}
-              >
+              <ButtonNonDestructive onClick={closeModal}>
                 Bestätigen
               </ButtonNonDestructive>
             </>

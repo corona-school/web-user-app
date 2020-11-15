@@ -175,6 +175,18 @@ const ProjectCoach: React.FC = () => {
         </React.Fragment>
       ));
 
+    const dissolvedMatches = userContext.user.projectMatches
+      .filter((match) => match.dissolved)
+      .map((match) => (
+        <React.Fragment key={match.uuid}>
+          <ProjectMatchCard
+            match={match}
+            type={userContext.user.type === 'student' ? 'coachee' : 'coach'}
+            handleDissolveMatch={() => {}}
+          />
+        </React.Fragment>
+      ));
+
     return (
       <div>
         {openRequests}
@@ -186,6 +198,10 @@ const ProjectCoach: React.FC = () => {
           />
         )}
         {currentMatches}
+        {dissolvedMatches.length > 0 && (
+          <Title size="h2">Entfernte Zuordnungen</Title>
+        )}
+        {dissolvedMatches}
       </div>
     );
   };
