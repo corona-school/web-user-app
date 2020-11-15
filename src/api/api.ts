@@ -107,6 +107,27 @@ export const axiosDissolveMatch = (
   });
 };
 
+export const axiosDissolveProjectMatch = (
+  id: string,
+  token: string,
+  uuid: string,
+  reason?: number
+): Promise<void> => {
+  const url = `${apiURL}/user/${id}/projectMatches/${uuid}`;
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(url, {
+        headers: { token },
+        data: reason === undefined ? undefined : { reason },
+      })
+      .then(() => resolve())
+      .catch((error) => {
+        reject();
+        if (dev) console.error('dissolveProjectMatch failed:', error);
+      });
+  });
+};
+
 export const axiosRequestNewToken = (
   email: string,
   redirectTo: string

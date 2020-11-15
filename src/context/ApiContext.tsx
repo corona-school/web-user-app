@@ -21,6 +21,7 @@ import {
 interface IApiContext {
   getUserData: () => Promise<User>;
   dissolveMatch: (uuid: string, reason?: number) => Promise<void>;
+  dissolveProjectMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string, redirectTo: string) => Promise<void>;
   putUser: (user: User) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
@@ -104,6 +105,7 @@ interface IApiContext {
 export const ApiContext = React.createContext<IApiContext>({
   getUserData: () => Promise.reject(),
   dissolveMatch: (uuid, reason?) => Promise.reject(),
+  dissolveProjectMatch: (uuid, reason?) => Promise.reject(),
   requestNewToken: api.axiosRequestNewToken,
   putUser: (user) => Promise.reject(),
   putUserSubjects: (subjects) => Promise.reject(),
@@ -153,6 +155,9 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const dissolveMatch = (uuid: string, reason?: number): Promise<void> =>
     api.axiosDissolveMatch(id, token, uuid, reason);
+
+  const dissolveProjectMatch = (uuid: string, reason?: number): Promise<void> =>
+    api.axiosDissolveProjectMatch(id, token, uuid, reason);
 
   const putUser = (user: User): Promise<void> =>
     api.putUser({ id, token }, user);
@@ -302,6 +307,7 @@ export const ApiProvider: React.FC = ({ children }) => {
       value={{
         getUserData,
         dissolveMatch,
+        dissolveProjectMatch,
         requestNewToken: api.axiosRequestNewToken,
         putUser,
         putUserSubjects,
