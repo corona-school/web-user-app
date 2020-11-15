@@ -1,12 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Match } from '../../types';
+import { Match, ProjectMatch } from '../../types';
 import Button, { LinkButton } from '../button';
 import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import classes from './MatchCard.module.scss';
 import { Tag } from '../Tag';
+import {
+  TuteeJufoParticipationIndicationMap,
+  TutorJufoParticipationIndicationMap,
+} from '../../assets/jufoParticipationStatus';
+import { TuteeJufoParticipationIndication } from '../../types/ProjectCoach';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -21,6 +26,12 @@ interface Props {
   match: Match;
   type: 'pupil' | 'student';
   dissolved: boolean;
+  handleDissolveMatch: () => void;
+}
+
+interface ProjectProps {
+  match: ProjectMatch;
+  type: 'coachee' | 'coach';
   handleDissolveMatch: () => void;
 }
 
@@ -70,6 +81,95 @@ const MatchCard: React.FC<Props> = ({
           </Text>
         </div>
         {!dissolved && (
+          <ButtonContainer>
+            <LinkButton
+              color="#71DE5A"
+              backgroundColor="#F4FFF2"
+              href={match.jitsilink}
+              target="_blank"
+              style={{ margin: '4px' }}
+            >
+              <Icons.VideoChat />
+              Video-Chat
+            </LinkButton>
+            <LinkButton
+              href={`mailto: ${match.email}`}
+              style={{ margin: '4px' }}
+              color="#71DE5A"
+              backgroundColor="#F4FFF2"
+            >
+              <Icons.Contact />
+            </LinkButton>
+            <Button
+              onClick={handleDissolveMatch}
+              style={{ margin: '4px' }}
+              color="#71DE5A"
+              backgroundColor="#F4FFF2"
+            >
+              <Icons.Delete />
+            </Button>
+          </ButtonContainer>
+        )}
+      </div>
+    </CardBase>
+  );
+};
+
+export const ProjectMatchCard: React.FC<ProjectProps> = ({
+  match,
+  type,
+  handleDissolveMatch,
+}) => {
+  console.log(match.jufoParticipation as TuteeJufoParticipationIndication);
+
+  return (
+    <CardBase
+      highlightColor={setHighlightColor(match.dissolved)}
+      className={classes.baseContainer}
+    >
+      <div className={classes.container}>
+        <div className={classes.matchInfoContainer}>
+          <Title size="h4">
+            {match.firstname} {match.lastname}
+          </Title>
+          <Text className={classes.emailText}>{match.email}</Text>
+        </div>
+        <div className={classes.tagContainer}>
+          <Tag background="#4E555C" color="#ffffff">
+            {type === 'coachee' ? `${match.grade}. Klasse` : `Coach`}
+          </Tag>
+        </div>
+        <div className={classes.subjectContainer}>
+          <Text large>
+            <b>Projektbereich</b>
+          </Text>
+          <Text className={classes.emailText} large>
+            {match.projectFields.map((s, i) =>
+              i !== match.projectFields.length - 1 ? `${s}, ` : s
+            )}
+          </Text>
+        </div>
+        <div>
+          <Text>
+            {type === 'coachee'
+              ? `Nimmt an Jugend forscht teil: ${
+                  TuteeJufoParticipationIndicationMap[
+                    match.jufoParticipation.toUpperCase()
+                  ]
+                }`
+              : `War Jugend-forscht-Teilnehmer: ${
+                  TutorJufoParticipationIndicationMap[
+                    match.jufoParticipation.toUpperCase()
+                  ]
+                }`}
+          </Text>
+        </div>
+        <div>
+          {type === 'coach' &&
+            match.projectMemberCount &&
+            `Projekt hat ${match.projectMemberCount} Teilnehmer.`}
+        </div>
+        {!match.dissolved && (
           <ButtonContainer>
             <LinkButton
               color="#71DE5A"

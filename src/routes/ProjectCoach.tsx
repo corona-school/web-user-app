@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 import { ThemeContext } from 'styled-components';
-import { WorkInProgress } from '../assets/animations/work-in-progress/WorkInProgress';
+import { Empty } from 'antd';
 import Button from '../components/button';
 import { Text, Title } from '../components/Typography';
 import context from '../context';
@@ -9,10 +8,11 @@ import classes from './ProjectCoach.module.scss';
 import { LeftHighlightCard } from '../components/cards/FlexibleHighlightCard';
 import BecomeProjectCoachModal from '../components/Modals/BecomeProjectCoachModal';
 import BecomeProjectCoacheeModal from '../components/Modals/BecomeProjectCoacheeModal';
+import { UserContext } from '../context/UserContext';
+import { ProjectMatchCard } from '../components/cards/MatchCard';
 
 const ProjectCoach: React.FC = () => {
   const { user } = useContext(context.User);
-  const history = useHistory();
   const theme = useContext(ThemeContext);
   const modalContext = useContext(context.Modal);
 
@@ -84,33 +84,37 @@ const ProjectCoach: React.FC = () => {
     );
   }
 
+  const Matches = () => {
+    const userContext = useContext(UserContext);
+
+    const currentMatches = userContext.user.projectMatches.map((match) => (
+      <React.Fragment key={match.uuid}>
+        <ProjectMatchCard
+          match={match}
+          type={userContext.user.type === 'student' ? 'coachee' : 'coach'}
+          handleDissolveMatch={() => {}}
+        />
+      </React.Fragment>
+    ));
+
+    return (
+      <div>
+        <Title size="h2">Deine Zuordnungen</Title>
+        {currentMatches.length === 0 && (
+          <Empty
+            style={{ maxWidth: '1000px' }}
+            description="Du hast keine aktiven Zuordnungen"
+          />
+        )}
+        {currentMatches}
+      </div>
+    );
+  };
+
   return (
     <div className={classes.container}>
       <Title size="h1">Projektcoaching</Title>
-      <div className={classes.wipContainer}>
-        <WorkInProgress />
-        <Title size="h2" className={classes.title}>
-          Bald verfügbar
-        </Title>
-        {user.type === 'student' ? (
-          <Text large className={classes.text}>
-            Hier kannst du bald Schüler im 1:1-Projektcoaching unterstützen
-          </Text>
-        ) : (
-          <Text>
-            Hier kannst du bald Unterstützung für 1:1-Projektcoaching anfordern
-          </Text>
-        )}
-        <Button
-          backgroundColor="#FFF7DB"
-          color="#FFCC12"
-          onClick={() => {
-            history.push('/settings');
-          }}
-        >
-          Zu den Einstellungen
-        </Button>
-      </div>
+      <Matches />
     </div>
   );
 };
