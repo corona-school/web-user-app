@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Modal from '.';
 import Icons from '../../assets/icons';
 import {
+  coacheeReasonOptions,
+  coachReasonOptions,
   pupilReasonOptions,
   studentReasonOptions,
 } from '../../assets/dissolveMatchReasons';
@@ -79,7 +81,8 @@ const DissolveMatchModal: React.FC<{
   matchFirstname: string;
   matchUuid: string;
   ownType: 'pupil' | 'student';
-}> = ({ identifier, matchUuid, matchFirstname, ownType }) => {
+  projectCoaching: boolean;
+}> = ({ identifier, matchUuid, matchFirstname, ownType, projectCoaching }) => {
   const [supportSuccessful, setSupportSuccessful] = useState<boolean | null>(
     null
   );
@@ -97,7 +100,12 @@ const DissolveMatchModal: React.FC<{
     putUser(credentials, {
       firstname: user.firstname,
       lastname: user.lastname,
-      matchesRequested: Math.min(user.matchesRequested + 1, 2),
+      matchesRequested: projectCoaching
+        ? user.matchesRequested
+        : Math.min(user.matchesRequested + 1, 2),
+      projectMatchesRequested: projectCoaching
+        ? Math.min(user.projectMatchesRequested + 1, 2)
+        : user.projectMatchesRequested,
       lastUpdatedSettingsViaBlocker: user.lastUpdatedSettingsViaBlocker,
     })
       .catch((err) => {
@@ -108,14 +116,29 @@ const DissolveMatchModal: React.FC<{
       });
   };
 
-  const endCollaboration = () =>
-    apiContext.dissolveMatch(
+  const endCollaboration = () => {
+    if (projectCoaching) {
+      return apiContext.dissolveProjectMatch(
+        matchUuid,
+        supportSuccessful ? -1 : Number(reasonSelected)
+      );
+    }
+    return apiContext.dissolveMatch(
       matchUuid,
       supportSuccessful ? -1 : Number(reasonSelected)
     );
+  };
 
-  const reasonOptions =
-    ownType === 'pupil' ? pupilReasonOptions : studentReasonOptions;
+  let reasonOptions: { [key: string]: string };
+
+  if (projectCoaching && ownType === 'student')
+    reasonOptions = coachReasonOptions;
+  if (projectCoaching && ownType === 'pupil')
+    reasonOptions = coacheeReasonOptions;
+  if (!projectCoaching && ownType === 'student')
+    reasonOptions = studentReasonOptions;
+  if (!projectCoaching && ownType === 'pupil')
+    reasonOptions = pupilReasonOptions;
 
   return (
     <Modal
@@ -132,7 +155,12 @@ const DissolveMatchModal: React.FC<{
         <>
           <Question>
             <p className="question">
-              Möchtest du mit einem/einer neuen Lernpartner*in verbunden werden?
+              {projectCoaching &&
+                `Möchtest du mit einem neuen ${
+                  ownType === 'student' ? 'Coachee' : 'Coach'
+                } verbunden werden?`}
+              {!projectCoaching &&
+                'Möchtest du mit einem/einer neuen Lernpartner*in verbunden werden?'}
             </p>
             <div>
               <CheckboxButton

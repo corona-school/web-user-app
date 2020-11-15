@@ -11,6 +11,7 @@ import BecomeProjectCoacheeModal from '../components/Modals/BecomeProjectCoachee
 import { UserContext } from '../context/UserContext';
 import { ProjectMatchCard } from '../components/cards/MatchCard';
 import OpenRequestCard from '../components/cards/OpenRequestCard';
+import DissolveMatchModal from '../components/Modals/DissolveMatchModal';
 
 const ProjectCoach: React.FC = () => {
   const { user } = useContext(context.User);
@@ -156,7 +157,18 @@ const ProjectCoach: React.FC = () => {
         <ProjectMatchCard
           match={match}
           type={userContext.user.type === 'student' ? 'coachee' : 'coach'}
-          handleDissolveMatch={() => {}}
+          handleDissolveMatch={() => {
+            modalContext.setOpenedModal(
+              `dissolveProjectMatchModal${match.uuid}`
+            );
+          }}
+        />
+        <DissolveMatchModal
+          identifier={`dissolveProjectMatchModal${match.uuid}`}
+          matchFirstname={match.firstname}
+          matchUuid={match.uuid}
+          ownType={userContext.user.type}
+          projectCoaching
         />
       </React.Fragment>
     ));

@@ -85,6 +85,7 @@ const Matches: React.FC = () => {
         matchUuid={match.uuid}
         matchFirstname={match.firstname}
         ownType={userContext.user.type}
+        projectCoaching={false}
       />
     </React.Fragment>
   ));
