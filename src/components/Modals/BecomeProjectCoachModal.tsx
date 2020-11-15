@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
-import { Form, message, Radio, Select } from 'antd';
+import { Form, InputNumber, message, Radio, Select } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { ModalContext } from '../../context/ModalContext';
 import { ApiContext } from '../../context/ApiContext';
@@ -34,15 +34,17 @@ const BecomeProjectCoachModal = () => {
     const projectCoachData: BecomeProjectCoach = {
       wasJufoParticipant: onFinish.wasJufoParticipant,
       hasJufoCertificate: onFinish.hasJufoCertificate,
-      projectFields: onFinish.projectFields.map((p) => ({ name: p })),
+      projectFields: onFinish.projectFields.map((p) => ({
+        name: p.name,
+        min: p.minGrade,
+        max: p.maxGrade,
+      })),
     };
-
-    console.log(projectCoachData);
 
     api
       .postUserRoleProjectCoach(projectCoachData)
       .then(() => {
-        message.success('Du wurdest als Jugend-Forscht-Coach angemeldet.');
+        message.success('Du wurdest als Projektcoach angemeldet.');
         modalContext.setOpenedModal(null);
         userContext.fetchUserData();
       })
@@ -61,7 +63,7 @@ const BecomeProjectCoachModal = () => {
         isOpen={modalContext.openedModal === 'becomeProjectCoach'}
       >
         <div className={classes.modal}>
-          <Title size="h2">Jugend-Forscht-Coach werden</Title>
+          <Title size="h2">Projektcoach werden</Title>
           <ClipLoader size={100} color="#123abc" loading />
           <div className={classes.buttonContainer}>
             <Button backgroundColor="#F4F6FF" color="#4E6AE6">
@@ -79,7 +81,7 @@ const BecomeProjectCoachModal = () => {
       onBackgroundClick={() => modalContext.setOpenedModal(null)}
     >
       <div className={classes.modal}>
-        <Title size="h2">Jugend-Forscht-Coach werden</Title>
+        <Title size="h2">Projektcoach werden</Title>
         <Form
           onFinish={onFinish}
           className={classes.formContainer}
@@ -97,7 +99,6 @@ const BecomeProjectCoachModal = () => {
                   'Bitte gebe, ob du an Jugend Forscht teilgenommen hast',
               },
             ]}
-            initialValue={TutorJufoParticipationIndication.NO}
           >
             <Radio.Group>
               <Radio value={TutorJufoParticipationIndication.YES}>Ja</Radio>
@@ -107,46 +108,64 @@ const BecomeProjectCoachModal = () => {
               </Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item
-            className={classes.formItem}
-            label="Hast du für deine Teilnahme an Jugend Forscht einen Nachweis?"
-            name="hasJufoCertificate"
-            rules={[
-              {
-                required: true,
-                message:
-                  'Bitte gebe an, ob du einen Nachweis für deine Teilnahme bei Jugend Forscht hast.',
-              },
-            ]}
-            initialValue={false}
-          >
-            <Radio.Group>
-              {/* eslint-disable-next-line react/jsx-boolean-value */}
-              <Radio value={true}>Ja</Radio>
-              <Radio value={false}>Nein</Radio>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item
-            className={classes.formItem}
-            label="In welchem Themenbereich möchtest du Unterstützung anbieten?"
-            name="projectFields"
-            rules={[
-              {
-                required: true,
-                message:
-                  'Bitte trage ein, in welchen Themenbereichen du unterstützen möchtest.',
-              },
-            ]}
-          >
-            <Select
-              mode="multiple"
-              placeholder="Bitte wähle deine Themenbereiche aus."
-              options={Object.entries(ProjectField).map((e) => ({
-                label: e[1],
-                value: e[1],
-              }))}
-            />
-          </Form.Item>
+          <Form.List name="projectFields">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map((field) => (
+                  <>
+                    <Form.Item
+                      name={[field.name, 'name']}
+                      rules={[
+                        {
+                          required: true,
+                          message:
+                            'Bitte trage ein, in welchen Themenbereichen du unterstützen möchtest.',
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="Bitte wähle einen Themenbereich aus."
+                        options={Object.entries(ProjectField).map((e) => ({
+                          label: e[1],
+                          value: e[1],
+                        }))}
+                      />
+                    </Form.Item>
+                    Klassenstufe
+                    <Form.Item
+                      name={[field.name, 'minGrade']}
+                      rules={[
+                        {
+                          required: true,
+                          message:
+                            'Bitte trage ein, ab welcher Klassenstufe du Projektcoaching anbieten möchtest.',
+                        },
+                      ]}
+                    >
+                      <InputNumber min={1} max={13} />
+                    </Form.Item>
+                    bis
+                    <Form.Item
+                      name={[field.name, 'maxGrade']}
+                      rules={[
+                        {
+                          required: true,
+                          message:
+                            'Bitte trage ein, bis zu welcher Klassenstufe du Projektcoaching anbieten möchtest.',
+                        },
+                      ]}
+                    >
+                      <InputNumber min={1} max={13} />
+                    </Form.Item>
+                    <Button onClick={() => remove(field.name)}>
+                      Entfernen
+                    </Button>
+                  </>
+                ))}
+                <Button onClick={() => add()}>Bereich hinzufügen</Button>
+              </>
+            )}
+          </Form.List>
           <Form.Item>
             <div className={classes.buttonContainer}>
               <Button backgroundColor="#F4F6FF" color="#4E6AE6" type="submit">
