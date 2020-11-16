@@ -114,6 +114,7 @@ const BecomeProjectCoachModal = () => {
                 {fields.map((field) => (
                   <>
                     <Form.Item
+                      label="Bitte wähle einen Themenbereich aus."
                       name={[field.name, 'name']}
                       rules={[
                         {
@@ -131,38 +132,65 @@ const BecomeProjectCoachModal = () => {
                         }))}
                       />
                     </Form.Item>
-                    Klassenstufe
-                    <Form.Item
-                      name={[field.name, 'minGrade']}
-                      rules={[
-                        {
-                          required: true,
-                          message:
-                            'Bitte trage ein, ab welcher Klassenstufe du Projektcoaching anbieten möchtest.',
-                        },
-                      ]}
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignContent: 'center',
+                        justifyContent: 'space-between',
+                      }}
                     >
-                      <InputNumber min={1} max={13} />
-                    </Form.Item>
-                    bis
-                    <Form.Item
-                      name={[field.name, 'maxGrade']}
-                      rules={[
-                        {
-                          required: true,
-                          message:
-                            'Bitte trage ein, bis zu welcher Klassenstufe du Projektcoaching anbieten möchtest.',
-                        },
-                      ]}
-                    >
-                      <InputNumber min={1} max={13} />
-                    </Form.Item>
-                    <Button onClick={() => remove(field.name)}>
-                      Entfernen
-                    </Button>
+                      <Form.Item
+                        style={{ display: 'flex', flexDirection: 'row' }}
+                        label="Klassenstufe"
+                        rules={[
+                          {
+                            required: true,
+                            message:
+                              'Bitte trage ein, ab welcher Klassenstufe du Projektcoaching anbieten möchtest.',
+                          },
+                        ]}
+                      >
+                        <Form.Item
+                          name={[field.name, 'minGrade']}
+                          style={{ display: 'inline-block', marginLeft: '4px' }}
+                        >
+                          <InputNumber min={1} max={13} />
+                        </Form.Item>
+                        <div
+                          style={{ display: 'inline-block', margin: '0px 5px' }}
+                        >
+                          bis
+                        </div>
+                        <Form.Item
+                          name={[field.name, 'maxGrade']}
+                          style={{ display: 'inline-block' }}
+                        >
+                          <InputNumber min={1} max={13} />
+                        </Form.Item>
+                      </Form.Item>
+                      <Button
+                        backgroundColor="#F4F6FF"
+                        color="#4E6AE6"
+                        onClick={() => remove(field.name)}
+                        style={{
+                          display: 'inline-block',
+                          marginLeft: 'auto',
+                          marginRight: '0px',
+                        }}
+                      >
+                        Entfernen
+                      </Button>
+                    </div>
                   </>
                 ))}
-                <Button onClick={() => add()}>Bereich hinzufügen</Button>
+                <Button
+                  onClick={() => add()}
+                  backgroundColor="#F4F6FF"
+                  color="#4E6AE6"
+                >
+                  Bereich hinzufügen
+                </Button>
               </>
             )}
           </Form.List>
