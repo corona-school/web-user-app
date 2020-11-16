@@ -96,7 +96,7 @@ const BecomeProjectCoacheeModal = () => {
           >
             <Select
               mode="multiple"
-              placeholder="Bitte wähle einen Themenbereich aus."
+              placeholder="Bitte wähle deine Themenbereiche aus."
               options={Object.values(ProjectField).map((e) => ({
                 label: e,
                 value: e,
@@ -114,7 +114,13 @@ const BecomeProjectCoacheeModal = () => {
               },
             ]}
           >
-            <Slider min={1} max={3} tooltipVisible />
+            <Slider
+              min={1}
+              max={3}
+              tooltipVisible
+              tooltipPlacement="right"
+              style={{ maxWidth: '300px' }}
+            />
           </Form.Item>
           <Form.Item
             className={classes.formItem}
@@ -127,14 +133,14 @@ const BecomeProjectCoacheeModal = () => {
               },
             ]}
           >
-            <Radio.Group>
+            <Radio.Group style={{ display: 'flex', flexDirection: 'column' }}>
               <Radio value={TuteeJufoParticipationIndication.YES}>Ja</Radio>
               <Radio value={TuteeJufoParticipationIndication.NO}>Nein</Radio>
               <Radio value={TuteeJufoParticipationIndication.UNSURE}>
                 Ich bin mir unsicher.
               </Radio>
               <Radio value={TuteeJufoParticipationIndication.NEVERHEARD}>
-                Ich habe noch nie von Jugend forsch gehört.
+                Ich habe noch nie von Jugend forscht gehört.
               </Radio>
             </Radio.Group>
           </Form.Item>
