@@ -32,6 +32,7 @@
   flex-grow: 1;
   display: flex;
   justify-content: center;
+  min-width: 75px;
 }
 
 .subjectContainer {
@@ -41,4 +42,8 @@
   .emailText {
     margin-top: -16px !important;
   }
+}
+
+.projectInfoContainer {
+  flex-grow: 1;
 }

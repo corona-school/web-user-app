@@ -8,9 +8,9 @@ import { Text, Title } from '../Typography';
 import classes from './MatchCard.module.scss';
 import { Tag } from '../Tag';
 import {
-  TuteeJufoParticipationIndicationMap,
-  TutorJufoParticipationIndicationMap,
-} from '../../assets/jufoParticipationStatus';
+  TuteeJufoParticipationIndication,
+  TutorJufoParticipationIndication,
+} from '../../types/ProjectCoach';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -138,7 +138,7 @@ export const ProjectMatchCard: React.FC<ProjectProps> = ({
         </div>
         <div className={classes.subjectContainer}>
           <Text large>
-            <b>Projektbereich</b>
+            <b>Projektbereiche</b>
           </Text>
           <Text className={classes.emailText} large>
             {match.projectFields.map((s, i) =>
@@ -146,26 +146,29 @@ export const ProjectMatchCard: React.FC<ProjectProps> = ({
             )}
           </Text>
         </div>
-        <div>
-          <Text>
-            {type === 'coachee'
-              ? `Nimmt an Jugend forscht teil: ${
-                  TuteeJufoParticipationIndicationMap[
-                    match.jufoParticipation.toUpperCase()
-                  ]
-                }`
-              : `War Jugend-forscht-Teilnehmer: ${
-                  TutorJufoParticipationIndicationMap[
-                    match.jufoParticipation.toUpperCase()
-                  ]
-                }`}
-          </Text>
-        </div>
-        <div>
-          {type === 'coachee' &&
-            match.projectMemberCount &&
-            `Projekt hat ${match.projectMemberCount} Teilnehmer.`}
-        </div>
+        {type === 'coachee' && (
+          <div className={classes.projectInfoContainer}>
+            {match.jufoParticipation ===
+            TuteeJufoParticipationIndication.YES ? (
+              <Tag color="#FFFFFF" background="#71DE5A">
+                Nimmt an Jugend forscht teil
+              </Tag>
+            ) : (
+              <Tag color="#FFFFFF" background="#DE2C18">
+                Nimmt nicht an Jugend forscht teil
+              </Tag>
+            )}
+            <Tag background="#4E555C" color="#ffffff">
+              {`${match.projectMemberCount} Projektteilnehmer*innen`}
+            </Tag>
+          </div>
+        )}
+        {type === 'coach' &&
+          match.jufoParticipation === TutorJufoParticipationIndication.YES && (
+            <Tag color="#FFFFFF" background="#71DE5A">
+              Hat an Jugend forscht teilgenommen
+            </Tag>
+          )}
         {!match.dissolved && (
           <ButtonContainer>
             <LinkButton

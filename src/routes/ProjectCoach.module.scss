@@ -32,4 +32,14 @@
       color: white;
     }
   }
+
+  .containerRequests {
+    min-height: 200px;
+    margin-bottom: 20px;
+
+    .openRequests {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
 }

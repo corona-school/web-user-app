@@ -60,10 +60,13 @@ const OpenRequestCard: React.FC<Props> = ({
       <CardBase highlightColor="#FCD95C" className={classes.pendingContainer}>
         <Title size="h4">Offene Anfrage</Title>
         <Text>
-          {`Wir sind auf der Suche nach einem ${
-            projectCoaching ? 'Coach' : 'bzw. einer Lernpartner*in'
-          } für dich
+          {projectCoaching &&
+            `Wir sind auf der Suche nach einem ${
+              user.type === 'student' ? 'Coachingpartner' : 'Coach'
+            } für dich
             und werden uns schnellstmöglich bei dir melden.`}
+          {!projectCoaching &&
+            'Wir sind auf der Suche nach einem bzw. einer Lernpartner*in für dich und werden uns schnellstmöglich bei dir melden.'}
         </Text>
         <div className={classes.buttonContainer}>
           <Button

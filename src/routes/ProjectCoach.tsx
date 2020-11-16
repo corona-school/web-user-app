@@ -18,73 +18,80 @@ const ProjectCoach: React.FC = () => {
   const theme = useContext(ThemeContext);
   const modalContext = useContext(context.Modal);
 
-  if (!user.isProjectCoach && user.isTutor) {
+  const BecomeProjectCoach = () => {
     return (
-      <div className={classes.container}>
-        <Title size="h1">Projektcoaching</Title>
-        <LeftHighlightCard highlightColor={theme.color.cardHighlightYellow}>
-          <Title size="h3">Lorem Ipsum</Title>
-          <Text>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-            et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-            no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-            dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-            voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-            Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-            dolor sit amet.
-          </Text>
-          <Button
-            className={classes.buttonParticipate}
-            onClick={() => modalContext.setOpenedModal('becomeProjectCoach')}
+      <LeftHighlightCard highlightColor={theme.color.cardHighlightYellow}>
+        <Title size="h3">
+          Schüler*innen bei außerschulischen Projekten unterstützen
+        </Title>
+        <Text>
+          Immer noch ist der Schulalltag aufgrund der Corona-Pandemie stark
+          eingeschränkt. Dabei fehlen den Schulen vor allem Kapazitäten zur
+          Förderung zusätzlicher Projekte wie beispielsweise im Rahmen von
+          Jugend forscht, dem bekanntesten Schüler- und Jugendwettbewerb im
+          Bereich Naturwissenschaften und Technik. Daher wollen der Corona
+          School e.V. gemeinsam mit der Stiftung Jugend Forscht e.V. nun auch
+          Schüler*innen im Rahmen des 1:1-Projektcoachings bei Ihren Projekten
+          mit Rat und Tat zur Seite stehen. Zusätzlich können Gruppenkurse
+          angeboten und bei speziellen Fragen auf eine Expertendatenbank
+          zurückgegriffen werden. Und genau dafür suchen wir dich! Wie bei der
+          1:1-Lernunterstützung kannst du ein oder mehrere Projekte individuell
+          begleiten und so durch dein Wissen Schüler*innen in ihrer Neugier Mehr
+          Mehr Informationen findest du{' '}
+          <a
+            href="https://www.corona-school.de/1-zu-1-projektcoaching"
+            style={{ color: '#0645AD' }}
           >
-            Projektcoach werden
-          </Button>
-        </LeftHighlightCard>
-        <BecomeProjectCoachModal />
-      </div>
+            hier
+          </a>
+          .
+        </Text>
+        <Button
+          className={classes.buttonParticipate}
+          onClick={() => modalContext.setOpenedModal('becomeProjectCoach')}
+        >
+          Jetzt 1:1-Projektcoach werden
+        </Button>
+      </LeftHighlightCard>
     );
-  }
+  };
 
-  if (!user.isProjectCoachee && user.isPupil) {
+  const BecomeProjectCoachee = () => {
     return (
-      <div className={classes.container}>
-        <Title size="h1">Projektcoaching</Title>
-        <LeftHighlightCard highlightColor={theme.color.cardHighlightYellow}>
-          <Title size="h3">Lorem Ipsum</Title>
-          <Text>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-            et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-            no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-            dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-            voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-            Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-            dolor sit amet.
-          </Text>
-          <Button
-            className={classes.buttonParticipate}
-            onClick={() => modalContext.setOpenedModal('becomeProjectCoachee')}
+      <LeftHighlightCard highlightColor={theme.color.cardHighlightYellow}>
+        <Title size="h3">Unterstützung bei Projekten bekommen</Title>
+        <Text>
+          Du hast eine Idee für ein Projekt oder interessierst dich für ein
+          Thema? Bekomme auch bei diesen außerschulischen Projekten
+          Unterstützung und melde dich für das 1:1-Projektcoaching an.
+          funktioniert so: Nach Auswahl des Fachbereichs teilen wir dir eine
+          Expert*in zu, die dich in Ideenfindung, Umsetzung, Präsentation und
+          mehr unterstützt. Profitiere von der Erfahrung der älteren Coach*in
+          und bringe dein Projekt noch weiter nach vorne! Mehr Informationen
+          findest du{' '}
+          <a
+            href="https://www.corona-school.de/1-zu-1-projektcoaching"
+            style={{ color: '#0645AD' }}
           >
-            Unterstützung anfordern
-          </Button>
-        </LeftHighlightCard>
-        <BecomeProjectCoacheeModal />
-      </div>
+            hier
+          </a>
+          . Übrigens: Das 1:1-Projektcoaching entstand aus einer Kooperation mit
+          der Stiftung Jugend forscht, der übrigens auch den Wettbewerb{' '}
+          <a href="https://www.jugend-forscht.de/" style={{ color: '#0645AD' }}>
+            {' '}
+            Jugend forscht
+          </a>{' '}
+          veranstaltet, bei dem du, wenn du möchtest, dein Projekt auch kannst.
+        </Text>
+        <Button
+          className={classes.buttonParticipate}
+          onClick={() => modalContext.setOpenedModal('becomeProjectCoachee')}
+        >
+          Jetzt anmelden
+        </Button>
+      </LeftHighlightCard>
     );
-  }
+  };
 
   const Matches = () => {
     const userContext = useContext(UserContext);
@@ -188,8 +195,8 @@ const ProjectCoach: React.FC = () => {
       ));
 
     return (
-      <div>
-        {openRequests}
+      <div className={classes.containerRequests}>
+        <div className={classes.openRequests}>{openRequests}</div>
         <Title size="h2">Deine Zuordnungen</Title>
         {currentMatches.length === 0 && (
           <Empty
@@ -208,8 +215,12 @@ const ProjectCoach: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      <Title size="h1">Projektcoaching</Title>
-      <Matches />
+      <Title size="h1">1:1-Projektcoaching</Title>
+      {!user.isProjectCoach && user.isTutor && <BecomeProjectCoach />}
+      {!user.isProjectCoachee && user.isPupil && <BecomeProjectCoachee />}
+      {(user.isProjectCoach || user.isProjectCoachee) && <Matches />}
+      <BecomeProjectCoachModal />
+      <BecomeProjectCoacheeModal />
     </div>
   );
 };
