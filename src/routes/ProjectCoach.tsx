@@ -98,7 +98,10 @@ const ProjectCoach: React.FC = () => {
 
     const openRequests = (() => {
       if (userContext.user.type === 'pupil') {
-        if (userContext.user.projectMatches.length === 1) {
+        if (
+          userContext.user.projectMatches.filter((match) => !match.dissolved)
+            .length === 1
+        ) {
           return (
             <Empty description="Du hast im Moment keine offenen Anfragen." />
           );
@@ -112,7 +115,7 @@ const ProjectCoach: React.FC = () => {
             />
           );
         }
-        if (userContext.user.matchesRequested >= 1) {
+        if (userContext.user.projectMatchesRequested >= 1) {
           return (
             <>
               {[...Array(userContext.user.projectMatchesRequested).keys()].map(
