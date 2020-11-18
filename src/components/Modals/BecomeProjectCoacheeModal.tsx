@@ -137,10 +137,7 @@ const BecomeProjectCoacheeModal = () => {
               <Radio value={TuteeJufoParticipationIndication.YES}>Ja</Radio>
               <Radio value={TuteeJufoParticipationIndication.NO}>Nein</Radio>
               <Radio value={TuteeJufoParticipationIndication.UNSURE}>
-                Ich bin mir unsicher.
-              </Radio>
-              <Radio value={TuteeJufoParticipationIndication.NEVERHEARD}>
-                Ich habe noch nie von Jugend forscht gehört.
+                Weiß nicht.
               </Radio>
             </Radio.Group>
           </Form.Item>
