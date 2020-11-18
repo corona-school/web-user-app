@@ -149,13 +149,9 @@ export const ProjectMatchCard: React.FC<ProjectProps> = ({
         {type === 'coachee' && (
           <div className={classes.projectInfoContainer}>
             {match.jufoParticipation ===
-            TuteeJufoParticipationIndication.YES ? (
+              TuteeJufoParticipationIndication.YES && (
               <Tag color="#FFFFFF" background="#71DE5A">
                 Nimmt an Jugend forscht teil
-              </Tag>
-            ) : (
-              <Tag color="#FFFFFF" background="#DE2C18">
-                Nimmt nicht an Jugend forscht teil
               </Tag>
             )}
             <Tag background="#4E555C" color="#ffffff">

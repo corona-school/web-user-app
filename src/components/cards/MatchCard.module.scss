@@ -45,5 +45,8 @@
 }
 
 .projectInfoContainer {
-  flex-grow: 1;
+  flex-grow: 2;
+  //width: 200px;
+  display: flex;
+  flex-direction: column;
 }

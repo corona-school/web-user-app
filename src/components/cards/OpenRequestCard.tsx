@@ -106,9 +106,9 @@ const OpenRequestCard: React.FC<Props> = ({
               ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen möchtest.'
               : `Hier kannst du ${
                   projectCoaching
-                    ? 'einen neuen Coach'
-                    : 'eine*n neue*n Student*in'
-                } anfordern, die dich beim Lernen unterstützt.`}
+                    ? 'einen neuen Coach anfordern, der'
+                    : 'eine*n neue*n Student*in anfordern, die'
+                }  dich beim Lernen unterstützt.`}
           </Text>
         )}
       </CardNewBase>
