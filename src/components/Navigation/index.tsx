@@ -23,6 +23,7 @@ const Navigation: React.FC<Props> = (props) => {
       type,
       screeningStatus,
       instructorScreeningStatus,
+      projectCoachingScreeningStatus,
       isInstructor,
       isProjectCoach,
       isParticipant,
@@ -93,7 +94,10 @@ const Navigation: React.FC<Props> = (props) => {
             to="/project-coaching"
             icon={<Icons.ProjectCoachingIcon />}
             // type === 'pupil' || screeningStatus === ScreeningStatus.Accepted
-            active
+            active={
+              type === 'pupil' ||
+              projectCoachingScreeningStatus === ScreeningStatus.Accepted
+            }
             onClick={() => props.setMenuOpen(false)}
           >
             Projektcoaching
