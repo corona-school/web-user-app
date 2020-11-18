@@ -12,6 +12,7 @@ import { UserContext } from '../context/UserContext';
 import { ProjectMatchCard } from '../components/cards/MatchCard';
 import OpenRequestCard from '../components/cards/OpenRequestCard';
 import DissolveMatchModal from '../components/Modals/DissolveMatchModal';
+import { ScreeningStatus } from '../types';
 
 const ProjectCoach: React.FC = () => {
   const { user } = useContext(context.User);
@@ -221,7 +222,9 @@ const ProjectCoach: React.FC = () => {
       <Title size="h1">1:1-Projektcoaching</Title>
       {!user.isProjectCoach && user.isTutor && <BecomeProjectCoach />}
       {!user.isProjectCoachee && user.isPupil && <BecomeProjectCoachee />}
-      {(user.isProjectCoach || user.isProjectCoachee) && <Matches />}
+      {((user.isProjectCoach &&
+        user.projectCoachingScreeningStatus === ScreeningStatus.Accepted) ||
+        user.isProjectCoachee) && <Matches />}
       <BecomeProjectCoachModal />
       <BecomeProjectCoacheeModal />
     </div>
