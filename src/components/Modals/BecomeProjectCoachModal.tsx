@@ -90,13 +90,13 @@ const BecomeProjectCoachModal = () => {
         >
           <Form.Item
             className={classes.formItem}
-            label="Hast du in der Vergangenheit an Jugend Forscht teilgenommen?"
+            label="Hast du in der Vergangenheit an Jugend forscht teilgenommen?"
             name="wasJufoParticipant"
             rules={[
               {
                 required: true,
                 message:
-                  'Bitte gebe, ob du an Jugend Forscht teilgenommen hast',
+                  'Bitte gebe, ob du an Jugend forscht teilgenommen hast',
               },
             ]}
           >
@@ -110,9 +110,14 @@ const BecomeProjectCoachModal = () => {
           </Form.Item>
           <Form.Item
             className={classes.formItem}
-            label="Wähle die Bereiche aus, in denen du Unterstützung anbieten Möchtest."
+            label="Wähle die Bereiche aus, in denen du Unterstützung anbieten möchtest."
             name="projectFields"
-            rules={[{ required: true }]}
+            rules={[
+              {
+                required: true,
+                message: 'Bitte wähle mindestens einen Projektbereich aus.',
+              },
+            ]}
           >
             <SelectProjectList />
           </Form.Item>

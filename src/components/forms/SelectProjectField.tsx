@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { Select } from 'antd';
 import { Option } from 'antd/es/mentions';
 import { ProjectField, ProjectInformation } from '../../types';
-import IconButton from '../button/IconButton';
+
+import classes from './SelectProjectField.module.scss';
+import Button from '../button';
+import Icons from '../../assets/icons';
 
 interface SelectProjectFieldProps {
   projectField: ProjectInformation;
@@ -38,7 +41,7 @@ const SelectProjectField: React.FC<SelectProjectFieldProps> = ({
   };
 
   return (
-    <div key={projectField.name}>
+    <div key={projectField.name} className={classes.fieldContainer}>
       <Select
         value={projectField.name}
         onChange={(value) => changeProjectFieldName(projectField, value)}
@@ -49,9 +52,8 @@ const SelectProjectField: React.FC<SelectProjectFieldProps> = ({
           </Option>
         ))}
       </Select>
-      <div>
-        <div>
-          Klasse
+      <div className={classes.gradeContainer}>
+        <div className={classes.selectContainer}>
           <Select
             value={`${projectField.min}`}
             onChange={(e) => handleOnChangeMinGrade(Number(e))}
@@ -70,7 +72,7 @@ const SelectProjectField: React.FC<SelectProjectFieldProps> = ({
             <option value="12">12. Klasse</option>
             <option value="13">13. Klasse</option>
           </Select>
-          -
+          <div style={{ margin: '0px 8px' }}>-</div>
           <Select
             value={`${projectField.max}`}
             onChange={(e) => handleOnChangeMaxGrade(Number(e))}
@@ -90,15 +92,15 @@ const SelectProjectField: React.FC<SelectProjectFieldProps> = ({
             <option value="13">13. Klasse</option>
           </Select>
         </div>
-        <div>
-          <IconButton
-            icon="Delete"
-            onClick={(e) => {
-              e.stopPropagation();
-              remove(projectField);
-            }}
-          />
-        </div>
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            remove(projectField);
+          }}
+          className={classes.deleteButton}
+        >
+          <Icons.Delete className={classes.deleteIcon} />
+        </Button>
       </div>
     </div>
   );
@@ -152,17 +154,17 @@ const SelectProjectList: React.FC<SelectProjectListProps> = ({
   };
 
   const addProjectField = () => {
-    const remainingProjectFields = Object.keys(ProjectField).find(
+    const remainingProjectFields = Object.values(ProjectField).find(
       (n) => !projectFields.find((i) => i.name === n)
     );
     if (remainingProjectFields) {
       setProjectFields([
         ...projectFields,
-        { name: ProjectField[remainingProjectFields].name, min: 1, max: 13 },
+        { name: remainingProjectFields, min: 1, max: 13 },
       ]);
       triggerChange([
         ...projectFields,
-        { name: ProjectField[remainingProjectFields].name, min: 1, max: 13 },
+        { name: remainingProjectFields, min: 1, max: 13 },
       ]);
     }
   };
@@ -186,15 +188,15 @@ const SelectProjectList: React.FC<SelectProjectListProps> = ({
           remove={removeProjectField}
         />
       ))}
-      <div>
-        <IconButton
-          icon="Add"
-          onClick={(e) => {
-            e.preventDefault();
-            addProjectField();
-          }}
-        />
-      </div>
+      <Button
+        onClick={(e) => {
+          e.preventDefault();
+          addProjectField();
+        }}
+        className={classes.addButton}
+      >
+        <Icons.Add className={classes.addIcon} />
+      </Button>
     </div>
   );
 };
