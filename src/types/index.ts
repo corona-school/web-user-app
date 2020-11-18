@@ -1,6 +1,8 @@
 import { subjectOptions } from '../assets/subjects';
-import { TutorJufoParticipationIndication } from '../../../web-screening-admin/src/types/Student';
-import { TuteeJufoParticipationIndication } from '../../../backend/common/jufo/participationIndication';
+import {
+  TuteeJufoParticipationIndication,
+  TutorJufoParticipationIndication,
+} from './ProjectCoach';
 
 export enum ProjectField {
   ARBEITSWELT = 'Arbeitswelt',
