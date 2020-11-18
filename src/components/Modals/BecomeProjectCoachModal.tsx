@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
-import { Form, InputNumber, message, Radio, Select } from 'antd';
+import { Form, message, Radio } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { ModalContext } from '../../context/ModalContext';
 import { ApiContext } from '../../context/ApiContext';
@@ -14,6 +14,7 @@ import {
 import Button from '../button';
 import { UserContext } from '../../context/UserContext';
 import { dev } from '../../api/config';
+import SelectProjectList from '../forms/SelectProjectField';
 import { ProjectField } from '../../types';
 
 const BecomeProjectCoachModal = () => {
@@ -32,14 +33,8 @@ const BecomeProjectCoachModal = () => {
     const projectCoachData: BecomeProjectCoach = {
       wasJufoParticipant: onFinish.wasJufoParticipant,
       hasJufoCertificate: onFinish.hasJufoCertificate,
-      projectFields: onFinish.projectFields.map((p) => ({
-        name: p.name,
-        min: p.minGrade,
-        max: p.maxGrade,
-      })),
+      projectFields: onFinish.projectFields,
     };
-
-    console.log(projectCoachData);
 
     api
       .postUserRoleProjectCoach(projectCoachData)
@@ -87,7 +82,11 @@ const BecomeProjectCoachModal = () => {
           className={classes.formContainer}
           layout="vertical"
           name="basic"
-          initialValues={{ projectFields: [''] }}
+          initialValues={{
+            projectFields: [
+              { name: ProjectField.ARBEITSWELT, min: 1, max: 13 },
+            ],
+          }}
         >
           <Form.Item
             className={classes.formItem}
@@ -109,81 +108,14 @@ const BecomeProjectCoachModal = () => {
               </Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.List name="projectFields">
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map((field) => (
-                  <>
-                    <Form.Item
-                      label="Bitte wähle einen Themenbereich aus."
-                      name={[field.name, 'name']}
-                      rules={[
-                        {
-                          required: true,
-                          message:
-                            'Bitte trage ein, in welchen Themenbereichen du unterstützen möchtest.',
-                        },
-                      ]}
-                    >
-                      <Select
-                        placeholder="Bitte wähle einen Themenbereich aus."
-                        options={Object.values(ProjectField).map((e) => ({
-                          label: e,
-                          value: e,
-                        }))}
-                      />
-                    </Form.Item>
-                    <div className={classes.gradeSelection}>
-                      <Form.Item
-                        rules={[
-                          {
-                            required: true,
-                            message:
-                              'Bitte trage ein, ab welcher Klassenstufe du Projektcoaching anbieten möchtest.',
-                          },
-                        ]}
-                      >
-                        <div
-                          style={{ display: 'inline-block', margin: '0px 5px' }}
-                        >
-                          Klassenstufe
-                        </div>
-                        <Form.Item
-                          name={[field.name, 'minGrade']}
-                          style={{ display: 'inline-block', marginLeft: '4px' }}
-                        >
-                          <InputNumber min={1} max={13} />
-                        </Form.Item>
-                        <div
-                          style={{ display: 'inline-block', margin: '0px 5px' }}
-                        >
-                          bis
-                        </div>
-                        <Form.Item
-                          name={[field.name, 'maxGrade']}
-                          style={{ display: 'inline-block' }}
-                        >
-                          <InputNumber min={1} max={13} />
-                        </Form.Item>
-                      </Form.Item>
-                      {field.name !== 0 && (
-                        <div className={classes.removeButtonContainer}>
-                          <Button onClick={() => remove(field.name)}>
-                            Entfernen
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </>
-                ))}
-                <div className={classes.addButtonContainer}>
-                  <Button onClick={() => add()}>
-                    Weiteren Bereich auswählen
-                  </Button>
-                </div>
-              </>
-            )}
-          </Form.List>
+          <Form.Item
+            className={classes.formItem}
+            label="Wähle die Bereiche aus, in denen du Unterstützung anbieten Möchtest."
+            name="projectFields"
+            rules={[{ required: true }]}
+          >
+            <SelectProjectList />
+          </Form.Item>
           <Form.Item>
             <div className={classes.buttonContainer}>
               <Button type="submit">Anmelden</Button>
