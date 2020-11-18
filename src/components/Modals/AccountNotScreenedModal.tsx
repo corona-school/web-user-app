@@ -39,7 +39,7 @@ const AccountNotScreenedModal = () => {
         </Title>
         <Text className={classes.text}>
           Wir möchten dich gerne persönlich kennenlernen und zu einem Gespräch
-          Gespräch einladen, in welchem du auch deine Fragen loswerden kannst.
+          einladen, in welchem du auch deine Fragen loswerden kannst.
         </Text>
         <div className={classes.buttonContainer}>
           <Button
