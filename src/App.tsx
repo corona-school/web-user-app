@@ -157,8 +157,8 @@ const App: React.FC = () => {
             path="/project-coaching"
             active={
               userContext.user.type === 'pupil' ||
-              userContext.user.isProjectCoach ||
-              userContext.user.isTutor
+              userContext.user.projectCoachingScreeningStatus ===
+                ScreeningStatus.Accepted
             }
           >
             <ProjectCoach />
