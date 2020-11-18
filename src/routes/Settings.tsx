@@ -29,9 +29,13 @@ const Settings: React.FC = () => {
 
   useEffect(() => {
     if (
-      userContext.user.screeningStatus === ScreeningStatus.Unscreened ||
+      (userContext.user.isTutor &&
+        userContext.user.screeningStatus === ScreeningStatus.Unscreened) ||
       (userContext.user.isInstructor &&
         userContext.user.instructorScreeningStatus ===
+          ScreeningStatus.Unscreened) ||
+      (userContext.user.isProjectCoach &&
+        userContext.user.projectCoachingScreeningStatus ===
           ScreeningStatus.Unscreened)
     ) {
       setOpenedModal('accountNotScreened');
