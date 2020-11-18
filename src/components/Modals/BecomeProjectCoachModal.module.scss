@@ -8,6 +8,35 @@
 
   align-items: center;
 
+  .addButtonContainer {
+    justify-content: flex-end;
+    align-items: flex-start;
+    display: flex;
+    button {
+      margin: 8px;
+      color: #F0CE52;
+      background-color: #FFF7DB
+
+    }
+  }
+
+  .removeButtonContainer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    button {
+      color: #F0CE52;
+      background-color: #FFF7DB
+    }
+  }
+
+  .gradeSelection {
+    display: flex;
+    flex-direction: row;
+    align-content: flex-start;
+    justify-content: space-between;
+  }
+
   .buttonContainer {
     justify-content: center;
     align-items: center;
@@ -15,9 +44,13 @@
     display: flex;
     button {
       margin: 8px;
+      color: #F0CE52;
+      background-color: #FFF7DB
     }
   }
 }
+
+
 
 .formContainer {
   width: 100%;

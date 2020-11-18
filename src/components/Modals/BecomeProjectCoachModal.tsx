@@ -24,8 +24,6 @@ const BecomeProjectCoachModal = () => {
   const api = useContext(ApiContext);
 
   const onFinish = (onFinish) => {
-    console.log('On finish');
-
     if (onFinish.projectFields === 0) {
       return;
     }
@@ -40,6 +38,8 @@ const BecomeProjectCoachModal = () => {
         max: p.maxGrade,
       })),
     };
+
+    console.log(projectCoachData);
 
     api
       .postUserRoleProjectCoach(projectCoachData)
@@ -87,6 +87,7 @@ const BecomeProjectCoachModal = () => {
           className={classes.formContainer}
           layout="vertical"
           name="basic"
+          initialValues={{ projectFields: [''] }}
         >
           <Form.Item
             className={classes.formItem}
@@ -132,17 +133,8 @@ const BecomeProjectCoachModal = () => {
                         }))}
                       />
                     </Form.Item>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignContent: 'center',
-                        justifyContent: 'space-between',
-                      }}
-                    >
+                    <div className={classes.gradeSelection}>
                       <Form.Item
-                        style={{ display: 'flex', flexDirection: 'row' }}
-                        label="Klassenstufe"
                         rules={[
                           {
                             required: true,
@@ -151,6 +143,11 @@ const BecomeProjectCoachModal = () => {
                           },
                         ]}
                       >
+                        <div
+                          style={{ display: 'inline-block', margin: '0px 5px' }}
+                        >
+                          Klassenstufe
+                        </div>
                         <Form.Item
                           name={[field.name, 'minGrade']}
                           style={{ display: 'inline-block', marginLeft: '4px' }}
@@ -169,36 +166,27 @@ const BecomeProjectCoachModal = () => {
                           <InputNumber min={1} max={13} />
                         </Form.Item>
                       </Form.Item>
-                      <Button
-                        backgroundColor="#F4F6FF"
-                        color="#4E6AE6"
-                        onClick={() => remove(field.name)}
-                        style={{
-                          display: 'inline-block',
-                          marginLeft: 'auto',
-                          marginRight: '0px',
-                        }}
-                      >
-                        Entfernen
-                      </Button>
+                      {field.name !== 0 && (
+                        <div className={classes.removeButtonContainer}>
+                          <Button onClick={() => remove(field.name)}>
+                            Entfernen
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </>
                 ))}
-                <Button
-                  onClick={() => add()}
-                  backgroundColor="#F4F6FF"
-                  color="#4E6AE6"
-                >
-                  Bereich hinzufügen
-                </Button>
+                <div className={classes.addButtonContainer}>
+                  <Button onClick={() => add()}>
+                    Weiteren Bereich auswählen
+                  </Button>
+                </div>
               </>
             )}
           </Form.List>
           <Form.Item>
             <div className={classes.buttonContainer}>
-              <Button backgroundColor="#F4F6FF" color="#4E6AE6" type="submit">
-                Anmelden
-              </Button>
+              <Button type="submit">Anmelden</Button>
             </div>
           </Form.Item>
         </Form>
