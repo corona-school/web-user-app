@@ -7,6 +7,11 @@ import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
 import { FeedbackCall } from '../types/FeedbackCall';
+import {
+  ApiProjectFieldInfo,
+  BecomeProjectCoach,
+  BecomeProjectCoachee,
+} from '../types/ProjectCoach';
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -50,6 +55,7 @@ export const putUser = (
     lastname?: string;
     grade?: number;
     matchesRequested?: number;
+    projectMatchesRequested?: number;
     state?: string;
     university?: string;
     schoolType?: string;
@@ -102,6 +108,27 @@ export const axiosDissolveMatch = (
   });
 };
 
+export const axiosDissolveProjectMatch = (
+  id: string,
+  token: string,
+  uuid: string,
+  reason?: number
+): Promise<void> => {
+  const url = `${apiURL}/user/${id}/projectMatches/${uuid}`;
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(url, {
+        headers: { token },
+        data: reason === undefined ? undefined : { reason },
+      })
+      .then(() => resolve())
+      .catch((error) => {
+        reject();
+        if (dev) console.error('dissolveProjectMatch failed:', error);
+      });
+  });
+};
+
 export const axiosRequestNewToken = (
   email: string,
   redirectTo: string
@@ -133,6 +160,23 @@ export const axiosPutUserSubjects = (
       .catch((error) => {
         reject();
         if (dev) console.error('putUserSubjects failed:', error);
+      });
+  });
+};
+
+export const axiosPutUserProjectFields = (
+  id: string,
+  token: string,
+  projectFields: ApiProjectFieldInfo[]
+): Promise<void> => {
+  const url = `${apiURL}/user/${id}/projectFields`;
+  return new Promise((resolve, reject) => {
+    axios
+      .put(url, projectFields, { headers: { token } })
+      .then(() => resolve())
+      .catch((error) => {
+        reject();
+        if (dev) console.error('putUserProjectFields failed:', error);
       });
   });
 };
@@ -721,5 +765,38 @@ export const axiosPostContactMentor = (
       .post(`${apiURL}/mentoring/contact`, message, { headers: { token } })
       .then(() => resolve())
       .catch((err) => reject(err));
+  });
+};
+
+export const axiosPostUserRoleProjectCoach = (
+  token: string,
+  id: string,
+  projectCoachData: BecomeProjectCoach
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/user/${id}/role/projectCoach`, projectCoachData, {
+        headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => reject(err));
+  });
+};
+
+export const axiosPostUserRoleProjectCoachee = (
+  token: string,
+  id: string,
+  projectCoacheeData: BecomeProjectCoachee
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/user/${id}/role/projectCoachee`, projectCoacheeData, {
+        headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
   });
 };

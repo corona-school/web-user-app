@@ -1,0 +1,56 @@
+.fieldContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 8px;
+
+  .gradeContainer {
+    width: 100%;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+
+    .selectContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+    }
+  }
+  .deleteButton {
+     width: min-content;
+     background-color: #FFF7DB;
+
+     display: flex;
+     justify-content: center;
+     align-items: center;
+
+     .deleteIcon {
+       path {
+         fill: #F0CE52;
+       }
+     }
+   }
+}
+
+.addButton {
+  background-color: #FFF7DB;
+
+  margin-left: 0px;
+  width: 100px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .addIcon {
+    path {
+      fill: #F0CE52;
+    }
+  }
+}
+
+

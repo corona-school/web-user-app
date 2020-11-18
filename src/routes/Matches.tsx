@@ -16,10 +16,16 @@ const Matches: React.FC = () => {
     if (userContext.user.type === 'pupil') {
       if (userContext.user.matches.length === 1)
         return (
-          <Empty description="Du hast im moment keine offenen Anfragen." />
+          <Empty description="Du hast im Moment keine offenen Anfragen." />
         );
       if (userContext.user.matchesRequested === 0) {
-        return <OpenRequestCard type="new" userType={userContext.user.type} />;
+        return (
+          <OpenRequestCard
+            type="new"
+            userType={userContext.user.type}
+            projectCoaching={false}
+          />
+        );
       }
       if (userContext.user.matchesRequested >= 1) {
         return (
@@ -28,6 +34,7 @@ const Matches: React.FC = () => {
               <OpenRequestCard
                 type="pending"
                 userType={userContext.user.type}
+                projectCoaching={false}
               />
             ))}
           </>
@@ -36,15 +43,29 @@ const Matches: React.FC = () => {
     }
 
     if (userContext.user.matchesRequested === 0) {
-      return <OpenRequestCard type="new" userType={userContext.user.type} />;
+      return (
+        <OpenRequestCard
+          type="new"
+          userType={userContext.user.type}
+          projectCoaching={false}
+        />
+      );
     }
 
     return (
       <>
         {[...Array(userContext.user.matchesRequested).keys()].map(() => (
-          <OpenRequestCard type="pending" userType={userContext.user.type} />
+          <OpenRequestCard
+            type="pending"
+            userType={userContext.user.type}
+            projectCoaching={false}
+          />
         ))}
-        <OpenRequestCard type="new" userType={userContext.user.type} />
+        <OpenRequestCard
+          type="new"
+          userType={userContext.user.type}
+          projectCoaching={false}
+        />
       </>
     );
   })();
@@ -64,6 +85,7 @@ const Matches: React.FC = () => {
         matchUuid={match.uuid}
         matchFirstname={match.firstname}
         ownType={userContext.user.type}
+        projectCoaching={false}
       />
     </React.Fragment>
   ));

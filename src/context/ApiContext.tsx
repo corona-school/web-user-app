@@ -13,13 +13,20 @@ import { CompletedSubCourse } from '../components/forms/CreateCourse';
 import { CompletedLecture } from '../routes/CourseForm';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
 import { FeedbackCall } from '../types/FeedbackCall';
+import {
+  ApiProjectFieldInfo,
+  BecomeProjectCoach,
+  BecomeProjectCoachee,
+} from '../types/ProjectCoach';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
   dissolveMatch: (uuid: string, reason?: number) => Promise<void>;
+  dissolveProjectMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string, redirectTo: string) => Promise<void>;
   putUser: (user: User) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
+  putUserProjectFields: (projectFields: ApiProjectFieldInfo[]) => Promise<void>;
   becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
   putUserActiveFalse: () => Promise<void>;
   getCertificate: (
@@ -89,14 +96,22 @@ interface IApiContext {
   ) => Promise<Mentoring[]>;
   getFeedbackCallData: () => Promise<FeedbackCall>;
   postContactMentor: (message: MenteeMessage) => Promise<void>;
+  postUserRoleProjectCoach: (
+    projectCoachData: BecomeProjectCoach
+  ) => Promise<void>;
+  postUserRoleProjectCoachee: (
+    projectCoacheeData: BecomeProjectCoachee
+  ) => Promise<void>;
 }
 
 export const ApiContext = React.createContext<IApiContext>({
   getUserData: () => Promise.reject(),
   dissolveMatch: (uuid, reason?) => Promise.reject(),
+  dissolveProjectMatch: (uuid, reason?) => Promise.reject(),
   requestNewToken: api.axiosRequestNewToken,
   putUser: (user) => Promise.reject(),
   putUserSubjects: (subjects) => Promise.reject(),
+  putUserProjectFields: (projectFields) => Promise.reject(),
   becomeInstructor: (description: BecomeInstructor | BecomeIntern) =>
     Promise.reject(),
   putUserActiveFalse: () => Promise.reject(),
@@ -128,6 +143,8 @@ export const ApiContext = React.createContext<IApiContext>({
   getMentoringMaterial: (type, location) => Promise.reject(),
   getFeedbackCallData: () => Promise.reject(),
   postContactMentor: (message) => Promise.reject(),
+  postUserRoleProjectCoach: () => Promise.reject(),
+  postUserRoleProjectCoachee: () => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -142,11 +159,18 @@ export const ApiProvider: React.FC = ({ children }) => {
   const dissolveMatch = (uuid: string, reason?: number): Promise<void> =>
     api.axiosDissolveMatch(id, token, uuid, reason);
 
+  const dissolveProjectMatch = (uuid: string, reason?: number): Promise<void> =>
+    api.axiosDissolveProjectMatch(id, token, uuid, reason);
+
   const putUser = (user: User): Promise<void> =>
     api.putUser({ id, token }, user);
 
   const putUserSubjects = (subjects: Subject[]): Promise<void> =>
     api.axiosPutUserSubjects(id, token, subjects);
+
+  const putUserProjectFields = (
+    projectFields: ApiProjectFieldInfo[]
+  ): Promise<void> => api.axiosPutUserProjectFields(id, token, projectFields);
 
   const becomeInstructor = (
     data: BecomeInstructor | BecomeIntern
@@ -278,14 +302,23 @@ export const ApiProvider: React.FC = ({ children }) => {
   const postContactMentor = (message: MenteeMessage) =>
     api.axiosPostContactMentor(token, message);
 
+  const postUserRoleProjectCoach = (projectCoachData: BecomeProjectCoach) =>
+    api.axiosPostUserRoleProjectCoach(token, id, projectCoachData);
+
+  const postUserRoleProjectCoachee = (
+    projectCoacheeData: BecomeProjectCoachee
+  ) => api.axiosPostUserRoleProjectCoachee(token, id, projectCoacheeData);
+
   return (
     <ApiContext.Provider
       value={{
         getUserData,
         dissolveMatch,
+        dissolveProjectMatch,
         requestNewToken: api.axiosRequestNewToken,
         putUser,
         putUserSubjects,
+        putUserProjectFields,
         becomeInstructor,
         putUserActiveFalse,
         getCertificate,
@@ -314,6 +347,8 @@ export const ApiProvider: React.FC = ({ children }) => {
         editSubCourse,
         editLecture,
         getCooperatingSchools,
+        postUserRoleProjectCoach,
+        postUserRoleProjectCoachee,
       }}
     >
       {children}

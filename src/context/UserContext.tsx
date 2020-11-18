@@ -15,6 +15,7 @@ export const defaultUser = {
   matchesRequested: 0,
   screeningStatus: ScreeningStatus.Accepted,
   instructorScreeningStatus: ScreeningStatus.Accepted,
+  projectCoachingScreeningStatus: ScreeningStatus.Accepted,
   lastUpdatedSettingsViaBlocker: null,
   registrationDate: null,
   matches: [
@@ -39,6 +40,7 @@ export const defaultUser = {
       date: 120301923,
     },
   ],
+  projectMatches: [],
   subjects: [
     {
       name: 'Mathematik' as const,

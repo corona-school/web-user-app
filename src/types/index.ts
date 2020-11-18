@@ -1,4 +1,6 @@
 import { subjectOptions } from '../assets/subjects';
+import { TutorJufoParticipationIndication } from '../../../web-screening-admin/src/types/Student';
+import { TuteeJufoParticipationIndication } from '../../../backend/common/jufo/participationIndication';
 
 export enum ProjectField {
   ARBEITSWELT = 'Arbeitswelt',
@@ -10,7 +12,7 @@ export enum ProjectField {
   TECHNIK = 'Technik',
 }
 
-interface ProjectInformation {
+export interface ProjectInformation {
   name: ProjectField;
   min: number;
   max: number;
@@ -25,6 +27,7 @@ export interface User {
   active: boolean;
   grade?: number;
   matchesRequested?: number;
+  projectMatchesRequested?: number;
   isInstructor?: boolean;
   isTutor?: boolean;
   isProjectCoachee?: boolean;
@@ -35,8 +38,10 @@ export interface User {
   subjects: Subject[];
   matches: Match[];
   dissolvedMatches: Match[];
+  projectMatches: ProjectMatch[];
   screeningStatus: ScreeningStatus;
   instructorScreeningStatus: ScreeningStatus;
+  projectCoachingScreeningStatus: ScreeningStatus;
   state?: string;
   university?: string;
   schoolType?: string;
@@ -67,6 +72,22 @@ export interface Match {
   subjects: string[];
   email: string;
   jitsilink: string;
+}
+
+export interface ProjectMatch {
+  dissolved: boolean;
+  firstname: string;
+  lastname: string;
+  email: string;
+  uuid: string;
+  grade?: number;
+  projectFields: ProjectField[];
+  jitsilink: string;
+  date: number;
+  jufoParticipation:
+    | TutorJufoParticipationIndication
+    | TuteeJufoParticipationIndication;
+  projectMemberCount?: number;
 }
 
 export interface Credentials {

@@ -16,11 +16,30 @@
   min-height: fit-content;
   display: flex;
   flex-direction: column;
-  padding-top: 60px;
-  padding-left: 40px;
+  padding: 60px 40px 0px;
   width: 100%;
 
   @media only screen and (max-width: 600px) {
     padding: 16px;
+  }
+
+  .buttonParticipate {
+    background-color: rgb(255, 204, 18);
+    color: white;
+    display: flex;
+    float: right;
+    &:hover {
+      color: white;
+    }
+  }
+
+  .containerRequests {
+    min-height: 200px;
+    margin-bottom: 20px;
+
+    .openRequests {
+      display: flex;
+      flex-wrap: wrap;
+    }
   }
 }

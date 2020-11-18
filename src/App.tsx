@@ -153,7 +153,14 @@ const App: React.FC = () => {
           >
             <Matches />
           </PrivateRoute>
-          <PrivateRoute path="/project-coaching">
+          <PrivateRoute
+            path="/project-coaching"
+            active={
+              userContext.user.type === 'pupil' ||
+              userContext.user.projectCoachingScreeningStatus ===
+                ScreeningStatus.Accepted
+            }
+          >
             <ProjectCoach />
           </PrivateRoute>
           <PrivateRoute path="/settings">
