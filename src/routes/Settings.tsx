@@ -10,6 +10,9 @@ import { Title } from '../components/Typography';
 import classes from './Settings.module.scss';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
 import { isProjectCoachButNotTutor } from '../utils/UserUtils';
+import ProjectFieldCard, {
+  AddProjectFieldCard,
+} from '../components/cards/ProjectFieldCard';
 
 const Wrapper = styled.div`
   display: flex;
@@ -65,11 +68,38 @@ const Settings: React.FC = () => {
     );
   };
 
+  const renderProjectFields = () => {
+    return (
+      <>
+        <Title size="h3" className={classes.subjectTitle}>
+          Deine Projektbereiche
+        </Title>
+        <div>
+          <Wrapper>
+            {userContext.user.projectFields.map((projectInformation) => (
+              <ProjectFieldCard
+                key={projectInformation.name}
+                type={userContext.user.type === 'student' ? 'coach' : 'coachee'}
+                field={projectInformation}
+              />
+            ))}
+            <AddProjectFieldCard
+              type={userContext.user.type === 'student' ? 'coach' : 'coachee'}
+              projectFields={userContext.user.projectFields.map((p) => p.name)}
+            />
+          </Wrapper>
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
       <SettingsCard user={userContext.user} />
       {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
+      {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
+        renderProjectFields()}
       <AccountNotScreenedModal />
     </div>
   );

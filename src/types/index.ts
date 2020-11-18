@@ -12,7 +12,7 @@ export enum ProjectField {
   TECHNIK = 'Technik',
 }
 
-interface ProjectInformation {
+export interface ProjectInformation {
   name: ProjectField;
   min: number;
   max: number;

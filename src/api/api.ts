@@ -8,6 +8,7 @@ import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
 import { FeedbackCall } from '../types/FeedbackCall';
 import {
+  ApiProjectFieldInfo,
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
@@ -159,6 +160,23 @@ export const axiosPutUserSubjects = (
       .catch((error) => {
         reject();
         if (dev) console.error('putUserSubjects failed:', error);
+      });
+  });
+};
+
+export const axiosPutUserProjectFields = (
+  id: string,
+  token: string,
+  projectFields: ApiProjectFieldInfo[]
+): Promise<void> => {
+  const url = `${apiURL}/user/${id}/projectFields`;
+  return new Promise((resolve, reject) => {
+    axios
+      .put(url, projectFields, { headers: { token } })
+      .then(() => resolve())
+      .catch((error) => {
+        reject();
+        if (dev) console.error('putUserProjectFields failed:', error);
       });
   });
 };

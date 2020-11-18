@@ -14,6 +14,7 @@ import { CompletedLecture } from '../routes/CourseForm';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
 import { FeedbackCall } from '../types/FeedbackCall';
 import {
+  ApiProjectFieldInfo,
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
@@ -25,6 +26,7 @@ interface IApiContext {
   requestNewToken: (email: string, redirectTo: string) => Promise<void>;
   putUser: (user: User) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
+  putUserProjectFields: (projectFields: ApiProjectFieldInfo[]) => Promise<void>;
   becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
   putUserActiveFalse: () => Promise<void>;
   getCertificate: (
@@ -109,6 +111,7 @@ export const ApiContext = React.createContext<IApiContext>({
   requestNewToken: api.axiosRequestNewToken,
   putUser: (user) => Promise.reject(),
   putUserSubjects: (subjects) => Promise.reject(),
+  putUserProjectFields: (projectFields) => Promise.reject(),
   becomeInstructor: (description: BecomeInstructor | BecomeIntern) =>
     Promise.reject(),
   putUserActiveFalse: () => Promise.reject(),
@@ -164,6 +167,10 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const putUserSubjects = (subjects: Subject[]): Promise<void> =>
     api.axiosPutUserSubjects(id, token, subjects);
+
+  const putUserProjectFields = (
+    projectFields: ApiProjectFieldInfo[]
+  ): Promise<void> => api.axiosPutUserProjectFields(id, token, projectFields);
 
   const becomeInstructor = (
     data: BecomeInstructor | BecomeIntern
@@ -311,6 +318,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         requestNewToken: api.axiosRequestNewToken,
         putUser,
         putUserSubjects,
+        putUserProjectFields,
         becomeInstructor,
         putUserActiveFalse,
         getCertificate,
