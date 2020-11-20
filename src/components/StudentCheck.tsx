@@ -14,9 +14,13 @@ const StudentCheck = () => {
       history.push('/');
     }
     if (
-      userContext.user.screeningStatus === ScreeningStatus.Unscreened ||
+      (userContext.user.isTutor &&
+        userContext.user.screeningStatus === ScreeningStatus.Unscreened) ||
       (userContext.user.isInstructor &&
         userContext.user.instructorScreeningStatus ===
+          ScreeningStatus.Unscreened) ||
+      (userContext.user.isProjectCoach &&
+        userContext.user.projectCoachingScreeningStatus ===
           ScreeningStatus.Unscreened)
     ) {
       modalContext.setOpenedModal('accountNotScreened');

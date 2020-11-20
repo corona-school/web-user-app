@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import moment from 'moment';
+import { useHistory } from 'react-router-dom';
 import { Title, Text } from '../components/Typography';
 import classes from './Dashboard.module.scss';
 import { Tag } from '../components/Tag';
@@ -11,10 +12,19 @@ import UpdateInformationBlockerModal, {
 } from '../components/Modals/UpdateInformationBlockerModal';
 import Context from '../context';
 import { nextDateOfYearAfterDate } from '../utils/DateUtils';
+import {
+  isProjectCoachButNotTutor,
+  isProjectCoacheeButNotPupil,
+} from '../utils/UserUtils';
 
 const Dashboard: React.FC = () => {
   const { setOpenedModal } = useContext(Context.Modal);
   const { user } = useContext(UserContext);
+  const history = useHistory();
+
+  if (isProjectCoachButNotTutor(user) || isProjectCoacheeButNotPupil(user)) {
+    history.push('/project-coaching');
+  }
 
   useEffect(() => {
     const shouldShowUpdateInformationBlocker =

@@ -42,9 +42,12 @@ const Settings: React.FC = () => {
     }
   }, [
     setOpenedModal,
+    userContext.user.isTutor,
     userContext.user.instructorScreeningStatus,
     userContext.user.isInstructor,
     userContext.user.screeningStatus,
+    userContext.user.isProjectCoach,
+    userContext.user.projectCoachingScreeningStatus,
   ]);
 
   const renderSubjects = () => {
