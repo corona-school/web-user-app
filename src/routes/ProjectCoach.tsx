@@ -94,7 +94,7 @@ const ProjectCoach: React.FC = () => {
         }
       }
 
-      if (userContext.user.matchesRequested === 0) {
+      if (userContext.user.projectMatchesRequested === 0) {
         return (
           <OpenRequestCard
             type="new"
