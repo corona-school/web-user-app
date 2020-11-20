@@ -57,7 +57,7 @@ const CourseDeletionConfirmationModal: React.FC<Props> = (props) => {
       isOpen={modalContext.openedModal === 'courseDeletionConfirmationModal'}
     >
       <div className={classes.messageModal}>
-        <Images.StepsContact width="180" height="140" />
+        <Images.TrashIllustration width="180" height="140" />
         <Title size="h2">Kurs absagen</Title>
         <Text style={{ marginTop: '-16px' }} large>
           Möchtest du den Kurs wirklich absagen?
