@@ -7,6 +7,7 @@ import { ReactComponent as StepsReadMore } from './steps_read_more.svg';
 import { ReactComponent as StepsRequest } from './steps_request.svg';
 import { ReactComponent as StepsContact } from './steps_contact.svg';
 import { ReactComponent as LetUsMeetIllustration } from './letUsMeetIllustration.svg';
+import { ReactComponent as TrashIllustration } from './trash.svg';
 
 import { ReactComponent as SignupBackground1 } from './signup/background-bottom-right.svg';
 import { ReactComponent as SignupBackground2 } from './signup/background-top-left.svg';
@@ -34,6 +35,7 @@ const ImageList = {
   SignupBackgroundZickZack,
   Celebration,
   MentoringPic,
+  TrashIllustration,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

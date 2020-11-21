@@ -47,6 +47,7 @@ import { tags } from '../components/forms/CreateCourse';
 import { ModalContext } from '../context/ModalContext';
 import CourseMessageModal from '../components/Modals/CourseMessageModal';
 import { dev } from '../api/config';
+import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 
 moment.locale('de');
 
@@ -140,13 +141,6 @@ const CourseDetail = (params: { id?: string }) => {
         if (dev) console.error(err);
         message.error('Kurs konnte nicht zur Prüfung freigegeben werden.');
       });
-  };
-
-  const cancelCourse = () => {
-    api.cancelCourse(course.id).then(() => {
-      message.success('Kurs wurde abgesagt.');
-      history.push('/courses');
-    });
   };
 
   const joinCourse = () => {
@@ -375,7 +369,7 @@ const CourseDetail = (params: { id?: string }) => {
             modalContext.setOpenedModal('courseMessageModal');
           }
           if (param.key === '4') {
-            cancelCourse();
+            modalContext.setOpenedModal('courseDeletionConfirmationModal');
           }
           if (param.key === '5') {
             history.push(`/courses/edit/${course.id}`);
@@ -624,6 +618,7 @@ const CourseDetail = (params: { id?: string }) => {
         courseId={course.id}
         subcourseId={course.subcourse.id}
       />
+      <CourseDeletionConfirmationModal courseId={course.id} />
     </div>
   );
 };
