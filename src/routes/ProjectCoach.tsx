@@ -182,7 +182,9 @@ const ProjectCoach: React.FC = () => {
     <div className={classes.container}>
       <Title size="h1">1:1-Projektcoaching</Title>
       {!user.isProjectCoach && user.isTutor && <BecomeProjectCoach />}
-      {!user.isProjectCoachee && user.isPupil && <BecomeProjectCoachee />}
+      {!user.isProjectCoachee && user.type === 'pupil' && (
+        <BecomeProjectCoachee />
+      )}
       {((user.isProjectCoach &&
         user.projectCoachingScreeningStatus === ScreeningStatus.Accepted) ||
         user.isProjectCoachee) && <Matches />}
