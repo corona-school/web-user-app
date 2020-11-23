@@ -218,7 +218,6 @@ const PublicCourse = () => {
             );
           })}
       </div>
-
       <div
         className={classNames(classes.sideNav, {
           [classes.navOpen]: filterOpen,
@@ -300,6 +299,12 @@ const PublicCourse = () => {
             Sonstige
           </Checkbox>
         </div>
+      </div>
+      <div className={classes.legal}>
+        <a href="https://www.corona-school.de/datenschutz-2">
+          Datenschutzerklärung
+        </a>
+        <a href="https://www.corona-school.de/impressum">Impressum</a>
       </div>
     </div>
   );

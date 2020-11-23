@@ -1,11 +1,13 @@
 .container {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 
   padding: 0px;
   margin: 0px;;
   width: 100%;
-
+  min-height: 100vh;
+  
   .header {
     position: sticky;
     top: 0;
@@ -129,5 +131,23 @@
         display: none;
       }
     }
+  }
+
+  .legal {
+    display: flex;
+    flex-direction: row;
+    margin: 4px;
+    text-align: center;
+    width: 1060px;
+    padding-left: 30px;
+    padding-right: 30px;
+    
+    @media only screen and (max-width: 1060px) {
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+  .legal > a {
+    margin: 10px;
   }
 }
