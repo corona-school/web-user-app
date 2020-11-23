@@ -18,26 +18,33 @@ const SignupContainer: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <div className={classes.container}>
-      <div className={classes.content}>
-        {history.location.pathname !== '/login' && shouldShowBackButton && (
-          <a
-            className={classes.backButton}
-            onClick={(e) => {
-              e.preventDefault();
-              if (/\/register\/[a-zA-Z]+/.test(history.location.pathname)) {
-                history.push('/register');
-                return;
-              }
-              if (/\/register$/.test(history.location.pathname)) {
-                history.push('/login');
-              }
-            }}
-          >
-            Zurück
+      <div className={classes.contentBox}>
+        <div className={classes.content}>
+          {history.location.pathname !== '/login' && shouldShowBackButton && (
+            <a
+              className={classes.backButton}
+              onClick={(e) => {
+                e.preventDefault();
+                if (/\/register\/[a-zA-Z]+/.test(history.location.pathname)) {
+                  history.push('/register');
+                  return;
+                }
+                if (/\/register$/.test(history.location.pathname)) {
+                  history.push('/login');
+                }
+              }}
+            >
+              Zurück
+            </a>
+          )}
+          {children}
+        </div>
+        <div className={classes.legal}>
+          <a href="https://www.corona-school.de/datenschutz-2">
+            Datenschutzerklärung
           </a>
-        )}
-
-        {children}
+          <a href="https://www.corona-school.de/impressum">Impressum</a>
+        </div>
       </div>
       <div className={classes.background1}>
         <Images.SignupBackground1 />
