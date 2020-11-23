@@ -705,7 +705,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             <Checkbox value="dataprotection">
               Ich habe die{' '}
               <a
-                href="https://www.corona-school.de/datenschutz"
+                href="https://www.corona-school.de/datenschutz-2"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -736,11 +736,11 @@ const RegisterTutor: React.FC<Props> = (props) => {
               Matchingpartner*innen bis zum Zeitpunkt des Widerrufs unberührt
               bleiben. Weitere Datenschutzinformationen sind abrufbar unter{' '}
               <a
-                href="https://www.corona-school.de/datenschutz"
+                href="https://www.corona-school.de/datenschutz-2"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                www.corona-school.de/datenschutz
+                www.corona-school.de/datenschutz-2
               </a>
               .
               <br />
