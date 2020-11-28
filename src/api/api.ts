@@ -13,42 +13,38 @@ import {
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
 
+const logError = (apiName: string) => (error: Error) => {
+  if (dev) console.error(`${apiName} failed:`, error);
+  throw error;
+};
+
+
 export const redeemVerificationToken = (
   verificationToken: string
 ): Promise<string> =>
-  new Promise((resolve, reject) => {
-    axios
-      .post(`${apiURL}/token`, {
-        token: verificationToken,
-      })
-      .then((response) => resolve(response.data.token))
-      .catch((reason) => {
-        reject(reason);
-        if (dev) console.error('redeemVerificationToken failed:', reason);
-      });
-  });
+  axios
+    .post(`${apiURL}/token`, {
+      token: verificationToken,
+    })
+    .then((response) => response.data.token)
+    .catch(logError("redeemVerificationToken"));
 
 export const getUserId = (token: string): Promise<string> =>
-  new Promise((resolve, reject) => {
-    axios
-      .get(`${apiURL}/user`, {
-        headers: { token },
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          resolve(response.data.id);
-        } else {
-          reject(response);
-          if (dev) console.error('getUserId failed:', response);
-        }
-      })
-      .catch((reason) => {
-        reject(reason);
-        if (dev) console.error('getUserId failed:', reason);
-      });
-  });
+  axios
+    .get(`${apiURL}/user`, {
+      headers: { token },
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data.id;
+      } else {
+        if (dev) console.error('getUserId failed:', response);
+        throw response;
+      }
+    })
+    .catch(logError('getUserId'));
 
-export const putUser = (
+export const putUser = async (
   credentials: Credentials,
   user: {
     firstname?: string;
@@ -61,145 +57,105 @@ export const putUser = (
     schoolType?: string;
     lastUpdatedSettingsViaBlocker: number;
   }
-): Promise<void> =>
-  new Promise((resolve, reject) => {
-    axios
-      .put(`${apiURL}/user/${credentials.id}`, user, {
-        headers: { token: credentials.token },
-      })
-      .then(() => resolve())
-      .catch((reason) => {
-        reject(reason);
-        if (dev) console.error('putUser failed:', reason);
-      });
-  });
+) => {
+  await axios
+    .put(`${apiURL}/user/${credentials.id}`, user, {
+      headers: { token: credentials.token },
+    })
+    .catch(logError('putUser'));
+};
 
 // ========================================================================
 
 export const axiosGetUser = (id: string, token: string): Promise<User> => {
-  return new Promise((resolve, reject) =>
-    axios
-      .get(`${apiURL}/user/${id}`, {
-        headers: { Token: token },
-      })
-      .then((res) => resolve(res.data))
-      .catch((err) => reject(err))
-  );
+  return axios
+    .get(`${apiURL}/user/${id}`, {
+      headers: { Token: token },
+    })
+    .then((res) => res.data)
+    .catch(logError('getUser'));
 };
 
-export const axiosDissolveMatch = (
+export const axiosDissolveMatch = async (
   id: string,
   token: string,
   uuid: string,
   reason?: number
-): Promise<void> => {
+) => {
   const url = `${apiURL}/user/${id}/matches/${uuid}`;
-  return new Promise((resolve, reject) => {
-    axios
-      .delete(url, {
-        headers: { token },
-        data: reason === undefined ? undefined : { reason },
-      })
-      .then(() => resolve())
-      .catch((error) => {
-        reject();
-        if (dev) console.error('dissolveMatch failed:', error);
-      });
-  });
+  await axios
+    .delete(url, {
+      headers: { token },
+      data: reason === undefined ? undefined : { reason },
+    })
+    .catch(logError('dissolveMatch'));
 };
 
-export const axiosDissolveProjectMatch = (
+export const axiosDissolveProjectMatch = async (
   id: string,
   token: string,
   uuid: string,
   reason?: number
-): Promise<void> => {
+) => {
   const url = `${apiURL}/user/${id}/projectMatches/${uuid}`;
-  return new Promise((resolve, reject) => {
-    axios
-      .delete(url, {
-        headers: { token },
-        data: reason === undefined ? undefined : { reason },
-      })
-      .then(() => resolve())
-      .catch((error) => {
-        reject();
-        if (dev) console.error('dissolveProjectMatch failed:', error);
-      });
-  });
+  await axios
+    .delete(url, {
+      headers: { token },
+      data: reason === undefined ? undefined : { reason },
+    })
+    .catch(logError('dissolveProjectMatch'));
 };
 
-export const axiosRequestNewToken = (
+export const axiosRequestNewToken = async (
   email: string,
   redirectTo: string
-): Promise<void> => {
+) => {
   const url = `${apiURL}/token`;
-  return new Promise((resolve, reject) => {
-    axios
-      .get(url, {
-        params: { email, redirectTo },
-      })
-      .then(() => resolve())
-      .catch((error) => {
-        reject(error?.response?.status);
-        if (dev) console.error('requestNewToken failed:', error);
-      });
-  });
+  await axios
+    .get(url, {
+      params: { email, redirectTo },
+    })
+    .catch((error) => {
+      if (dev) console.error('requestNewToken failed:', error);
+      throw error?.response?.status;
+    });
 };
 
-export const axiosPutUserSubjects = (
+export const axiosPutUserSubjects = async (
   id: string,
   token: string,
   subjects: Subject[]
-): Promise<void> => {
+) => {
   const url = `${apiURL}/user/${id}/subjects`;
-  return new Promise((resolve, reject) => {
-    axios
-      .put(url, subjects, { headers: { token } })
-      .then(() => resolve())
-      .catch((error) => {
-        reject();
-        if (dev) console.error('putUserSubjects failed:', error);
-      });
-  });
+  await axios
+    .put(url, subjects, { headers: { token } })
+    .catch(logError('putUserSubjects'));
 };
 
-export const axiosPutUserProjectFields = (
+export const axiosPutUserProjectFields = async (
   id: string,
   token: string,
   projectFields: ApiProjectFieldInfo[]
-): Promise<void> => {
+) => {
   const url = `${apiURL}/user/${id}/projectFields`;
-  return new Promise((resolve, reject) => {
-    axios
-      .put(url, projectFields, { headers: { token } })
-      .then(() => resolve())
-      .catch((error) => {
-        reject();
-        if (dev) console.error('putUserProjectFields failed:', error);
-      });
-  });
+  await axios
+    .put(url, projectFields, { headers: { token } })
+    .catch(logError('putUserProjectFields'));
 };
 
-export const axiosPutUserActive = (
+export const axiosPutUserActive = async (
   id: string,
   token: string,
   active: boolean
-): Promise<void> => {
+) => {
   const url = `${apiURL}/user/${id}/active/${active ? 'true' : 'false'}`;
   console.log(url);
-  return new Promise((resolve, reject) => {
-    axios
-      .put(url, undefined, { headers: { token } })
-      .then(() => resolve())
-      .catch((error) => {
-        reject();
-        if (dev) console.error('putUserActive failed:', error);
-      });
-  });
+  await axios
+    .put(url, undefined, { headers: { token } })
+    .catch(logError('putUserActive'));
 };
 
-export const axiosGetCertificate = (
+export const axiosGetCertificate = async (
   id: string,
   token: string,
   certificateDate: CertificateData
@@ -207,45 +163,32 @@ export const axiosGetCertificate = (
 ): Promise<AxiosResponse<any>> => {
   const url = `${apiURL}/certificate/${id}/${certificateDate.student}`;
 
-  return new Promise((resolve, reject) => {
-    const params = new URLSearchParams();
-    params.append('subjects', certificateDate.subjects.join(','));
-    params.append('endDate', certificateDate.endDate.toString());
-    params.append('medium', certificateDate.mediaType || '');
-    params.append('hoursPerWeek', certificateDate.hoursPerWeek.toString());
-    params.append('hoursTotal', certificateDate.hoursTotal.toString());
-    params.append('categories', certificateDate.activities.join('\n'));
-    axios
-      .get(url, { headers: { token }, responseType: 'blob', params })
-      .then((response) => {
-        resolve(response);
-      })
-      .catch((error) => {
-        console.log('getCertificate failed:', error);
-        reject();
-      });
-  });
+  const params = new URLSearchParams();
+  params.append('subjects', certificateDate.subjects.join(','));
+  params.append('endDate', certificateDate.endDate.toString());
+  params.append('medium', certificateDate.mediaType || '');
+  params.append('hoursPerWeek', certificateDate.hoursPerWeek.toString());
+  params.append('hoursTotal', certificateDate.hoursTotal.toString());
+  params.append('categories', certificateDate.activities.join('\n'));
+
+  return axios
+    .get(url, { headers: { token }, responseType: 'blob', params })
+    .catch(logError('getCertificate'));
 };
 
-export const axiosGetCourses = (token: string): Promise<CourseOverview[]> => {
+export const axiosGetCourses = async (token: string): Promise<CourseOverview[]> => {
   const url = `${apiURL}/courses`;
 
-  return new Promise((resolve, reject) => {
-    const params = new URLSearchParams();
-    params.append(
-      'fields',
-      'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
-    );
+  const params = new URLSearchParams();
+  params.append(
+    'fields',
+    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
+  );
 
-    axios
-      .get(url, { headers: { token }, params })
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .get(url, { headers: { token }, params })
+    .then((response) => response.data)
+    .catch(logError('getCourses'));
 };
 
 export const axiosGetCourse = (
@@ -254,74 +197,47 @@ export const axiosGetCourse = (
 ): Promise<CourseOverview> => {
   const url = `${apiURL}/course/${id}`;
 
-  return new Promise((resolve, reject) => {
-    axios
-      .get(url, { headers: { token } })
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .get(url, { headers: { token } })
+    .then((response) => response.data)
+    .catch(logError('getCourse'))
 };
 
-export const axiosEditCourse = (
+export const axiosEditCourse = async (
   token: string,
   id: number,
   course: Course
-): Promise<void> => {
+) => {
   const url = `${apiURL}/course/${id}`;
 
-  return new Promise((resolve, reject) => {
-    axios
-      .put(url, course, { headers: { token } })
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  await axios
+    .put(url, course, { headers: { token } })
+    .catch(logError('editCourse'));
 };
 
-export const axiosSubmitCourse = (
+export const axiosSubmitCourse = async (
   token: string,
   id: number,
   course: Course
-): Promise<void> => {
+) => {
   const url = `${apiURL}/course/${id}`;
 
-  return new Promise((resolve, reject) => {
-    axios
-      .put(url, { ...course, submit: true }, { headers: { token } })
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  await axios
+    .put(url, { ...course, submit: true }, { headers: { token } })
+    .catch(logError('submitCourse'));
 };
 
-export const axiosPublishSubCourse = (
+export const axiosPublishSubCourse = async (
   token: string,
   courseId: number,
   id: number,
   subcourse: SubCourse
-): Promise<void> => {
+) => {
   const url = `${apiURL}/course/${courseId}/subcourse/${id}`;
 
-  return new Promise((resolve, reject) => {
-    axios
-      .put(url, { ...subcourse, published: true }, { headers: { token } })
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  await axios
+    .put(url, { ...subcourse, published: true }, { headers: { token } })
+    .catch(logError('publishSubCourse'));
 };
 
 export const axiosGetMyCourses = (
@@ -331,31 +247,25 @@ export const axiosGetMyCourses = (
 ): Promise<CourseOverview[]> => {
   const url = `${apiURL}/courses`;
 
-  return new Promise((resolve, reject) => {
-    const params = new URLSearchParams();
-    params.append(
-      'fields',
-      'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
-    );
-    if (instructor) {
-      params.append('instructor', instructor);
-      params.append('states', 'created,submitted,allowed,denied,cancelled');
-    }
-    if (participant) {
-      params.append('participant', participant);
-    }
+  const params = new URLSearchParams();
+  params.append(
+    'fields',
+    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
+  );
+  if (instructor) {
+    params.append('instructor', instructor);
+    params.append('states', 'created,submitted,allowed,denied,cancelled');
+  }
+  if (participant) {
+    params.append('participant', participant);
+  }
 
-    params.append('onlyJoinableCourses', 'false');
+  params.append('onlyJoinableCourses', 'false');
 
-    axios
-      .get(url, { headers: { token }, params })
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .get(url, { headers: { token }, params })
+    .then((response) => response.data)
+    .catch(logError('getMyCourses'))
 };
 
 const isValidTutee = (tutee: Tutee) => {
@@ -385,130 +295,85 @@ const isValidTutor = (tutor: Tutor) => {
   return true;
 };
 
-export const axiosRegisterTutee = (tutee: Tutee): Promise<void> => {
+export const axiosRegisterTutee = (tutee: Tutee) => {
   if (!isValidTutee(tutee)) {
     throw new Error('Tutee is not valid');
   }
 
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${apiURL}/register/tutee`, tutee)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .post(`${apiURL}/register/tutee`, tutee)
+    .then((response) => response.data)
+    .catch(logError('registerTutee'));
 };
 
-export const axiosRegisterStateTutee = (tutee: Tutee): Promise<void> => {
+export const axiosRegisterStateTutee = (tutee: Tutee) => {
   if (!isValidTutee(tutee)) {
     throw new Error('Tutee is not valid');
   }
 
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${apiURL}/register/tutee/state`, tutee)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .post(`${apiURL}/register/tutee/state`, tutee)
+    .then((response) => response.data)
+    .catch(logError('registerStateTutee'));
 };
 
-export const axiosRegisterTutor = (tutor: Tutor): Promise<void> => {
+export const axiosRegisterTutor = (tutor: Tutor) => {
   if (!isValidTutor(tutor)) {
     throw new Error('Tutor is not valid');
   }
 
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${apiURL}/register/tutor`, tutor)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .post(`${apiURL}/register/tutor`, tutor)
+    .then((response) => response.data)
+    .catch(logError('registerTutor'));
 };
 
 export const axiosCreateCourse = (
   token: string,
   course: Course
-): Promise<number> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${apiURL}/course`, course, { headers: { token } })
-      .then((response) => {
-        resolve(response.data.id);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+) => {
+  return axios
+    .post(`${apiURL}/course`, course, { headers: { token } })
+    .then((response) => response.data.id)
+    .catch(logError('createCourse'));
 };
 
-export const axiosJoinCourse = (
+export const axiosJoinCourse = async (
   token: string,
   courseId: number,
   subCourseId: number,
   participant: string
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/participants/${participant}`,
-        {},
-        { headers: { token } }
-      )
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+) => {
+  await axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/participants/${participant}`,
+      {},
+      { headers: { token } }
+    )
+    .catch(logError('joinCourse'));
 };
 
-export const axiosLeaveCourse = (
+export const axiosLeaveCourse = async (
   token: string,
   courseId: number,
   subCourseId: number,
   participant: string
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .delete(
-        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/participants/${participant}`,
-        { headers: { token } }
-      )
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+) => {
+  await axios
+    .delete(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/participants/${participant}`,
+      { headers: { token } }
+    )
+    .catch(logError('leaveCourse'));
 };
 
-export const axiosCancelCourse = (
+export const axiosCancelCourse = async (
   token: string,
   courseId: number
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .delete(`${apiURL}/course/${courseId}`, { headers: { token } })
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+) => {
+  await axios
+    .delete(`${apiURL}/course/${courseId}`, { headers: { token } })
+    .catch(logError('cancelCourse'));
 };
 
 export const axiosCreateSubCourse = (
@@ -516,59 +381,39 @@ export const axiosCreateSubCourse = (
   courseId: number,
   subCourse: SubCourse
 ): Promise<number> => {
-  return new Promise((resolve, reject) => {
-    console.log(subCourse);
+  console.log(subCourse);
 
-    axios
-      .post(`${apiURL}/course/${courseId}/subcourse`, subCourse, {
-        headers: { token },
-      })
-      .then((response) => {
-        resolve(response.data.id);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .post(`${apiURL}/course/${courseId}/subcourse`, subCourse, {
+      headers: { token },
+    })
+    .then((response) => response.data.id)
+    .catch(logError('createSubcourse'));
 };
 
-export const axiosCancelSubCourse = (
+export const axiosCancelSubCourse = async (
   token: string,
   courseId: number,
   subCourseId: number
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .delete(`${apiURL}/course/${courseId}/subcourse/${subCourseId}`, {
-        headers: { token },
-      })
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+) => {
+  await axios
+    .delete(`${apiURL}/course/${courseId}/subcourse/${subCourseId}`, {
+      headers: { token },
+    })
+    .catch(logError('cancelSubcourse'));
 };
 
-export const axiosEditSubCourse = (
+export const axiosEditSubCourse = async (
   token: string,
   courseId: number,
   subCourseId: number,
   subCourse: SubCourse
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .put(`${apiURL}/course/${courseId}/subcourse/${subCourseId}`, subCourse, {
-        headers: { token },
-      })
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+) => {
+  await axios
+    .put(`${apiURL}/course/${courseId}/subcourse/${subCourseId}`, subCourse, {
+      headers: { token },
+    })
+    .catch(logError('editSubcourse'));
 };
 
 export const axiosCreateLecture = (
@@ -577,22 +422,16 @@ export const axiosCreateLecture = (
   subCourseId: number,
   lecture: Lecture
 ): Promise<number> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture`,
-        lecture,
-        {
-          headers: { token },
-        }
-      )
-      .then((response) => {
-        resolve(response.data.id);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture`,
+      lecture,
+      {
+        headers: { token },
+      }
+    )
+    .then((response) => response.data.id)
+    .catch(logError('createLecture'));
 };
 
 export const axiosEditLecture = (
@@ -602,91 +441,64 @@ export const axiosEditLecture = (
   lectureId: number,
   lecture: Lecture
 ): Promise<number> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .put(
-        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture/${lectureId}`,
-        lecture,
-        {
-          headers: { token },
-        }
-      )
-      .then((response) => {
-        resolve(response.data.id);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .put(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture/${lectureId}`,
+      lecture,
+      {
+        headers: { token },
+      }
+    )
+    .then((response) => response.data.id)
+    .catch(logError('editLecture'));
 };
 
-export const axiosCancelLecture = (
+export const axiosCancelLecture = async (
   token: string,
   courseId: number,
   subCourseId: number,
   lectureId: number
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
+) => {
+   await axios
       .delete(
         `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture/${lectureId}`,
         { headers: { token } }
       )
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+      .catch(logError('cancelLecture'));
 };
 
-export const axiosSendCourseGroupMail = (
+export const axiosSendCourseGroupMail = async (
   token: string,
   courseId: number,
   subCourseId: number,
   subject: string,
   body: string
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/groupmail`,
-        { subject, body },
-        {
-          headers: { token },
-        }
-      )
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+) => {
+  await axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/groupmail`,
+      { subject, body },
+      {
+        headers: { token },
+      }
+    )
+    .catch(logError('sendGroupcourseMail'));
 };
 
-export const axiosBecomeInstructor = (
+export const axiosBecomeInstructor = async (
   id: string,
   token: string,
   data: BecomeInstructor | BecomeIntern
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${apiURL}/user/${id}/role/instructor`,
-        { ...data },
-        {
-          headers: { token },
-        }
-      )
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+) => {
+  await axios
+    .post(
+      `${apiURL}/user/${id}/role/instructor`,
+      { ...data },
+      {
+        headers: { token },
+      }
+    )
+    .catch(logError('becomeInstructor'));
 };
 
 export const axiosJoinBBBmeeting = (
@@ -696,17 +508,13 @@ export const axiosJoinBBBmeeting = (
 ): Promise<CourseOverview> => {
   const url = `${apiURL}/course/${courseId}/subcourse/${subcourseId}/meeting/join`;
 
-  return new Promise((resolve, reject) => {
-    axios
-      .get(url, { headers: { token } })
-      .then((response) => {
-        console.log(response);
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .get(url, { headers: { token } })
+    .then((response) => {
+      console.log(response);
+      return response.data;
+    })
+    .catch(logError('JoinBBBmeeting'));
 };
 
 export const axiosGetCooperatingSchool = (
@@ -714,16 +522,10 @@ export const axiosGetCooperatingSchool = (
 ): Promise<SchoolInfo[]> => {
   const url = `${apiURL}/register/${state}/schools`;
 
-  return new Promise((resolve, reject) => {
-    axios
-      .get(url)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+  return axios
+    .get(url)
+    .then((response) => response.data)
+    .catch(logError('getCooperatingSchool'));
 };
 
 export const axiosGetMentoringMaterial = (
@@ -737,66 +539,51 @@ export const axiosGetMentoringMaterial = (
   params.append('type', type);
   params.append('location', location);
 
-  return new Promise((resolve, reject) => {
-    axios
-      .get(url, { headers: { token }, params })
-      .then((response) => resolve(response.data))
-      .catch((error) => reject(error));
-  });
+  return axios
+    .get(url, { headers: { token }, params })
+    .then((response) => response.data)
+    .catch(logError('getMentoringMaterial'));
 };
 
 export const axiosGetFeedbackCallData = (
   token: string
 ): Promise<FeedbackCall> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`${apiURL}/mentoring/feedbackCall`, { headers: { token } })
-      .then((response) => resolve(response.data))
-      .catch((error) => reject(error));
-  });
+  return axios
+    .get(`${apiURL}/mentoring/feedbackCall`, { headers: { token } })
+    .then((response) => response.data)
+    .catch(logError('getFeedbackCallData'));
 };
 
-export const axiosPostContactMentor = (
+export const axiosPostContactMentor = async (
   token: string,
   message: MenteeMessage
-): Promise<void> => {
-  return new Promise<void>((resolve, reject) => {
-    axios
-      .post(`${apiURL}/mentoring/contact`, message, { headers: { token } })
-      .then(() => resolve())
-      .catch((err) => reject(err));
-  });
+) => {
+  await axios
+    .post(`${apiURL}/mentoring/contact`, message, { headers: { token } })
+    .catch(logError('postContactMentor'));
+
 };
 
-export const axiosPostUserRoleProjectCoach = (
+export const axiosPostUserRoleProjectCoach = async (
   token: string,
   id: string,
   projectCoachData: BecomeProjectCoach
-): Promise<void> => {
-  return new Promise<void>((resolve, reject) => {
-    axios
-      .post(`${apiURL}/user/${id}/role/projectCoach`, projectCoachData, {
-        headers: { token },
-      })
-      .then(() => resolve())
-      .catch((err) => reject(err));
-  });
+) => {
+  await axios
+    .post(`${apiURL}/user/${id}/role/projectCoach`, projectCoachData, {
+      headers: { token },
+    })
+    .catch(logError('becomeProjectCoach'))
 };
 
-export const axiosPostUserRoleProjectCoachee = (
+export const axiosPostUserRoleProjectCoachee = async (
   token: string,
   id: string,
   projectCoacheeData: BecomeProjectCoachee
-): Promise<void> => {
-  return new Promise<void>((resolve, reject) => {
-    axios
-      .post(`${apiURL}/user/${id}/role/projectCoachee`, projectCoacheeData, {
-        headers: { token },
-      })
-      .then(() => resolve())
-      .catch((err) => {
-        console.log(`Caught error: ${err}`);
-        reject(err);
-      });
-  });
+) => {
+  await axios
+    .post(`${apiURL}/user/${id}/role/projectCoachee`, projectCoacheeData, {
+      headers: { token },
+    })
+    .catch(logError('becomeProjectCoachee'));
 };
