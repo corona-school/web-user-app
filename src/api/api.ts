@@ -18,6 +18,13 @@ const logError = (apiName: string) => (error: Error) => {
   throw error;
 };
 
+/* NOTE: Maybe we can migrate more APIs to this, then this file will get slightly smaller ... */
+const getAPI = <R = void, P extends Array<any> = Array<void>> (name: string, url: (string | ((...params: P) => string)), returns?: (res: AxiosResponse) => R) =>
+  (token: string, ...args: P): Promise<R> => 
+    axios.get(apiURL + (typeof url === 'string' ? url : url(...args)), { headers: { token }})
+      .then(returns ?? ((() => {}) as (() => R)))
+      .catch(logError(name));
+
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -175,6 +182,8 @@ export const axiosGetCertificate = async (
     .get(url, { headers: { token }, responseType: 'blob', params })
     .catch(logError('getCertificate'));
 };
+
+export const axiosGetCertificates = getAPI('getCertificates', "/certificates", (res) => res.data.certificates as CertificateData[]);
 
 export const axiosGetCourses = async (token: string): Promise<CourseOverview[]> => {
   const url = `${apiURL}/courses`;
