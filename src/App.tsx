@@ -32,6 +32,7 @@ import {
   stateInfoForStateSubdomain,
 } from './assets/supportedStateCooperations';
 import ProjectCoach from './routes/ProjectCoach';
+import Certificates from './routes/Certificates';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -80,6 +81,11 @@ const App: React.FC = () => {
   }
   // jufo cooperation
   const isJufoSubdomain = subdomain === 'jufo';
+
+  const isVerified = (
+    userContext.user.type === 'pupil' ||
+    userContext.user.instructorScreeningStatus === ScreeningStatus.Accepted
+  );
 
   return (
     <>
@@ -132,39 +138,28 @@ const App: React.FC = () => {
             <PrivateRoute path="/courses/:id" comeback>
               <CourseDetail />
             </PrivateRoute>
-            <PrivateRoute
-              path="/courses"
-              active={
-                userContext.user.type === 'pupil' ||
-                userContext.user.instructorScreeningStatus ===
-                  ScreeningStatus.Accepted
-              }
-            >
+            <PrivateRoute path="/courses" active={isVerified}>
               <Course />
             </PrivateRoute>
           </Switch>
 
           <PrivateRoute
             path="/matches"
-            active={
-              userContext.user.type === 'pupil' ||
-              userContext.user.screeningStatus === ScreeningStatus.Accepted
-            }
+            active={isVerified}
           >
             <Matches />
           </PrivateRoute>
           <PrivateRoute
             path="/project-coaching"
-            active={
-              userContext.user.type === 'pupil' ||
-              userContext.user.projectCoachingScreeningStatus ===
-                ScreeningStatus.Accepted
-            }
+            active={isVerified}
           >
             <ProjectCoach />
           </PrivateRoute>
           <PrivateRoute path="/settings">
             <Settings />
+          </PrivateRoute>
+          <PrivateRoute path="/certificates" active={isVerified} comeback>
+            <Certificates />
           </PrivateRoute>
           <PrivateRoute path="/mentoring">
             <Mentoring />
