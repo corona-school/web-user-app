@@ -59,7 +59,7 @@ const CourseDetail = (params: { id?: string }) => {
     false
   );
 
-  const { id: urlParamID } = useParams();
+  const { id: urlParamID } = useParams() as { id: string };
   const id = params.id ?? urlParamID;
 
   const api = useContext(ApiContext);

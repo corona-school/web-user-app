@@ -12,6 +12,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
+import { IExposedCertificate } from '../types/Certificate';
 
 const logError = (apiName: string) => (error: Error) => {
   if (dev) console.error(`${apiName} failed:`, error);
@@ -19,12 +20,24 @@ const logError = (apiName: string) => (error: Error) => {
 };
 
 /* NOTE: Maybe we can migrate more APIs to this, then this file will get slightly smaller ... */
-const getAPI = <R = void, P extends Array<any> = Array<void>> (name: string, url: (string | ((...params: P) => string)), returns?: (res: AxiosResponse) => R) =>
-  (token: string, ...args: P): Promise<R> => 
-    axios.get(apiURL + (typeof url === 'string' ? url : url(...args)), { headers: { token }})
-      .then(returns ?? ((() => {}) as (() => R)))
-      .catch(logError(name));
+// eslint-disable-next-line
+const getAPI = <R = void, P extends Array<any> = Array<void>>(
+  name: string,
+  url: string | ((...params: P) => string),
+  returns?: (res: AxiosResponse) => R
+) => (token: string, ...args: P): Promise<R> =>
+  axios
+    .get(apiURL + (typeof url === 'string' ? url : url(...args)), {
+      headers: { token },
+    })
+    .then(returns ?? ((() => {}) as () => R))
+    .catch(logError(name));
 
+export class APIError extends Error {
+  constructor(public readonly code: number, message: string) {
+    super(message);
+  }
+}
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -34,7 +47,7 @@ export const redeemVerificationToken = (
       token: verificationToken,
     })
     .then((response) => response.data.token)
-    .catch(logError("redeemVerificationToken"));
+    .catch(logError('redeemVerificationToken'));
 
 export const getUserId = (token: string): Promise<string> =>
   axios
@@ -44,10 +57,9 @@ export const getUserId = (token: string): Promise<string> =>
     .then((response) => {
       if (response.status === 200) {
         return response.data.id;
-      } else {
-        if (dev) console.error('getUserId failed:', response);
-        throw response;
       }
+      if (dev) console.error('getUserId failed:', response);
+      throw new APIError(response.status, 'getUserId');
     })
     .catch(logError('getUserId'));
 
@@ -124,7 +136,7 @@ export const axiosRequestNewToken = async (
     })
     .catch((error) => {
       if (dev) console.error('requestNewToken failed:', error);
-      throw error?.response?.status;
+      throw new APIError(error?.response?.status, 'requestNewToken');
     });
 };
 
@@ -165,27 +177,32 @@ export const axiosPutUserActive = async (
 export const axiosGetCertificate = async (
   id: string,
   token: string,
-  certificateDate: CertificateData
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<AxiosResponse<any>> => {
-  const url = `${apiURL}/certificate/${id}/${certificateDate.student}`;
+  certificateData: CertificateData
+): Promise<AxiosResponse<string>> => {
+  const url = `${apiURL}/certificate/${id}/${certificateData.student}`;
 
   const params = new URLSearchParams();
-  params.append('subjects', certificateDate.subjects.join(','));
-  params.append('endDate', certificateDate.endDate.toString());
-  params.append('medium', certificateDate.mediaType || '');
-  params.append('hoursPerWeek', certificateDate.hoursPerWeek.toString());
-  params.append('hoursTotal', certificateDate.hoursTotal.toString());
-  params.append('categories', certificateDate.activities.join('\n'));
+  params.append('subjects', certificateData.subjects.join(','));
+  params.append('endDate', certificateData.endDate.toString());
+  params.append('medium', certificateData.mediaType || '');
+  params.append('hoursPerWeek', certificateData.hoursPerWeek.toString());
+  params.append('hoursTotal', certificateData.hoursTotal.toString());
+  params.append('categories', certificateData.activities.join('\n'));
 
   return axios
     .get(url, { headers: { token }, responseType: 'blob', params })
     .catch(logError('getCertificate'));
 };
 
-export const axiosGetCertificates = getAPI('getCertificates', "/certificates", (res) => res.data.certificates as CertificateData[]);
+export const axiosGetCertificates = getAPI(
+  'getCertificates',
+  '/certificates',
+  (res) => res.data.certificates as IExposedCertificate[]
+);
 
-export const axiosGetCourses = async (token: string): Promise<CourseOverview[]> => {
+export const axiosGetCourses = async (
+  token: string
+): Promise<CourseOverview[]> => {
   const url = `${apiURL}/courses`;
 
   const params = new URLSearchParams();
@@ -209,7 +226,7 @@ export const axiosGetCourse = (
   return axios
     .get(url, { headers: { token } })
     .then((response) => response.data)
-    .catch(logError('getCourse'))
+    .catch(logError('getCourse'));
 };
 
 export const axiosEditCourse = async (
@@ -274,7 +291,7 @@ export const axiosGetMyCourses = (
   return axios
     .get(url, { headers: { token }, params })
     .then((response) => response.data)
-    .catch(logError('getMyCourses'))
+    .catch(logError('getMyCourses'));
 };
 
 const isValidTutee = (tutee: Tutee) => {
@@ -337,10 +354,7 @@ export const axiosRegisterTutor = (tutor: Tutor) => {
     .catch(logError('registerTutor'));
 };
 
-export const axiosCreateCourse = (
-  token: string,
-  course: Course
-) => {
+export const axiosCreateCourse = (token: string, course: Course) => {
   return axios
     .post(`${apiURL}/course`, course, { headers: { token } })
     .then((response) => response.data.id)
@@ -376,10 +390,7 @@ export const axiosLeaveCourse = async (
     .catch(logError('leaveCourse'));
 };
 
-export const axiosCancelCourse = async (
-  token: string,
-  courseId: number
-) => {
+export const axiosCancelCourse = async (token: string, courseId: number) => {
   await axios
     .delete(`${apiURL}/course/${courseId}`, { headers: { token } })
     .catch(logError('cancelCourse'));
@@ -468,12 +479,12 @@ export const axiosCancelLecture = async (
   subCourseId: number,
   lectureId: number
 ) => {
-   await axios
-      .delete(
-        `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture/${lectureId}`,
-        { headers: { token } }
-      )
-      .catch(logError('cancelLecture'));
+  await axios
+    .delete(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/lecture/${lectureId}`,
+      { headers: { token } }
+    )
+    .catch(logError('cancelLecture'));
 };
 
 export const axiosSendCourseGroupMail = async (
@@ -570,7 +581,6 @@ export const axiosPostContactMentor = async (
   await axios
     .post(`${apiURL}/mentoring/contact`, message, { headers: { token } })
     .catch(logError('postContactMentor'));
-
 };
 
 export const axiosPostUserRoleProjectCoach = async (
@@ -582,7 +592,7 @@ export const axiosPostUserRoleProjectCoach = async (
     .post(`${apiURL}/user/${id}/role/projectCoach`, projectCoachData, {
       headers: { token },
     })
-    .catch(logError('becomeProjectCoach'))
+    .catch(logError('becomeProjectCoach'));
 };
 
 export const axiosPostUserRoleProjectCoachee = async (

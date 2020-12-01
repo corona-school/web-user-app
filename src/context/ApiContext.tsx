@@ -18,6 +18,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
+import { IExposedCertificate } from '../types/Certificate';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
@@ -33,7 +34,7 @@ interface IApiContext {
     cerfiticateData: CertificateData
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => Promise<AxiosResponse<any>>;
-  getCertificates: () => Promise<CertificateData[]>;
+  getCertificates: () => Promise<IExposedCertificate[]>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
   getMyCourses: (type: 'student' | 'pupil') => Promise<CourseOverview[]>;
@@ -152,9 +153,7 @@ export function useAPI<N extends keyof IApiContext>(name: N): IApiContext[N] {
   return useContext(ApiContext)[name];
 }
 
-export function useAPIResult<
-  N extends keyof IApiContext
->(name: N) {
+export function useAPIResult<N extends keyof IApiContext>(name: N) {
   const [value, setValue] = useState<{
     loading?: boolean;
     error?: Error;
@@ -163,6 +162,7 @@ export function useAPIResult<
   const api = useAPI(name);
 
   useEffect(() => {
+    // eslint-disable-next-line
     (api as any)()
       .then((value) => setValue({ value }))
       .catch((error) => setValue({ error }));
@@ -179,6 +179,7 @@ export const ApiProvider: React.FC = ({ children }) => {
   } = authContext;
 
   /* NOTE: Maybe we can migrate more APIs to this, then this file will get slightly smaller ... */
+  // eslint-disable-next-line
   const withToken = <R, P extends Array<any>>(
     api: (token: string, ...params: P) => R
   ) => (...args: P): R => api(token, ...args);
