@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useContext } from 'react';
 import { AxiosResponse } from 'axios';
-import { message } from 'antd';
 import { AuthContext } from './AuthContext';
 import { User, Subject } from '../types';
 import * as api from '../api/api';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
-import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
+import {
+  Course,
+  SubCourse,
+  Lecture,
+  CourseOverview,
+  Tag,
+} from '../types/Course';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { CompletedSubCourse } from '../components/forms/CreateCourse';
 import { CompletedLecture } from '../routes/CourseForm';
@@ -34,6 +39,7 @@ interface IApiContext {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => Promise<AxiosResponse<any>>;
   getCourses: () => Promise<CourseOverview[]>;
+  getCourseTags: () => Promise<Tag[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
   getMyCourses: (type: 'student' | 'pupil') => Promise<CourseOverview[]>;
   createCourse: (coure: Course) => Promise<number>;
@@ -117,6 +123,7 @@ export const ApiContext = React.createContext<IApiContext>({
   putUserActiveFalse: () => Promise.reject(),
   getCertificate: (cerfiticateData) => Promise.reject(),
   getCourses: () => Promise.reject(),
+  getCourseTags: () => Promise.reject(),
   getCourse: (courseId) => Promise.reject(),
   getMyCourses: () => Promise.reject(),
   createCourse: (course) => Promise.reject(),
@@ -187,6 +194,8 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const getCourses = (): Promise<CourseOverview[]> =>
     api.axiosGetCourses(token);
+
+  const getCourseTags = (): Promise<Tag[]> => api.axiosGetCourseTags(token);
 
   const getCourse = (id: string): Promise<CourseOverview> =>
     api.axiosGetCourse(token, id);
@@ -323,6 +332,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         putUserActiveFalse,
         getCertificate,
         getCourses,
+        getCourseTags,
         getCourse,
         getMyCourses,
         registerTutee,

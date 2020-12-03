@@ -5,14 +5,18 @@ import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 import Context from '../context';
 import { Title } from '../components/Typography';
-import { ParsedCourseOverview, CourseCategory } from '../types/Course';
+import {
+  ParsedCourseOverview,
+  CourseCategory,
+  Tag as CourseTag,
+} from '../types/Course';
 import MyCourseCard from '../components/cards/MyCourseCard';
 
 import classes from './PublicCourse.module.scss';
 import { parseCourse, defaultPublicCourseSort } from '../utils/CourseUtil';
 import { Tag } from '../components/Tag';
-import { tags } from '../components/forms/CreateCourse';
 import Icons from '../assets/icons';
+import { dev } from '../api/config';
 
 const categoryToLabel = new Map([
   [CourseCategory.CLUB, 'AGs'],
@@ -26,33 +30,49 @@ const PublicCourse = () => {
 
   const [filterOpen, setFilterOpen] = useState(false);
 
-  const default1 = tags.get('club').map((t) => t.name);
-  const [checkedList1, setCheckedList1] = useState(default1);
+  const apiContext = useContext(Context.Api);
+
+  const [clubTags, setClubTags] = useState<CourseTag[]>([]);
+  const [checkedList1, setCheckedList1] = useState<string[]>([]);
   const [indeterminate1, setIndeterminate1] = useState(false);
   const [checkAll1, setCheckAll1] = useState(true);
 
-  const default2 = tags.get('revision').map((t) => t.name);
-  const [checkedList2, setCheckedList2] = useState(default2);
+  const [revisionTags, setRevisionTags] = useState<CourseTag[]>([]);
+  const [checkedList2, setCheckedList2] = useState<string[]>([]);
   const [indeterminate2, setIndeterminate2] = useState(false);
   const [checkAll2, setCheckAll2] = useState(true);
 
-  const default3 = tags.get('coaching').map((t) => t.name);
-  const [checkedList3, setCheckedList3] = useState(default3);
+  const [coachingTags, setCoachingTags] = useState<CourseTag[]>([]);
+  const [checkedList3, setCheckedList3] = useState<string[]>([]);
   const [indeterminate3, setIndeterminate3] = useState(false);
   const [checkAll3, setCheckAll3] = useState(true);
 
   // no tags
   const [checkAll4, setCheckAll4] = useState(true);
 
-  const apiContext = useContext(Context.Api);
   // eslint-disable-next-line @typescript-eslint/ban-types
   const [options, setOptions] = useState<SelectProps<object>['options']>([]);
 
   const history = useHistory();
 
+  const handleSetTags = (newTags: CourseTag[]) => {
+    setClubTags(newTags.filter((t) => t.category === 'club'));
+    setRevisionTags(newTags.filter((t) => t.category === 'revision'));
+    setCoachingTags(newTags.filter((t) => t.category === 'coaching'));
+
+    setCheckedList1(
+      newTags.filter((t) => t.category === 'club').map((t) => t.name)
+    );
+    setCheckedList2(
+      newTags.filter((t) => t.category === 'revision').map((t) => t.name)
+    );
+    setCheckedList3(
+      newTags.filter((t) => t.category === 'coaching').map((t) => t.name)
+    );
+  };
+
   useEffect(() => {
     setLoading(true);
-
     apiContext
       .getCourses()
       .then((c) => {
@@ -64,6 +84,17 @@ const PublicCourse = () => {
       .finally(() => {
         setLoading(false);
       });
+
+    setLoading(true);
+    apiContext
+      .getCourseTags()
+      .then((response) => {
+        handleSetTags(response);
+      })
+      .catch((error) => {
+        if (dev) console.error(error);
+      })
+      .finally(() => setLoading(false));
   }, [apiContext]);
 
   if (loading) {
@@ -121,39 +152,39 @@ const PublicCourse = () => {
     if (key === '1') {
       setCheckedList1(checkedList);
       setIndeterminate1(
-        !!checkedList.length && checkedList.length < default1.length
+        !!checkedList.length && checkedList.length < clubTags.length
       );
-      setCheckAll1(checkedList.length === default1.length);
+      setCheckAll1(checkedList.length === clubTags.length);
     }
     if (key === '2') {
       setCheckedList2(checkedList);
       setIndeterminate2(
-        !!checkedList.length && checkedList.length < default2.length
+        !!checkedList.length && checkedList.length < revisionTags.length
       );
-      setCheckAll2(checkedList.length === default2.length);
+      setCheckAll2(checkedList.length === revisionTags.length);
     }
     if (key === '3') {
       setCheckedList3(checkedList);
       setIndeterminate3(
-        !!checkedList.length && checkedList.length < default3.length
+        !!checkedList.length && checkedList.length < coachingTags.length
       );
-      setCheckAll3(checkedList.length === default3.length);
+      setCheckAll3(checkedList.length === coachingTags.length);
     }
   };
 
   const onCheckAllChange = (e, key: string) => {
     if (key === '1') {
-      setCheckedList1(e.target.checked ? default1 : []);
+      setCheckedList1(e.target.checked ? clubTags.map((t) => t.name) : []);
       setIndeterminate1(false);
       setCheckAll1(e.target.checked);
     }
     if (key === '2') {
-      setCheckedList2(e.target.checked ? default2 : []);
+      setCheckedList2(e.target.checked ? revisionTags.map((t) => t.name) : []);
       setIndeterminate2(false);
       setCheckAll2(e.target.checked);
     }
     if (key === '3') {
-      setCheckedList3(e.target.checked ? default3 : []);
+      setCheckedList3(e.target.checked ? coachingTags.map((t) => t.name) : []);
       setIndeterminate3(false);
       setCheckAll3(e.target.checked);
     }
@@ -247,7 +278,7 @@ const PublicCourse = () => {
               flexDirection: 'column',
               marginLeft: '16px',
             }}
-            options={default1 || []}
+            options={clubTags.map((t) => t.name) || []}
             value={checkedList1}
             onChange={(checkedList: string[]) => onChange(checkedList, '1')}
           />
@@ -266,7 +297,7 @@ const PublicCourse = () => {
               flexDirection: 'column',
               marginLeft: '16px',
             }}
-            options={default2 || []}
+            options={revisionTags.map((t) => t.name) || []}
             value={checkedList2}
             onChange={(checkedList: string[]) => onChange(checkedList, '2')}
           />
@@ -285,7 +316,7 @@ const PublicCourse = () => {
               flexDirection: 'column',
               marginLeft: '16px',
             }}
-            options={default3 || []}
+            options={coachingTags.map((t) => t.name) || []}
             value={checkedList3}
             onChange={(checkedList: string[]) => onChange(checkedList, '3')}
           />

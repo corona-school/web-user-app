@@ -1,11 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Form, Input, Radio, Select, InputNumber, Switch, message } from 'antd';
 import Button from '../button';
 import Context from '../../context';
 
 import classes from './CreateCourse.module.scss';
-import { Course, SubCourse } from '../../types/Course';
+import { Course, SubCourse, Tag } from '../../types/Course';
 import { CompletedCourse } from '../../routes/CourseForm';
 import { dev } from '../../api/config';
 
@@ -23,37 +23,6 @@ interface Props {
   setCourse: (course: CompletedCourse) => void;
   setSubCourse: (subCourse: CompletedSubCourse) => void;
 }
-
-export const revisionTags = [
-  { name: 'easy', identifier: 'easy' },
-  { name: 'medium', identifier: 'medium' },
-  { name: 'difficult', identifier: 'difficult' },
-  { name: 'Mathematik', identifier: 'Mathematics' },
-  { name: 'Englisch', identifier: 'English' },
-  { name: 'Deutsch', identifier: 'German' },
-];
-
-export const clubTags = [
-  { name: 'Spiel & Spaß', identifier: 'play&fun' },
-  { name: 'Kreativität', identifier: 'creativity' },
-  { name: 'Sport & Bewegung', identifier: 'sports' },
-  { name: 'Naturwissenschaften', identifier: 'science' },
-  { name: 'Musik', identifier: 'music' },
-  { name: 'Gesundheit', identifier: 'health' },
-  { name: 'Interkulturelles', identifier: 'intercultural' },
-];
-
-export const coachingTags = [
-  { name: 'Prüfungsvorbereitung', identifier: 'preparation' },
-  { name: 'Selbstsorganisation', identifier: 'organisation' },
-  { name: 'Persönlichkeitsbildung', identifier: 'personality' },
-];
-
-export const tags = new Map([
-  ['revision', revisionTags],
-  ['club', clubTags],
-  ['coaching', coachingTags],
-]);
 
 export const CreateCourse: React.FC<Props> = (props) => {
   const [outline, setOutline] = useState(
@@ -80,8 +49,21 @@ export const CreateCourse: React.FC<Props> = (props) => {
     props.course?.tags ? props.course?.tags : []
   );
 
+  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
+
+  useEffect(() => {
+    apiContext
+      .getCourseTags()
+      .then((response) => {
+        setAvailableTags(response);
+      })
+      .catch((error) => {
+        if (dev) console.error(error);
+      });
+  }, [apiContext, setAvailableTags]);
 
   const renderSubCourseForm = () => {
     return (
@@ -265,9 +247,11 @@ export const CreateCourse: React.FC<Props> = (props) => {
             mode="multiple"
             placeholder="Ergänze hier Tags damit dein Kurs besser gefunden werden kann"
           >
-            {tags.get(category)?.map((tag) => {
-              return <Option value={tag.identifier}>{tag.name}</Option>;
-            })}
+            {availableTags
+              .filter((t) => t.category === category || t.category === 'other')
+              .map((tag) => {
+                return <Option value={tag.id}>{tag.name}</Option>;
+              })}
           </Select>
         </Form.Item>
 
