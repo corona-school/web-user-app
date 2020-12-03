@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import { Button, Space, Table, Tag } from 'antd';
 import Context from '../context';
 
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
@@ -100,6 +101,78 @@ const Settings: React.FC = () => {
     );
   };
 
+  const renderCertificatesTable = () => {
+    const certificateAttrs = {
+      pupilFullname: 'pupilFullname',
+      subjects: 'subjects',
+      status: 'status', // use strict value range here?
+    };
+    const columns = [
+      {
+        title: 'Name des Schülers',
+        dataIndex: certificateAttrs.pupilFullname,
+        key: certificateAttrs.pupilFullname,
+      },
+      {
+        title: 'Fächer',
+        dataIndex: certificateAttrs.subjects,
+        key: certificateAttrs.subjects,
+        render: (subjects) => (
+          <>
+            {subjects.map((subject) => (
+              <Tag key={subject}>{subject.toUpperCase()}</Tag>
+            ))}
+          </>
+        ),
+      },
+      {
+        title: 'Status',
+        dataIndex: certificateAttrs.status,
+        key: certificateAttrs.status,
+        render: (status) => (
+          <>
+            <Tag color={status === 'Ausstehend' ? 'red' : 'green'} key={status}>
+              {status}
+            </Tag>
+          </>
+        ),
+      },
+      {
+        title: 'Aktion',
+        key: 'action',
+        render: () => (
+          <Space size="middle">
+            {/* Need API calls for these buttons */}
+            <Button type="primary">Ansehen</Button>
+            <Button danger>Löschen</Button>
+          </Space>
+        ),
+      },
+    ];
+    const certificatesData = [
+      {
+        key: '1',
+        pupilFullname: 'Mike Mustermann',
+        subjects: ['Deutsch', 'Englisch'],
+        status: 'Unterschrieben',
+      },
+      {
+        key: '2',
+        pupilFullname: 'Tom Müller',
+        subjects: ['Biologie', 'Mathe'],
+        status: 'Ausstehend',
+      },
+    ];
+    return (
+      <>
+        <Title size="h3" className={classes.subjectTitle}>
+          Zertifikate
+        </Title>
+        <Table dataSource={certificatesData} columns={columns} />
+      </>
+    );
+  };
+
   return (
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
@@ -107,6 +180,7 @@ const Settings: React.FC = () => {
       {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}
+      {renderCertificatesTable()}
       <AccountNotScreenedModal />
     </div>
   );

@@ -207,12 +207,17 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
         </Title>
         <div className={classes.inputField}>
           <Select
+            disabled={!selectedPupil}
             onChange={(v: string[]) => {
               setCertificateData({ ...certificateData, subjects: v });
             }}
             value={certificateData.subjects}
             mode="multiple"
-            placeholder="Wähle deine Fächer aus"
+            placeholder={
+              selectedPupil
+                ? 'Wähle deine Fächer aus'
+                : 'Zuerst einen Schüler auswählen'
+            }
             style={{ width: '100%' }}
           >
             {selectedPupil?.subjects.map((s) => {
