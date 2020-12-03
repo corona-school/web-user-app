@@ -2,7 +2,13 @@ import axios, { AxiosResponse } from 'axios';
 import { Credentials, User, Subject } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
-import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
+import {
+  Course,
+  SubCourse,
+  Lecture,
+  CourseOverview,
+  Tag,
+} from '../types/Course';
 import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
@@ -239,6 +245,21 @@ export const axiosGetCourses = (token: string): Promise<CourseOverview[]> => {
 
     axios
       .get(url, { headers: { token }, params })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const axiosGetCourseTags = (token: string): Promise<Tag[]> => {
+  const url = `${apiURL}/courses/tags`;
+
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url, { headers: { token } })
       .then((response) => {
         resolve(response.data);
       })
