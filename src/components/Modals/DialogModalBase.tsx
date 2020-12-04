@@ -145,6 +145,10 @@ const Content = (props) => {
   return <div className={styles.content}>{props.children}</div>;
 };
 
+const Spacer = () => {
+  return <div className={styles.spacer} />;
+};
+
 /*
 Responsible for aligning buttons next to each other
  */
@@ -239,6 +243,7 @@ DialogModalBase.Modal = Modal;
 DialogModalBase.Title = Title;
 DialogModalBase.Icon = Icon;
 DialogModalBase.Description = Description;
+DialogModalBase.Spacer = Spacer;
 DialogModalBase.Subheading = Subheading;
 DialogModalBase.Form = Form;
 DialogModalBase.InputCompound = InputCompound;

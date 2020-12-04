@@ -134,6 +134,7 @@ const CancelMatchModal: React.FC<{
 
               {supportSuccessful && ownType === 'student' && (
                 <div>
+                  <DialogModalBase.Spacer />
                   <DialogModalBase.Subheading>
                     Vielen Dank für deine Hilfe!
                   </DialogModalBase.Subheading>
@@ -152,6 +153,7 @@ const CancelMatchModal: React.FC<{
 
               {supportSuccessful && ownType === 'pupil' && (
                 <div>
+                  <DialogModalBase.Spacer />
                   <DialogModalBase.Subheading>
                     Vielen Dank für deine Rückmeldung!
                   </DialogModalBase.Subheading>
