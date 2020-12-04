@@ -3,7 +3,6 @@ import { Empty } from 'antd';
 import OpenRequestCard from '../components/cards/OpenRequestCard';
 import { UserContext } from '../context/UserContext';
 import Context from '../context';
-import DissolveMatchModal from '../components/Modals/DissolveMatchModal';
 import { Title } from '../components/Typography';
 import classes from './Matches.module.scss';
 import MatchCard from '../components/cards/MatchCard';
@@ -77,21 +76,13 @@ const Matches: React.FC = () => {
         type={userContext.user.type === 'student' ? 'pupil' : 'student'}
         match={match}
         handleDissolveMatch={() => {
-          // modalContext.setOpenedModal(`dissolveMatchModal${match.uuid}`);
           modalContext.setOpenedModal(`cancelMatchModal${match.uuid}`);
         }}
         dissolved={false}
       />
-      <DissolveMatchModal
-        identifier={`dissolveMatchModal${match.uuid}`}
-        matchUuid={match.uuid}
-        matchFirstname={match.firstname}
-        ownType={userContext.user.type}
-        projectCoaching={false}
-      />
       <CancelMatchModal
-        // identifier={`dissolveMatchModal${match.uuid}`}
-        // matchUuid={match.uuid}
+        identifier={`cancelMatchModal${match.uuid}`}
+        matchUuid={match.uuid}
         matchFirstname={match.firstname}
         ownType={userContext.user.type}
         projectCoaching={false}

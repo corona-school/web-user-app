@@ -1,31 +1,71 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import DialogModalBase from './DialogModalBase';
 import { ReactComponent as Trashcan } from '../../assets/icons/trashcan.svg';
+import Context from '../../context';
 import {
   coacheeReasonOptions,
   coachReasonOptions,
   pupilReasonOptions,
   studentReasonOptions,
 } from '../../assets/dissolveMatchReasons';
+import { putUser } from '../../api/api';
+import { dev } from '../../api/config';
 
 const accentColor = '#D03D53';
 
-export default function CancelMatchModal({
-  // identifier,
-  // matchUuid,
-  matchFirstname,
-  ownType,
-  projectCoaching,
-}) {
-  const [couldHelp, setCouldHelp] = useState(null);
+const CancelMatchModal: React.FC<{
+  identifier: string;
+  matchFirstname: string;
+  matchUuid: string;
+  ownType: 'pupil' | 'student';
+  projectCoaching: boolean;
+}> = ({ identifier, matchUuid, matchFirstname, ownType, projectCoaching }) => {
+  const [supportSuccessful, setSupportSuccessful] = useState(null);
   const [noHelpReason, setNoHelpReason] = useState(null);
 
   const [dissolved, setDissolved] = useState<boolean>(false);
-  const [/* newMatchWanted, */ setNewMatchWanted] = useState<boolean | null>(
-    null
-  );
-  // const { credentials } = useContext(Context.Auth);
-  // const { user, fetchUserData } = useContext(Context.User);
+  const [newMatchWanted, setNewMatchWanted] = useState<boolean | null>(null);
+
+  const apiContext = useContext(Context.Api);
+  const { credentials } = useContext(Context.Auth);
+  const { user, fetchUserData } = useContext(Context.User);
+
+  const requestNewMatch = () => {
+    if (projectCoaching && typeof user.projectMatchesRequested !== 'number') {
+      return;
+    }
+    if (!projectCoaching && typeof user.matchesRequested !== 'number') return;
+    putUser(credentials, {
+      firstname: user.firstname,
+      lastname: user.lastname,
+      matchesRequested: projectCoaching
+        ? user.matchesRequested
+        : Math.min(user.matchesRequested + 1, 2),
+      projectMatchesRequested: projectCoaching
+        ? Math.min(user.projectMatchesRequested + 1, 2)
+        : user.projectMatchesRequested,
+      lastUpdatedSettingsViaBlocker: user.lastUpdatedSettingsViaBlocker,
+    })
+      .catch((err) => {
+        if (dev) console.error(err);
+      })
+      .finally(() => {
+        fetchUserData();
+      });
+  };
+
+  const endCollaboration = () => {
+    if (projectCoaching) {
+      return apiContext.dissolveProjectMatch(
+        matchUuid,
+        supportSuccessful ? -1 : Number(noHelpReason)
+      );
+    }
+    return apiContext.dissolveMatch(
+      matchUuid,
+      supportSuccessful ? -1 : Number(noHelpReason)
+    );
+  };
 
   let reasonOptions: { [key: string]: string };
 
@@ -38,125 +78,169 @@ export default function CancelMatchModal({
   if (!projectCoaching && ownType === 'pupil')
     reasonOptions = pupilReasonOptions;
 
+  const onModalClose = () => {
+    if (newMatchWanted) requestNewMatch();
+    else fetchUserData();
+  };
+
   return (
     <DialogModalBase accentColor={accentColor}>
-      <DialogModalBase.Modal modalName="cancelMatchModal">
+      <DialogModalBase.Modal modalName={identifier}>
         <DialogModalBase.Header>
           <DialogModalBase.Icon Icon={Trashcan} />
           <DialogModalBase.Title>Match auflösen</DialogModalBase.Title>
           <DialogModalBase.CloseButton
             stateSettingMethods={[
-              setCouldHelp,
+              setSupportSuccessful,
               setNoHelpReason,
               setDissolved,
               setNewMatchWanted,
             ]}
+            hook={onModalClose}
           />
         </DialogModalBase.Header>
+        {!dissolved ? (
+          <div>
+            <DialogModalBase.Description>
+              Schade, dass du die Zusammenarbeit beenden möchtest. Bitte teile
+              uns mit, warum du dein Match auflöst.
+            </DialogModalBase.Description>
 
-        <DialogModalBase.Description>
-          Schade, dass du die Zusammenarbeit beenden möchtest. Bitte teile uns
-          mit, warum du dein Match auflöst.
-        </DialogModalBase.Description>
+            <DialogModalBase.Content>
+              <DialogModalBase.Form>
+                {ownType === 'pupil' ? (
+                  <DialogModalBase.Subheading>
+                    Konnte dich {matchFirstname} erfolgreich unterstützen?
+                  </DialogModalBase.Subheading>
+                ) : (
+                  <DialogModalBase.Subheading>
+                    Konntest du {matchFirstname} erfolgreich unterstützen?
+                  </DialogModalBase.Subheading>
+                )}
+                <DialogModalBase.InputCompound direction="horizontal">
+                  <DialogModalBase.CheckboxSingle
+                    value
+                    selected={supportSuccessful}
+                    onSelect={setSupportSuccessful}
+                    label="Ja"
+                  />
+                  <DialogModalBase.CheckboxSingle
+                    value={false}
+                    selected={supportSuccessful}
+                    onSelect={setSupportSuccessful}
+                    label="Nein"
+                  />
+                </DialogModalBase.InputCompound>
+              </DialogModalBase.Form>
 
-        <DialogModalBase.Content>
-          <DialogModalBase.Form>
-            {ownType === 'pupil' ? (
+              {supportSuccessful && ownType === 'student' && (
+                <div>
+                  <DialogModalBase.Subheading>
+                    Vielen Dank für deine Hilfe!
+                  </DialogModalBase.Subheading>
+                  <DialogModalBase.Description>
+                    Ohne dich wäre dieses Projekt nicht möglich. Danke, dass du
+                    in dieser schwierigen Zeit gesellschaftliche Verantwortung
+                    übernommen hast!
+                    <br />
+                    Sobald du die Zusammenarbeit endgültig beendest, werden wird
+                    {matchFirstname} darüber per E-Mail informieren.
+                    {matchFirstname} hat dann die Möglichkeit, sich bei Bedarf
+                    neu verbinden zu lassen.
+                  </DialogModalBase.Description>
+                </div>
+              )}
+
+              {supportSuccessful && ownType === 'pupil' && (
+                <div>
+                  <DialogModalBase.Subheading>
+                    Vielen Dank für deine Rückmeldung!
+                  </DialogModalBase.Subheading>
+                  <DialogModalBase.Description>
+                    Sobald du die Zusammenarbeit endgültig beendest, werden wir
+                    {matchFirstname} darüber per E-Mail informieren.
+                    {matchFirstname} hat dann die Möglichkeit sich bei Bedarf
+                    neu verbinden zu lassen.
+                  </DialogModalBase.Description>
+                </div>
+              )}
+
+              {supportSuccessful === false && (
+                <DialogModalBase.Form>
+                  {ownType === 'student' ? (
+                    <DialogModalBase.Subheading>
+                      Warum konntest du {matchFirstname} nicht unterstützen?
+                    </DialogModalBase.Subheading>
+                  ) : (
+                    <DialogModalBase.Subheading>
+                      Warum konnte dich {matchFirstname} nicht unterstützen?
+                    </DialogModalBase.Subheading>
+                  )}
+                  <DialogModalBase.InputCompound direction="vertical">
+                    {Object.entries(reasonOptions).map(([key, value]) => (
+                      <DialogModalBase.CheckboxSingle
+                        key={key}
+                        label={value}
+                        value={key}
+                        selected={noHelpReason}
+                        onSelect={setNoHelpReason}
+                      />
+                    ))}
+                  </DialogModalBase.InputCompound>
+                </DialogModalBase.Form>
+              )}
+              {!dissolved &&
+                supportSuccessful != null &&
+                (supportSuccessful ||
+                  (!supportSuccessful && noHelpReason != null)) && (
+                  <DialogModalBase.ButtonBox>
+                    <DialogModalBase.Button
+                      onClick={() =>
+                        endCollaboration().then(() => setDissolved(true))
+                      }
+                      label="Auflösen"
+                    />
+                  </DialogModalBase.ButtonBox>
+                )}
+            </DialogModalBase.Content>
+            {dissolved && (
               <DialogModalBase.Subheading>
-                Konnte dich {matchFirstname} erfolgreich unterstützen?
-              </DialogModalBase.Subheading>
-            ) : (
-              <DialogModalBase.Subheading>
-                Konntest du {matchFirstname} erfolgreich unterstützen?
+                Die Zusammenarbeit wurde erfolgreich beendet!
               </DialogModalBase.Subheading>
             )}
-            <DialogModalBase.InputCompound direction="horizontal">
-              <DialogModalBase.CheckboxSingle
-                value
-                selected={couldHelp}
-                onSelect={setCouldHelp}
-                label="Ja"
-              />
-              <DialogModalBase.CheckboxSingle
-                value={false}
-                selected={couldHelp}
-                onSelect={setCouldHelp}
-                label="Nein"
-              />
-            </DialogModalBase.InputCompound>
-          </DialogModalBase.Form>
-
-          {couldHelp && ownType === 'student' && (
-            <div>
-              <DialogModalBase.Subheading>
-                Vielen Dank für deine Hilfe!
-              </DialogModalBase.Subheading>
-              <DialogModalBase.Description>
-                Ohne dich wäre dieses Projekt nicht möglich. Danke, dass du in
-                dieser schwierigen Zeit gesellschaftliche Verantwortung
-                übernommen hast!
-                <br />
-                Sobald du die Zusammenarbeit endgültig beendest, werden wird
-                {matchFirstname} darüber per E-Mail informieren.
-                {matchFirstname} hat dann die Möglichkeit, sich bei Bedarf neu
-                verbinden zu lassen.
-              </DialogModalBase.Description>
-            </div>
-          )}
-
-          {couldHelp && ownType === 'pupil' && (
-            <div>
-              <DialogModalBase.Subheading>
-                Vielen Dank für deine Rückmeldung!
-              </DialogModalBase.Subheading>
-              <DialogModalBase.Description>
-                Sobald du die Zusammenarbeit endgültig beendest, werden wir
-                {matchFirstname} darüber per E-Mail informieren.
-                {matchFirstname} hat dann die Möglichkeit sich bei Bedarf neu
-                verbinden zu lassen.
-              </DialogModalBase.Description>
-            </div>
-          )}
-
-          {couldHelp === false && (
+          </div>
+        ) : (
+          <DialogModalBase.Content>
             <DialogModalBase.Form>
-              {ownType === 'student' ? (
-                <DialogModalBase.Subheading>
-                  Warum konntest du {matchFirstname} nicht unterstützen?
-                </DialogModalBase.Subheading>
-              ) : (
-                <DialogModalBase.Subheading>
-                  Warum konnte dich {matchFirstname} nicht unterstützen?
-                </DialogModalBase.Subheading>
-              )}
-              <DialogModalBase.InputCompound direction="vertical">
-                {Object.entries(reasonOptions).map(([key, value]) => (
-                  <DialogModalBase.CheckboxSingle
-                    key={key}
-                    label={value}
-                    value={value}
-                    selected={noHelpReason}
-                    onSelect={setNoHelpReason}
-                  />
-                ))}
+              <DialogModalBase.Subheading>
+                {projectCoaching &&
+                  `Möchtest du mit einem neuen ${
+                    ownType === 'student' ? 'Coachee' : 'Coach'
+                  } verbunden werden?`}
+                {!projectCoaching &&
+                  'Möchtest du mit einem/einer neuen Lernpartner*in verbunden werden?'}
+              </DialogModalBase.Subheading>
+
+              <DialogModalBase.InputCompound direction="horizontal">
+                <DialogModalBase.CheckboxSingle
+                  value
+                  selected={newMatchWanted}
+                  onSelect={setNewMatchWanted}
+                  label="Ja"
+                />
+                <DialogModalBase.CheckboxSingle
+                  value={false}
+                  selected={newMatchWanted}
+                  onSelect={setNewMatchWanted}
+                  label="Nein"
+                />
               </DialogModalBase.InputCompound>
             </DialogModalBase.Form>
-          )}
-          {!dissolved && (
-            <DialogModalBase.ButtonBox>
-              <DialogModalBase.Button
-                onClick={() => setDissolved(true)}
-                label="Auflösen"
-              />
-            </DialogModalBase.ButtonBox>
-          )}
-        </DialogModalBase.Content>
-        {dissolved && (
-          <DialogModalBase.Subheading>
-            Die Zusammenarbeit wurde erfolgreich beendet!
-          </DialogModalBase.Subheading>
+          </DialogModalBase.Content>
         )}
       </DialogModalBase.Modal>
     </DialogModalBase>
   );
-}
+};
+
+export default CancelMatchModal;

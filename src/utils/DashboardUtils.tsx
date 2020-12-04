@@ -275,7 +275,6 @@ export function hexToRGB(hex, a) {
   let g: any = 0;
   let b: any = 0;
 
-  console.log(hex, hex.length);
   // 3 digits
   if (hex.length === 4) {
     r = `0x${hex[1]}${hex[1]}`;
@@ -289,6 +288,5 @@ export function hexToRGB(hex, a) {
     b = `0x${hex[5]}${hex[6]}`;
   }
 
-  console.log(`rgb(${+r},${+g},${+b},${a})`);
   return `rgb(${+r},${+g},${+b},${a})`;
 }

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useContext } from 'react';
 import StyledReactModal from 'styled-react-modal';
-// import { ApiContext } from '../../context/ApiContext';
 import { ModalContext } from '../../context/ModalContext';
 import styles from './DialogModalBase.module.scss';
 import { hexToRGB } from '../../utils/DashboardUtils';
@@ -43,7 +42,9 @@ function closeModal(modalContext, stateSettingMethods) {
   modalContext.setOpenedModal(null);
   if (stateSettingMethods != null) {
     // can be optional
-    stateSettingMethods.map((method) => method(null)); // Set all states stored in modal to null
+    stateSettingMethods.map(
+      (method) => typeof method === 'function' && method(null)
+    ); // Set all states stored in modal to null
   }
 }
 
@@ -57,7 +58,7 @@ const Modal: React.FC<ModalProps> = (props) => {
     <StyledReactModal
       isOpen={
         modalContext.openedModal != null &&
-        modalContext.openedModal.startsWith(props.modalName)
+        modalContext.openedModal === props.modalName
       }
     >
       <div className={styles.modal}>{props.children}</div>
@@ -83,16 +84,18 @@ const Icon = ({ Icon }) => {
 
 interface CloseButtonProps {
   stateSettingMethods?: Array<any>;
+  hook?: any;
 }
 
 const CloseButton: React.FC<CloseButtonProps> = (props) => {
   const { modalContext } = useDialogContext();
-  return (
-    <Cross
-      className={styles.close}
-      onClick={() => closeModal(modalContext, props.stateSettingMethods)}
-    />
-  );
+  const onClick = () => {
+    if (props.hook != null) {
+      props.hook();
+    }
+    closeModal(modalContext, props.stateSettingMethods);
+  };
+  return <Cross className={styles.close} onClick={onClick} />;
 };
 
 const Header = (props) => {
