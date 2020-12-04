@@ -14,6 +14,8 @@ import { isProjectCoachButNotTutor } from '../utils/UserUtils';
 import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
+import { useAPI, useAPIResult } from '../context/ApiContext';
+import { IExposedCertificate } from '../types/Certificate';
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,6 +27,13 @@ const Wrapper = styled.div`
 const Settings: React.FC = () => {
   const modalContext = useContext(Context.Modal);
   const userContext = useContext(Context.User);
+  const certificates = useAPIResult('getCertificates');
+  const getCertificate = useAPI('getCertificate');
+
+  async function showCertificate(uuid: IExposedCertificate['uuid']) {
+    const response = await getCertificate(uuid);
+    window.location.href = URL.createObjectURL(new Blob([response.data]));
+  }
 
   const { setOpenedModal } = modalContext;
 
@@ -102,24 +111,19 @@ const Settings: React.FC = () => {
   };
 
   const renderCertificatesTable = () => {
-    const certificateAttrs = {
-      pupilFullname: 'pupilFullname',
-      subjects: 'subjects',
-      status: 'status', // use strict value range here?
-    };
     const columns = [
       {
         title: 'Name des Schülers',
-        dataIndex: certificateAttrs.pupilFullname,
-        key: certificateAttrs.pupilFullname,
+        key: 'fullname',
+        render: (certificate: IExposedCertificate) =>
+          `${certificate.pupil.firstname} ${certificate.pupil.lastname}`,
       },
       {
         title: 'Fächer',
-        dataIndex: certificateAttrs.subjects,
-        key: certificateAttrs.subjects,
-        render: (subjects) => (
+        key: 'subjects',
+        render: (certificate: IExposedCertificate) => (
           <>
-            {subjects.map((subject) => (
+            {certificate.subjects.split(', ').map((subject) => (
               <Tag key={subject}>{subject.toUpperCase()}</Tag>
             ))}
           </>
@@ -127,12 +131,16 @@ const Settings: React.FC = () => {
       },
       {
         title: 'Status',
-        dataIndex: certificateAttrs.status,
-        key: certificateAttrs.status,
-        render: (status) => (
+        key: 'status',
+        render: (certificate: IExposedCertificate) => (
           <>
-            <Tag color={status === 'Ausstehend' ? 'red' : 'green'} key={status}>
-              {status}
+            <Tag
+              color={
+                certificate.state === 'awaiting-approval' ? 'red' : 'green'
+              }
+              key={certificate.state}
+            >
+              {certificate.state}
             </Tag>
           </>
         ),
@@ -140,35 +148,26 @@ const Settings: React.FC = () => {
       {
         title: 'Aktion',
         key: 'action',
-        render: () => (
+        render: (certificate: IExposedCertificate) => (
           <Space size="middle">
-            {/* Need API calls for these buttons */}
-            <Button type="primary">Ansehen</Button>
-            <Button danger>Löschen</Button>
+            <Button
+              type="primary"
+              onClick={() => showCertificate(certificate.uuid)}
+            >
+              Ansehen
+            </Button>
+            {/* <Button danger>Löschen</Button> */}
           </Space>
         ),
       },
     ];
-    const certificatesData = [
-      {
-        key: '1',
-        pupilFullname: 'Mike Mustermann',
-        subjects: ['Deutsch', 'Englisch'],
-        status: 'Unterschrieben',
-      },
-      {
-        key: '2',
-        pupilFullname: 'Tom Müller',
-        subjects: ['Biologie', 'Mathe'],
-        status: 'Ausstehend',
-      },
-    ];
+
     return (
       <>
         <Title size="h3" className={classes.subjectTitle}>
           Zertifikate
         </Title>
-        <Table dataSource={certificatesData} columns={columns} />
+        <Table dataSource={certificates.value ?? []} columns={columns} />
       </>
     );
   };

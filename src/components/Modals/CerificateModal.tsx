@@ -312,7 +312,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   const downloadPDF = () => {
     setLoading(true);
     apiContext
-      .getCertificate(certificateData)
+      .createCertificate(certificateData)
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');

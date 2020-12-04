@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useContext, useState, useEffect } from 'react';
 import { AxiosResponse } from 'axios';
-import { message } from 'antd';
 import { AuthContext } from './AuthContext';
 import { User, Subject } from '../types';
 import * as api from '../api/api';
@@ -30,10 +29,12 @@ interface IApiContext {
   putUserProjectFields: (projectFields: ApiProjectFieldInfo[]) => Promise<void>;
   becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
   putUserActiveFalse: () => Promise<void>;
-  getCertificate: (
+  createCertificate: (
     cerfiticateData: CertificateData
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) => Promise<AxiosResponse<any>>;
+  ) => Promise<AxiosResponse<string>>;
+  getCertificate: (
+    uuid: IExposedCertificate['uuid']
+  ) => Promise<AxiosResponse<string>>;
   getCertificates: () => Promise<IExposedCertificate[]>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
@@ -118,6 +119,7 @@ export const ApiContext = React.createContext<IApiContext>({
   putUserProjectFields: reject,
   becomeInstructor: reject,
   putUserActiveFalse: reject,
+  createCertificate: reject,
   getCertificate: reject,
   getCertificates: reject,
   getCourses: reject,
@@ -157,7 +159,7 @@ export function useAPIResult<N extends keyof IApiContext>(name: N) {
   const [value, setValue] = useState<{
     loading?: boolean;
     error?: Error;
-    value?: ReturnType<IApiContext[N]>;
+    value?: ReturnType<IApiContext[N]> extends Promise<infer T> ? T : never;
   }>({ loading: true });
   const api = useAPI(name);
 
@@ -209,11 +211,10 @@ export const ApiProvider: React.FC = ({ children }) => {
   const putUserActiveFalse = (): Promise<void> =>
     api.axiosPutUserActive(id, token, false);
 
-  const getCertificate = (
+  const createCertificate = (
     certificateDate: CertificateData
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Promise<AxiosResponse<any>> =>
-    api.axiosGetCertificate(id, token, certificateDate);
+  ): Promise<AxiosResponse<string>> =>
+    api.axiosCreateCertificate(id, token, certificateDate);
 
   const getCourses = (): Promise<CourseOverview[]> =>
     api.axiosGetCourses(token);
@@ -351,7 +352,8 @@ export const ApiProvider: React.FC = ({ children }) => {
         putUserProjectFields,
         becomeInstructor,
         putUserActiveFalse,
-        getCertificate,
+        createCertificate,
+        getCertificate: withToken(api.axiosGetCertificate),
         getCertificates: withToken(api.axiosGetCertificates),
         getCourses,
         getCourse,
