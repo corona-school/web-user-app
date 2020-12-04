@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { Select, DatePicker, InputNumber, message } from 'antd';
+import { Select, DatePicker, InputNumber, message, Checkbox } from 'antd';
 import moment from 'moment';
 
 import context from '../../context';
@@ -34,6 +34,7 @@ export interface CertificateData {
   subjects: string[];
   mediaType: string | null;
   activities: string[];
+  ongoingLessons: boolean;
 }
 
 const CertificateModal: React.FC<Props> = ({ user }) => {
@@ -48,6 +49,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     subjects: [],
     mediaType: null,
     activities: [],
+    ongoingLessons: false,
   });
 
   const [currentStep, setStep] = useState(0);
@@ -201,6 +203,19 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
             format={dateFormat}
           />{' '}
           ({certificateData.weekCount} Wochen)
+        </div>
+        <div className={classes.inputField}>
+          <Checkbox
+            checked={certificateData.ongoingLessons}
+            onChange={(e) =>
+              setCertificateData({
+                ...certificateData,
+                ongoingLessons: e.target.checked,
+              })
+            }
+          >
+            Unterstützung dauert noch an
+          </Checkbox>
         </div>
         <Title size="h5" bold>
           Fächer
