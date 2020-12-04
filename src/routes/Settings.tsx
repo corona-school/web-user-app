@@ -110,13 +110,25 @@ const Settings: React.FC = () => {
     );
   };
 
+  const stateTranslation: { [key in IExposedCertificate['state']]: string } = {
+    manual: 'Manuell',
+    'awaiting-approval': 'Auf Bestätigung warten',
+    approved: 'Bestätigt',
+  };
+
   const renderCertificatesTable = () => {
     const columns = [
       {
-        title: 'Name des Schülers',
-        key: 'fullname',
+        title: 'Schüler*in',
+        key: 'pupil',
         render: (certificate: IExposedCertificate) =>
           `${certificate.pupil.firstname} ${certificate.pupil.lastname}`,
+      },
+      {
+        title: 'Student*in',
+        key: 'student',
+        render: (certificate: IExposedCertificate) =>
+          `${certificate.student.firstname} ${certificate.student.lastname}`,
       },
       {
         title: 'Fächer',
@@ -140,7 +152,7 @@ const Settings: React.FC = () => {
               }
               key={certificate.state}
             >
-              {certificate.state}
+              {stateTranslation[certificate.state]}
             </Tag>
           </>
         ),
