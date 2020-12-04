@@ -32,7 +32,6 @@ import {
   stateInfoForStateSubdomain,
 } from './assets/supportedStateCooperations';
 import ProjectCoach from './routes/ProjectCoach';
-import Certificates from './routes/Certificates';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -82,10 +81,9 @@ const App: React.FC = () => {
   // jufo cooperation
   const isJufoSubdomain = subdomain === 'jufo';
 
-  const isVerified = (
+  const isVerified =
     userContext.user.type === 'pupil' ||
-    userContext.user.instructorScreeningStatus === ScreeningStatus.Accepted
-  );
+    userContext.user.instructorScreeningStatus === ScreeningStatus.Accepted;
 
   return (
     <>
@@ -143,23 +141,14 @@ const App: React.FC = () => {
             </PrivateRoute>
           </Switch>
 
-          <PrivateRoute
-            path="/matches"
-            active={isVerified}
-          >
+          <PrivateRoute path="/matches" active={isVerified}>
             <Matches />
           </PrivateRoute>
-          <PrivateRoute
-            path="/project-coaching"
-            active={isVerified}
-          >
+          <PrivateRoute path="/project-coaching" active={isVerified}>
             <ProjectCoach />
           </PrivateRoute>
           <PrivateRoute path="/settings">
             <Settings />
-          </PrivateRoute>
-          <PrivateRoute path="/certificates" active={isVerified} comeback>
-            <Certificates />
           </PrivateRoute>
           <PrivateRoute path="/mentoring">
             <Mentoring />
