@@ -22,7 +22,6 @@ const CancelMatchModal: React.FC<{
 }> = ({ identifier, matchUuid, matchFirstname, ownType, projectCoaching }) => {
   const [supportSuccessful, setSupportSuccessful] = useState(null);
   const [noHelpReason, setNoHelpReason] = useState(null);
-
   const [dissolved, setDissolved] = useState<boolean>(false);
   const [newMatchWanted, setNewMatchWanted] = useState<boolean | null>(null);
 
@@ -141,10 +140,10 @@ const CancelMatchModal: React.FC<{
                   <DialogModalBase.Description>
                     Ohne dich wäre dieses Projekt nicht möglich. Danke, dass du
                     in dieser schwierigen Zeit gesellschaftliche Verantwortung
-                    übernommen hast!
+                    übernommen hast! <br />
                     <br />
-                    Sobald du die Zusammenarbeit endgültig beendest, werden wird
-                    {matchFirstname} darüber per E-Mail informieren.
+                    Sobald du die Zusammenarbeit endgültig beendest, werden wir{' '}
+                    {matchFirstname} darüber per E-Mail informieren.{' '}
                     {matchFirstname} hat dann die Möglichkeit, sich bei Bedarf
                     neu verbinden zu lassen.
                   </DialogModalBase.Description>
@@ -157,9 +156,9 @@ const CancelMatchModal: React.FC<{
                     Vielen Dank für deine Rückmeldung!
                   </DialogModalBase.Subheading>
                   <DialogModalBase.Description>
-                    Sobald du die Zusammenarbeit endgültig beendest, werden wir
-                    {matchFirstname} darüber per E-Mail informieren.
-                    {matchFirstname} hat dann die Möglichkeit sich bei Bedarf
+                    Sobald du die Zusammenarbeit endgültig beendest, werden wir{' '}
+                    {matchFirstname} darüber per E-Mail informieren.{' '}
+                    {matchFirstname} hat dann die Möglichkeit, sich bei Bedarf
                     neu verbinden zu lassen.
                   </DialogModalBase.Description>
                 </div>
@@ -203,14 +202,13 @@ const CancelMatchModal: React.FC<{
                   </DialogModalBase.ButtonBox>
                 )}
             </DialogModalBase.Content>
-            {dissolved && (
-              <DialogModalBase.Subheading>
-                Die Zusammenarbeit wurde erfolgreich beendet!
-              </DialogModalBase.Subheading>
-            )}
           </div>
         ) : (
           <DialogModalBase.Content>
+            <DialogModalBase.Description>
+              Die Zusammenarbeit wurde erfolgreich beendet!
+            </DialogModalBase.Description>
+
             <DialogModalBase.Form>
               <DialogModalBase.Subheading>
                 {projectCoaching &&

@@ -27,6 +27,9 @@ const DialogModalBase = (props) => {
   );
 };
 
+/*
+ Allows you to access properties of the DialogModalBase component from within its children
+ */
 function useDialogContext() {
   const context = React.useContext(DialogContext);
 
@@ -38,6 +41,9 @@ function useDialogContext() {
   return context;
 }
 
+/*
+Closes the modal and clears all of the states that are part of it if passed
+ */
 function closeModal(modalContext, stateSettingMethods) {
   modalContext.setOpenedModal(null);
   if (stateSettingMethods != null) {
@@ -48,11 +54,10 @@ function closeModal(modalContext, stateSettingMethods) {
   }
 }
 
-interface ModalProps {
-  modalName: string;
-}
-
-const Modal: React.FC<ModalProps> = (props) => {
+/*
+ The modal wrapper which includes the StyledReactModal component. Required the modalName parameter which is used to check if the modal should be open currently.
+ */
+const Modal: React.FC<{ modalName: string }> = (props) => {
   const { modalContext } = useDialogContext();
   return (
     <StyledReactModal
@@ -66,10 +71,16 @@ const Modal: React.FC<ModalProps> = (props) => {
   );
 };
 
+/*
+Styled Title
+ */
 const Title = (props) => {
   return <h1 className={styles.title}>{props.children}</h1>;
 };
 
+/*
+Styled icon in the top left of the modal. Pass the prop icon as a component. The icon has to be an SVG image as it gets filled with the accent color.
+ */
 const Icon = ({ Icon }) => {
   const { accentColor } = useDialogContext();
   return (
@@ -82,12 +93,13 @@ const Icon = ({ Icon }) => {
   );
 };
 
-interface CloseButtonProps {
+/*
+The close button on the top right of the modal. Pass your modal's state setting methods if you want to clear them when the user closes the modal. The function passed as "hook" will be called when the user clicks on the button.
+ */
+const CloseButton: React.FC<{
   stateSettingMethods?: Array<any>;
   hook?: any;
-}
-
-const CloseButton: React.FC<CloseButtonProps> = (props) => {
+}> = (props) => {
   const { modalContext } = useDialogContext();
   const onClick = () => {
     if (props.hook != null) {
@@ -98,30 +110,51 @@ const CloseButton: React.FC<CloseButtonProps> = (props) => {
   return <Cross className={styles.close} onClick={onClick} />;
 };
 
+/*
+Header component which is responsible for the layout of the icon, the title and the close button.
+ */
 const Header = (props) => {
   return <div className={styles.header}>{props.children}</div>;
 };
 
+/*
+Styled description component
+ */
 const Description = (props) => {
   return <p className={styles.description}>{props.children}</p>;
 };
 
+/*
+Indented component for forms
+ */
 const Form = (props) => {
   return <div className={styles.form}>{props.children}</div>;
 };
 
+/*
+Styled subheading
+ */
 const Subheading = (props) => {
   return <h3 className={styles.subheading}>{props.children}</h3>;
 };
 
+/*
+Assures that all elements within it can get as wide as 100% of the modal's width.
+ */
 const Content = (props) => {
   return <div className={styles.content}>{props.children}</div>;
 };
 
+/*
+Responsible for aligning buttons next to each other
+ */
 const ButtonBox = (props) => {
   return <div className={styles.buttonBox}>{props.children}</div>;
 };
 
+/*
+Uses the AccentColorButton component to create a button in the set accent color.
+ */
 const Button = (props) => {
   const { accentColor } = useDialogContext();
   return (
@@ -137,6 +170,9 @@ type InputCompoundDirection = 'horizontal' | 'vertical';
 interface InputCompoundProps {
   direction: InputCompoundDirection;
 }
+/*
+Aligns e.g. input components. There are two directions: 'horizontal' and 'vertical'.
+ */
 const InputCompound: React.FC<InputCompoundProps> = (props) => {
   return (
     <div
@@ -157,6 +193,9 @@ interface CheckboxProps {
   onSelect: any;
   label: string;
 }
+/*
+Creates a checkbox with the set accent color. Behaves like a normal checkbox.
+ */
 const Checkbox: React.FC<CheckboxProps> = (props) => {
   const { accentColor } = useDialogContext();
 
@@ -176,6 +215,13 @@ interface CheckboxSingleProps {
   onSelect: any;
   label: string;
 }
+/*
+Creates a checkbox with the set accent color. It behaves like radio buttons: You can only select one at a time.
+Props:
+value:  The value of the checkbox
+selected:   The currently selected value (in your checkbox compound, *this is not a boolean*)
+onSelect:   The function that should get called when the user clicks on the checkbox. This will likely be your state setting method.
+ */
 const CheckboxSingle: React.FC<CheckboxSingleProps> = (props) => {
   const { accentColor } = useDialogContext();
 
