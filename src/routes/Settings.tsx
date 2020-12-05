@@ -13,6 +13,7 @@ import { isProjectCoachButNotTutor } from '../utils/UserUtils';
 import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
+import { JufoExpertCard } from '../components/cards/JufoExpertCard';
 
 const Wrapper = styled.div`
   display: flex;
@@ -104,6 +105,8 @@ const Settings: React.FC = () => {
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
       <SettingsCard user={userContext.user} />
+      {userContext.user.isProjectCoach && <JufoExpertCard />}
+
       {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}

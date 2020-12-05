@@ -1,7 +1,7 @@
 export interface Expert {
   id: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   description?: string;
   expertiseTags: string[];
 }
