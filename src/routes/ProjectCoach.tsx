@@ -11,12 +11,12 @@ import BecomeProjectCoacheeModal from '../components/Modals/BecomeProjectCoachee
 import { UserContext } from '../context/UserContext';
 import { ProjectMatchCard } from '../components/cards/MatchCard';
 import OpenRequestCard from '../components/cards/OpenRequestCard';
-import DissolveMatchModal from '../components/Modals/DissolveMatchModal';
 import { ScreeningStatus } from '../types';
 import {
   BecomeCoacheeText,
   BecomeCoachText,
 } from '../assets/ProjectCoachingAssets';
+import CancelMatchModal from '../components/Modals/CancelMatchModal';
 
 const ProjectCoach: React.FC = () => {
   const { user } = useContext(context.User);
@@ -133,14 +133,14 @@ const ProjectCoach: React.FC = () => {
             type={userContext.user.type === 'student' ? 'coachee' : 'coach'}
             handleDissolveMatch={() => {
               modalContext.setOpenedModal(
-                `dissolveProjectMatchModal${match.uuid}`
+                `cancelProjectMatchModal${match.uuid}`
               );
             }}
           />
-          <DissolveMatchModal
-            identifier={`dissolveProjectMatchModal${match.uuid}`}
-            matchFirstname={match.firstname}
+          <CancelMatchModal
+            identifier={`cancelProjectMatchModal${match.uuid}`}
             matchUuid={match.uuid}
+            matchFirstname={match.firstname}
             ownType={userContext.user.type}
             projectCoaching
           />
