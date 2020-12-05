@@ -159,13 +159,17 @@ const ButtonBox = (props) => {
 /*
 Uses the AccentColorButton component to create a button in the set accent color.
  */
-const Button = (props) => {
+const Button: React.FC<{
+  onClick: any;
+  label: string;
+  accentColor?: string;
+}> = (props) => {
   const { accentColor } = useDialogContext();
   return (
     <AccentColorButton
       onClick={props.onClick}
       label={props.label}
-      accentColor={accentColor}
+      accentColor={props.accentColor != null ? props.accentColor : accentColor}
     />
   );
 };

@@ -10,6 +10,7 @@ import {
 } from '../../assets/dissolveMatchReasons';
 import { putUser } from '../../api/api';
 import { dev } from '../../api/config';
+import { ModalContext } from '../../context/ModalContext';
 
 const accentColor = '#D03D53';
 
@@ -66,6 +67,15 @@ const CancelMatchModal: React.FC<{
     );
   };
 
+  const modalContext = useContext(ModalContext);
+
+  const stateSettingMethods = [
+    setSupportSuccessful,
+    setNoHelpReason,
+    setDissolved,
+    setNewMatchWanted,
+  ];
+
   let reasonOptions: { [key: string]: string };
 
   if (projectCoaching && ownType === 'student')
@@ -82,6 +92,17 @@ const CancelMatchModal: React.FC<{
     else fetchUserData();
   };
 
+  function closeModal(modalContext, stateSettingMethods) {
+    modalContext.setOpenedModal(null);
+    if (stateSettingMethods != null) {
+      // can be optional
+      stateSettingMethods.map(
+        (method) => typeof method === 'function' && method(null)
+      ); // Set all states stored in modal to null
+    }
+    onModalClose();
+  }
+
   return (
     <DialogModalBase accentColor={accentColor}>
       <DialogModalBase.Modal modalName={identifier}>
@@ -89,12 +110,7 @@ const CancelMatchModal: React.FC<{
           <DialogModalBase.Icon Icon={Trashcan} />
           <DialogModalBase.Title>Match auflösen</DialogModalBase.Title>
           <DialogModalBase.CloseButton
-            stateSettingMethods={[
-              setSupportSuccessful,
-              setNoHelpReason,
-              setDissolved,
-              setNewMatchWanted,
-            ]}
+            stateSettingMethods={stateSettingMethods}
             hook={onModalClose}
           />
         </DialogModalBase.Header>
@@ -235,6 +251,12 @@ const CancelMatchModal: React.FC<{
                   label="Nein"
                 />
               </DialogModalBase.InputCompound>
+              <DialogModalBase.ButtonBox>
+                <DialogModalBase.Button
+                  onClick={() => closeModal(modalContext, stateSettingMethods)}
+                  label="Fertig"
+                />
+              </DialogModalBase.ButtonBox>
             </DialogModalBase.Form>
           </DialogModalBase.Content>
         )}
