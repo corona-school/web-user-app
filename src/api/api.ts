@@ -18,6 +18,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
+import { Expert, ExpertTag, ExpertUpdate } from '../types/Expert';
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -812,6 +813,75 @@ export const axiosPostUserRoleProjectCoachee = (
   return new Promise<void>((resolve, reject) => {
     axios
       .post(`${apiURL}/user/${id}/role/projectCoachee`, projectCoacheeData, {
+        headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosGetJufoExperts = (token: string): Promise<Expert[]> => {
+  return new Promise<Expert[]>((resolve, reject) => {
+    axios
+      .get(`${apiURL}/expert`, {
+        headers: { token },
+      })
+      .then((response) => resolve(response.data))
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosGetUsedExpertTags = (token: string): Promise<ExpertTag[]> => {
+  return new Promise<ExpertTag[]>((resolve, reject) => {
+    axios
+      .get(`${apiURL}/expert/tags`, {
+        headers: { token },
+      })
+      .then((response) => resolve(response.data))
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosContactJufoExpert = (
+  token: string,
+  id: string,
+  emailText: string,
+  subject: string
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/expert/${id}/contact`,
+        { emailText, subject },
+        {
+          headers: { token },
+        }
+      )
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosUpdateJufoExpert = (
+  token: string,
+  id: string,
+  data: ExpertUpdate
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/expert/${id}/contact`, data, {
         headers: { token },
       })
       .then(() => resolve())

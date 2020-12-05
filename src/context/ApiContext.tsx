@@ -23,6 +23,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
+import { Expert, ExpertTag, ExpertUpdate } from '../types/Expert';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
@@ -108,6 +109,14 @@ interface IApiContext {
   postUserRoleProjectCoachee: (
     projectCoacheeData: BecomeProjectCoachee
   ) => Promise<void>;
+  getJufoExperts: () => Promise<Expert[]>;
+  getUsedExpertTags: () => Promise<ExpertTag[]>;
+  contactJufoExpert: (
+    id: string,
+    emailText: string,
+    subject: string
+  ) => Promise<void>;
+  updateJufoExpert: (id: string, data: ExpertUpdate) => Promise<void>;
 }
 
 export const ApiContext = React.createContext<IApiContext>({
@@ -152,6 +161,10 @@ export const ApiContext = React.createContext<IApiContext>({
   postContactMentor: (message) => Promise.reject(),
   postUserRoleProjectCoach: () => Promise.reject(),
   postUserRoleProjectCoachee: () => Promise.reject(),
+  getJufoExperts: () => Promise.reject(),
+  getUsedExpertTags: () => Promise.reject(),
+  contactJufoExpert: (id, emailText, subject) => Promise.reject(),
+  updateJufoExpert: (id, data) => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -318,6 +331,16 @@ export const ApiProvider: React.FC = ({ children }) => {
     projectCoacheeData: BecomeProjectCoachee
   ) => api.axiosPostUserRoleProjectCoachee(token, id, projectCoacheeData);
 
+  const getJufoExperts = () => api.axiosGetJufoExperts(token);
+
+  const getUsedExpertTags = () => api.axiosGetUsedExpertTags(token);
+
+  const contactJufoExpert = (id: string, emailText: string, subject: string) =>
+    api.axiosContactJufoExpert(token, id, emailText, subject);
+
+  const updateJufoExpert = (id: string, data: ExpertUpdate) =>
+    api.axiosUpdateJufoExpert(token, id, data);
+
   return (
     <ApiContext.Provider
       value={{
@@ -359,6 +382,10 @@ export const ApiProvider: React.FC = ({ children }) => {
         getCooperatingSchools,
         postUserRoleProjectCoach,
         postUserRoleProjectCoachee,
+        getJufoExperts,
+        getUsedExpertTags,
+        updateJufoExpert,
+        contactJufoExpert,
       }}
     >
       {children}
