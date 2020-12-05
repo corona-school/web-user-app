@@ -66,7 +66,9 @@ const Modal: React.FC<{ modalName: string }> = (props) => {
         modalContext.openedModal === props.modalName
       }
     >
-      <div className={styles.modal}>{props.children}</div>
+      <div className={styles.modal}>
+        <div className={styles.modalWrapper}>{props.children}</div>
+      </div>
     </StyledReactModal>
   );
 };

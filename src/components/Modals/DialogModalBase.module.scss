@@ -1,6 +1,4 @@
 .modal {
-  display: flex;
-  flex-direction: column;
   padding: 27px;
   background-color: white;
   border-radius: 4px;
@@ -8,6 +6,13 @@
   width: 100%;
   max-width: 550px;
   align-items: center;
+}
+
+.modalWrapper{
+  max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 }
 
 .header {
