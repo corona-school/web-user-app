@@ -48,6 +48,7 @@ import { ReactComponent as SignupTutor } from './signup/tutor.svg';
 import { ReactComponent as CoatOfArmsNRW } from './states/nrw.svg';
 
 import { ReactComponent as ProjectCoachingIcon } from './project-coaching.svg';
+import { ReactComponent as EmailFilled } from './email-filled.svg';
 
 const IconsList = {
   Edit,
@@ -97,6 +98,7 @@ const IconsList = {
   Palm,
   CoatOfArmsNRW,
   ProjectCoachingIcon,
+  EmailFilled,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

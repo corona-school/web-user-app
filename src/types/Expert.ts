@@ -4,6 +4,7 @@ export interface Expert {
   lastName: string;
   description?: string;
   expertiseTags: string[];
+  projectFields: string[];
 }
 
 export interface ExpertTag {

@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import { ClipLoader } from 'react-spinners';
+import Search from 'antd/lib/input/Search';
 import { Title } from '../Typography';
 import { ModalContext } from '../../context/ModalContext';
 import { ApiContext } from '../../context/ApiContext';
 
 import classes from './ExpertOverviewModal.module.scss';
 import { Expert } from '../../types/Expert';
+import { JufoExpertDetailCard } from '../cards/JufoExpertDetailCard';
 
 export const MODAL_IDENTIFIER = 'expertOverviewModal';
 const MODAL_TITLE = 'Experten*innen';
@@ -15,7 +17,8 @@ export const ExpertOverviewModal: React.FC = () => {
   const modalContext = useContext(ModalContext);
   const api = useContext(ApiContext);
 
-  const [experts, setExpertts] = useState<Expert[]>([]);
+  const [experts, setExperts] = useState<Expert[]>([]);
+  const [filteredExperts, setFileredExperts] = useState<Expert[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -24,7 +27,8 @@ export const ExpertOverviewModal: React.FC = () => {
       api
         .getJufoExperts()
         .then((result) => {
-          setExpertts(result);
+          setExperts(result);
+          setFileredExperts(result);
         })
         .catch((err) => {
           console.error(err);
@@ -46,6 +50,23 @@ export const ExpertOverviewModal: React.FC = () => {
     );
   }
 
+  const onSearch = (value: string) => {
+    if (value.trim().length === 0) {
+      setFileredExperts(experts);
+      return;
+    }
+    const searchString = value.toLowerCase();
+    const filter = experts.filter(
+      (e) =>
+        e.description.toLowerCase().includes(searchString) ||
+        e.expertiseTags.some((t) => t.toLowerCase().includes(searchString)) ||
+        e.projectFields.some((p) => p.toLowerCase().includes(searchString)) ||
+        e.firstName.toLowerCase().includes(searchString) ||
+        e.lastName.toLowerCase().includes(searchString)
+    );
+    setFileredExperts(filter);
+  };
+
   return (
     <StyledReactModal
       isOpen={modalContext.openedModal === MODAL_IDENTIFIER}
@@ -53,13 +74,16 @@ export const ExpertOverviewModal: React.FC = () => {
     >
       <div className={classes.modal}>
         <Title size="h2">{MODAL_TITLE}</Title>
-        <div>
-          {experts.map((expert) => (
-            <div key={`${expert.id}`}>
-              {expert.firstName} {expert.lastName}
-            </div>
-          ))}
-        </div>
+        <Search
+          placeholder="Suche nach Experten für.."
+          allowClear
+          onSearch={onSearch}
+          className={classes.search}
+        />
+
+        {filteredExperts.map((expert) => (
+          <JufoExpertDetailCard expert={expert} />
+        ))}
       </div>
     </StyledReactModal>
   );
