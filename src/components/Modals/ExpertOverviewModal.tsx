@@ -11,7 +11,7 @@ import { Expert } from '../../types/Expert';
 import { JufoExpertDetailCard } from '../cards/JufoExpertDetailCard';
 
 export const MODAL_IDENTIFIER = 'expertOverviewModal';
-const MODAL_TITLE = 'Experten*innen';
+const MODAL_TITLE = 'Liste von Experten*innen';
 
 export const ExpertOverviewModal: React.FC = () => {
   const modalContext = useContext(ModalContext);
