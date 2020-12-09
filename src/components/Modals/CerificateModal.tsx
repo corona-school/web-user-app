@@ -11,6 +11,11 @@ import Button from '../button';
 import Icons from '../../assets/icons';
 import { User } from '../../types';
 import ActivityForm from '../forms/ActivityForm';
+import {
+  defaultLanguage,
+  ISupportedLanguage,
+  supportedLanguages,
+} from '../../types/Certificate';
 
 const { Option } = Select;
 
@@ -35,10 +40,12 @@ export interface CertificateData {
   mediaType: string | null;
   activities: string[];
   ongoingLessons: boolean;
+  lang: ISupportedLanguage;
 }
 
 const CertificateModal: React.FC<Props> = ({ user }) => {
   const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState<ISupportedLanguage>(defaultLanguage);
   const allMatches = [...user.matches, ...user.dissolvedMatches];
 
   const [certificateData, setCertificateData] = useState<CertificateData>({
@@ -50,6 +57,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     mediaType: null,
     activities: [],
     ongoingLessons: false,
+    lang: language,
   });
 
   const [currentStep, setStep] = useState(0);
@@ -338,6 +346,15 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
         </Text>
 
         <div className={classes.downloadContainer}>
+          <Select
+            defaultValue={defaultLanguage}
+            onChange={(event) => setLanguage(event)}
+            style={{ width: 120 }}
+          >
+            {Object.entries(supportedLanguages).map(([code, value]) => (
+              <Option value={code}>{value}</Option>
+            ))}
+          </Select>
           <Button
             className={classes.downloadButton}
             backgroundColor="#4E6AE6"
