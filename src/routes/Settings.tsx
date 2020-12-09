@@ -27,12 +27,15 @@ const Wrapper = styled.div`
 const Settings: React.FC = () => {
   const modalContext = useContext(Context.Modal);
   const userContext = useContext(Context.User);
-  const certificates = useAPIResult('getCertificates');
+  const [certificates, reloadCertificates] = useAPIResult('getCertificates');
   const getCertificate = useAPI('getCertificate');
 
   async function showCertificate(uuid: IExposedCertificate['uuid']) {
     const response = await getCertificate(uuid);
-    window.location.href = URL.createObjectURL(new Blob([response.data]));
+    // window.location.href = URL.createObjectURL(new Blob([response.data]));
+    window.open(
+      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
+    );
   }
 
   const { setOpenedModal } = modalContext;
@@ -111,8 +114,8 @@ const Settings: React.FC = () => {
   };
 
   const stateTranslation: { [key in IExposedCertificate['state']]: string } = {
-    manual: 'Manuell',
-    'awaiting-approval': 'Auf Bestätigung warten',
+    manual: 'Unbestätigt',
+    'awaiting-approval': 'Bestätigung ausstehend',
     approved: 'Bestätigt',
   };
 
@@ -144,11 +147,24 @@ const Settings: React.FC = () => {
       {
         title: 'Status',
         key: 'status',
+        filters: ['manual', 'awaiting-approval', 'approved'].map((s) => ({
+          value: s,
+          text: stateTranslation[s],
+        })),
+        filterMultiple: false,
+        onFilter: (value: string, certificate: IExposedCertificate) =>
+          certificate.state === value,
+        // defaultSortOrder: 'descend',
+        sorter: (a: IExposedCertificate, b: IExposedCertificate) =>
+          a.state.length - b.state.length,
+        // sortDirections: ['descend', 'ascend'],
         render: (certificate: IExposedCertificate) => (
           <>
             <Tag
               color={
-                certificate.state === 'awaiting-approval' ? 'red' : 'green'
+                (certificate.state === 'manual' && 'red') ||
+                (certificate.state === 'awaiting-approval' && 'yellow') ||
+                (certificate.state === 'approved' && 'green')
               }
               key={certificate.state}
             >
@@ -187,7 +203,10 @@ const Settings: React.FC = () => {
   return (
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
-      <SettingsCard user={userContext.user} />
+      <SettingsCard
+        user={userContext.user}
+        reloadCertificates={reloadCertificates}
+      />
       {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}

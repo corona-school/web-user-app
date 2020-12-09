@@ -32,9 +32,7 @@ interface IApiContext {
   createCertificate: (
     cerfiticateData: CertificateData
   ) => Promise<AxiosResponse<string>>;
-  getCertificate: (
-    uuid: IExposedCertificate['uuid']
-  ) => Promise<AxiosResponse<string>>;
+  getCertificate: (uuid: IExposedCertificate['uuid']) => Promise<string>;
   getCertificates: () => Promise<IExposedCertificate[]>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
@@ -163,14 +161,18 @@ export function useAPIResult<N extends keyof IApiContext>(name: N) {
   }>({ loading: true });
   const api = useAPI(name);
 
-  useEffect(() => {
+  function reload() {
     // eslint-disable-next-line
     (api as any)()
       .then((value) => setValue({ value }))
       .catch((error) => setValue({ error }));
+  }
+
+  useEffect(() => {
+    reload();
   }, []);
 
-  return value;
+  return [value, reload] as const;
 }
 
 export const ApiProvider: React.FC = ({ children }) => {

@@ -16,6 +16,7 @@ const { Option } = Select;
 
 interface Props {
   user: User;
+  reloadCertificates: () => void;
 }
 
 const STEPS = 4;
@@ -37,7 +38,7 @@ export interface CertificateData {
   ongoingLessons: boolean;
 }
 
-const CertificateModal: React.FC<Props> = ({ user }) => {
+const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
   const [loading, setLoading] = useState(false);
   const allMatches = [...user.matches, ...user.dissolvedMatches];
 
@@ -139,7 +140,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     return (
       <div className={classes.generalInformationContainer}>
         <Text className={classes.description}>
-          Schritt 1: Allgemeine Informationen eintragen
+          Schritt 1/{STEPS - 2}: Allgemeine Informationen eintragen
         </Text>
         <Title size="h5" bold>
           Schüler*in
@@ -299,7 +300,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     return (
       <div>
         <Text className={classes.description}>
-          Schritt 2: Tätigkeiten eintragen
+          Schritt 2/{STEPS - 2}: Tätigkeiten eintragen
         </Text>
         <ActivityForm
           certificateData={certificateData}
@@ -333,9 +334,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   const renderDownloadPage = () => {
     return (
       <div>
-        <Text className={classes.description}>
-          Schritt 3: Bescheinigung herunterladen
-        </Text>
+        <Text className={classes.description}>Bescheinigung herunterladen</Text>
 
         <div className={classes.downloadContainer}>
           <Button
@@ -412,7 +411,11 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
             <Button
               color="#B5B5B5"
               backgroundColor="#ffffff"
-              onClick={() => modalContext.setOpenedModal(null)}
+              onClick={() => {
+                modalContext.setOpenedModal(null);
+                setStep(0);
+                reloadCertificates();
+              }}
             >
               <Icons.Abort />
             </Button>
@@ -420,7 +423,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           {renderStep(currentStep)}
         </div>
         <div className={classes.buttonContainer}>
-          {currentStep > 0 && (
+          {currentStep > 0 && currentStep < STEPS - 1 && (
             <Button
               backgroundColor="#F4F6FF"
               color="#4E6AE6"
@@ -435,7 +438,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
               color="#4E6AE6"
               onClick={() => onClick(currentStep + 1)}
             >
-              Weiter
+              {currentStep === STEPS - 2 ? 'Abschließen' : 'Weiter'}
             </Button>
           )}
         </div>
