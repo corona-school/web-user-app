@@ -30,12 +30,13 @@
     width: 60px;
     height: 60px;
     border-radius: 100px;
+    margin-right: 40px;
     > svg {
       width: 20px;
     }
   }
   .title {
-    margin: 0 auto 0 40px;
+    margin: 0 auto 0 0;
   }
 
   .close {
@@ -85,4 +86,15 @@
 .spacer {
   margin-top: 20px;
   width: 100%;
+}
+
+
+.label {
+  font-size: 16px;
+  font-weight: 600;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  line-height: 25px;
+  margin-top: 15px;
 }

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Context from '../context';
 
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
+import BecomeExpertCard from '../components/cards/BecomeExpertCard';
 import { ScreeningStatus } from '../types';
 import SettingsCard from '../components/cards/SettingsCard';
 import { Title } from '../components/Typography';
@@ -108,6 +109,7 @@ const Settings: React.FC = () => {
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}
       <AccountNotScreenedModal />
+      <BecomeExpertCard />
     </div>
   );
 };
