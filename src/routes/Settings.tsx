@@ -168,12 +168,14 @@ const Settings: React.FC = () => {
         key: 'action',
         render: (certificate: IExposedCertificate) => (
           <Space size="middle">
-            <Button
-              type="primary"
-              onClick={() => showCertificate(certificate.uuid, language)}
-            >
-              Ansehen
-            </Button>
+            {userContext.user.isTutor && certificate.state === 'approved' && (
+              <Button
+                type="primary"
+                onClick={() => showCertificate(certificate.uuid)}
+              >
+                Ansehen
+              </Button>
+            )}
             <Select
               defaultValue={defaultLanguage}
               onChange={(event) => setLanguage(event)}
