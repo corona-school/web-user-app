@@ -162,12 +162,14 @@ const Settings: React.FC = () => {
         key: 'action',
         render: (certificate: IExposedCertificate) => (
           <Space size="middle">
-            <Button
-              type="primary"
-              onClick={() => showCertificate(certificate.uuid)}
-            >
-              Ansehen
-            </Button>
+            {userContext.user.isTutor && certificate.state === 'approved' && (
+              <Button
+                type="primary"
+                onClick={() => showCertificate(certificate.uuid)}
+              >
+                Ansehen
+              </Button>
+            )}
             {/* <Button danger>Löschen</Button> */}
           </Space>
         ),
