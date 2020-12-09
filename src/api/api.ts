@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Credentials, User, Subject } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
@@ -24,11 +24,13 @@ const logError = (apiName: string) => (error: Error) => {
 const getAPI = <R = void, P extends Array<any> = Array<void>>(
   name: string,
   url: string | ((...params: P) => string),
-  returns?: (res: AxiosResponse) => R
+  returns?: (res: AxiosResponse) => R,
+  options: AxiosRequestConfig = {}
 ) => (token: string, ...args: P): Promise<R> =>
   axios
     .get(apiURL + (typeof url === 'string' ? url : url(...args)), {
       headers: { token },
+      ...options,
     })
     .then(returns ?? ((() => {}) as () => R))
     .catch(logError(name));
@@ -199,7 +201,8 @@ export const axiosGetCertificate = getAPI(
   'getCertificate',
   (uuid: string, lang: ISupportedLanguage) =>
     `/certificate/${uuid}?lang=${lang}`,
-  (res) => res.data
+  (res) => res.data,
+  { responseType: 'blob' }
 );
 
 export const axiosGetCertificates = getAPI(

@@ -167,7 +167,7 @@ const Settings: React.FC = () => {
           <>
             <Tag
               color={
-                (certificate.state === 'manual' && 'red') ||
+                (certificate.state === 'manual' && 'green') ||
                 (certificate.state === 'awaiting-approval' && 'yellow') ||
                 (certificate.state === 'approved' && 'green')
               }
@@ -183,23 +183,27 @@ const Settings: React.FC = () => {
         key: 'action',
         render: (certificate: IExposedCertificate) => (
           <Space size="middle">
-            {userContext.user.isTutor && certificate.state === 'approved' && (
-              <Button
-                type="primary"
-                onClick={() => showCertificate(certificate.uuid)}
-              >
-                Ansehen
-              </Button>
-            )}
-            <Select
-              defaultValue={defaultLanguage}
-              onChange={(event) => setLanguage(event)}
-              style={{ width: 120 }}
-            >
-              {Object.entries(supportedLanguages).map(([code, value]) => (
-                <Select.Option value={code}>{value}</Select.Option>
-              ))}
-            </Select>
+            {userContext.user.isTutor &&
+              certificate.state !== 'awaiting-approval' && (
+                <>
+                  <Select
+                    defaultValue={defaultLanguage}
+                    onChange={(event) => setLanguage(event)}
+                    style={{ width: 120 }}
+                  >
+                    {Object.entries(supportedLanguages).map(([code, value]) => (
+                      <Select.Option value={code}>{value}</Select.Option>
+                    ))}
+                  </Select>
+                  <Button
+                    type="primary"
+                    onClick={() => showCertificate(certificate.uuid)}
+                  >
+                    Ansehen
+                  </Button>
+                </>
+              )}
+
             {/* <Button danger>Löschen</Button> */}
           </Space>
         ),
