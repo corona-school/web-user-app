@@ -17,7 +17,11 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
-import { IExposedCertificate } from '../types/Certificate';
+import {
+  IExposedCertificate,
+  ISupportedLanguage,
+  supportedLanguages,
+} from '../types/Certificate';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
@@ -32,7 +36,10 @@ interface IApiContext {
   createCertificate: (
     cerfiticateData: CertificateData
   ) => Promise<AxiosResponse<string>>;
-  getCertificate: (uuid: IExposedCertificate['uuid']) => Promise<string>;
+  getCertificate: (
+    uuid: IExposedCertificate['uuid'],
+    lang: ISupportedLanguage
+  ) => Promise<string>;
   getCertificates: () => Promise<IExposedCertificate[]>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourse: (id: string) => Promise<CourseOverview>;

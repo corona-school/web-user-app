@@ -16,3 +16,7 @@ export interface IExposedCertificate {
   hoursTotal: number;
   medium: string;
 }
+
+export const supportedLanguages = { de: 'Deutsch', en: 'Englisch' } as const;
+export const defaultLanguage = 'de';
+export type ISupportedLanguage = keyof typeof supportedLanguages;

@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Button, Space, Table, Tag } from 'antd';
+import { Button, Select, Space, Table, Tag } from 'antd';
 import Context from '../context';
 
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
@@ -15,7 +15,12 @@ import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
 import { useAPI, useAPIResult } from '../context/ApiContext';
-import { IExposedCertificate } from '../types/Certificate';
+import {
+  defaultLanguage,
+  IExposedCertificate,
+  ISupportedLanguage,
+  supportedLanguages,
+} from '../types/Certificate';
 
 const Wrapper = styled.div`
   display: flex;
@@ -29,10 +34,10 @@ const Settings: React.FC = () => {
   const userContext = useContext(Context.User);
   const [certificates, reloadCertificates] = useAPIResult('getCertificates');
   const getCertificate = useAPI('getCertificate');
+  const [language, setLanguage] = useState<ISupportedLanguage>(defaultLanguage);
 
   async function showCertificate(uuid: IExposedCertificate['uuid']) {
-    const response = await getCertificate(uuid);
-    // window.location.href = URL.createObjectURL(new Blob([response.data]));
+    const response = await getCertificate(uuid, language);
     window.open(
       URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
     );
@@ -178,12 +183,23 @@ const Settings: React.FC = () => {
         key: 'action',
         render: (certificate: IExposedCertificate) => (
           <Space size="middle">
-            <Button
-              type="primary"
-              onClick={() => showCertificate(certificate.uuid)}
+            {userContext.user.isTutor && certificate.state === 'approved' && (
+              <Button
+                type="primary"
+                onClick={() => showCertificate(certificate.uuid)}
+              >
+                Ansehen
+              </Button>
+            )}
+            <Select
+              defaultValue={defaultLanguage}
+              onChange={(event) => setLanguage(event)}
+              style={{ width: 120 }}
             >
-              Ansehen
-            </Button>
+              {Object.entries(supportedLanguages).map(([code, value]) => (
+                <Select.Option value={code}>{value}</Select.Option>
+              ))}
+            </Select>
             {/* <Button danger>Löschen</Button> */}
           </Space>
         ),

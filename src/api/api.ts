@@ -12,7 +12,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
-import { IExposedCertificate } from '../types/Certificate';
+import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
 
 const logError = (apiName: string) => (error: Error) => {
   if (dev) console.error(`${apiName} failed:`, error);
@@ -188,6 +188,7 @@ export const axiosCreateCertificate = async (
   params.append('hoursPerWeek', certificateData.hoursPerWeek.toString());
   params.append('hoursTotal', certificateData.hoursTotal.toString());
   params.append('categories', certificateData.activities.join('\n'));
+  params.append('lang', certificateData.lang);
 
   return axios
     .get(url, { headers: { token }, responseType: 'blob', params })
@@ -196,7 +197,8 @@ export const axiosCreateCertificate = async (
 
 export const axiosGetCertificate = getAPI(
   'getCertificate',
-  (uuid: string) => `/certificate/${uuid}`,
+  (uuid: string, lang: ISupportedLanguage) =>
+    `/certificate/${uuid}?lang=${lang}`,
   (res) => res.data
 );
 
