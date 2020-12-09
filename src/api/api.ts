@@ -191,6 +191,7 @@ export const axiosCreateCertificate = async (
   params.append('hoursTotal', certificateData.hoursTotal.toString());
   params.append('categories', certificateData.activities.join('\n'));
   params.append('lang', certificateData.lang);
+  params.append('ongoingLessons', certificateData.ongoingLessons.toString());
 
   return axios
     .get(url, { headers: { token }, responseType: 'blob', params })
