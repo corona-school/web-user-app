@@ -1,29 +1,101 @@
-import React, { useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import DialogModalBase from './DialogModalBase';
 import styles from './EditExpertProfileModal.module.scss';
+import Context from '../../context';
+import { ModalContext } from '../../context/ModalContext';
 
-const accentColor = '#D03D53';
+const accentColor = '#4E6AE6';
 
-const EditExpertProfileModal = () => {
+const EditExpertProfileModal = (props) => {
   const [email, setEmail] = useState(null);
   const [expertise, setExpertise] = useState(null);
   const [description, setDescription] = useState(null);
   const [expertiseTags, setExpertiseTags] = useState(null);
   const [visibility, setVisibility] = useState(null);
 
+  const [fieldsMissing, setFieldsMissing] = useState(false);
+
+  const apiContext = useContext(Context.Api);
+  const { user } = useContext(Context.User);
+  const modalContext = useContext(ModalContext);
+
+  const [Avatar, setAvatar] = useState(props.avatar);
+
+  const avatarUploader = useRef(null);
+
+  function closeModal() {
+    modalContext.setOpenedModal(null);
+    // can be optional
+    [
+      setEmail,
+      setExpertise,
+      setDescription,
+      setExpertiseTags,
+      setVisibility,
+    ].map((method) => typeof method === 'function' && method(null));
+  }
+
+  const putExpertProfile = () => {
+    if (
+      email == null ||
+      expertise == null ||
+      description == null ||
+      expertiseTags == null ||
+      visibility == null
+    ) {
+      setFieldsMissing(true);
+      return;
+    }
+    apiContext
+      .putExpert({
+        user,
+        contactEmail: email,
+        description,
+        expertiseTags: expertiseTags.split(','),
+        active: visibility,
+      })
+      .then(() => closeModal());
+  };
+
   return (
     <DialogModalBase accentColor={accentColor}>
       <DialogModalBase.Modal modalName="editExpertProfileModal">
         <DialogModalBase.Header>
           <div className={styles.avatarWrapper}>
-            <img
-              className={styles.avatar}
-              alt="avatar"
-              src="https://www.lensmen.ie/wp-content/uploads/2015/02/Profile-Portrait-Photographer-in-Dublin-Ireland.-1030x1030.jpg"
-            />
-            <div className={styles.avatarOverlay}>
+            <Avatar className={styles.avatar} />
+            <button
+              className={styles.avatarOverlay}
+              onClick={() => avatarUploader.current.click()}
+            >
               <p>Ändern</p>
-            </div>
+              <input
+                type="file"
+                id="file"
+                ref={avatarUploader}
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  const file = e.target.files[0];
+                  console.log(file);
+                  const fileReader = new FileReader();
+                  fileReader.onload = () => {
+                    setAvatar(() => ({ className }) => {
+                      return (
+                        <img
+                          className={className}
+                          alt="avatar"
+                          src={String(fileReader.result)}
+                        />
+                      );
+                    });
+                  };
+
+                  fileReader.readAsDataURL(file);
+                }}
+              />
+            </button>
           </div>
         </DialogModalBase.Header>
         <DialogModalBase.Spacer />
@@ -31,6 +103,11 @@ const EditExpertProfileModal = () => {
           <DialogModalBase.Title>Melanie Meiers</DialogModalBase.Title>
           <DialogModalBase.CloseButton />
         </DialogModalBase.Header>
+        {fieldsMissing && (
+          <DialogModalBase.Error>
+            <span>Bitte alle Felder ausfüllen.</span>
+          </DialogModalBase.Error>
+        )}
         <DialogModalBase.Form>
           <DialogModalBase.InputCompound direction="vertical">
             <DialogModalBase.TextBox
@@ -77,7 +154,7 @@ const EditExpertProfileModal = () => {
           <DialogModalBase.ButtonBox>
             <DialogModalBase.Button
               label="Speichern"
-              onClick={() => alert('fertig')}
+              onClick={putExpertProfile}
             />
           </DialogModalBase.ButtonBox>
         </DialogModalBase.Form>

@@ -18,6 +18,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
+import { Expert } from '../types/Expert';
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -812,6 +813,26 @@ export const axiosPostUserRoleProjectCoachee = (
   return new Promise<void>((resolve, reject) => {
     axios
       .post(`${apiURL}/user/${id}/role/projectCoachee`, projectCoacheeData, {
+        headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosPutExpert = (
+  token: string,
+  id: string,
+  _expert: Expert
+): Promise<void> => {
+  const expert = _expert;
+  delete expert.user;
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .put(`${apiURL}/expert/${id}`, expert, {
         headers: { token },
       })
       .then(() => resolve())

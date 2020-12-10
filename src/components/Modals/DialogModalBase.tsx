@@ -36,7 +36,7 @@ function useDialogContext() {
   const context = React.useContext(DialogContext);
 
   if (!context) {
-    throw new Error(
+    throw Error(
       `Dialog compound components cannot be rendered outside the Dialog component`
     );
   }
@@ -166,6 +166,13 @@ Responsible for aligning buttons next to each other
  */
 const ButtonBox = (props) => {
   return <div className={styles.buttonBox}>{props.children}</div>;
+};
+
+/*
+Error box
+ */
+const Error2 = (props) => {
+  return <div className={styles.error}>{props.children}</div>;
 };
 
 /*
@@ -299,6 +306,7 @@ DialogModalBase.Form = Form;
 DialogModalBase.InputCompound = InputCompound;
 DialogModalBase.Checkbox = Checkbox;
 DialogModalBase.CheckboxSingle = CheckboxSingle;
+DialogModalBase.Error = Error2;
 DialogModalBase.Header = Header;
 DialogModalBase.CloseButton = CloseButton;
 DialogModalBase.Content = Content;

@@ -23,6 +23,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
+import { Expert } from '../types/Expert';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
@@ -108,6 +109,7 @@ interface IApiContext {
   postUserRoleProjectCoachee: (
     projectCoacheeData: BecomeProjectCoachee
   ) => Promise<void>;
+  putExpert: (expert: Expert) => Promise<void>;
 }
 
 export const ApiContext = React.createContext<IApiContext>({
@@ -152,6 +154,7 @@ export const ApiContext = React.createContext<IApiContext>({
   postContactMentor: (message) => Promise.reject(),
   postUserRoleProjectCoach: () => Promise.reject(),
   postUserRoleProjectCoachee: () => Promise.reject(),
+  putExpert: () => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -318,6 +321,8 @@ export const ApiProvider: React.FC = ({ children }) => {
     projectCoacheeData: BecomeProjectCoachee
   ) => api.axiosPostUserRoleProjectCoachee(token, id, projectCoacheeData);
 
+  const putExpert = (expert: Expert) => api.axiosPutExpert(token, id, expert);
+
   return (
     <ApiContext.Provider
       value={{
@@ -359,6 +364,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         getCooperatingSchools,
         postUserRoleProjectCoach,
         postUserRoleProjectCoachee,
+        putExpert,
       }}
     >
       {children}
