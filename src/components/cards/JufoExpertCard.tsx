@@ -7,6 +7,7 @@ import context from '../../context';
 import classes from './JufoExpertCard.module.scss';
 import Button from '../button';
 import { ExpertOverviewModal } from '../Modals/ExpertOverviewModal';
+import EditExpertProfileModal from '../Modals/EditExpertProfileModal';
 
 export const JufoExpertCard: React.FC = () => {
   const modalContext = useContext(context.Modal);
@@ -36,7 +37,9 @@ export const JufoExpertCard: React.FC = () => {
               Experten*innen angucken
             </Button>
             <Button
-              onClick={() => modalContext.setOpenedModal('createExpertModal')}
+              onClick={() =>
+                modalContext.setOpenedModal('editExpertProfileModal')
+              }
               color="#ffffff"
               backgroundColor="#4E6AE6"
               style={{ margin: '4px' }}
@@ -46,6 +49,17 @@ export const JufoExpertCard: React.FC = () => {
           </div>
         </div>
       </CardBase>
+      <EditExpertProfileModal
+        avatar={() => ({ className }) => {
+          return (
+            <img
+              className={className}
+              alt="avatar"
+              src="https://www.lensmen.ie/wp-content/uploads/2015/02/Profile-Portrait-Photographer-in-Dublin-Ireland.-1030x1030.jpg"
+            />
+          );
+        }}
+      />
       <ExpertOverviewModal />
     </>
   );
