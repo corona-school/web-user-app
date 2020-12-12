@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from 'styled-components';
 import { Empty } from 'antd';
 import Button from '../components/button';
@@ -17,11 +17,45 @@ import {
   BecomeCoachText,
 } from '../assets/ProjectCoachingAssets';
 import CancelMatchModal from '../components/Modals/CancelMatchModal';
+import { ExpertRequestCard } from '../components/cards/ExpertRequestCard';
+import { ExpertOverviewModal } from '../components/Modals/ExpertOverviewModal';
+import { ApiContext } from '../context/ApiContext';
+import { Expert } from '../types/Expert';
+import { JufoExpertDetailCard } from '../components/cards/JufoExpertDetailCard';
 
 const ProjectCoach: React.FC = () => {
   const { user } = useContext(context.User);
   const theme = useContext(ThemeContext);
   const modalContext = useContext(context.Modal);
+  const userContext = useContext(UserContext);
+  const apiContext = useContext(ApiContext);
+  const [experts, setExperts] = useState<Expert[]>([]);
+  const [pinnedExperts, setPinnedExperts] = useState([]);
+
+  const getPinnedExperts = () => {
+    const stringExperts = window.localStorage.getItem('experts');
+    if (!stringExperts) {
+      return;
+    }
+    try {
+      const experts = JSON.parse(stringExperts);
+      if (experts instanceof Array) {
+        setPinnedExperts(experts);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getPinnedExperts();
+  }, [modalContext.openedModal]);
+
+  useEffect(() => {
+    apiContext.getJufoExperts().then((experts) => {
+      setExperts(experts);
+    });
+  }, [modalContext.openedModal]);
 
   const BecomeProjectCoach = () => {
     return (
@@ -55,9 +89,37 @@ const ProjectCoach: React.FC = () => {
     );
   };
 
-  const Matches = () => {
-    const userContext = useContext(UserContext);
+  const renderJufoExpertCards = () => {
+    if (!user.isProjectCoachee) {
+      return null;
+    }
+    const myExperts = experts.filter((e) => pinnedExperts.includes(e.id));
+    return (
+      <div className={classes.experts}>
+        <Title size="h2">Deine Experten*innen</Title>
+        <div className={classes.cardContainer}>
+          {myExperts.map((e) => (
+            <div className={classes.expertContainer}>
+              <div className={classes.expertMatchBar} />
+              <div className={classes.paddingContainer}>
+                <JufoExpertDetailCard
+                  expert={e}
+                  type="card"
+                  onUnpin={getPinnedExperts}
+                />
+              </div>
+            </div>
+          ))}
+          <ExpertRequestCard
+            onClick={() => modalContext.setOpenedModal('expertOverviewModal')}
+          />
+        </div>
+        <ExpertOverviewModal />
+      </div>
+    );
+  };
 
+  const Matches = () => {
     const openRequests = (() => {
       if (userContext.user.type === 'pupil') {
         if (
@@ -162,6 +224,7 @@ const ProjectCoach: React.FC = () => {
     return (
       <div className={classes.containerRequests}>
         <div className={classes.openRequests}>{openRequests}</div>
+        {renderJufoExpertCards()}
         <Title size="h2">Deine Zuordnungen</Title>
         {currentMatches.length === 0 && (
           <Empty
