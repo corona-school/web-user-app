@@ -1,0 +1,35 @@
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+}
+
+.avatarWrapper {
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: -80px auto 40px;
+
+}
+
+.avatarOverlay {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -150px;
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  background-color: #000000;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity .2s ease-in-out;
+  cursor: pointer;
+  &:hover{
+    opacity: .4;
+  }
+}
+

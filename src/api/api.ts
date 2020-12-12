@@ -881,7 +881,7 @@ export const axiosUpdateJufoExpert = (
 ): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     axios
-      .post(`${apiURL}/expert/${id}/contact`, data, {
+      .put(`${apiURL}/expert/${id}`, data, {
         headers: { token },
       })
       .then(() => resolve())

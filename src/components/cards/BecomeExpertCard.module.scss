@@ -1,0 +1,63 @@
+.baseContainer {
+  max-width: 700px !important;
+  width: 100%;
+  min-height: 260px;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.matchInfoContainer {
+  flex-grow: 1;
+
+  .emailText {
+    margin-top: -12px !important;
+  }
+}
+
+.tagContainer {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.subjectContainer {
+  flex-grow: 1;
+  width: 300px;
+
+  .emailText {
+    margin-top: -16px !important;
+  }
+}
+
+.mainButtonContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+  }
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: white;
+  max-width: 500px;
+  align-items: center;
+
+  .buttonContainer {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    button {
+      margin: 8px;
+    }
+  }
+}

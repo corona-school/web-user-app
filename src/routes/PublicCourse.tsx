@@ -16,7 +16,6 @@ import classes from './PublicCourse.module.scss';
 import { parseCourse, defaultPublicCourseSort } from '../utils/CourseUtil';
 import { Tag } from '../components/Tag';
 import Icons from '../assets/icons';
-import { dev } from '../api/config';
 
 const categoryToLabel = new Map([
   [CourseCategory.CLUB, 'AGs'],
@@ -74,9 +73,13 @@ const PublicCourse = () => {
   useEffect(() => {
     setLoading(true);
     apiContext
-      .getCourses()
-      .then((c) => {
-        setCourses(c.map(parseCourse).sort(defaultPublicCourseSort));
+      .getCourseTags()
+      .then((response) => {
+        handleSetTags(response);
+      })
+      .then(apiContext.getCourses)
+      .then((response) => {
+        setCourses(response.map(parseCourse).sort(defaultPublicCourseSort));
       })
       .catch(() => {
         // message.error('Kurse konnten nicht geladen werden.');
@@ -84,17 +87,6 @@ const PublicCourse = () => {
       .finally(() => {
         setLoading(false);
       });
-
-    setLoading(true);
-    apiContext
-      .getCourseTags()
-      .then((response) => {
-        handleSetTags(response);
-      })
-      .catch((error) => {
-        if (dev) console.error(error);
-      })
-      .finally(() => setLoading(false));
   }, [apiContext]);
 
   if (loading) {

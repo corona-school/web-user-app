@@ -1,0 +1,111 @@
+.modal {
+  padding: 27px;
+  background-color: white;
+  border-radius: 4px;
+  min-width: 300px;
+  width: 100%;
+  max-width: 550px;
+  align-items: center;
+}
+
+.modalWrapper{
+  max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.header {
+  //height: 70px;
+  width: 100%;
+  display: flex;
+  //justify-content: center;
+  align-items: center;
+
+  .icon {
+    //margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
+    margin-right: 40px;
+    > svg {
+      width: 20px;
+    }
+  }
+  .title {
+    margin: 0 auto 0 0;
+  }
+
+  .close {
+    width: 30px;
+    fill: #b5b5b5;
+    cursor: pointer;
+    transition: fill .1s ease-in-out;
+    &:hover {
+      fill: #7a7a7a;
+    }
+  }
+}
+
+.description {
+  margin-top: 20px;
+  color: #666666;
+}
+
+.form {
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+.content {
+  width: 100%;
+}
+
+.buttonBox {
+  display: flex;
+  justify-content: center;
+  > button {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+}
+
+.inputCompoundH {
+  display: flex;
+
+}
+
+.inputCompoundV {
+  display: flex;
+  flex-direction: column;
+}
+
+.spacer {
+  margin-top: 20px;
+  width: 100%;
+}
+
+
+.label {
+  font-size: 16px;
+  font-weight: 600;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  line-height: 25px;
+  margin-top: 15px;
+}
+
+
+.error {
+  width: 100%;
+  background-color: #ffb4b4;
+  padding: 10px 30px;
+  display: flex;
+  align-items: center;
+  border-left: 5px solid #ff6060;
+  margin-top: 20px;
+}
