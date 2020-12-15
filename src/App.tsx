@@ -81,10 +81,6 @@ const App: React.FC = () => {
   // jufo cooperation
   const isJufoSubdomain = subdomain === 'jufo';
 
-  const isVerified =
-    userContext.user.type === 'pupil' ||
-    userContext.user.instructorScreeningStatus === ScreeningStatus.Accepted;
-
   return (
     <>
       <GlobalStyle />
@@ -136,15 +132,34 @@ const App: React.FC = () => {
             <PrivateRoute path="/courses/:id" comeback>
               <CourseDetail />
             </PrivateRoute>
-            <PrivateRoute path="/courses" active={isVerified}>
+            <PrivateRoute
+              path="/courses"
+              active={
+                userContext.user.type === 'pupil' ||
+                userContext.user.instructorScreeningStatus ===
+                  ScreeningStatus.Accepted
+              }
+            >
               <Course />
             </PrivateRoute>
           </Switch>
-
-          <PrivateRoute path="/matches" active={isVerified}>
+          <PrivateRoute
+            path="/matches"
+            active={
+              userContext.user.type === 'pupil' ||
+              userContext.user.screeningStatus === ScreeningStatus.Accepted
+            }
+          >
             <Matches />
           </PrivateRoute>
-          <PrivateRoute path="/project-coaching" active={isVerified}>
+          <PrivateRoute
+            path="/project-coaching"
+            active={
+              userContext.user.type === 'pupil' ||
+              userContext.user.projectCoachingScreeningStatus ===
+                ScreeningStatus.Accepted
+            }
+          >
             <ProjectCoach />
           </PrivateRoute>
           <PrivateRoute path="/settings">
