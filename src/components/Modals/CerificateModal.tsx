@@ -46,7 +46,6 @@ export interface CertificateData {
 
 const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
   const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState<ISupportedLanguage>(defaultLanguage);
   const allMatches = [...user.matches, ...user.dissolvedMatches];
 
   const [certificateData, setCertificateData] = useState<CertificateData>({
@@ -58,7 +57,7 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
     mediaType: null,
     activities: [],
     ongoingLessons: false,
-    lang: language,
+    lang: defaultLanguage,
   });
 
   const [currentStep, setStep] = useState(0);
@@ -347,7 +346,9 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
         <div className={classes.downloadContainer}>
           <Select
             defaultValue={defaultLanguage}
-            onChange={(event) => setLanguage(event)}
+            onChange={(lang) => {
+              setCertificateData((data) => ({ ...data, lang }));
+            }}
             style={{ width: 120 }}
           >
             {Object.entries(supportedLanguages).map(([code, value]) => (
