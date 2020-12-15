@@ -93,15 +93,13 @@
 }
 
 .bottomContainer {
-  min-height: fit-content;
+  height: fit-content;
   margin-top: 40px;
   padding: 0px 32px;
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-image: url(/background_full_red.svg);
-  background-position-y: 10px;
-  background-repeat: no-repeat;
+  background-color: #fffafc;
 
   @media only screen and (max-width: 768px) {
     padding: 0px;
@@ -114,7 +112,7 @@
     padding: 8px 16px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    overflow-x: scroll;
+    overflow: scroll;
 
     @media only screen and (max-width: 1200px) {
       grid-template-columns: 1fr 1fr 1fr;
