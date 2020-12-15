@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select } from 'antd';
+import { Select, Input } from 'antd';
 import { Text } from '../Typography';
 
 import { StatesMap } from '../../assets/states';
@@ -29,6 +29,9 @@ export interface EditableUserSettings {
   grade?: number;
   state?: string;
   schoolType?: string;
+  phone?: string;
+  phoneNr?: string;
+  phonePrefix?: string;
 }
 interface Props {
   editableUserSettings: EditableUserSettings;
@@ -145,6 +148,66 @@ const EditableUserSettingsCard: React.FC<Props> = ({
           </Select>
         </SettingWrapper>
       )}
+      <SettingWrapper
+        title="Handynummer"
+        value={editableUserSettings.phone}
+        isEditing={isEditing}
+      >
+        <Input
+          addonBefore={
+            <Select
+              style={{
+                width: 70,
+              }}
+              onChange={(selectedPhonePrefix) => {
+                let { phoneNr } = editableUserSettings;
+                if (!phoneNr && editableUserSettings.phone) {
+                  phoneNr = editableUserSettings.phone.substring(3);
+                }
+                onSettingChanges({
+                  ...editableUserSettings,
+                  phonePrefix: selectedPhonePrefix,
+                  phone: phoneNr ? selectedPhonePrefix + phoneNr : null,
+                });
+              }}
+              defaultValue={
+                editableUserSettings.phone
+                  ? editableUserSettings.phone.substring(0, 3)
+                  : editableUserSettings.phonePrefix || '+49'
+              }
+            >
+              <Select.Option value="+49">+49</Select.Option>
+              <Select.Option value="+41">+41</Select.Option>
+              <Select.Option value="+43">+43</Select.Option>
+            </Select>
+          }
+          className={classes.settingEditAreaSelect}
+          style={{ width: '100%' }}
+          onChange={(phoneNum) => {
+            let { phonePrefix } = editableUserSettings;
+            if (!phonePrefix && editableUserSettings.phone) {
+              phonePrefix = editableUserSettings.phone.substring(0, 3);
+            } else if (!phonePrefix) {
+              phonePrefix = '+49';
+            }
+            onSettingChanges({
+              ...editableUserSettings,
+              phoneNr: parseInt(phoneNum.target.value)
+                ? `${parseInt(phoneNum.target.value)}`
+                : '',
+              phone: parseInt(phoneNum.target.value)
+                ? phonePrefix + parseInt(phoneNum.target.value)
+                : null,
+            });
+          }}
+          placeholder="1234567891"
+          defaultValue={
+            editableUserSettings.phone
+              ? editableUserSettings.phone.substring(3)
+              : ''
+          }
+        />
+      </SettingWrapper>
     </div>
   );
 };
