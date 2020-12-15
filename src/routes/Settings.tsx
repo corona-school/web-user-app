@@ -143,7 +143,7 @@ const Settings: React.FC = () => {
         key: 'subjects',
         render: (certificate: IExposedCertificate) => (
           <>
-            {certificate.subjects.split(', ').map((subject) => (
+            {certificate.subjects.split(',').map((subject) => (
               <Tag key={subject}>{subject.toUpperCase()}</Tag>
             ))}
           </>
