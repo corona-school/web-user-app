@@ -20,6 +20,7 @@ interface Props {
   ownedByMe?: boolean;
   course: ParsedCourseOverview;
   redirect?: string;
+  showCourseState: boolean;
 }
 
 export const CourseStateToLabel = new Map([
@@ -36,7 +37,12 @@ export const CategoryToLabel = new Map([
   [CourseCategory.CLUB, 'AGs'],
 ]);
 
-const MyCourseCard: React.FC<Props> = ({ course, redirect, ownedByMe }) => {
+const MyCourseCard: React.FC<Props> = ({
+  course,
+  redirect,
+  ownedByMe,
+  showCourseState,
+}) => {
   const history = useHistory();
   const auth = useContext(AuthContext);
 
@@ -109,7 +115,7 @@ const MyCourseCard: React.FC<Props> = ({ course, redirect, ownedByMe }) => {
             <div className={classes.metaInfo}>
               {CategoryToLabel.get(course.category)}
             </div>
-            {isMyCourse && (
+            {showCourseState && isMyCourse && (
               <div className={classes.metaInfo}>
                 <Tag
                   background={

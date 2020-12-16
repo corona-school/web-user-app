@@ -89,7 +89,7 @@ const Course = () => {
             <Empty description="Du hast im Moment keine Kurse" />
           ) : (
             myCourses.map((c) => {
-              return <MyCourseCard course={c} ownedByMe />;
+              return <MyCourseCard course={c} ownedByMe showCourseState />;
             })
           )}
         </div>
@@ -104,7 +104,7 @@ const Course = () => {
         />
       ) : (
         filteredCourses.map((c) => {
-          return <MyCourseCard course={c} />;
+          return <MyCourseCard course={c} showCourseState />;
         })
       )}
     </div>
