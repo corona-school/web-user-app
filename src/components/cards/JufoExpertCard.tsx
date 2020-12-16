@@ -9,7 +9,7 @@ import EditExpertProfileModal from '../Modals/EditExpertProfileModal';
 
 export const JufoExpertCard: React.FC = () => {
   const modalContext = useContext(context.Modal);
-  const userContext = useContext(Context.User);
+  const userContext = useContext(context.User);
 
   return (
     <>
