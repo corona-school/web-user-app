@@ -115,11 +115,13 @@ const ProjectCoach: React.FC = () => {
               />
             )
           )}
-          <OpenRequestCard
-            type="new"
-            userType={userContext.user.type}
-            projectCoaching
-          />
+          {userContext.user.projectMatchesRequested < 3 && (
+            <OpenRequestCard
+              type="new"
+              userType={userContext.user.type}
+              projectCoaching
+            />
+          )}
         </>
       );
     })();

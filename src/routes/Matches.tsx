@@ -61,11 +61,13 @@ const Matches: React.FC = () => {
             projectCoaching={false}
           />
         ))}
-        <OpenRequestCard
-          type="new"
-          userType={userContext.user.type}
-          projectCoaching={false}
-        />
+        {userContext.user.matchesRequested < 3 && (
+          <OpenRequestCard
+            type="new"
+            userType={userContext.user.type}
+            projectCoaching={false}
+          />
+        )}
       </>
     );
   })();
