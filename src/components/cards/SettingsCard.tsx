@@ -36,6 +36,7 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
     grade: user.grade,
     schoolType: user.schoolType,
     university: user.university,
+    phone: user.phone,
   });
 
   useEffect(() => {
@@ -44,8 +45,9 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
       grade: user.grade,
       schoolType: user.schoolType,
       university: user.university,
+      phone: user.phone,
     });
-  }, [user.state, user.grade, user.schoolType, user.university]);
+  }, [user.state, user.grade, user.schoolType, user.university, user.phone]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);

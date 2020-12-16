@@ -29,6 +29,7 @@ interface FormData {
   firstname?: string;
   lastname?: string;
   email?: string;
+  phone?: string;
   grade?: number;
   isTutee?: boolean;
   isJufo?: boolean;
@@ -246,6 +247,20 @@ const RegisterTutee: React.FC<Props> = ({
     );
   };
 
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle initialValue="+49">
+      <Select
+        style={{
+          width: 70,
+        }}
+      >
+        <Option value="+49">+49</Option>
+        <Option value="+41">+41</Option>
+        <Option value="+43">+43</Option>
+      </Select>
+    </Form.Item>
+  );
+
   const renderStart = () => {
     return (
       <>
@@ -292,6 +307,26 @@ const RegisterTutee: React.FC<Props> = ({
           ]}
         >
           <Input type="email" placeholder="max.musterman@email.com" />
+        </Form.Item>
+
+        <Form.Item
+          className={classes.formItem}
+          label="Handynummer"
+          name="phone"
+          initialValue={formData.phone}
+          rules={[
+            {
+              pattern: /^[0-9]*$/,
+              message: 'Bitte trage eine gültige Handynummer ein!',
+              validateTrigger: 'onSubmit',
+            },
+          ]}
+        >
+          <Input
+            addonBefore={prefixSelector}
+            style={{ width: '100%' }}
+            placeholder="1234567891"
+          />
         </Form.Item>
 
         {(isJufoSubdomain && renderOfferPickerForJufo()) ||
@@ -747,6 +782,7 @@ const RegisterTutee: React.FC<Props> = ({
       firstname: data.firstname,
       lastname: data.lastname,
       email: data.email.toLowerCase(),
+      phone: data.phone,
       isTutee: data.isTutee,
       subjects: data.subjects || [],
       grade: data.grade,
@@ -784,6 +820,7 @@ const RegisterTutee: React.FC<Props> = ({
           firstname: undefined,
           lastname: undefined,
           email: undefined,
+          phone: undefined,
           subjects: undefined,
           msg: undefined,
           newsletter: undefined,
@@ -821,6 +858,9 @@ const RegisterTutee: React.FC<Props> = ({
           firstname: formValues.firstname,
           lastname: formValues.lastname,
           email: formValues.email,
+          phone: formValues.phone
+            ? formValues.prefix + formValues.phone
+            : formValues.phone,
           isTutee,
           isJufo,
         });

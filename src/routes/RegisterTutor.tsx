@@ -28,6 +28,7 @@ interface FormData {
   firstname?: string;
   lastname?: string;
   email?: string;
+  phone?: string;
   isOfficial?: boolean;
   isInstructor?: boolean;
   isTutor?: boolean;
@@ -282,6 +283,20 @@ const RegisterTutor: React.FC<Props> = (props) => {
     );
   };
 
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle initialValue="+49">
+      <Select
+        style={{
+          width: 70,
+        }}
+      >
+        <Option value="+49">+49</Option>
+        <Option value="+41">+41</Option>
+        <Option value="+43">+43</Option>
+      </Select>
+    </Form.Item>
+  );
+
   const renderStart = () => {
     return (
       <>
@@ -330,6 +345,27 @@ const RegisterTutor: React.FC<Props> = (props) => {
             defaultValue={formData.email}
           />
         </Form.Item>
+
+        <Form.Item
+          className={classes.formItem}
+          label="Handynummer"
+          name="phone"
+          initialValue={formData.phone}
+          rules={[
+            {
+              pattern: /^[0-9]*$/,
+              message: 'Bitte trage eine gültige Handynummer ein!',
+              validateTrigger: 'onSubmit',
+            },
+          ]}
+        >
+          <Input
+            addonBefore={prefixSelector}
+            style={{ width: '100%' }}
+            placeholder="1234567891"
+          />
+        </Form.Item>
+
         {(props.isJufoSubdomain && renderOfferPickerForJufo()) ||
           renderOfferPickerNormal()}
         {renderDLLFormItem()}
@@ -775,6 +811,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       firstname: data.firstname,
       lastname: data.lastname,
       email: data.email.toLowerCase(),
+      phone: data.phone,
       isTutor: data.isTutor,
       subjects: data.subjects || [],
       isOfficial: data.isOfficial,
@@ -841,6 +878,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           firstname: undefined,
           lastname: undefined,
           email: undefined,
+          phone: undefined,
           subjects: undefined,
           msg: undefined,
           newsletter: undefined,
@@ -880,6 +918,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
           firstname: formValues.firstname,
           lastname: formValues.lastname,
           email: formValues.email,
+          phone: formValues.phone
+            ? formValues.prefix + formValues.phone
+            : formValues.phone,
           isOfficial,
           isTutor,
           isInstructor: isGroups,
