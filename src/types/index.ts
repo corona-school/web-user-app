@@ -49,6 +49,14 @@ export interface User {
   schoolType?: string;
   lastUpdatedSettingsViaBlocker: number;
   registrationDate: number;
+  expertData?: {
+    id: number;
+    contactEmail: string;
+    description: string;
+    expertiseTags: string[];
+    active: boolean;
+    allowed: string;
+  };
 }
 
 export enum ScreeningStatus {
