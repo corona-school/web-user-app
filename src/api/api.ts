@@ -18,6 +18,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
+import { ConfirmPhone } from '../types/ConfirmPhone';
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -819,5 +820,20 @@ export const axiosPostUserRoleProjectCoachee = (
         console.log(`Caught error: ${err}`);
         reject(err);
       });
+  });
+};
+
+export const axiosPostConfirmPhone = (
+  token: string,
+  id: string,
+  confirmPhoneData: ConfirmPhone
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/code/`, confirmPhoneData, {
+        headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => reject(err));
   });
 };

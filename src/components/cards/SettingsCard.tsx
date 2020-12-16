@@ -16,6 +16,7 @@ import context from '../../context';
 import classes from './SettingsCard.module.scss';
 import BecomeInstructorModal from '../Modals/BecomeInstructorModal';
 import BecomeInternModal from '../Modals/BecomeInternModal';
+import ConfirmPhoneModal from '../Modals/ConfirmPhone';
 import EditableUserSettingsCard, {
   EditableUserSettings,
 } from './EditableUserSettingsCard';
@@ -62,6 +63,12 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
       message.error('Ein Fehler ist aufgetreten. Probiere es noch einmal!');
     } finally {
       setIsSaving(false);
+      if (
+        editableUserSettings.phone &&
+        user.phoneConfirmed !== editableUserSettings.phone
+      ) {
+        modalContext.setOpenedModal('ConfirmPhone');
+      }
     }
   };
 
@@ -193,6 +200,7 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
       <CertificateModal user={user} />
       <BecomeInstructorModal user={user} />
       <BecomeInternModal user={user} />
+      <ConfirmPhoneModal user={user} />
       <StyledReactModal
         isOpen={modalContext.openedModal === 'deactivateAccount'}
       >

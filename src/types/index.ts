@@ -50,6 +50,7 @@ export interface User {
   lastUpdatedSettingsViaBlocker: number;
   registrationDate: number;
   phone?: string;
+  phoneConfirmed?: string;
 }
 
 export enum ScreeningStatus {
