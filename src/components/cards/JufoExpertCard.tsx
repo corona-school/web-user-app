@@ -59,7 +59,9 @@ export const JufoExpertCard: React.FC = () => {
               backgroundColor="#4E6AE6"
               style={{ margin: '4px' }}
             >
-              Profil erstellen
+              {userContext.user.expertData == null
+                ? 'Profil erstellen'
+                : 'Profil bearbeiten'}
             </Button>
           </div>
         </div>
