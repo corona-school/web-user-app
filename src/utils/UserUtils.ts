@@ -14,16 +14,16 @@ export const getUserTags = (user: User) => {
   }
 
   if (user.isTutor) {
-    studentTags.isTutor = 'Tutor';
+    studentTags["isTutor"] = 'Tutor';
   }
 
   if (user.isInstructor) {
-    studentTags.isInstructor =
+    studentTags["isInstructor"] =
       user.university === null ? 'Kursleiter' : 'Praktikant';
   }
 
   if (user.isProjectCoach) {
-    studentTags.isProjectCoach = 'Project-Coach';
+    studentTags["isProjectCoach"] = 'Project-Coach';
   }
   return studentTags;
 };
