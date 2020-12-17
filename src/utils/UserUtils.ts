@@ -7,6 +7,27 @@ export const getUserType = (user: User) => {
   return `Student*in`;
 };
 
+export const getUserTags = (user: User) => {
+  const studentTags = {};
+  if (user.type === 'pupil') {
+    return { pupil: 'Schüler*in' };
+  }
+
+  if (user.isTutor) {
+    studentTags.isTutor = 'Tutor';
+  }
+
+  if (user.isInstructor) {
+    studentTags.isInstructor =
+      user.university === null ? 'Kursleiter' : 'Praktikant';
+  }
+
+  if (user.isProjectCoach) {
+    studentTags.isProjectCoach = 'Project-Coach';
+  }
+  return studentTags;
+};
+
 export const isProjectCoachButNotTutor = (user: User) =>
   !user.isTutor && user.isProjectCoach;
 
