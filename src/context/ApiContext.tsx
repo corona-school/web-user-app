@@ -23,7 +23,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
-import { ConfirmPhone } from '../types/ConfirmPhone';
+import { RequestCode, VerifyCode } from '../types/Phone';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
@@ -109,7 +109,8 @@ interface IApiContext {
   postUserRoleProjectCoachee: (
     projectCoacheeData: BecomeProjectCoachee
   ) => Promise<void>;
-  postConfirmPhone: (confirmPhoneData: ConfirmPhone) => Promise<void>;
+  postRequestCode: (requestCodeData: RequestCode) => Promise<void>;
+  postVerifyCode: (verifyCodeData: VerifyCode) => Promise<void>;
 }
 
 export const ApiContext = React.createContext<IApiContext>({
@@ -154,7 +155,8 @@ export const ApiContext = React.createContext<IApiContext>({
   postContactMentor: (message) => Promise.reject(),
   postUserRoleProjectCoach: () => Promise.reject(),
   postUserRoleProjectCoachee: () => Promise.reject(),
-  postConfirmPhone: () => Promise.reject(),
+  postRequestCode: () => Promise.reject(),
+  postVerifyCode: () => Promise.reject(),
 });
 
 export const ApiProvider: React.FC = ({ children }) => {
@@ -321,8 +323,11 @@ export const ApiProvider: React.FC = ({ children }) => {
     projectCoacheeData: BecomeProjectCoachee
   ) => api.axiosPostUserRoleProjectCoachee(token, id, projectCoacheeData);
 
-  const postConfirmPhone = (confirmPhoneData: ConfirmPhone) =>
-    api.axiosPostConfirmPhone(token, id, confirmPhoneData);
+  const postRequestCode = (requestCodeData: RequestCode) =>
+    api.axiosPostRequestCode(token, id, requestCodeData);
+
+  const postVerifyCode = (verifyCodeData: VerifyCode) =>
+    api.axiosPostVerifyCode(token, id, verifyCodeData);
 
   return (
     <ApiContext.Provider
@@ -365,7 +370,8 @@ export const ApiProvider: React.FC = ({ children }) => {
         getCooperatingSchools,
         postUserRoleProjectCoach,
         postUserRoleProjectCoachee,
-        postConfirmPhone,
+        postRequestCode,
+        postVerifyCode,
       }}
     >
       {children}

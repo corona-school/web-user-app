@@ -1,24 +1,39 @@
-import React from 'react';
-import { Select, Input } from 'antd';
+import React, { useContext } from 'react';
+import { Select, Input, Button } from 'antd';
 import { Text } from '../Typography';
-
+import { User } from '../../types';
 import { StatesMap } from '../../assets/states';
 import classes from './EditableUserSettingsCard.module.scss';
 import { SchoolTypesMap } from '../../assets/schoolTypes';
 import UniSelect from '../forms/select/UniSelect';
+import context from '../../context';
 
 const SettingWrapper: React.FC<{
   title: string;
   value: string;
   isEditing: boolean;
   children: React.ReactNode;
-}> = ({ title, value, isEditing, children }) => {
+  verify: boolean;
+  modalContext;
+}> = ({ title, value, isEditing, children, verify, modalContext }) => {
   return (
     <>
       <Text large bold>
         {title}
       </Text>
-      {!isEditing && <Text large>{value}</Text>}
+      {!isEditing && (
+        <Text large>
+          {value}
+          {verify && (
+            <Button
+              className={classes.verifyBtn}
+              onClick={() => modalContext.setOpenedModal('Phone')}
+            >
+              Verifizieren
+            </Button>
+          )}
+        </Text>
+      )}
       <div className={classes.settingEditArea}>{isEditing && children}</div>
     </>
   );
@@ -38,13 +53,17 @@ interface Props {
   onSettingChanges?: (newValue: EditableUserSettings) => void;
   isEditing?: boolean;
   personType: 'tutee' | 'tutor';
+  user: User;
 }
 const EditableUserSettingsCard: React.FC<Props> = ({
   editableUserSettings,
   onSettingChanges,
   isEditing = false,
   personType,
+  user,
 }) => {
+  const modalContext = useContext(context.Modal);
+
   return (
     <div className={classes.baseContainer}>
       {personType === 'tutor' && (
@@ -52,6 +71,8 @@ const EditableUserSettingsCard: React.FC<Props> = ({
           title="Universität"
           value={editableUserSettings.university}
           isEditing={isEditing}
+          verify={false}
+          modalContext={modalContext}
         >
           <UniSelect
             className={classes.settingEditAreaSelect}
@@ -70,6 +91,8 @@ const EditableUserSettingsCard: React.FC<Props> = ({
           title="Klassenstufe"
           value={`${editableUserSettings.grade}. Klasse`}
           isEditing={isEditing}
+          verify={false}
+          modalContext={modalContext}
         >
           <Select
             className={classes.settingEditAreaSelect}
@@ -98,6 +121,8 @@ const EditableUserSettingsCard: React.FC<Props> = ({
         title="Bundesland"
         value={StatesMap[editableUserSettings.state.toUpperCase()]}
         isEditing={isEditing}
+        verify={false}
+        modalContext={modalContext}
       >
         <Select
           className={classes.settingEditAreaSelect}
@@ -128,6 +153,8 @@ const EditableUserSettingsCard: React.FC<Props> = ({
           title="Schultyp"
           value={SchoolTypesMap[editableUserSettings.schoolType]}
           isEditing={isEditing}
+          verify={false}
+          modalContext={modalContext}
         >
           <Select
             className={classes.settingEditAreaSelect}
@@ -152,6 +179,11 @@ const EditableUserSettingsCard: React.FC<Props> = ({
         title="Handynummer"
         value={editableUserSettings.phone}
         isEditing={isEditing}
+        verify={
+          editableUserSettings.phone &&
+          user.phoneConfirmed !== editableUserSettings.phone
+        }
+        modalContext={modalContext}
       >
         <Input
           addonBefore={
@@ -180,6 +212,17 @@ const EditableUserSettingsCard: React.FC<Props> = ({
               <Select.Option value="+41">+41</Select.Option>
               <Select.Option value="+43">+43</Select.Option>
             </Select>
+          }
+          /* addonAfter={
+            user.phoneConfirmed === editableUserSettings.phone ?
+              <Button>Verifiziert</Button>
+            :
+              <Button>Unverifiziert</Button>
+          } */
+          suffix={
+            user.phoneConfirmed === editableUserSettings.phone
+              ? 'Verifiziert'
+              : ''
           }
           className={classes.settingEditAreaSelect}
           style={{ width: '100%' }}

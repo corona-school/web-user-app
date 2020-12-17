@@ -5,9 +5,9 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import { ModalContext } from '../../context/ModalContext';
 import { ApiContext } from '../../context/ApiContext';
 
-import classes from './ConfirmPhone.module.scss';
+import classes from './PhoneModal.module.scss';
 import { Title } from '../Typography';
-import { ConfirmPhone } from '../../types/ConfirmPhone';
+import { RequestCode, VerifyCode } from '../../types/Phone';
 import Button from '../button';
 import { UserContext } from '../../context/UserContext';
 import { dev } from '../../api/config';
@@ -17,25 +17,43 @@ interface Props {
   user: User;
 }
 
-const ConfirmPhoneModal: React.FC<Props> = ({ user }) => {
+const PhoneModal: React.FC<Props> = ({ user }) => {
   const [loading, setLoading] = useState(false);
 
   const modalContext = useContext(ModalContext);
   const userContext = useContext(UserContext);
   const api = useContext(ApiContext);
 
+  const requestCode = () => {
+    const requestCodeData: RequestCode = {
+      wixId: user.id,
+    };
+
+    api
+      .postRequestCode(requestCodeData)
+      .then(() => {
+        message.success(
+          'Es wurde ein Verifizierungscode an deine Handynummer gesendet.'
+        );
+      })
+      .catch((err) => {
+        if (dev) console.error(err);
+        message.error('Etwas ist schief gegangen.');
+      });
+  };
+
   const onFinish = (onFinish) => {
     setLoading(true);
 
-    const confirmPhoneData: ConfirmPhone = {
+    const verifyCodeData: VerifyCode = {
       code: onFinish.code,
       wixId: user.id,
     };
 
     api
-      .postConfirmPhone(confirmPhoneData)
+      .postVerifyCode(verifyCodeData)
       .then(() => {
-        message.success('Deine Telefonummer wurde bestätigt.');
+        message.success('Deine Handynummer wurde bestätigt.');
         modalContext.setOpenedModal(null);
         userContext.fetchUserData();
       })
@@ -50,7 +68,7 @@ const ConfirmPhoneModal: React.FC<Props> = ({ user }) => {
 
   if (loading) {
     return (
-      <StyledReactModal isOpen={modalContext.openedModal === 'ConfirmPhone'}>
+      <StyledReactModal isOpen={modalContext.openedModal === 'Phone'}>
         <div className={classes.modal}>
           <Title size="h2">Telefonnummer bestätigen</Title>
           <ClipLoader size={100} color="#123abc" loading />
@@ -66,11 +84,14 @@ const ConfirmPhoneModal: React.FC<Props> = ({ user }) => {
 
   return (
     <StyledReactModal
-      isOpen={modalContext.openedModal === 'ConfirmPhone'}
+      isOpen={modalContext.openedModal === 'Phone'}
       onBackgroundClick={() => modalContext.setOpenedModal(null)}
     >
       <div className={classes.modal}>
-        <Title size="h2">Telefonnummer bestätigen</Title>
+        <Title size="h2">Handynummer verifizieren</Title>
+        <div className={classes.buttonContainer}>
+          <Button onClick={requestCode}>Code anfordern</Button>
+        </div>
         <Form
           onFinish={onFinish}
           className={classes.formContainer}
@@ -79,12 +100,12 @@ const ConfirmPhoneModal: React.FC<Props> = ({ user }) => {
         >
           <Form.Item
             className={classes.formItem}
-            label="SMS Bestätigungs Code"
+            label="SMS Verifizierungscode"
             name="code"
             rules={[
               {
                 required: true,
-                message: 'Bitte gebe den SMS Bestätigungs Code ein.',
+                message: 'Bitte gebe den SMS Verifizierungscode ein.',
               },
             ]}
           >
@@ -92,7 +113,7 @@ const ConfirmPhoneModal: React.FC<Props> = ({ user }) => {
           </Form.Item>
           <Form.Item>
             <div className={classes.buttonContainer}>
-              <Button type="submit">Bestätigen</Button>
+              <Button type="submit">Verifizieren</Button>
             </div>
           </Form.Item>
         </Form>
@@ -101,4 +122,4 @@ const ConfirmPhoneModal: React.FC<Props> = ({ user }) => {
   );
 };
 
-export default ConfirmPhoneModal;
+export default PhoneModal;

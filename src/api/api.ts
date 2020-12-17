@@ -18,7 +18,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
-import { ConfirmPhone } from '../types/ConfirmPhone';
+import { RequestCode, VerifyCode } from '../types/Phone';
 
 export const redeemVerificationToken = (
   verificationToken: string
@@ -823,14 +823,29 @@ export const axiosPostUserRoleProjectCoachee = (
   });
 };
 
-export const axiosPostConfirmPhone = (
+export const axiosPostRequestCode = (
   token: string,
   id: string,
-  confirmPhoneData: ConfirmPhone
+  requestCodeData: RequestCode
 ): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     axios
-      .post(`${apiURL}/code/`, confirmPhoneData, {
+      .post(`${apiURL}/code/request/`, requestCodeData, {
+        headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => reject(err));
+  });
+};
+
+export const axiosPostVerifyCode = (
+  token: string,
+  id: string,
+  verifyCodeData: VerifyCode
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/code/verify/`, verifyCodeData, {
         headers: { token },
       })
       .then(() => resolve())
