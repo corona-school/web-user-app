@@ -220,6 +220,7 @@ const EditableUserSettingsCard: React.FC<Props> = ({
               <Button>Unverifiziert</Button>
           } */
           suffix={
+            editableUserSettings.phone &&
             user.phoneConfirmed === editableUserSettings.phone
               ? 'Verifiziert'
               : ''
