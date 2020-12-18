@@ -8,22 +8,22 @@ export const getUserType = (user: User) => {
 };
 
 export const getUserTags = (user: User) => {
-  const studentTags = {};
+  const studentTags = [];
+
   if (user.type === 'pupil') {
     return { pupil: 'Schüler*in' };
   }
 
   if (user.isTutor) {
-    studentTags.isTutor = 'Tutor*in';
+    studentTags.push('Tutor*in');
   }
 
   if (user.isInstructor) {
-    studentTags.isInstructor =
-      user.university === null ? 'Kursleiter*in' : 'Praktikant*in';
+    studentTags.push('Kursleiter*in');
   }
 
   if (user.isProjectCoach) {
-    studentTags.isProjectCoach = 'Projektcoach*in';
+    studentTags.push('Projektcoach*in');
   }
   return studentTags;
 };
