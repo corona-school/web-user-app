@@ -6,7 +6,13 @@ import { User, Subject } from '../types';
 import * as api from '../api/api';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
-import { Course, SubCourse, Lecture, CourseOverview } from '../types/Course';
+import {
+  Course,
+  SubCourse,
+  Lecture,
+  CourseOverview,
+  Tag,
+} from '../types/Course';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { CompletedSubCourse } from '../components/forms/CreateCourse';
 import { CompletedLecture } from '../routes/CourseForm';
@@ -42,6 +48,7 @@ interface IApiContext {
   ) => Promise<string>;
   getCertificates: () => Promise<IExposedCertificate[]>;
   getCourses: () => Promise<CourseOverview[]>;
+  getCourseTags: () => Promise<Tag[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
   getMyCourses: (type: 'student' | 'pupil') => Promise<CourseOverview[]>;
   createCourse: (coure: Course) => Promise<number>;
@@ -128,6 +135,7 @@ export const ApiContext = React.createContext<IApiContext>({
   getCertificate: reject,
   getCertificates: reject,
   getCourses: reject,
+  getCourseTags: reject,
   getCourse: reject,
   getMyCourses: reject,
   createCourse: reject,
@@ -227,6 +235,8 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const getCourses = (): Promise<CourseOverview[]> =>
     api.axiosGetCourses(token);
+
+  const getCourseTags = (): Promise<Tag[]> => api.axiosGetCourseTags(token);
 
   const getCourse = (id: string): Promise<CourseOverview> =>
     api.axiosGetCourse(token, id);
@@ -365,6 +375,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         getCertificate: withToken(api.axiosGetCertificate),
         getCertificates: withToken(api.axiosGetCertificates),
         getCourses,
+        getCourseTags,
         getCourse,
         getMyCourses,
         registerTutee,

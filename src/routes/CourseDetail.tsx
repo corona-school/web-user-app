@@ -31,6 +31,7 @@ import {
   CourseState,
   Course,
   SubCourse,
+  Tag as CourseTag,
 } from '../types/Course';
 import { Title, Text } from '../components/Typography';
 import { Tag } from '../components/Tag';
@@ -43,7 +44,6 @@ import {
   CourseStateToLabel,
 } from '../components/cards/MyCourseCard';
 
-import { tags } from '../components/forms/CreateCourse';
 import { ModalContext } from '../context/ModalContext';
 import CourseMessageModal from '../components/Modals/CourseMessageModal';
 import { dev } from '../api/config';
@@ -58,6 +58,7 @@ const CourseDetail = (params: { id?: string }) => {
   const [isCustomShareMenuVisible, setIsCustomShareMenuVisible] = useState(
     false
   );
+  const [tags, setTags] = useState<CourseTag[]>([]);
 
   const { id: urlParamID } = useParams() as { id: string };
   const id = params.id ?? urlParamID;
@@ -87,7 +88,15 @@ const CourseDetail = (params: { id?: string }) => {
           setLoading(false);
         });
     }
-  }, [api, id]);
+    setLoading(true);
+    api
+      .getCourseTags()
+      .then((response) => {
+        setTags(response);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+  }, [api, id, setTags]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -101,7 +110,7 @@ const CourseDetail = (params: { id?: string }) => {
 
   const submitCourse = () => {
     const { category } = course;
-    const tagObj = tags.get(category);
+    const tagObj = tags.filter((t) => t.category === category);
 
     const apiCourse: Course = {
       instructors: course.instructors.map((i) => i.id),
@@ -109,9 +118,7 @@ const CourseDetail = (params: { id?: string }) => {
       outline: course.outline,
       description: course.description,
       category: course.category,
-      tags: course.tags.map(
-        (t) => tagObj.find((o) => o.name === t.name)?.identifier
-      ),
+      tags: course.tags.map((t) => tagObj.find((o) => o.name === t.name)?.id),
       submit: true,
     };
 
