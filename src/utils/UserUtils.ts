@@ -11,7 +11,7 @@ export const getUserTags = (user: User) => {
   const studentTags = [];
 
   if (user.type === 'pupil') {
-    return { pupil: 'Schüler*in' };
+    return ['Schüler*in'];
   }
 
   if (user.isTutor) {
