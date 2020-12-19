@@ -23,9 +23,10 @@ import SaveEditButton from '../button/SaveEditButton';
 
 interface Props {
   user: User;
+  reloadCertificates: () => void;
 }
 
-const SettingsCard: React.FC<Props> = ({ user }) => {
+const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
   const modalContext = useContext(context.Modal);
   const ApiContext = useContext(context.Api);
 
@@ -188,7 +189,7 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
           </div>
         </div>
       </CardBase>
-      <CertificateModal user={user} />
+      <CertificateModal user={user} reloadCertificates={reloadCertificates} />
       <BecomeInstructorModal user={user} />
       <BecomeInternModal user={user} />
       <StyledReactModal

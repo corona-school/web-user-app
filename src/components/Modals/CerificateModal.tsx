@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { Select, DatePicker, InputNumber, message } from 'antd';
+import { Select, DatePicker, InputNumber, message, Checkbox } from 'antd';
 import moment from 'moment';
 
 import context from '../../context';
@@ -11,11 +11,17 @@ import Button from '../button';
 import Icons from '../../assets/icons';
 import { User } from '../../types';
 import ActivityForm from '../forms/ActivityForm';
+import {
+  defaultLanguage,
+  ISupportedLanguage,
+  supportedLanguages,
+} from '../../types/Certificate';
 
 const { Option } = Select;
 
 interface Props {
   user: User;
+  reloadCertificates: () => void;
 }
 
 const STEPS = 4;
@@ -34,9 +40,11 @@ export interface CertificateData {
   subjects: string[];
   mediaType: string | null;
   activities: string[];
+  ongoingLessons: boolean;
+  lang: ISupportedLanguage;
 }
 
-const CertificateModal: React.FC<Props> = ({ user }) => {
+const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
   const [loading, setLoading] = useState(false);
   const allMatches = [...user.matches, ...user.dissolvedMatches];
 
@@ -48,6 +56,8 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     subjects: [],
     mediaType: null,
     activities: [],
+    ongoingLessons: false,
+    lang: defaultLanguage,
   });
 
   const [currentStep, setStep] = useState(0);
@@ -137,7 +147,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     return (
       <div className={classes.generalInformationContainer}>
         <Text className={classes.description}>
-          Schritt 1: Allgemeine Informationen eintragen
+          Schritt 1/{STEPS - 2}: Allgemeine Informationen eintragen
         </Text>
         <Title size="h5" bold>
           Schüler*in
@@ -202,17 +212,35 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           />{' '}
           ({certificateData.weekCount} Wochen)
         </div>
+        <div className={classes.inputField}>
+          <Checkbox
+            checked={certificateData.ongoingLessons}
+            onChange={(e) =>
+              setCertificateData({
+                ...certificateData,
+                ongoingLessons: e.target.checked,
+              })
+            }
+          >
+            Unterstützung dauert noch an
+          </Checkbox>
+        </div>
         <Title size="h5" bold>
           Fächer
         </Title>
         <div className={classes.inputField}>
           <Select
+            disabled={!selectedPupil}
             onChange={(v: string[]) => {
               setCertificateData({ ...certificateData, subjects: v });
             }}
             value={certificateData.subjects}
             mode="multiple"
-            placeholder="Wähle deine Fächer aus"
+            placeholder={
+              selectedPupil
+                ? 'Wähle deine Fächer aus'
+                : 'Zuerst einen Schüler auswählen'
+            }
             style={{ width: '100%' }}
           >
             {selectedPupil?.subjects.map((s) => {
@@ -279,7 +307,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
     return (
       <div>
         <Text className={classes.description}>
-          Schritt 2: Tätigkeiten eintragen
+          Schritt 2/{STEPS - 2}: Tätigkeiten eintragen
         </Text>
         <ActivityForm
           certificateData={certificateData}
@@ -292,7 +320,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   const downloadPDF = () => {
     setLoading(true);
     apiContext
-      .getCertificate(certificateData)
+      .createCertificate(certificateData)
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
@@ -313,11 +341,20 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
   const renderDownloadPage = () => {
     return (
       <div>
-        <Text className={classes.description}>
-          Schritt 3: Bescheinigung herunterladen
-        </Text>
+        <Text className={classes.description}>Bescheinigung herunterladen</Text>
 
         <div className={classes.downloadContainer}>
+          <Select
+            defaultValue={defaultLanguage}
+            onChange={(lang) => {
+              setCertificateData((data) => ({ ...data, lang }));
+            }}
+            style={{ width: 120 }}
+          >
+            {Object.entries(supportedLanguages).map(([code, value]) => (
+              <Option value={code}>{value}</Option>
+            ))}
+          </Select>
           <Button
             className={classes.downloadButton}
             backgroundColor="#4E6AE6"
@@ -392,7 +429,11 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
             <Button
               color="#B5B5B5"
               backgroundColor="#ffffff"
-              onClick={() => modalContext.setOpenedModal(null)}
+              onClick={() => {
+                modalContext.setOpenedModal(null);
+                setStep(0);
+                reloadCertificates();
+              }}
             >
               <Icons.Abort />
             </Button>
@@ -400,7 +441,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
           {renderStep(currentStep)}
         </div>
         <div className={classes.buttonContainer}>
-          {currentStep > 0 && (
+          {currentStep > 0 && currentStep < STEPS - 1 && (
             <Button
               backgroundColor="#F4F6FF"
               color="#4E6AE6"
@@ -415,7 +456,7 @@ const CertificateModal: React.FC<Props> = ({ user }) => {
               color="#4E6AE6"
               onClick={() => onClick(currentStep + 1)}
             >
-              Weiter
+              {currentStep === STEPS - 2 ? 'Abschließen' : 'Weiter'}
             </Button>
           )}
         </div>
