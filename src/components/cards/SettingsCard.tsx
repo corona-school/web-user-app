@@ -114,7 +114,7 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             </Text>
           </div>
           <div className={classes.tagContainer}>
-            {Object.values(userTags).map((tag) => (
+            {userTags.map((tag) => (
               <Tag
                 background="#4E555C"
                 color="#ffffff"
