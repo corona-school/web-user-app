@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import DialogModalBase from './DialogModalBase';
 import Context from '../../context';
 import { ModalContext } from '../../context/ModalContext';
+import TagInput from '../forms/TagInput';
 
 const accentColor = '#4E6AE6';
-const emailValidationRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const emailValidationRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const EditExpertProfileModal = () => {
   const userContext = useContext(Context.User);
@@ -19,7 +20,7 @@ const EditExpertProfileModal = () => {
     user.expertData != null ? user.expertData.description : ''
   );
   const [expertiseTags, setExpertiseTags] = useState(
-    user.expertData != null ? user.expertData.expertiseTags.join(',') : ''
+    user.expertData != null ? user.expertData.expertiseTags : ['']
   );
   const [visibility, setVisibility] = useState(
     user.expertData != null ? user.expertData.active : null
@@ -27,6 +28,14 @@ const EditExpertProfileModal = () => {
 
   const [fieldsMissing, setFieldsMissing] = useState(false);
   const [emailInvalid, setEmailInvalid] = useState(false);
+
+  const [availableTags, setAvailableTags] = useState([]);
+
+  useEffect(() => {
+    apiContext.getUsedExpertTags().then((r) => {
+      setAvailableTags(r.map((expertTag) => expertTag.name));
+    });
+  }, []);
 
   // const [Avatar, setAvatar] = useState(props.avatar);
   //
@@ -36,7 +45,7 @@ const EditExpertProfileModal = () => {
     setEmail(user.expertData != null ? user.expertData.contactEmail : '');
     setDescription(user.expertData != null ? user.expertData.description : '');
     setExpertiseTags(
-      user.expertData != null ? user.expertData.expertiseTags.join(',') : ''
+      user.expertData != null ? user.expertData.expertiseTags : ['']
     );
     setVisibility(user.expertData != null ? user.expertData.active : null);
     setFieldsMissing(false);
@@ -74,7 +83,7 @@ const EditExpertProfileModal = () => {
       .updateJufoExpert(user.id, {
         contactEmail: email,
         description,
-        expertiseTags: expertiseTags.split(','),
+        expertiseTags,
         active: visibility,
       })
       .then(() => {
@@ -151,10 +160,12 @@ const EditExpertProfileModal = () => {
               onChange={(e) => setDescription(e.target.value)}
               value={description}
             />
-            <DialogModalBase.TextBox
-              label="Experten-Tags"
-              onChange={(e) => setExpertiseTags(e.target.value)}
+            <TagInput
+              accentColor={accentColor}
+              onChange={(newTags) => setExpertiseTags(newTags)}
               value={expertiseTags}
+              title="Experten-Tags"
+              availableTags={availableTags}
             />
           </DialogModalBase.InputCompound>
           <DialogModalBase.Spacer />
