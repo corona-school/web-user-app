@@ -48,7 +48,7 @@ export const ContactJufoExpert: React.FC = () => {
     }
     const modal = modalContext.openedModal;
     const id = modal.substring(modal.indexOf('#') + 1) || '';
-    const e = experts.find((e) => e.id === id);
+    const e = experts.find((e) => `${e.id}` === id);
     if (e) {
       setExpert(e);
     }

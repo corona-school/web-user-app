@@ -37,7 +37,11 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
     } catch (err) {}
   }, []);
 
-  const pinExpert = () => {
+  const pinExpert = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
     const stringExperts = window.localStorage.getItem('experts');
     if (!stringExperts) {
       window.localStorage.setItem('experts', JSON.stringify([props.expert.id]));
@@ -54,7 +58,11 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
     } catch (err) {}
   };
 
-  const unpinExpert = () => {
+  const unpinExpert = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
     const stringExperts = window.localStorage.getItem('experts');
     if (!stringExperts) {
       return;
@@ -74,68 +82,84 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
     } catch (err) {}
   };
 
-  const openEmailDialog = () => {
+  const openEmailDialog = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
     modalContext.setOpenedModal(`contact-expert#${props.expert.id}`);
   };
 
-  return (
-    <div className={classes.container}>
-      <div className={classes.infoContainer}>
-        <div className={classes.header}>
-          <Title size="h4" bold>
-            {props.expert.firstName} {props.expert.lastName}
-          </Title>
+  const openExpertDetails = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    modalContext.setOpenedModal(`detail-expert#${props.expert.id}`);
+  };
 
-          <div className={classes.rightHeader}>
-            {props.expert.projectFields.map((field) => (
-              <Tag
-                key={`${field}-${props.expert.id}`}
-                fontSize="12px"
-                background="#F4F6FF"
-                color="#4E6AE6"
-              >
-                {field}
-              </Tag>
-            ))}
-            {user.isProjectCoachee && (
+  return (
+    <button onClick={openExpertDetails}>
+      <div className={classes.container}>
+        <div className={classes.infoContainer}>
+          <div className={classes.header}>
+            <Title size="h4" bold>
+              {props.expert.firstName} {props.expert.lastName}
+            </Title>
+
+            <div className={classes.rightHeader}>
+              {props.expert.projectFields.map((field) => (
+                <Tag
+                  key={`${field}-${props.expert.id}`}
+                  fontSize="12px"
+                  background="#F4F6FF"
+                  color="#4E6AE6"
+                >
+                  {field}
+                </Tag>
+              ))}
+              {user.isProjectCoachee && (
+                <Button
+                  backgroundColor="#4E6AE6"
+                  color="#ffffff"
+                  className={classes.emailButton}
+                  image={
+                    pinned ? (
+                      <Icons.BookmarkSlashFilled />
+                    ) : (
+                      <Icons.BookmarkFilled />
+                    )
+                  }
+                  onClick={pinned ? unpinExpert : pinExpert}
+                />
+              )}
               <Button
                 backgroundColor="#4E6AE6"
                 color="#ffffff"
+                image={<Icons.EmailFilled />}
+                onClick={openEmailDialog}
                 className={classes.emailButton}
-                image={
-                  pinned ? (
-                    <Icons.BookmarkSlashFilled />
-                  ) : (
-                    <Icons.BookmarkFilled />
-                  )
-                }
-                onClick={pinned ? unpinExpert : pinExpert}
               />
-            )}
-            <Button
-              backgroundColor="#4E6AE6"
-              color="#ffffff"
-              image={<Icons.EmailFilled />}
-              onClick={openEmailDialog}
-              className={classes.emailButton}
-            />
+            </div>
           </div>
+
+          <Text
+            className={props.type === 'card' ? classes.cardDescription : ''}
+          >
+            {props.expert.description}
+          </Text>
+
+          {props.type === 'card' ? null : (
+            <div className={classes.expertTags}>
+              {props.expert.expertiseTags.map((tag) => (
+                <Tag background="#4E555C" color="#ffffff">
+                  {tag}
+                </Tag>
+              ))}
+            </div>
+          )}
         </div>
-
-        <Text className={props.type === 'card' ? classes.cardDescription : ''}>
-          {props.expert.description}
-        </Text>
-
-        {props.type === 'card' ? null : (
-          <div className={classes.expertTags}>
-            {props.expert.expertiseTags.map((tag) => (
-              <Tag background="#4E555C" color="#ffffff">
-                {tag}
-              </Tag>
-            ))}
-          </div>
-        )}
       </div>
-    </div>
+    </button>
   );
 };
