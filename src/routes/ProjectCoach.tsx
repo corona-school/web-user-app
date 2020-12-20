@@ -55,7 +55,7 @@ const ProjectCoach: React.FC = () => {
     apiContext.getJufoExperts().then((experts) => {
       setExperts(experts);
     });
-  }, [modalContext.openedModal]);
+  }, []);
 
   const BecomeProjectCoach = () => {
     return (

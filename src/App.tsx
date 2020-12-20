@@ -32,6 +32,7 @@ import {
   stateInfoForStateSubdomain,
 } from './assets/supportedStateCooperations';
 import ProjectCoach from './routes/ProjectCoach';
+import { Modals } from './Modals';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -84,6 +85,7 @@ const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
+      <Modals />
       <Switch>
         <Route path="/login">
           <Login />

@@ -49,6 +49,8 @@ import { ReactComponent as CoatOfArmsNRW } from './states/nrw.svg';
 
 import { ReactComponent as ProjectCoachingIcon } from './project-coaching.svg';
 import { ReactComponent as EmailFilled } from './email-filled.svg';
+import { ReactComponent as BookmarkFilled } from './bookmark-filled.svg';
+import { ReactComponent as BookmarkSlashFilled } from './bookmark-slash-filled.svg';
 
 const IconsList = {
   Edit,
@@ -99,6 +101,8 @@ const IconsList = {
   CoatOfArmsNRW,
   ProjectCoachingIcon,
   EmailFilled,
+  BookmarkFilled,
+  BookmarkSlashFilled,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

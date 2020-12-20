@@ -22,6 +22,7 @@ export const ExpertSearch: React.FC = () => {
   >([]);
 
   useEffect(() => {
+    console.log('Hello');
     setLoading(true);
     api
       .getJufoExperts()
