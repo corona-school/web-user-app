@@ -18,7 +18,6 @@ import {
 } from '../assets/ProjectCoachingAssets';
 import CancelMatchModal from '../components/Modals/CancelMatchModal';
 import { ExpertRequestCard } from '../components/cards/ExpertRequestCard';
-import { ExpertOverviewModal } from '../components/Modals/ExpertOverviewModal';
 import { ApiContext } from '../context/ApiContext';
 import { Expert } from '../types/Expert';
 import { JufoExpertDetailCard } from '../components/cards/JufoExpertDetailCard';
@@ -114,7 +113,6 @@ const ProjectCoach: React.FC = () => {
             onClick={() => modalContext.setOpenedModal('expertOverviewModal')}
           />
         </div>
-        <ExpertOverviewModal />
       </div>
     );
   };

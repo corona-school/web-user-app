@@ -4,7 +4,7 @@ import { Text, Title } from '../Typography';
 import context from '../../context';
 import classes from './JufoExpertCard.module.scss';
 import Button from '../button';
-import { ExpertOverviewModal } from '../Modals/ExpertOverviewModal';
+
 import EditExpertProfileModal from '../Modals/EditExpertProfileModal';
 
 export const JufoExpertCard: React.FC = () => {
@@ -77,7 +77,6 @@ export const JufoExpertCard: React.FC = () => {
           );
         }}
       />
-      <ExpertOverviewModal />
     </>
   );
 };

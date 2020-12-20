@@ -9,33 +9,40 @@ import { Expert } from '../../types/Expert';
 import Button from '../button';
 
 import classes from './ContactJufoExpert.module.scss';
+import { UserContext } from '../../context/UserContext';
 
 export const ContactJufoExpert: React.FC = () => {
   const modalContext = useContext(ModalContext);
+  const userContext = useContext(UserContext);
   const api = useContext(ApiContext);
 
   const [loading, setLoading] = useState(false);
   const [expert, setExpert] = useState<Expert>(null);
+  const [experts, setExperts] = useState<Expert[]>([]);
+
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+
+  useEffect(() => {
+    setLoading(true);
+    api
+      .getJufoExperts()
+      .then((experts) => {
+        setExperts(experts);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [userContext.user]);
 
   useEffect(() => {
     if (modalContext.openedModal === null || loading) {
       return;
     }
-    setLoading(true);
-
-    api
-      .getJufoExperts()
-      .then((experts) => {
-        const e = experts.find((e) => e.id === modalContext.openedModal);
-        if (e) {
-          setExpert(e);
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    const e = experts.find((e) => e.id === modalContext.openedModal);
+    if (e) {
+      setExpert(e);
+    }
   }, [modalContext.openedModal]);
 
   const contactExpert = () => {
