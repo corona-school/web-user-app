@@ -101,17 +101,7 @@ export const JufoExpertCard: React.FC = () => {
           </div>
         </div>
       </CardBase>
-      <EditExpertProfileModal
-        avatar={() => ({ className }) => {
-          return (
-            <img
-              className={className}
-              alt="avatar"
-              src="https://www.lensmen.ie/wp-content/uploads/2015/02/Profile-Portrait-Photographer-in-Dublin-Ireland.-1030x1030.jpg"
-            />
-          );
-        }}
-      />
+      <EditExpertProfileModal />
     </>
   );
 };

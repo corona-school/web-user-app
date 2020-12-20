@@ -1,44 +1,61 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import DialogModalBase from './DialogModalBase';
-import styles from './EditExpertProfileModal.module.scss';
 import Context from '../../context';
 import { ModalContext } from '../../context/ModalContext';
 
 const accentColor = '#4E6AE6';
+const emailValidationRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const EditExpertProfileModal = (props) => {
-  const [email, setEmail] = useState(null);
-  const [expertise, setExpertise] = useState(null);
-  const [description, setDescription] = useState(null);
-  const [expertiseTags, setExpertiseTags] = useState(null);
-  const [visibility, setVisibility] = useState(null);
-
-  const [fieldsMissing, setFieldsMissing] = useState(false);
-
+const EditExpertProfileModal = () => {
+  const userContext = useContext(Context.User);
+  const { user } = userContext;
   const apiContext = useContext(Context.Api);
-  const { user } = useContext(Context.User);
   const modalContext = useContext(ModalContext);
 
-  const [Avatar, setAvatar] = useState(props.avatar);
+  const [email, setEmail] = useState(
+    user.expertData != null ? user.expertData.contactEmail : ''
+  );
+  const [description, setDescription] = useState(
+    user.expertData != null ? user.expertData.description : ''
+  );
+  const [expertiseTags, setExpertiseTags] = useState(
+    user.expertData != null ? user.expertData.expertiseTags.join(',') : ''
+  );
+  const [visibility, setVisibility] = useState(
+    user.expertData != null ? user.expertData.active : null
+  );
 
-  const avatarUploader = useRef(null);
+  const [fieldsMissing, setFieldsMissing] = useState(false);
+  const [emailInvalid, setEmailInvalid] = useState(false);
+
+  // const [Avatar, setAvatar] = useState(props.avatar);
+  //
+  // const avatarUploader = useRef(null);
+
+  const resetFields = () => {
+    setEmail(user.expertData != null ? user.expertData.contactEmail : '');
+    setDescription(user.expertData != null ? user.expertData.description : '');
+    setExpertiseTags(
+      user.expertData != null ? user.expertData.expertiseTags.join(',') : ''
+    );
+    setVisibility(user.expertData != null ? user.expertData.active : null);
+    setFieldsMissing(false);
+    setEmailInvalid(false);
+  };
 
   function closeModal() {
     modalContext.setOpenedModal(null);
-    // can be optional
-    [
-      setEmail,
-      setExpertise,
-      setDescription,
-      setExpertiseTags,
-      setVisibility,
-    ].map((method) => typeof method === 'function' && method(null));
   }
+
+  useEffect(() => {
+    if (modalContext.openedModal === 'editExpertProfileModal') {
+      resetFields(); // Re-initialize fields when modal gets opened again (Can't do that in .then() of putExpertProfile because fetchUserData is async and therefore we can't update the modal's fields immediately after re-fetching the new data. Ideally, fetchUserData would return a promise.)
+    }
+  }, [modalContext.openedModal]);
 
   const putExpertProfile = () => {
     if (
       email == null ||
-      expertise == null ||
       description == null ||
       expertiseTags == null ||
       visibility == null
@@ -46,6 +63,13 @@ const EditExpertProfileModal = (props) => {
       setFieldsMissing(true);
       return;
     }
+
+    if (!emailValidationRegex.test(String(email).toLowerCase())) {
+      setEmailInvalid(true);
+      return;
+    }
+    setEmailInvalid(false);
+
     apiContext
       .updateJufoExpert(user.id, {
         contactEmail: email,
@@ -53,58 +77,66 @@ const EditExpertProfileModal = (props) => {
         expertiseTags: expertiseTags.split(','),
         active: visibility,
       })
-      .then(() => closeModal());
+      .then(() => {
+        userContext.fetchUserData();
+        closeModal();
+      });
   };
 
   return (
     <DialogModalBase accentColor={accentColor}>
       <DialogModalBase.Modal modalName="editExpertProfileModal">
-        <DialogModalBase.Header>
-          <div className={styles.avatarWrapper}>
-            <Avatar className={styles.avatar} />
-            <button
-              className={styles.avatarOverlay}
-              onClick={() => avatarUploader.current.click()}
-            >
-              <p>Ändern</p>
-              <input
-                type="file"
-                id="file"
-                ref={avatarUploader}
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  const file = e.target.files[0];
-                  console.log(file);
-                  const fileReader = new FileReader();
-                  fileReader.onload = () => {
-                    setAvatar(() => ({ className }) => {
-                      return (
-                        <img
-                          className={className}
-                          alt="avatar"
-                          src={String(fileReader.result)}
-                        />
-                      );
-                    });
-                  };
+        {/* <DialogModalBase.Header> */}
+        {/*  <div className={styles.avatarWrapper}> */}
+        {/*    <Avatar className={styles.avatar} /> */}
+        {/*    <button */}
+        {/*      className={styles.avatarOverlay} */}
+        {/*      onClick={() => avatarUploader.current.click()} */}
+        {/*    > */}
+        {/*      <p>Ändern</p> */}
+        {/*      <input */}
+        {/*        type="file" */}
+        {/*        id="file" */}
+        {/*        ref={avatarUploader} */}
+        {/*        accept="image/*" */}
+        {/*        style={{ display: 'none' }} */}
+        {/*        onChange={(e) => { */}
+        {/*          e.stopPropagation(); */}
+        {/*          e.preventDefault(); */}
+        {/*          const file = e.target.files[0]; */}
+        {/*          console.log(file); */}
+        {/*          const fileReader = new FileReader(); */}
+        {/*          fileReader.onload = () => { */}
+        {/*            setAvatar(() => ({ className }) => { */}
+        {/*              return ( */}
+        {/*                <img */}
+        {/*                  className={className} */}
+        {/*                  alt="avatar" */}
+        {/*                  src={String(fileReader.result)} */}
+        {/*                /> */}
+        {/*              ); */}
+        {/*            }); */}
+        {/*          }; */}
 
-                  fileReader.readAsDataURL(file);
-                }}
-              />
-            </button>
-          </div>
-        </DialogModalBase.Header>
+        {/*          fileReader.readAsDataURL(file); */}
+        {/*        }} */}
+        {/*      /> */}
+        {/*    </button> */}
+        {/*  </div> */}
+        {/* </DialogModalBase.Header> */}
         <DialogModalBase.Spacer />
         <DialogModalBase.Header>
-          <DialogModalBase.Title>Melanie Meiers</DialogModalBase.Title>
-          <DialogModalBase.CloseButton />
+          <DialogModalBase.Title>{`${user.firstname} ${user.lastname}`}</DialogModalBase.Title>
+          <DialogModalBase.CloseButton hook={resetFields} />
         </DialogModalBase.Header>
         {fieldsMissing && (
           <DialogModalBase.Error>
-            <span>Bitte alle Felder ausfüllen.</span>
+            <span>Bitte fülle alle Felder aus.</span>
+          </DialogModalBase.Error>
+        )}
+        {emailInvalid && (
+          <DialogModalBase.Error>
+            <span>Die eingegebene E-Mail-Adresse ist ungültig.</span>
           </DialogModalBase.Error>
         )}
         <DialogModalBase.Form>
@@ -113,11 +145,6 @@ const EditExpertProfileModal = (props) => {
               label="Kontakt E-Mail-Adresse"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-            />
-            <DialogModalBase.TextBox
-              label="Fachgebiet"
-              onChange={(e) => setExpertise(e.target.value)}
-              value={expertise}
             />
             <DialogModalBase.TextArea
               label="Kurzbeschreibung"
