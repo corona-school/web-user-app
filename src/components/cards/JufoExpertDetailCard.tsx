@@ -75,7 +75,7 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
   };
 
   const openEmailDialog = () => {
-    modalContext.setOpenedModal(props.expert.id);
+    modalContext.setOpenedModal(`contact-expert#${props.expert.id}`);
   };
 
   return (

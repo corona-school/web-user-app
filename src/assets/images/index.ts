@@ -16,6 +16,8 @@ import { ReactComponent as SignupBackgroundCircle2 } from './signup/yellow-circl
 import { ReactComponent as SignupBackgroundZickZack } from './signup/zick-zack-line.svg';
 import { ReactComponent as MentoringPic } from './mentoring.svg';
 
+import { ReactComponent as NotFound } from './not-found.svg';
+
 import { ReactComponent as Celebration } from './celebration_blue.svg';
 
 const ImageList = {
@@ -36,6 +38,7 @@ const ImageList = {
   Celebration,
   MentoringPic,
   TrashIllustration,
+  NotFound,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
