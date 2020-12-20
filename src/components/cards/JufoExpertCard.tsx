@@ -74,7 +74,7 @@ export const JufoExpertCard: React.FC = () => {
               renderPending()}
             {userContext.user.expertData?.allowed === ExpertStatus.YES &&
               renderExpertData()}
-            {userContext.user.expertData?.allowed === ExpertStatus.YES &&
+            {userContext.user.expertData?.allowed === ExpertStatus.NO &&
               renderExpertDenied()}
           </div>
           <div className={classes.mainButtonContainer}>
