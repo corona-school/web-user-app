@@ -19,13 +19,13 @@ export const ExpertRequestCard: React.FC<Props> = (props) => {
       >
         <div className={classes.titleContainer}>
           <Icons.Add height="20px" />
-          <Title size="h4">Neue Anfrage</Title>
+          <Title size="h4">Mehr Expert*innen finden</Title>
         </div>
 
         <Text className={classes.newTextContainer}>
-          Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner
-          zeitlichen Möglichkeiten eine*n weitere*n Jugend-forscht-Teilnehmer*in
-          unterstützen möchtest.
+          Hier findest du eine ganze Liste weiterer Expert*innen mit ganz
+          verschiedenen Kompetenzen, die dir bei deinen spezifischen Problemen
+          helfen könnten.
         </Text>
       </CardNewBase>
     </button>
