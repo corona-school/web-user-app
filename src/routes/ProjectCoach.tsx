@@ -51,10 +51,16 @@ const ProjectCoach: React.FC = () => {
   }, [modalContext.openedModal]);
 
   useEffect(() => {
+    if (
+      !userContext.user.isProjectCoachee &&
+      !userContext.user.isProjectCoach
+    ) {
+      return;
+    }
     apiContext.getJufoExperts().then((experts) => {
       setExperts(experts);
     });
-  }, []);
+  }, [userContext.user]);
 
   const BecomeProjectCoach = () => {
     return (
@@ -167,8 +173,10 @@ const ProjectCoach: React.FC = () => {
       return (
         <>
           {[...Array(userContext.user.projectMatchesRequested).keys()].map(
-            () => (
+            (_, i) => (
               <OpenRequestCard
+                // eslint-disable-next-line react/no-array-index-key
+                key={`project-request-${i}`}
                 type="pending"
                 userType={userContext.user.type}
                 projectCoaching

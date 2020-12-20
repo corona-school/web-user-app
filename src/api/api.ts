@@ -194,7 +194,7 @@ export const axiosPutUserActive = (
   active: boolean
 ): Promise<void> => {
   const url = `${apiURL}/user/${id}/active/${active ? 'true' : 'false'}`;
-  console.log(url);
+
   return new Promise((resolve, reject) => {
     axios
       .put(url, undefined, { headers: { token } })
@@ -539,8 +539,6 @@ export const axiosCreateSubCourse = (
   subCourse: SubCourse
 ): Promise<number> => {
   return new Promise((resolve, reject) => {
-    console.log(subCourse);
-
     axios
       .post(`${apiURL}/course/${courseId}/subcourse`, subCourse, {
         headers: { token },
@@ -722,7 +720,6 @@ export const axiosJoinBBBmeeting = (
     axios
       .get(url, { headers: { token } })
       .then((response) => {
-        console.log(response);
         resolve(response.data);
       })
       .catch((error) => {

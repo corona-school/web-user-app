@@ -9,11 +9,13 @@ import { ApiContext } from '../../context/ApiContext';
 import classes from './ExpertOverviewModal.module.scss';
 import { Expert } from '../../types/Expert';
 import { JufoExpertDetailCard } from '../cards/JufoExpertDetailCard';
+import { UserContext } from '../../context/UserContext';
 
 export const MODAL_IDENTIFIER = 'expertOverviewModal';
 const MODAL_TITLE = 'Liste von Experten*innen';
 
 export const ExpertOverviewModal: React.FC = () => {
+  const userContext = useContext(UserContext);
   const modalContext = useContext(ModalContext);
   const api = useContext(ApiContext);
 
@@ -22,6 +24,12 @@ export const ExpertOverviewModal: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (
+      !userContext.user.isProjectCoachee &&
+      !userContext.user.isProjectCoach
+    ) {
+      return;
+    }
     if (modalContext.openedModal === MODAL_IDENTIFIER) {
       setLoading(true);
       api
@@ -37,18 +45,7 @@ export const ExpertOverviewModal: React.FC = () => {
           setLoading(false);
         });
     }
-  }, [modalContext.openedModal]);
-
-  if (loading) {
-    return (
-      <StyledReactModal isOpen={modalContext.openedModal === MODAL_IDENTIFIER}>
-        <div className={classes.modal}>
-          <Title size="h2">Wir aktualisieren deine Informationen...</Title>
-          <ClipLoader size={100} color="#4E6AE6" loading />
-        </div>
-      </StyledReactModal>
-    );
-  }
+  }, [modalContext.openedModal, userContext.user]);
 
   const onSearch = (value: string) => {
     if (value.trim().length === 0) {
@@ -67,6 +64,21 @@ export const ExpertOverviewModal: React.FC = () => {
     setFileredExperts(filter);
   };
 
+  if (!userContext.user.isProjectCoachee && !userContext.user.isProjectCoach) {
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <StyledReactModal isOpen={modalContext.openedModal === MODAL_IDENTIFIER}>
+        <div className={classes.modal}>
+          <Title size="h2">Wir aktualisieren deine Informationen...</Title>
+          <ClipLoader size={100} color="#4E6AE6" loading />
+        </div>
+      </StyledReactModal>
+    );
+  }
+
   return (
     <StyledReactModal
       isOpen={modalContext.openedModal === MODAL_IDENTIFIER}
@@ -82,7 +94,7 @@ export const ExpertOverviewModal: React.FC = () => {
         />
 
         {filteredExperts.map((expert) => (
-          <JufoExpertDetailCard expert={expert} />
+          <JufoExpertDetailCard key={expert.id} expert={expert} />
         ))}
       </div>
     </StyledReactModal>

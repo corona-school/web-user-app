@@ -69,12 +69,12 @@ export const JufoExpertCard: React.FC = () => {
             <Title size="h4" bold>
               Willst du Jufo Experte*in werden?
             </Title>
-            {userContext.user.expertData === null && renderIntroduction()}
-            {userContext.user.expertData.allowed === ExpertStatus.PENDING &&
+            {userContext.user.expertData == null && renderIntroduction()}
+            {userContext.user.expertData?.allowed === ExpertStatus.PENDING &&
               renderPending()}
-            {userContext.user.expertData.allowed === ExpertStatus.YES &&
+            {userContext.user.expertData?.allowed === ExpertStatus.YES &&
               renderExpertData()}
-            {userContext.user.expertData.allowed === ExpertStatus.YES &&
+            {userContext.user.expertData?.allowed === ExpertStatus.YES &&
               renderExpertDenied()}
           </div>
           <div className={classes.mainButtonContainer}>

@@ -10,6 +10,7 @@ import Button from '../button';
 
 import classes from './ContactJufoExpert.module.scss';
 import { UserContext } from '../../context/UserContext';
+import Images from '../../assets/images';
 
 export const ContactJufoExpert: React.FC = () => {
   const modalContext = useContext(ModalContext);
@@ -23,7 +24,9 @@ export const ContactJufoExpert: React.FC = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
-  useEffect(() => {
+  const isOpen = modalContext.openedModal?.includes('contact-expert');
+
+  const reloadExperts = () => {
     setLoading(true);
     api
       .getJufoExperts()
@@ -33,17 +36,25 @@ export const ContactJufoExpert: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    if (userContext.user.isProjectCoachee || userContext.user.isProjectCoach) {
+      reloadExperts();
+    }
   }, [userContext.user]);
 
   useEffect(() => {
-    if (modalContext.openedModal === null || loading) {
+    if (!isOpen) {
       return;
     }
-    const e = experts.find((e) => e.id === modalContext.openedModal);
+    const modal = modalContext.openedModal;
+    const id = modal.substring(modal.indexOf('#') + 1) || '';
+    const e = experts.find((e) => `${e.id}` === id);
     if (e) {
       setExpert(e);
     }
-  }, [modalContext.openedModal]);
+  }, [isOpen, userContext.user]);
 
   const contactExpert = () => {
     if (loading) {
@@ -67,13 +78,45 @@ export const ContactJufoExpert: React.FC = () => {
       });
   };
 
-  if (!expert) {
+  if (!userContext.user.isProjectCoachee && !userContext.user.isProjectCoach) {
     return null;
+  }
+
+  if (!expert) {
+    return (
+      <StyledReactModal
+        isOpen={isOpen}
+        onBackgroundClick={() => modalContext.setOpenedModal(null)}
+      >
+        <div className={classes.modal}>
+          <div className={classes.title}>
+            <Title size="h2">
+              Nachricht an... {} {}
+            </Title>
+          </div>
+          <div className={classes.buttonContainer}>
+            <Images.NotFound />
+            <Text large className={classes.text}>
+              Experte konnte nicht gefunden werden.
+            </Text>
+            <Button
+              backgroundColor="#4E6AE6"
+              color="#ffffff"
+              onClick={reloadExperts}
+              className={classes.messageButton}
+            >
+              <ClipLoader size={40} color="#ffffff" loading={loading} />
+              {loading ? '' : 'Erneut versuchen'}
+            </Button>
+          </div>
+        </div>
+      </StyledReactModal>
+    );
   }
 
   return (
     <StyledReactModal
-      isOpen={modalContext.openedModal === expert.id}
+      isOpen={isOpen}
       onBackgroundClick={() => modalContext.setOpenedModal(null)}
     >
       <div className={classes.modal}>
