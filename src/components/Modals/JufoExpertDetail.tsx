@@ -39,7 +39,9 @@ export const JufoExpertDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    reloadExperts();
+    if (userContext.user.isProjectCoachee || userContext.user.isProjectCoach) {
+      reloadExperts();
+    }
   }, [userContext.user]);
 
   useEffect(() => {
@@ -114,6 +116,10 @@ export const JufoExpertDetail: React.FC = () => {
       // eslint-disable-next-line no-empty
     } catch (err) {}
   };
+
+  if (!userContext.user.isProjectCoachee && !userContext.user.isProjectCoach) {
+    return null;
+  }
 
   if (!expert) {
     return (

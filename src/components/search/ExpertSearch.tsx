@@ -22,6 +22,12 @@ export const ExpertSearch: React.FC = () => {
   >([]);
 
   useEffect(() => {
+    if (
+      !userContext.user.isProjectCoachee &&
+      !userContext.user.isProjectCoach
+    ) {
+      return;
+    }
     setLoading(true);
     api
       .getJufoExperts()

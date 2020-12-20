@@ -151,8 +151,13 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
 
           {props.type === 'card' ? null : (
             <div className={classes.expertTags}>
-              {props.expert.expertiseTags.map((tag) => (
-                <Tag background="#4E555C" color="#ffffff">
+              {props.expert.expertiseTags.map((tag, i) => (
+                <Tag
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`${props.expert.id}-${i}`}
+                  background="#4E555C"
+                  color="#ffffff"
+                >
                   {tag}
                 </Tag>
               ))}

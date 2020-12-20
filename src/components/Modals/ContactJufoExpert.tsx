@@ -39,7 +39,9 @@ export const ContactJufoExpert: React.FC = () => {
   };
 
   useEffect(() => {
-    reloadExperts();
+    if (userContext.user.isProjectCoachee || userContext.user.isProjectCoach) {
+      reloadExperts();
+    }
   }, [userContext.user]);
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export const ContactJufoExpert: React.FC = () => {
     if (e) {
       setExpert(e);
     }
-  }, [isOpen]);
+  }, [isOpen, userContext.user]);
 
   const contactExpert = () => {
     if (loading) {
@@ -75,6 +77,10 @@ export const ContactJufoExpert: React.FC = () => {
         setLoading(false);
       });
   };
+
+  if (!userContext.user.isProjectCoachee && !userContext.user.isProjectCoach) {
+    return null;
+  }
 
   if (!expert) {
     return (
