@@ -188,6 +188,7 @@ export const JufoExpertDetail: React.FC = () => {
           <div className={classes.rightSide}>
             {userContext.user.isProjectCoachee && (
               <Button
+                autoFocus
                 backgroundColor="#4E6AE6"
                 color="#ffffff"
                 className={classes.emailButton}
@@ -202,6 +203,7 @@ export const JufoExpertDetail: React.FC = () => {
               />
             )}
             <Button
+              autoFocus
               backgroundColor="#4E6AE6"
               color="#ffffff"
               image={<Icons.EmailFilled />}

@@ -12,10 +12,12 @@ import classes from './ExpertSearch.module.scss';
 export const ExpertSearch: React.FC = () => {
   const location = useLocation();
   const userContext = useContext(UserContext);
+
   const api = useContext(ApiContext);
 
   const [experts, setExperts] = useState<Expert[]>([]);
   const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState('');
   const [options, setOptions] = useState<
     // eslint-disable-next-line @typescript-eslint/ban-types
     SelectProps<object>['options']
@@ -86,8 +88,9 @@ export const ExpertSearch: React.FC = () => {
     setOptions(value ? searchResult(value) : []);
   };
 
-  const onSelect = (value: string) => {
-    console.log('onSelect', value);
+  const onSelect = () => {
+    setQuery('');
+    setOptions([]);
   };
 
   return (
@@ -96,6 +99,8 @@ export const ExpertSearch: React.FC = () => {
         style={{ width: '100%', maxWidth: '500px' }}
         dropdownMatchSelectWidth={340}
         onSearch={handleSearch}
+        value={query}
+        onChange={(e) => setQuery(e)}
         onSelect={onSelect}
         options={options}
       >
