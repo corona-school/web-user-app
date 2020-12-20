@@ -105,7 +105,7 @@ const Settings: React.FC = () => {
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
       <SettingsCard user={userContext.user} />
-      {userContext.user.isProjectCoach && <JufoExpertCard />}
+      <JufoExpertCard />
 
       {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
