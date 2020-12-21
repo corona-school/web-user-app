@@ -58,7 +58,7 @@ export default function TagInput({
     <div
       className={styles.outerWrapper}
       ref={wrapperRef}
-      onClick={
+      onClick={() =>
         textboxRef.current != null ? textboxRef.current.focus() : undefined
       }
     >
