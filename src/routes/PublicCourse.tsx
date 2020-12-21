@@ -237,6 +237,7 @@ const PublicCourse = () => {
                 key={c.id}
                 course={c}
                 redirect={`/public/courses/${c.id}`}
+                showCourseState={false}
               />
             );
           })}

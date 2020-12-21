@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AxiosResponse } from 'axios';
 import { AuthContext } from './AuthContext';
 import { User, Subject } from '../types';
@@ -24,6 +23,7 @@ import {
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
 import { Expert, ExpertTag, ExpertUpdate } from '../types/Expert';
+import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
@@ -35,10 +35,14 @@ interface IApiContext {
   putUserProjectFields: (projectFields: ApiProjectFieldInfo[]) => Promise<void>;
   becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
   putUserActiveFalse: () => Promise<void>;
-  getCertificate: (
+  createCertificate: (
     cerfiticateData: CertificateData
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) => Promise<AxiosResponse<any>>;
+  ) => Promise<AxiosResponse<string>>;
+  getCertificate: (
+    uuid: IExposedCertificate['uuid'],
+    lang: ISupportedLanguage
+  ) => Promise<string>;
+  getCertificates: () => Promise<IExposedCertificate[]>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourseTags: () => Promise<Tag[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
@@ -119,53 +123,80 @@ interface IApiContext {
   updateJufoExpert: (id: string, data: ExpertUpdate) => Promise<void>;
 }
 
+const reject = () => Promise.reject();
+
 export const ApiContext = React.createContext<IApiContext>({
-  getUserData: () => Promise.reject(),
-  dissolveMatch: (uuid, reason?) => Promise.reject(),
-  dissolveProjectMatch: (uuid, reason?) => Promise.reject(),
+  getUserData: reject,
+  dissolveMatch: reject,
+  dissolveProjectMatch: reject,
   requestNewToken: api.axiosRequestNewToken,
-  putUser: (user) => Promise.reject(),
-  putUserSubjects: (subjects) => Promise.reject(),
-  putUserProjectFields: (projectFields) => Promise.reject(),
-  becomeInstructor: (description: BecomeInstructor | BecomeIntern) =>
-    Promise.reject(),
-  putUserActiveFalse: () => Promise.reject(),
-  getCertificate: (cerfiticateData) => Promise.reject(),
-  getCourses: () => Promise.reject(),
-  getCourseTags: () => Promise.reject(),
-  getCourse: (courseId) => Promise.reject(),
-  getMyCourses: () => Promise.reject(),
-  createCourse: (course) => Promise.reject(),
-  cancelCourse: (id) => Promise.reject(),
-  editCourse: (id, course) => Promise.reject(),
-  joinCourse: (courseId: number, subCourseId: number, participantId: string) =>
-    Promise.reject(),
-  leaveCourse: (courseId: number, subCourseId: number, participantId: string) =>
-    Promise.reject(),
-  submitCourse: (id, course) => Promise.reject(),
-  publishSubCourse: (courseId, id, course) => Promise.reject(),
-  createSubCourse: (id, subCourse) => Promise.reject(),
-  editSubCourse: (id, subCourse) => Promise.reject(),
-  cancelSubCourse: (id, subCourseId) => Promise.reject(),
-  createLecture: (id, subCourseId, lecture) => Promise.reject(),
-  editLecture: (id, subCourseId, lecture) => Promise.reject(),
-  cancelLecture: (id, subCourseId, lectureId) => Promise.reject(),
-  registerTutee: (tutee) => Promise.reject(),
-  registerStateTutee: (tutee) => Promise.reject(),
-  registerTutor: (tutor) => Promise.reject(),
-  sendCourseGroupMail: (id, subCourseId, subject, body) => Promise.reject(),
-  joinBBBmeeting: (courseId, subcourseId) => Promise.reject(),
-  getCooperatingSchools: (state) => Promise.reject(),
-  getMentoringMaterial: (type, location) => Promise.reject(),
-  getFeedbackCallData: () => Promise.reject(),
-  postContactMentor: (message) => Promise.reject(),
-  postUserRoleProjectCoach: () => Promise.reject(),
-  postUserRoleProjectCoachee: () => Promise.reject(),
-  getJufoExperts: () => Promise.reject(),
-  getUsedExpertTags: () => Promise.reject(),
-  contactJufoExpert: (id, emailText, subject) => Promise.reject(),
-  updateJufoExpert: (id, data) => Promise.reject(),
+  getJufoExperts: reject,
+  getUsedExpertTags: reject,
+  contactJufoExpert: reject,
+  updateJufoExpert: reject,
+  putUser: reject,
+  putUserSubjects: reject,
+  putUserProjectFields: reject,
+  becomeInstructor: reject,
+  putUserActiveFalse: reject,
+  createCertificate: reject,
+  getCertificate: reject,
+  getCertificates: reject,
+  getCourses: reject,
+  getCourseTags: reject,
+  getCourse: reject,
+  getMyCourses: reject,
+  createCourse: reject,
+  cancelCourse: reject,
+  editCourse: reject,
+  joinCourse: reject,
+  leaveCourse: reject,
+  submitCourse: reject,
+  publishSubCourse: reject,
+  createSubCourse: reject,
+  editSubCourse: reject,
+  cancelSubCourse: reject,
+  createLecture: reject,
+  editLecture: reject,
+  cancelLecture: reject,
+  registerTutee: reject,
+  registerStateTutee: reject,
+  registerTutor: reject,
+  sendCourseGroupMail: reject,
+  joinBBBmeeting: reject,
+  getCooperatingSchools: reject,
+  getMentoringMaterial: reject,
+  getFeedbackCallData: reject,
+  postContactMentor: reject,
+  postUserRoleProjectCoach: reject,
+  postUserRoleProjectCoachee: reject,
 });
+
+export function useAPI<N extends keyof IApiContext>(name: N): IApiContext[N] {
+  return useContext(ApiContext)[name];
+}
+
+export function useAPIResult<N extends keyof IApiContext>(name: N) {
+  const [value, setValue] = useState<{
+    loading?: boolean;
+    error?: Error;
+    value?: ReturnType<IApiContext[N]> extends Promise<infer T> ? T : never;
+  }>({ loading: true });
+  const api = useAPI(name);
+
+  function reload() {
+    // eslint-disable-next-line
+    (api as any)()
+      .then((value) => setValue({ value }))
+      .catch((error) => setValue({ error }));
+  }
+
+  useEffect(() => {
+    reload();
+  }, []);
+
+  return [value, reload] as const;
+}
 
 export const ApiProvider: React.FC = ({ children }) => {
   const authContext = useContext(AuthContext);
@@ -173,6 +204,12 @@ export const ApiProvider: React.FC = ({ children }) => {
   const {
     credentials: { id, token },
   } = authContext;
+
+  /* NOTE: Maybe we can migrate more APIs to this, then this file will get slightly smaller ... */
+  // eslint-disable-next-line
+  const withToken = <R, P extends Array<any>>(
+    api: (token: string, ...params: P) => R
+  ) => (...args: P): R => api(token, ...args);
 
   const getUserData = (): Promise<User> => api.axiosGetUser(id, token);
 
@@ -199,11 +236,10 @@ export const ApiProvider: React.FC = ({ children }) => {
   const putUserActiveFalse = (): Promise<void> =>
     api.axiosPutUserActive(id, token, false);
 
-  const getCertificate = (
+  const createCertificate = (
     certificateDate: CertificateData
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Promise<AxiosResponse<any>> =>
-    api.axiosGetCertificate(id, token, certificateDate);
+  ): Promise<AxiosResponse<string>> =>
+    api.axiosCreateCertificate(id, token, certificateDate);
 
   const getCourses = (): Promise<CourseOverview[]> =>
     api.axiosGetCourses(token);
@@ -353,7 +389,9 @@ export const ApiProvider: React.FC = ({ children }) => {
         putUserProjectFields,
         becomeInstructor,
         putUserActiveFalse,
-        getCertificate,
+        createCertificate,
+        getCertificate: withToken(api.axiosGetCertificate),
+        getCertificates: withToken(api.axiosGetCertificates),
         getCourses,
         getCourseTags,
         getCourse,

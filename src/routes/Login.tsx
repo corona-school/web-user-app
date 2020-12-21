@@ -3,7 +3,7 @@ import { Redirect, useLocation } from 'react-router-dom';
 import classnames from 'classnames';
 import { Input, message } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { getUserId } from '../api/api';
+import { APIError, getUserId } from '../api/api';
 import Context from '../context';
 
 import storedCredentials from '../api/storedCredentials';
@@ -76,8 +76,8 @@ const Login: React.FC = () => {
       .then(() => {
         setLoginState('success');
       })
-      .catch((error) => {
-        if (error === 403) {
+      .catch((error: APIError) => {
+        if (error.code === 403) {
           setLoginState('rateLimit');
         } else {
           setLoginState('error');

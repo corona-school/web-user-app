@@ -145,7 +145,6 @@ const App: React.FC = () => {
               <Course />
             </PrivateRoute>
           </Switch>
-
           <PrivateRoute
             path="/matches"
             active={
