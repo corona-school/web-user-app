@@ -68,6 +68,7 @@ export default function TagInput({
       <div className={styles.wrapper}>
         {tags.map((tag) => (
           <div
+            key={tag}
             className={styles.tag}
             style={{
               backgroundColor: hexToRGB(accentColor, 0.18),
