@@ -341,7 +341,7 @@ export const ApiProvider: React.FC = ({ children }) => {
   const joinBBBmeeting = (courseId: number, subcourseId: number) =>
     api.axiosJoinBBBmeeting(token, courseId, subcourseId);
 
-  const getCooperatingSchools = (state: string): Promise<SchoolInfo[]> =>
+  const getCooperatingSchools = (state?: string): Promise<SchoolInfo[]> =>
     api.axiosGetCooperatingSchool(state);
 
   const getMentoringMaterial = (type: string, location: string) =>

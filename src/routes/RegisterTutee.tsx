@@ -19,8 +19,8 @@ import classes from './RegisterTutee.module.scss';
 import { Subject } from '../types';
 import Context from '../context';
 import { SchoolInfo, Tutee } from '../types/Registration';
-import { StateCooperationInfo } from '../assets/supportedStateCooperations';
 import { emailDomainIsEqual } from '../utils/EmailUtils';
+import { CooperationMode } from '../utils/RegistrationCooperationUtils';
 
 const { Option } = Select;
 
@@ -49,14 +49,13 @@ interface FormData {
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
-
 interface Props {
-  stateCooperationInfo?: StateCooperationInfo;
+  cooperationMode?: CooperationMode;
   isJufoSubdomain?: boolean;
 }
 
 const RegisterTutee: React.FC<Props> = ({
-  stateCooperationInfo,
+  cooperationMode,
   isJufoSubdomain,
 }) => {
   const history = useHistory();
@@ -77,11 +76,15 @@ const RegisterTutee: React.FC<Props> = ({
 
   const isOnlyJufo = isJufo && !isTutee && !isGroups;
 
-  if (stateCooperationInfo && !loading && schoolInfo == null) {
+  if (!!cooperationMode && !loading && schoolInfo == null) {
     // load school info
     setLoading(true);
     apiContext
-      .getCooperatingSchools(stateCooperationInfo.abbrev)
+      .getCooperatingSchools(
+        cooperationMode.kind === 'SpecificStateCooperation'
+          ? cooperationMode.stateInfo.abbrev
+          : null
+      )
       .then((schools) => {
         setSchoolInfo(schools);
         setLoading(false);
@@ -303,7 +306,7 @@ const RegisterTutee: React.FC<Props> = ({
   const renderDetail = () => {
     return (
       <>
-        {!stateCooperationInfo && (
+        {!cooperationMode && (
           <Form.Item
             className={classes.formItem}
             label="Schulform"
@@ -325,40 +328,42 @@ const RegisterTutee: React.FC<Props> = ({
             </Select>
           </Form.Item>
         )}
-        <Form.Item
-          className={classes.formItem}
-          label="Bundesland"
-          name="state"
-          rules={[
-            { required: true, message: 'Bitte trage dein Bundesland ein' },
-          ]}
-          initialValue={
-            stateCooperationInfo?.abbrev.toUpperCase() ?? formData.state
-          }
-        >
-          <Select
-            disabled={!!stateCooperationInfo}
-            placeholder="Baden-Württemberg"
+        {cooperationMode?.kind !== 'GeneralSchoolCooperation' && (
+          <Form.Item
+            className={classes.formItem}
+            label="Bundesland"
+            name="state"
+            rules={[
+              { required: true, message: 'Bitte trage dein Bundesland ein' },
+            ]}
+            initialValue={
+              cooperationMode?.stateInfo?.abbrev.toUpperCase() ?? formData.state
+            }
           >
-            <Option value="BW"> Baden-Württemberg</Option>
-            <Option value="BY"> Bayern</Option>
-            <Option value="BE"> Berlin</Option>
-            <Option value="BB"> Brandenburg</Option>
-            <Option value="HB"> Bremen</Option>
-            <Option value="HH"> Hamburg</Option>
-            <Option value="HE"> Hessen</Option>
-            <Option value="MV"> Mecklenburg-Vorpommern</Option>
-            <Option value="NI"> Niedersachsen</Option>
-            <Option value="NW"> Nordrhein-Westfalen</Option>
-            <Option value="RP"> Rheinland-Pfalz</Option>
-            <Option value="SL"> Saarland</Option>
-            <Option value="SN"> Sachsen</Option>
-            <Option value="ST"> Sachsen-Anhalt</Option>
-            <Option value="SH"> Schleswig-Holstein</Option>
-            <Option value="TH"> Thüringen</Option>
-            <Option value="other">anderer Wohnort</Option>
-          </Select>
-        </Form.Item>
+            <Select
+              disabled={!!cooperationMode}
+              placeholder="Baden-Württemberg"
+            >
+              <Option value="BW"> Baden-Württemberg</Option>
+              <Option value="BY"> Bayern</Option>
+              <Option value="BE"> Berlin</Option>
+              <Option value="BB"> Brandenburg</Option>
+              <Option value="HB"> Bremen</Option>
+              <Option value="HH"> Hamburg</Option>
+              <Option value="HE"> Hessen</Option>
+              <Option value="MV"> Mecklenburg-Vorpommern</Option>
+              <Option value="NI"> Niedersachsen</Option>
+              <Option value="NW"> Nordrhein-Westfalen</Option>
+              <Option value="RP"> Rheinland-Pfalz</Option>
+              <Option value="SL"> Saarland</Option>
+              <Option value="SN"> Sachsen</Option>
+              <Option value="ST"> Sachsen-Anhalt</Option>
+              <Option value="SH"> Schleswig-Holstein</Option>
+              <Option value="TH"> Thüringen</Option>
+              <Option value="other">anderer Wohnort</Option>
+            </Select>
+          </Form.Item>
+        )}
         <Form.Item
           className={classes.formItem}
           label="Klasse"
@@ -392,7 +397,7 @@ const RegisterTutee: React.FC<Props> = ({
             <Option value="11">11. Klasse</Option>
             <Option value="12">12. Klasse</Option>
             <Option value="13">13. Klasse</Option>
-            {isOnlyJufo && !stateCooperationInfo && (
+            {isOnlyJufo && !cooperationMode && (
               <Option value={null}>Keine Angabe</Option>
             )}
           </Select>
@@ -561,7 +566,7 @@ const RegisterTutee: React.FC<Props> = ({
             </Select>
           </Form.Item>
         )}
-        {!!stateCooperationInfo && (
+        {!!cooperationMode && (
           <Form.Item
             className={classes.formItem}
             label="E-Mail-Adresse Lehrer*in"
@@ -580,7 +585,7 @@ const RegisterTutee: React.FC<Props> = ({
                   if (
                     schoolInfo?.length === 0 || // then check if submitted to server
                     schoolInfo
-                      .map((s) => s.emailDomain)
+                      ?.map((s) => s.emailDomain)
                       .some((d) => emailDomainIsEqual(value, d))
                   ) {
                     return Promise.resolve();
@@ -741,7 +746,9 @@ const RegisterTutee: React.FC<Props> = ({
       !data.lastname ||
       !data.email ||
       (!data.grade && !isOnlyJufo) ||
-      !data.state
+      (!data.state &&
+        (!cooperationMode ||
+          cooperationMode.kind === 'SpecificStateCooperation'))
     ) {
       return null;
     }
@@ -773,7 +780,7 @@ const RegisterTutee: React.FC<Props> = ({
     }
     console.log(tutee);
 
-    const registerAPICall = stateCooperationInfo
+    const registerAPICall = cooperationMode
       ? apiContext.registerStateTutee
       : apiContext.registerTutee;
 
@@ -867,7 +874,7 @@ const RegisterTutee: React.FC<Props> = ({
   };
 
   return (
-    <SignupContainer shouldShowBackButton={!stateCooperationInfo}>
+    <SignupContainer shouldShowBackButton={!cooperationMode}>
       <div className={classes.signupContainer}>
         <a
           rel="noopener noreferrer"
@@ -875,8 +882,9 @@ const RegisterTutee: React.FC<Props> = ({
           target="_blank"
         >
           <Icons.Logo className={classes.logo} />
-          {stateCooperationInfo?.coatOfArms &&
-            React.createElement(stateCooperationInfo.coatOfArms, {
+          {cooperationMode?.kind === 'SpecificStateCooperation' &&
+            cooperationMode.stateInfo.coatOfArms &&
+            React.createElement(cooperationMode.stateInfo.coatOfArms, {
               className: classes.stateLogo,
             })}
           <Title size="h2" bold>

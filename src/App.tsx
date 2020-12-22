@@ -27,11 +27,8 @@ import { CourseForm } from './routes/CourseForm';
 import CourseDetail from './routes/CourseDetail';
 import PublicCourseDetail from './routes/PublicCourseDetail';
 import { getDomainComponents } from './utils/DomainUtils';
-import {
-  isSupportedStateSubdomain,
-  stateInfoForStateSubdomain,
-} from './assets/supportedStateCooperations';
 import ProjectCoach from './routes/ProjectCoach';
+import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -60,18 +57,15 @@ const App: React.FC = () => {
 
   const domainComponents = getDomainComponents();
   const subdomain = domainComponents?.length > 0 && domainComponents[0];
-  if (subdomain && isSupportedStateSubdomain(subdomain)) {
+  const cooperationMode = getCooperationModeForSubdomain(subdomain);
+  if (subdomain && cooperationMode) {
     // render the special page for cooperations with states of Germany
     return (
       <>
         <GlobalStyle />
         <Switch>
           <Route exact path="/">
-            <RegisterTutee
-              stateCooperationInfo={stateInfoForStateSubdomain(
-                domainComponents[0]
-              )}
-            />
+            <RegisterTutee cooperationMode={cooperationMode} />
           </Route>
           <Route component={NotFound} />
         </Switch>

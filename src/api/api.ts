@@ -571,9 +571,9 @@ export const axiosJoinBBBmeeting = (
 };
 
 export const axiosGetCooperatingSchool = (
-  state: string
+  state?: string
 ): Promise<SchoolInfo[]> => {
-  const url = `${apiURL}/register/${state}/schools`;
+  const url = `${apiURL}/register/schools/${state ?? ''}`;
 
   return axios
     .get(url)
