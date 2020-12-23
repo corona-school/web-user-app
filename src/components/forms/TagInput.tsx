@@ -35,7 +35,9 @@ export default function TagInput({
   useOutsideAlerter(wrapperRef, () => setFocused(false));
 
   const addTag = (tag) => {
-    setTags((current) => [...current, tag]);
+    if (tag.length > 0 && !tags.some((t) => t.trim() === tag)) {
+      setTags((current) => [...current, tag]);
+    }
   };
 
   const deleteTag = (tag) => {
@@ -44,7 +46,7 @@ export default function TagInput({
 
   useEffect(() => {
     if (currentTBcontent.includes(',')) {
-      addTag(currentTBcontent.replace(',', ''));
+      addTag(currentTBcontent.replace(',', '').trim());
       setCurrentTBcontent('');
     }
   }, [currentTBcontent]);

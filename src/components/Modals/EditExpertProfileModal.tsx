@@ -20,7 +20,7 @@ const EditExpertProfileModal = () => {
     user.expertData != null ? user.expertData.description : ''
   );
   const [expertiseTags, setExpertiseTags] = useState(
-    user.expertData != null ? user.expertData.expertiseTags : ['']
+    user.expertData != null ? user.expertData.expertiseTags : []
   );
   const [visibility, setVisibility] = useState(
     user.expertData != null ? user.expertData.active : null

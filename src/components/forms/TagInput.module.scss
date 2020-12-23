@@ -6,8 +6,12 @@
   border: none;
   outline: none;
   background-color: transparent;
+  width: 100%;
 }
 .tagsDropdown {
+  position: absolute;
+  z-index: 100;
+  background-color: #ffffff;
   list-style: none;
   margin-left: 16px;
   border: 1px solid #ccc;
@@ -64,6 +68,7 @@
 .tagInner {
   margin-right: 3px;
   white-space: nowrap;
+  user-select: none;
 }
 
 .label {
