@@ -16,7 +16,7 @@ function useOutsideAlerter(ref, onOutsideClick) {
       // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [ref]);
+  }, [onOutsideClick, ref]);
 }
 
 export default function TagInput({
@@ -32,13 +32,20 @@ export default function TagInput({
   const textboxRef = useRef(null);
   const wrapperRef = useRef(null);
 
-  useOutsideAlerter(wrapperRef, () => setFocused(false));
-
   const addTag = (tag) => {
     if (tag.length > 0 && !tags.some((t) => t.trim() === tag)) {
       setTags((current) => [...current, tag]);
     }
   };
+
+  useOutsideAlerter(wrapperRef, () => {
+    setFocused(false);
+    if (currentTBcontent.trim().length > 0) {
+      // Finalize last tag
+      addTag(currentTBcontent.trim());
+      setCurrentTBcontent('');
+    }
+  });
 
   const deleteTag = (tag) => {
     setTags((current) => current.filter((x) => x !== tag));
@@ -60,9 +67,11 @@ export default function TagInput({
     <div
       className={styles.outerWrapper}
       ref={wrapperRef}
-      onClick={() =>
-        textboxRef.current != null ? textboxRef.current.focus() : undefined
-      }
+      onClick={() => {
+        if (textboxRef.current != null) {
+          textboxRef.current.focus();
+        }
+      }}
     >
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label className={styles.label}>{title}</label>
