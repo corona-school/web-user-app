@@ -84,7 +84,7 @@ export const JufoExpertCard: React.FC = () => {
               backgroundColor="#4E6AE6"
               style={{ margin: '4px' }}
             >
-              andere Experten*innen ansehen
+              andere Expert*innen ansehen
             </Button>
             <Button
               onClick={() =>

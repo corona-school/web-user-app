@@ -134,7 +134,7 @@ export const JufoExpertDetail: React.FC = () => {
           <div className={classes.buttonContainer}>
             <Images.NotFound />
             <Text large className={classes.text}>
-              Experte konnte nicht gefunden werden.
+              Expert*in konnte nicht gefunden werden.
             </Text>
             <Button
               backgroundColor="#4E6AE6"
@@ -219,7 +219,7 @@ export const JufoExpertDetail: React.FC = () => {
           {expert.description}
         </Text>
         <Text large className={classes.label}>
-          Experten-Tags
+          Expertise-Tags
         </Text>
         <div className={classes.expertTags}>
           {expert.expertiseTags.map((tag) => (

@@ -164,13 +164,13 @@ const EditExpertProfileModal = () => {
               accentColor={accentColor}
               onChange={(newTags) => setExpertiseTags(newTags)}
               value={expertiseTags}
-              title="Experten-Tags"
+              title="Expertise-Tags"
               availableTags={availableTags}
             />
           </DialogModalBase.InputCompound>
           <DialogModalBase.Spacer />
           <DialogModalBase.Label>
-            Möchtest du als Experte*in vorgeschlagen werden?
+            Möchtest du als Expert*in vorgeschlagen werden?
           </DialogModalBase.Label>
           <DialogModalBase.InputCompound direction="horizontal">
             <DialogModalBase.CheckboxSingle

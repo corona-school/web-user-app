@@ -105,7 +105,7 @@ export const ExpertSearch: React.FC = () => {
         options={options}
       >
         <Input.Search
-          placeholder="Hier nach Experten für dein Thema suchen.."
+          placeholder="Hier nach Expert*innen für dein Thema suchen..."
           enterButton
           loading={loading}
           allowClear

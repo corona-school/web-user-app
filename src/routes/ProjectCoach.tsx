@@ -101,7 +101,7 @@ const ProjectCoach: React.FC = () => {
     const myExperts = experts.filter((e) => pinnedExperts.includes(e.id));
     return (
       <div className={classes.experts}>
-        <Title size="h2">Deine Experten*innen</Title>
+        <Title size="h2">Deine Expert*innen</Title>
         <div className={classes.cardContainer}>
           {myExperts.map((e) => (
             <div className={classes.expertContainer}>

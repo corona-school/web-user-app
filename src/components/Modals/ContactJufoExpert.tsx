@@ -97,7 +97,7 @@ export const ContactJufoExpert: React.FC = () => {
           <div className={classes.buttonContainer}>
             <Images.NotFound />
             <Text large className={classes.text}>
-              Experte konnte nicht gefunden werden.
+              Expert*in konnte nicht gefunden werden.
             </Text>
             <Button
               backgroundColor="#4E6AE6"
@@ -136,7 +136,7 @@ export const ContactJufoExpert: React.FC = () => {
           value={body}
           autoSize={{ minRows: 5, maxRows: 10 }}
           onChange={(e) => setBody(e.target.value)}
-          placeholder="Hier deine Nachricht an den Experten"
+          placeholder="Hier deine Nachricht an den/die Expert*in"
         />
         <div className={classes.buttonContainer}>
           <Button

@@ -12,7 +12,7 @@ import { JufoExpertDetailCard } from '../cards/JufoExpertDetailCard';
 import { UserContext } from '../../context/UserContext';
 
 export const MODAL_IDENTIFIER = 'expertOverviewModal';
-const MODAL_TITLE = 'Liste von Experten*innen';
+const MODAL_TITLE = 'Liste von Expert*innen';
 
 export const ExpertOverviewModal: React.FC = () => {
   const userContext = useContext(UserContext);
@@ -87,7 +87,7 @@ export const ExpertOverviewModal: React.FC = () => {
       <div className={classes.modal}>
         <Title size="h2">{MODAL_TITLE}</Title>
         <Search
-          placeholder="Suche nach Experten für.."
+          placeholder="Suche nach Expert*innen für.."
           allowClear
           onSearch={onSearch}
           className={classes.search}
