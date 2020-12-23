@@ -45,7 +45,7 @@ const EditExpertProfileModal = () => {
     setEmail(user.expertData != null ? user.expertData.contactEmail : '');
     setDescription(user.expertData != null ? user.expertData.description : '');
     setExpertiseTags(
-      user.expertData != null ? user.expertData.expertiseTags : ['']
+      user.expertData != null ? user.expertData.expertiseTags : []
     );
     setVisibility(user.expertData != null ? user.expertData.active : null);
     setFieldsMissing(false);
@@ -59,14 +59,16 @@ const EditExpertProfileModal = () => {
   useEffect(() => {
     if (modalContext.openedModal === 'editExpertProfileModal') {
       resetFields(); // Re-initialize fields when modal gets opened again (Can't do that in .then() of putExpertProfile because fetchUserData is async and therefore we can't update the modal's fields immediately after re-fetching the new data. Ideally, fetchUserData would return a promise.)
+      console.log('effect', userContext.user.expertData);
     }
   }, [modalContext.openedModal]);
 
   const putExpertProfile = () => {
+    console.log(expertiseTags);
     if (
       email == null ||
       description == null ||
-      expertiseTags == null ||
+      expertiseTags.length === 0 ||
       visibility == null
     ) {
       setFieldsMissing(true);
