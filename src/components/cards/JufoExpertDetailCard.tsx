@@ -99,7 +99,7 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
   };
 
   return (
-    <button onClick={openExpertDetails}>
+    <button onClick={openExpertDetails} className={classes.containerButton}>
       <div className={classes.container}>
         <div className={classes.infoContainer}>
           <div className={classes.header}>
