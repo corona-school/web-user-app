@@ -7,6 +7,7 @@ import Button from '../button';
 
 import EditExpertProfileModal from '../Modals/EditExpertProfileModal';
 import { ExpertStatus } from '../../types/Expert';
+import { Tag } from '../Tag';
 
 export const JufoExpertCard: React.FC = () => {
   const modalContext = useContext(context.Modal);
@@ -16,47 +17,96 @@ export const JufoExpertCard: React.FC = () => {
     return null;
   }
 
-  const renderIntroduction = () => {
+  const renderExpertListContent = (title: string, text: React.ReactElement) => {
     return (
+      <>
+        <Title size="h4" bold>
+          {title}
+        </Title>
+        {text}
+      </>
+    );
+  };
+
+  const renderIntroduction = () => {
+    return renderExpertListContent(
+      'Willst du als Expert*in gelistet werden?',
       <Text className={classes.emailText} large>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
+        Hier hast du die Möglichkeit, ein Profil für unsere Expert*innenliste zu
+        erstellen.
+        <br />
+        Die Expert*innenliste ist eine Möglichkeit für Teilnehmer*innen des
+        Projektcoachings, um Hilfe bei sehr spezifischen/fachlichen Fragen zu
+        finden. In deinem Profil beschreibst du, auf welchem spezifischen Gebiet
+        du Expert*in bist, sodass die Schüler*innen dich bei fachlichen Fragen
+        aus diesem Gebiet kontaktieren können. Dein Profil wird dazu in einer
+        für alle registrierten Schüler*innen zugänglichen Liste aufgeführt.
+        <br />
+        Um Missbrauch vorzubeugen, wird dein Profil vor Veröffentlichung von
+        unserem Team überprüft. Du hast außerdem jederzeit die Möglichkeit, dein
+        Profil aus der öffentliche Liste zu entfernen.
       </Text>
     );
   };
   const renderPending = () => {
-    return (
+    return renderExpertListContent(
+      'Dein Expert*innenprofil wird überprüft...',
       <Text className={classes.emailText} large>
-        Dein Experten-Profil wird noch überprüft... <br />
+        Vor der Veröffentlichung überprüft unser Team das von dir erstellte
+        Expert*innenprofil.
+        <br />
+        Wenn es ein Problem mit deinem Profil geben sollte, kontaktieren wir
+        dich eventuell noch einmal.
+        <br />
       </Text>
     );
   };
 
   const renderExpertData = () => {
-    return (
-      <Text className={classes.emailText} large>
-        Kontakt E-Mail-Adresse: {userContext.user.expertData.contactEmail}{' '}
-        <br />
-        Beschreibung: {userContext.user.expertData.description} <br />
-        Experten-Tags:{' '}
-        {userContext.user.expertData.expertiseTags.map((item) => (
-          <span key={item}>{item} </span>
-        ))}{' '}
-        <br />
-        Kann vorgeschlagen werden:{' '}
-        {userContext.user.expertData.active ? 'Ja' : 'Nein'}
-        <br />
-      </Text>
+    return renderExpertListContent(
+      'Dein Expert*innenprofil ist freigeschaltet',
+      <div>
+        <Text large bold>
+          Kontaktadresse
+        </Text>
+        <Text large>{userContext.user.expertData.contactEmail}</Text>
+        <Text large bold>
+          Beschreibung
+        </Text>
+        <Text large>{userContext.user.expertData.description}</Text>
+        <Text large bold>
+          Expertise-Tags
+        </Text>
+        <div className={classes.tagContainer}>
+          {userContext.user.expertData.expertiseTags.map((item) => (
+            <Tag background="#4E555C" color="#ffffff">
+              {item}
+            </Tag>
+          ))}
+        </div>
+        <Text large bold>
+          Sichtbarkeit des Profils
+        </Text>
+        <Text large>
+          {userContext.user.expertData.active
+            ? 'sichtbar für alle Schüler*innen'
+            : 'ausgeblendet und nur sichtbar für dich'}
+        </Text>
+      </div>
     );
   };
 
   const renderExpertDenied = () => {
-    return (
+    return renderExpertListContent(
+      'Dein Expert*innenprofil ist blockiert',
       <Text className={classes.emailText} large>
-        Dein Experten-Profil wurde leider abgelehnt. Wende dich bei Fragen bitte
-        an unseren Support.
+        Wir haben festgestellt, dass dein Expert*innenprofil Mängel aufweist. Es
+        ist bis auf Weiteres für die Veröffentlichung gesperrt! Wende dich bei
+        Fragen bitte an unseren Support unter{' '}
+        <a href="mailto:support@corona-school.de">support@corona-school.de</a>.
+        <br />
+        Du hast die Möglichkeit, Änderungen an deinem Profil vorzunehmen, um es
+        erneut zur Überprüfung einzureichen.
       </Text>
     );
   };
@@ -66,9 +116,6 @@ export const JufoExpertCard: React.FC = () => {
       <CardBase highlightColor="#4E6AE6" className={classes.baseContainer}>
         <div className={classes.container}>
           <div className={classes.matchInfoContainer}>
-            <Title size="h4" bold>
-              Willst du Jufo Experte*in werden?
-            </Title>
             {userContext.user.expertData == null && renderIntroduction()}
             {userContext.user.expertData?.allowed === ExpertStatus.PENDING &&
               renderPending()}

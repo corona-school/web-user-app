@@ -19,7 +19,10 @@
 .tagContainer {
   flex-grow: 1;
   display: flex;
-  justify-content: center;
+  justify-content: left;
+  > div {
+    margin-left: 10px;
+  }
 }
 
 .subjectContainer {
