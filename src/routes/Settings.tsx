@@ -98,7 +98,6 @@ const Settings: React.FC = () => {
       </>
     );
   };
-  console.log('isTutor', userContext.user.isTutor);
   return (
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
