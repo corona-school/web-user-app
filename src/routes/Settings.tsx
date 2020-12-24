@@ -9,7 +9,6 @@ import { Title } from '../components/Typography';
 
 import classes from './Settings.module.scss';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
-import { isProjectCoachButNotTutor } from '../utils/UserUtils';
 import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
@@ -99,12 +98,16 @@ const Settings: React.FC = () => {
       </>
     );
   };
-
+  console.log('isTutor', userContext.user.isTutor);
   return (
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
       <SettingsCard user={userContext.user} />
-      {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
+      {!userContext.user.isTutor &&
+        !(
+          userContext.user.isProjectCoach || userContext.user.isProjectCoachee
+        ) &&
+        renderSubjects()}
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}
       <AccountNotScreenedModal />
