@@ -135,7 +135,7 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
               </Text>
             </div>
           )}
-          {!isProjectCoachButNotTutor(user) && (
+          {!isProjectCoachButNotTutor(user) && user.subjects.length > 0 && (
             <div className={classes.subjectContainer}>
               <Text large>
                 <b>Fächer</b>
