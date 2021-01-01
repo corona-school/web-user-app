@@ -166,7 +166,11 @@ export const CourseForm: React.FC = () => {
 
   return (
     <CourseContainer position={position}>
-      {position === 0 && <Title size="h2">Erstelle einen Kurs</Title>}
+      {position === 0 && (
+        <Title size="h2">
+          {params?.id ? 'Bearbeite diesen Kurs' : 'Erstelle einen Kurs'}
+        </Title>
+      )}
       {position === 1 && <Title size="h2">Lege deine Kurstermine fest</Title>}
       {position === 2 && (
         <Title size="h2">Der Kurs wurde erfolgreich erstellt.</Title>
