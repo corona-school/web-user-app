@@ -140,7 +140,9 @@ export const CreateLecture: React.FC<Props> = (props) => {
         className={classes.listContainer}
         itemLayout="horizontal"
         header="Erstelle hier deine Lektionen"
-        dataSource={props.lectures ? props.lectures : []}
+        dataSource={
+          props.lectures ? props.lectures.sort((a, b) => a.start - b.start) : []
+        }
         loading={loading}
         bordered
         footer={
