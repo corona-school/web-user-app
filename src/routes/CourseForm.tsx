@@ -6,7 +6,7 @@ import {
   CreateCourse,
   CompletedSubCourse,
 } from '../components/forms/CreateCourse';
-import { Course, Lecture, CourseOverview } from '../types/Course';
+import { Course, Lecture, CourseOverview, CourseState } from '../types/Course';
 import { CreateLecture } from '../components/forms/CreateLecture';
 import CourseSuccess from '../components/forms/CourseSuccess';
 
@@ -46,7 +46,7 @@ export const CourseForm: React.FC = () => {
     description: course.description,
     category: course.category,
     tags: course.tags.map((t) => t.id),
-    submit: false,
+    submit: course.state !== CourseState.CREATED,
   });
 
   const parseSubCourse = (course: CourseOverview) => {
@@ -139,6 +139,7 @@ export const CourseForm: React.FC = () => {
           onSuccess={(lecture) => {
             setLectures([...lectures, lecture]);
           }}
+          edit={!!params?.id}
         />
       );
     }

@@ -275,7 +275,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
         description: formValues.description,
         category: formValues.category,
         tags: formValues.tags || [],
-        submit: false,
+        submit: props.course?.submit ?? false,
       };
       const subCourse: SubCourse = {
         instructors: props.subCourse ? props.subCourse.instructors : [],
@@ -283,7 +283,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
         maxGrade,
         maxParticipants,
         joinAfterStart: !!joinAfterStart,
-        published: false,
+        published: props.subCourse?.published ?? false,
       };
 
       if (dev) {

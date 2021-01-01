@@ -19,6 +19,7 @@ interface Props {
   next: () => void;
   onSuccess: (lecture: CompletedLecture) => void;
   onCancelLecture: (id: number) => void;
+  edit: boolean;
 }
 
 export const CreateLecture: React.FC<Props> = (props) => {
@@ -50,12 +51,12 @@ export const CreateLecture: React.FC<Props> = (props) => {
           Der Kurs ist am
           <DatePicker
             disabledDate={(date) => {
-              return (
-                moment(new Date())
-                  .startOf('day')
-                  .add(2, 'days')
-                  .diff(date.clone().startOf('day'), 'days') >= 1
-              );
+              return props.edit
+                ? moment(date).isBefore(moment(), 'day')
+                : moment(new Date())
+                    .startOf('day')
+                    .add(2, 'days')
+                    .diff(date.clone().startOf('day'), 'days') >= 1;
             }}
             value={start}
             onChange={(v) => setStart(v)}
@@ -152,7 +153,9 @@ export const CreateLecture: React.FC<Props> = (props) => {
             </div>
             <div style={{ padding: '0px 0px 8px 24px', marginTop: '-8px' }}>
               <div className="ant-form-item-explain">
-                Der Termin muss mindestens 2 Tage in der Zukunft liegen.
+                {!props.edit
+                  ? 'Der Termin muss mindestens 2 Tage in der Zukunft liegen.'
+                  : 'Bitte benachrichtige später die Teilnehmer*innen des Kurses über Änderungen eines Kursdatums mithilfe der "Nachricht senden" Funktion in den Einstellungen dieses Kurses.'}
               </div>
             </div>
             <div className={classes.footerForm}>
@@ -170,14 +173,18 @@ export const CreateLecture: React.FC<Props> = (props) => {
         }
         renderItem={(item) => (
           <List.Item
-            actions={[
-              <a
-                key="list-loadmore-more"
-                onClick={() => deleteLecture(item.id, item.subCourseId)}
-              >
-                löschen
-              </a>,
-            ]}
+            actions={
+              moment.unix(item.start).isAfter(moment()) // prevent deletion of lectures from the past
+                ? [
+                    <a
+                      key="list-loadmore-more"
+                      onClick={() => deleteLecture(item.id, item.subCourseId)}
+                    >
+                      löschen
+                    </a>,
+                  ]
+                : []
+            }
           >
             <List.Item.Meta
               title={props.course.name}
