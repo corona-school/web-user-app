@@ -238,9 +238,13 @@ export const CreateCourse: React.FC<Props> = (props) => {
             </Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item className={classes.formItem} label="Tags" name="tags">
+        <Form.Item
+          className={classes.formItem}
+          label="Tags"
+          name="tags"
+          initialValue={editTags}
+        >
           <Select
-            defaultValue={editTags}
             onChange={(v: string[]) => {
               setEditTags(v);
             }}
