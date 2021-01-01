@@ -168,7 +168,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
           initialValue={props.course?.name}
           rules={[
             { required: true, message: 'Bitte trage einen Kursnamen ein' },
-            { max: 30, message: 'Bitte beschränke dich auf 30 Zeichen' },
+            { max: 100, message: 'Bitte beschränke dich auf 100 Zeichen' },
           ]}
         >
           <Input placeholder="Mathematik Hilfe" />
