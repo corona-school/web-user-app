@@ -401,11 +401,9 @@ const CourseDetail = (params: { id?: string }) => {
           </Menu.Item>
         )}
 
-        {course.state === CourseState.CREATED && (
-          <Menu.Item key="5" icon={<CheckCircleOutlined />}>
-            Bearbeiten
-          </Menu.Item>
-        )}
+        <Menu.Item key="5" icon={<CheckCircleOutlined />}>
+          Bearbeiten
+        </Menu.Item>
       </Menu>
     );
 
