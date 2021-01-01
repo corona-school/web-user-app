@@ -80,6 +80,7 @@ const App: React.FC = () => {
   }
   // jufo cooperation
   const isJufoSubdomain = subdomain === 'jufo';
+  const isDrehtuerSubdomain = subdomain === 'drehtuer';
 
   return (
     <>
@@ -89,7 +90,11 @@ const App: React.FC = () => {
           <Login />
         </Route>
         <Route path="/register/tutee">
-          <RegisterTutee isJufoSubdomain={isJufoSubdomain} />
+          <RegisterTutee
+            isJufoSubdomain={isJufoSubdomain}
+            // TODO
+            isDrehtuerSubdomain={true || isDrehtuerSubdomain}
+          />
         </Route>
         <Route path="/register/internship">
           <RegisterTutor isInternship />
@@ -101,7 +106,10 @@ const App: React.FC = () => {
           <RegisterTutor isStudent isJufoSubdomain={isJufoSubdomain} />
         </Route>
         <Route path="/register/tutor">
-          <RegisterTutor isJufoSubdomain={isJufoSubdomain} />
+          <RegisterTutor
+            isJufoSubdomain={isJufoSubdomain}
+            isDrehtuerSubdomain={true || isDrehtuerSubdomain}
+          />
         </Route>
         <Route path="/register">
           <Register />

@@ -20,6 +20,7 @@ import { Tutor } from '../types/Registration';
 
 import classes from './RegisterTutor.module.scss';
 import UniSelect from '../components/forms/select/UniSelect';
+import { RegisterDrehtuerTutor } from './RegisterDrehtuerTutor';
 
 const { Option } = Select;
 
@@ -55,6 +56,7 @@ interface Props {
   isClub?: boolean;
   isStudent?: boolean;
   isJufoSubdomain?: boolean;
+  isDrehtuerSubdomain?: boolean;
 }
 
 const useQuery = () => {
@@ -673,9 +675,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
             rules={[
               {
                 required: formData.hasJufoCertificate === false,
-                message: `Die Übermittlung der Daten ist für deine Teilnahme 
-                zwingend notwendig. Alternativ kannst du uns auch bei deinem 
-                Kennenlerngespräch mit uns einen anderen Nachweis vorlegen. 
+                message: `Die Übermittlung der Daten ist für deine Teilnahme
+                zwingend notwendig. Alternativ kannst du uns auch bei deinem
+                Kennenlerngespräch mit uns einen anderen Nachweis vorlegen.
                 In diesem Fall gehe bitte noch einmal einen Schritt zurück.`,
               },
             ]}
@@ -927,6 +929,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
       console.log(e);
     }
   };
+
+  if (props.isDrehtuerSubdomain) {
+    return <RegisterDrehtuerTutor />;
+  }
 
   return (
     <SignupContainer>
