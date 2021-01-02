@@ -639,3 +639,25 @@ export const axiosPostUserRoleProjectCoachee = async (
     })
     .catch(logError('becomeProjectCoachee'));
 };
+
+export const axiosAddInstructor = (
+  token: string,
+  courseId: number,
+  email: string
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/course/${courseId}/instructor`,
+        { email },
+        {
+          headers: { token },
+        }
+      )
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
