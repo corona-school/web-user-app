@@ -25,19 +25,6 @@ export const RegisterDrehtuerTutor: React.FC = () => {
   const [form] = Form.useForm();
   const apiContext = useContext(ApiContext);
 
-  const renderFormItems = () => {
-    return (
-      <>
-        <NameField className={classes.formItem} />
-        <EmailField className={classes.formItem} />
-        <StateField className={classes.formItem} />
-        <UniversityField className={classes.formItem} />
-        <MessageField className={classes.formItem} isGroups />
-        <DataProtectionField className={classes.formItem} />
-      </>
-    );
-  };
-
   const registerTutor = async () => {
     try {
       const formValues = await form.validateFields();
@@ -55,6 +42,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         isInstructor: true,
         isProjectCoach: false,
         newsletter: false,
+        registrationSource: 'DREHTUER',
       };
 
       setLoading(true);
@@ -65,7 +53,9 @@ export const RegisterDrehtuerTutor: React.FC = () => {
           setFormState('done');
         })
         .catch((err) => {
-          message.error('Fehler');
+          message.error(
+            'Ein Fehler ist aufgetreten. Bitte versuche es erneut.'
+          );
           console.error(err);
         })
         .finally(() => {
@@ -109,7 +99,14 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         initialValues={{ remember: true }}
       >
         {!loading ? (
-          renderFormItems()
+          <>
+            <NameField className={classes.formItem} />
+            <EmailField className={classes.formItem} />
+            <StateField className={classes.formItem} />
+            <UniversityField className={classes.formItem} />
+            <MessageField className={classes.formItem} isGroups />
+            <DataProtectionField className={classes.formItem} />
+          </>
         ) : (
           <div className={classes.loadingContainer}>
             <ClipLoader size={100} color="#123abc" loading />
