@@ -8,20 +8,29 @@
 
   .headerCenterContainer {
     max-width: 920px;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    display: grid;
+    @media only screen and (max-width: 992px) {
+      grid-template-columns: 2fr 1fr;
+    }
+    @media only screen and (max-width: 400px) {
+      grid-template-columns: 1fr;
+    }
 
     .filterContainer {
       display: flex;
       flex-direction: column;
-      margin-right: 20px;
+      margin-right: 8px;
+      margin-left: 8px;
 
       .gradeGrid {
         display: grid;
         grid-template-columns: 110px 110px 110px;
         column-gap: 8px;
         row-gap: 8px;
+        @media only screen and (max-width: 600px) {
+          grid-template-columns: 110px 110px;
+        }
       }
       .smallGrid {
         display: grid;
