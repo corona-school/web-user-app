@@ -74,7 +74,10 @@ const AddInstructorModal: React.FC<{
             </DialogModalBase.Error>
           )}
           <DialogModalBase.Description>
-            Lorem ipsum dolor sit amet, lorem ipsum, lorem ipsum.....
+            Du hast die Möglichkeit, weitere Personen als Tutor*innen zu deinem
+            Kurs hinzuzufügen. Um eine Person hinzuzufügen, brauchst du
+            lediglich die E-Mail-Adresse, mit der die Person bei der Corona
+            School registriert ist.
           </DialogModalBase.Description>
 
           <DialogModalBase.Content>
