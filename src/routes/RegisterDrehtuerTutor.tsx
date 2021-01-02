@@ -8,8 +8,10 @@ import SignupContainer from '../components/container/SignupContainer';
 import {
   DataProtectionField,
   EmailField,
+  MessageField,
   NameField,
   StateField,
+  UniversityField,
 } from '../components/forms/registration';
 import { Title, Text } from '../components/Typography';
 import { ApiContext } from '../context/ApiContext';
@@ -29,6 +31,8 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         <NameField className={classes.formItem} />
         <EmailField className={classes.formItem} />
         <StateField className={classes.formItem} />
+        <UniversityField className={classes.formItem} />
+        <MessageField className={classes.formItem} isGroups />
         <DataProtectionField className={classes.formItem} />
       </>
     );
@@ -43,12 +47,12 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         lastname: formValues.lastname,
         email: formValues.email,
         state: formValues.state,
-        university: '',
-        msg: '',
+        university: formValues.university,
+        msg: formValues.msg,
         // empty
-        isTutor: true,
+        isTutor: false,
         isOfficial: false,
-        isInstructor: false,
+        isInstructor: true,
         isProjectCoach: false,
         newsletter: false,
       };

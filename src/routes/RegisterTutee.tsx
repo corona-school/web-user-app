@@ -27,8 +27,10 @@ import {
   EmailField,
   GradeField,
   NameField,
+  NewsletterField,
   SchoolKindField,
   StateField,
+  MessageField,
 } from '../components/forms/registration';
 
 const { Option } = Select;
@@ -503,14 +505,7 @@ const RegisterTutee: React.FC<Props> = ({
             />
           </Form.Item>
         )}
-        <Form.Item
-          className={classes.formItem}
-          label="Nachricht"
-          name="msg"
-          initialValue={formData.msg}
-        >
-          <Input.TextArea placeholder="Hier deine Nachricht" />
-        </Form.Item>
+        <MessageField className={classes.formItem} />
       </>
     );
   };
@@ -518,19 +513,11 @@ const RegisterTutee: React.FC<Props> = ({
   const renderFinnish = () => {
     return (
       <>
-        <Form.Item
+        <NewsletterField
           className={classes.formItem}
-          label="Newsletter"
-          name="newsletter"
-        >
-          <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox value="newsletter" defaultChecked={formData.newsletter}>
-              Ich möchte den Newsletter der Corona School erhalten und über
-              Angebote, Aktionen und weitere Unterstützungsmöglichkeiten per
-              E-Mail informiert werden.
-            </Checkbox>
-          </Checkbox.Group>
-        </Form.Item>
+          defaultChecked={formData.newsletter}
+          isPupil
+        />
         <DataProtectionField className={classes.formItem} />
       </>
     );
