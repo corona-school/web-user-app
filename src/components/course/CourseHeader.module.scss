@@ -1,0 +1,54 @@
+.headerContainer {
+  display: flex;
+  background: #f4f6ff;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: 20px;
+
+  .headerCenterContainer {
+    max-width: 920px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    .filterContainer {
+      display: flex;
+      flex-direction: column;
+      margin-right: 20px;
+
+      .gradeGrid {
+        display: grid;
+        grid-template-columns: 110px 110px 110px;
+        column-gap: 8px;
+        row-gap: 8px;
+      }
+      .smallGrid {
+        display: grid;
+        grid-template-columns: 120px;
+        column-gap: 8px;
+        row-gap: 8px;
+      }
+      .normalGrid {
+        display: grid;
+        grid-template-columns: 150px;
+        column-gap: 8px;
+        row-gap: 8px;
+      }
+      .bigGrid {
+        display: grid;
+        grid-template-columns: 200px;
+        column-gap: 8px;
+        row-gap: 8px;
+      }
+
+      .checkbox {
+        margin-left: 0px;
+      }
+
+      .title {
+        margin: 8px;
+      }
+    }
+  }
+}

@@ -32,6 +32,7 @@ import {
   stateInfoForStateSubdomain,
 } from './assets/supportedStateCooperations';
 import ProjectCoach from './routes/ProjectCoach';
+import { CourseOverview } from './routes/CourseOverview';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -137,6 +138,16 @@ const App: React.FC = () => {
             <Dashboard />
           </PrivateRoute>
           <Switch>
+            <PrivateRoute
+              path="/courses/overview"
+              active={
+                userContext.user.type === 'pupil' ||
+                userContext.user.instructorScreeningStatus ===
+                  ScreeningStatus.Accepted
+              }
+            >
+              <CourseOverview />
+            </PrivateRoute>
             <PrivateRoute path="/courses/:id" comeback>
               <CourseDetail />
             </PrivateRoute>

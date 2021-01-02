@@ -3,7 +3,7 @@ import { Empty } from 'antd';
 import { useHistory } from 'react-router-dom';
 import Context from '../context';
 import { Title } from '../components/Typography';
-import Button from '../components/button';
+import Button, { LinkButton } from '../components/button';
 import Icons from '../assets/icons';
 import { ParsedCourseOverview } from '../types/Course';
 import MyCourseCard from '../components/cards/MyCourseCard';
@@ -95,6 +95,9 @@ const Course = () => {
         </div>
       </div>
       <Title size="h2">Alle Kurse</Title>
+      <div>
+        <LinkButton href="/courses/overview">Suche Kurse</LinkButton>
+      </div>
       {filteredCourses.length === 0 ? (
         <Empty
           style={{ marginBottom: '64px' }}
