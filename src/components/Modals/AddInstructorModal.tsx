@@ -32,14 +32,14 @@ const AddInstructorModal: React.FC<{
     setEmailInvalid(false);
     apiContext.addInstructor(courseId, email).then(
       () => {
-        message.success('Tutor wurde hinzugefügt!');
+        message.success('Tutor*in wurde hinzugefügt!');
         closeModal();
         updateDetails();
       },
       (err) => {
         if (err.response != null && err.response.status != null) {
           if (err.response.status === 409) {
-            message.error('Diese Person ist bereits Tutor des Kurses.');
+            message.error('Diese Person ist bereits Tutor*in des Kurses.');
             console.log(err);
             return;
           }
@@ -51,7 +51,7 @@ const AddInstructorModal: React.FC<{
             return;
           }
         }
-        message.error('Der Tutor konnte nicht hinzugefügt werden.');
+        message.error('Tutor*in konnte nicht hinzugefügt werden.');
         console.log(err);
       }
     );
@@ -62,7 +62,7 @@ const AddInstructorModal: React.FC<{
       <DialogModalBase.Modal modalName="addInstructorModal">
         <DialogModalBase.Header>
           <DialogModalBase.Icon Icon={AddIcon} />
-          <DialogModalBase.Title>Tutor hinzufügen</DialogModalBase.Title>
+          <DialogModalBase.Title>Tutor*in hinzufügen</DialogModalBase.Title>
           <DialogModalBase.CloseButton
             stateSettingMethods={[setEmail, setEmailInvalid]}
           />
@@ -80,7 +80,7 @@ const AddInstructorModal: React.FC<{
           <DialogModalBase.Content>
             <DialogModalBase.Form>
               <DialogModalBase.TextBox
-                label="E-Mail-Adresse des Tutors"
+                label="E-Mail-Adresse des/der Tutor*in"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />

@@ -416,7 +416,7 @@ const CourseDetail = (params: { id?: string }) => {
 
         {course.state !== CourseState.CANCELLED && (
           <Menu.Item key="6" icon={<UserAddOutlined />}>
-            Tutor hinzufügen
+            Tutor*in hinzufügen
           </Menu.Item>
         )}
       </Menu>
