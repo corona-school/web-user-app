@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { Text, Title } from '../Typography';
 import { ParsedCourseOverview } from '../../types/Course';
 
@@ -11,7 +12,7 @@ interface Props {
 
 const CourseCard: React.FC<Props> = ({ course }) => {
   return (
-    <div className={classes.baseContainer}>
+    <Link className={classes.baseContainer} to={`/courses/${course.id}`}>
       <div className={classes.highlight} />
       <Title size="h4" bold>
         {course.name}
@@ -29,7 +30,7 @@ const CourseCard: React.FC<Props> = ({ course }) => {
           {course.subcourse?.participants} / {course.subcourse?.maxParticipants}
         </Text>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { ParsedCourseOverview, Tag } from '../../types/Course';
 import Button from '../button';
 import CourseCard from '../cards/CourseCard';
-import { Title } from '../Typography';
+import { Text, Title } from '../Typography';
 import classes from './CourseList.module.scss';
 
 interface Props {
@@ -24,6 +24,9 @@ export const CourseList: React.FC<Props> = (props) => {
         {props.courses.map((course) => (
           <CourseCard course={course} />
         ))}
+        {props.courses.length === 0 && (
+          <Text large>Leider haben wir keine Kurse für diese Kategorie</Text>
+        )}
       </div>
     </div>
   );
