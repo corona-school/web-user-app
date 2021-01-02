@@ -1,6 +1,7 @@
 import React from 'react';
 import { ParsedCourseOverview, Tag } from '../../types/Course';
 import Button from '../button';
+import CourseCard from '../cards/CourseCard';
 import { Title } from '../Typography';
 import classes from './CourseList.module.scss';
 
@@ -21,7 +22,7 @@ export const CourseList: React.FC<Props> = (props) => {
       </div>
       <div className={classes.courseContainer}>
         {props.courses.map((course) => (
-          <div>{course.name}</div>
+          <CourseCard course={course} />
         ))}
       </div>
     </div>
