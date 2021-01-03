@@ -5,7 +5,9 @@ import { Text, Title } from '../Typography';
 import { ParsedCourseOverview } from '../../types/Course';
 
 import classes from './CourseCard.module.scss';
+
 import Icons from '../../assets/icons';
+import Images from '../../assets/images';
 
 interface Props {
   course: ParsedCourseOverview;
@@ -14,7 +16,14 @@ interface Props {
 const CourseCard: React.FC<Props> = ({ course }) => {
   return (
     <Link className={classes.baseContainer} to={`/courses/${course.id}`}>
-      <div className={classes.highlight} />
+      <div className={classes.coverImageContainer}>
+        <img
+          className={classes.coverImage}
+          src={course.image ?? Images.DrehtuerDefaultCourseCover}
+          alt="Cover-Bild des Kurses"
+        />
+      </div>
+
       <div className={classes.contentContainer}>
         <Title size="h3" bold className={classes.title}>
           {course.name}

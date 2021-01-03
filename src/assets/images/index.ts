@@ -18,6 +18,8 @@ import { ReactComponent as MentoringPic } from './mentoring.svg';
 
 import { ReactComponent as Celebration } from './celebration_blue.svg';
 
+import DrehtuerDefaultCourseCover from './drehtuer.png';
+
 const ImageList = {
   StepsMatched,
   StepsCheckInformation,
@@ -36,6 +38,7 @@ const ImageList = {
   Celebration,
   MentoringPic,
   TrashIllustration,
+  DrehtuerDefaultCourseCover,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

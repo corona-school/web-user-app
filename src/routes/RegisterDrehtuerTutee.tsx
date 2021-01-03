@@ -33,8 +33,8 @@ export const RegisterDrehtuerTutee: React.FC = () => {
         firstname: formValues.firstname,
         lastname: formValues.lastname,
         email: formValues.email,
-        state: formValues.state,
-        school: formValues.school,
+        state: formValues.state?.toLowerCase(),
+        school: formValues.school?.toLowerCase(),
         grade: parseInt(formValues.grade),
         // empty
         msg: '',

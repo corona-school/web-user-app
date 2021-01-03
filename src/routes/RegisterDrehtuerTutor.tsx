@@ -33,7 +33,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         firstname: formValues.firstname,
         lastname: formValues.lastname,
         email: formValues.email,
-        state: formValues.state,
+        state: formValues.state?.toLowerCase(),
         university: formValues.university,
         msg: formValues.msg,
         // empty
