@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Empty } from 'antd';
 import Context from '../context';
-import { Title } from '../components/Typography';
+import { Title, Text } from '../components/Typography';
 import { LinkButton } from '../components/button';
 import Icons from '../assets/icons';
 import { ParsedCourseOverview } from '../types/Course';
@@ -10,7 +10,6 @@ import MyCourseCard from '../components/cards/MyCourseCard';
 import classes from './Course.module.scss';
 import { parseCourse } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
-import Images from '../assets/images';
 
 const MAX_COURSES = 25;
 
@@ -46,20 +45,28 @@ const Course = () => {
         <div className={classes.courseOverviewContainer}>
           <div className={classes.hightightCourse} />
           <div className={classes.couseOverviewContent}>
-            <Title size="h1" className={classes.title}>
-              Unser neues Kursangebot
-            </Title>
-            <Images.Graduation className={classes.graduationImage} />
-            <LinkButton
-              href="/courses/overview"
-              local
-              backgroundColor="#4E6AE6"
-              color="white"
-              className={classes.courseButton}
-            >
-              <Icons.Search height="16px" />
-              Kursangebote ansehen
-            </LinkButton>
+            <div className={classes.courseOverviewHeader}>
+              <div className={classes.textLeft}>
+                <Title size="h2" bold className={classes.title}>
+                  Unser neues Kursangebot
+                </Title>
+                <Text large>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam
+                </Text>
+              </div>
+              <LinkButton
+                href="/courses/overview"
+                local
+                backgroundColor="#4E6AE6"
+                color="white"
+                className={classes.courseButton}
+              >
+                <Icons.Search height="16px" />
+                Kursangebote ansehen
+              </LinkButton>
+            </div>
           </div>
         </div>
         <div className={classes.header}>

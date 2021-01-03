@@ -65,15 +65,33 @@
   }
 
   .couseOverviewContent {
-    width: 1000%;
+    width: 100%;
     display: flex;
     align-items: center;
     flex-direction: column;
     padding: 16px;
 
-    .graduationImage {
-      margin-top: -32px;
+    .courseOverviewHeader {
       width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .title {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      .textLeft {
+        max-width: 600px;
+      }
+    }
+
+    .graduationImage {
+      width: 100%;
+      max-width: 700px;
+      margin-top: -12px;
+      margin-bottom: -32px;
     }
   }
 }
