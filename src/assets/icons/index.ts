@@ -112,7 +112,13 @@ const IconsList = {
   ChevronRight,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Icons: { [I in keyof typeof IconsList]: any } = IconsList;
+const Icons: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [I in keyof typeof IconsList]: React.FunctionComponent<
+    React.SVGProps<SVGSVGElement> & {
+      title?: string;
+    }
+  >;
+} = IconsList;
 
 export default Icons;

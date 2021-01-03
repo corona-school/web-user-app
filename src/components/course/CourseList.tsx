@@ -28,13 +28,13 @@ export const CourseList: React.FC<Props> = (props) => {
             className={classes.chevronButton}
             onClick={() => scrollTo(-(360 + 16 + 6))}
           >
-            <Icons.ChevronLeft alt="Scroll Left" />
+            <Icons.ChevronLeft />
           </button>
           <button
             className={classes.chevronButton}
             onClick={() => scrollTo(360 + 16 + 6)}
           >
-            <Icons.ChevronRight alt="Scroll Right" />
+            <Icons.ChevronRight />
           </button>
         </div>
       </div>

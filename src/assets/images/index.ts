@@ -19,6 +19,7 @@ import { ReactComponent as MentoringPic } from './mentoring.svg';
 import { ReactComponent as Celebration } from './celebration_blue.svg';
 
 import DrehtuerDefaultCourseCover from './drehtuer.png';
+import { ReactComponent as Empty } from './empty.svg';
 
 const ImageList = {
   StepsMatched,
@@ -39,9 +40,17 @@ const ImageList = {
   MentoringPic,
   TrashIllustration,
   DrehtuerDefaultCourseCover,
+  Empty,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Images: { [I in keyof typeof ImageList]: any } = ImageList;
+const Images: {
+  [I in keyof typeof ImageList]:
+    | React.FunctionComponent<
+        React.SVGProps<SVGSVGElement> & {
+          title?: string;
+        }
+      >
+    | string;
+} = ImageList;
 
 export default Images;

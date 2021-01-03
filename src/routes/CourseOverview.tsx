@@ -1,6 +1,7 @@
 import { Empty, message } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
+import Images from '../assets/images';
 import Button from '../components/button';
 import { CourseHeader } from '../components/course/CourseHeader';
 import { CourseList } from '../components/course/CourseList';
@@ -9,6 +10,7 @@ import { UserContext } from '../context/UserContext';
 import { ParsedCourseOverview, Tag } from '../types/Course';
 import { parseCourse } from '../utils/CourseUtil';
 import classes from './CourseOverview.module.scss';
+import { Text } from '../components/Typography';
 
 export const CourseOverview: React.FC = () => {
   const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
@@ -78,7 +80,8 @@ export const CourseOverview: React.FC = () => {
     if (courseLists.filter((b) => b !== null).length === 0) {
       return (
         <div className={classes.loadingContainer}>
-          <Empty description="Es wurden keine Kurse für deine Suche gefunden." />
+          <Images.Empty className={classes.emptyImage} />
+          <Text large>Wir konnten leider keine Kurse finden.</Text>
         </div>
       );
     }
