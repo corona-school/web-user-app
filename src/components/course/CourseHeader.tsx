@@ -25,7 +25,11 @@ export const CourseHeader: React.FC<Props> = (props) => {
           </Title>
           <Checkbox.Group className={classes.gradeGrid} onChange={() => {}}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((n) => (
-              <Checkbox className={classes.checkbox} value={n.toString()}>
+              <Checkbox
+                className={classes.checkbox}
+                value={n.toString()}
+                key={n}
+              >
                 {n}. Klasse
               </Checkbox>
             ))}
@@ -41,32 +45,6 @@ export const CourseHeader: React.FC<Props> = (props) => {
             </Checkbox>
             <Checkbox className={classes.checkbox} value="2">
               Nachmittags
-            </Checkbox>
-          </Checkbox.Group>
-        </div>
-        <div className={classes.filterContainer}>
-          <Title size="h2" className={classes.title}>
-            Vorkenntnisse
-          </Title>
-          <Checkbox.Group className={classes.bigGrid} onChange={() => {}}>
-            <Checkbox className={classes.checkbox} value="1">
-              Ohne Vorkenntnisse
-            </Checkbox>
-            <Checkbox className={classes.checkbox} value="2">
-              Vorkenntnisse benötigt
-            </Checkbox>
-          </Checkbox.Group>
-        </div>
-        <div className={classes.filterContainer}>
-          <Title size="h2" className={classes.title}>
-            Material
-          </Title>
-          <Checkbox.Group className={classes.normalGrid} onChange={() => {}}>
-            <Checkbox className={classes.checkbox} value="1">
-              Ohne Material
-            </Checkbox>
-            <Checkbox className={classes.checkbox} value="2">
-              Material benötigt
             </Checkbox>
           </Checkbox.Group>
         </div>

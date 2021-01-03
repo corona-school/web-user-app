@@ -8,7 +8,7 @@
 
   .headerCenterContainer {
     max-width: 920px;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     display: grid;
     @media only screen and (max-width: 992px) {
       grid-template-columns: 2fr 1fr;

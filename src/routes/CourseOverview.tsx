@@ -62,6 +62,7 @@ export const CourseOverview: React.FC = () => {
     return tags.map((t) => (
       <CourseList
         tag={t}
+        key={t.id}
         courses={courses.filter((c) => c.tags.map((t) => t.id).includes(t.id))}
       />
     ));

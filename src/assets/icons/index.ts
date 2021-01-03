@@ -53,6 +53,8 @@ import { ReactComponent as Team } from './team.svg';
 import { ReactComponent as Hashtag } from './hashtag.svg';
 import { ReactComponent as Calendar } from './calendar.svg';
 import { ReactComponent as School } from './school.svg';
+import { ReactComponent as ChevronLeft } from './chevron-left.svg';
+import { ReactComponent as ChevronRight } from './chevron-right.svg';
 
 const IconsList = {
   Edit,
@@ -106,6 +108,8 @@ const IconsList = {
   Calendar,
   Hashtag,
   School,
+  ChevronLeft,
+  ChevronRight,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
