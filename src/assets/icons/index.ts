@@ -49,6 +49,11 @@ import { ReactComponent as CoatOfArmsNRW } from './states/nrw.svg';
 
 import { ReactComponent as ProjectCoachingIcon } from './project-coaching.svg';
 
+import { ReactComponent as Team } from './team.svg';
+import { ReactComponent as Hashtag } from './hashtag.svg';
+import { ReactComponent as Calendar } from './calendar.svg';
+import { ReactComponent as School } from './school.svg';
+
 const IconsList = {
   Edit,
   Add,
@@ -97,6 +102,10 @@ const IconsList = {
   Palm,
   CoatOfArmsNRW,
   ProjectCoachingIcon,
+  Team,
+  Calendar,
+  Hashtag,
+  School,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

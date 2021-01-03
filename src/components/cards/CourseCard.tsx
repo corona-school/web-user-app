@@ -5,6 +5,7 @@ import { Text, Title } from '../Typography';
 import { ParsedCourseOverview } from '../../types/Course';
 
 import classes from './CourseCard.module.scss';
+import Icons from '../../assets/icons';
 
 interface Props {
   course: ParsedCourseOverview;
@@ -14,21 +15,41 @@ const CourseCard: React.FC<Props> = ({ course }) => {
   return (
     <Link className={classes.baseContainer} to={`/courses/${course.id}`}>
       <div className={classes.highlight} />
-      <Title size="h4" bold>
-        {course.name}
-      </Title>
-      <Text large>{course.description}</Text>
-      <div className={classes.info}>
-        <Text large>
-          ab {moment(course.subcourse?.lectures[0].start).format('DD.MM.')}
+      <div className={classes.contentContainer}>
+        <Title size="h3" bold className={classes.title}>
+          {course.name}
+        </Title>
+        <Text large className={classes.text}>
+          {course.description}
         </Text>
-        <Text large>{course.subcourse?.lectures.length} Termine</Text>
-        <Text large>
-          {course.subcourse?.minGrade}. - {course.subcourse?.maxGrade}. Klasse
-        </Text>
-        <Text large>
-          {course.subcourse?.participants} / {course.subcourse?.maxParticipants}
-        </Text>
+        <div className={classes.infoContainer}>
+          <div className={classes.info}>
+            <Icons.Calendar />
+            <Text large>
+              ab {moment(course.subcourse?.lectures[0].start).format('DD.MM.')}
+            </Text>
+          </div>
+          <div className={classes.info}>
+            <Icons.Hashtag />
+            <Text large>{course.subcourse?.lectures.length} Termine</Text>
+          </div>
+        </div>
+        <div className={classes.infoContainer}>
+          <div className={classes.info}>
+            <Icons.School />
+            <Text large>
+              {course.subcourse?.minGrade}. - {course.subcourse?.maxGrade}.
+              Klasse
+            </Text>
+          </div>
+          <div className={classes.info}>
+            <Icons.Team />
+            <Text large>
+              {course.subcourse?.participants} /{' '}
+              {course.subcourse?.maxParticipants}
+            </Text>
+          </div>
+        </div>
       </div>
     </Link>
   );

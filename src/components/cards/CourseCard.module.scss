@@ -3,7 +3,7 @@
   flex-direction: column;
   background: white;
   width: 100%;
-  max-width: 400px;
+  max-width: 360px;
   box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.02);
 
   .highlight {
@@ -11,9 +11,38 @@
     background: #f4486d;
   }
 
-  .info {
+  .contentContainer {
+    padding: 0 20px;
+
+    .title {
+      margin-left: 0px;
+      margin-right: 0px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .text {
+      margin-left: 0px;
+      margin-right: 0px;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .infoContainer {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0px;
+    .info {
+      display: flex;
+      align-items: center;
+    }
   }
 }

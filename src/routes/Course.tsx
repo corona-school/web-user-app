@@ -96,7 +96,9 @@ const Course = () => {
       </div>
       <Title size="h2">Alle Kurse</Title>
       <div>
-        <LinkButton href="/courses/overview">Suche Kurse</LinkButton>
+        <LinkButton local href="/courses/overview">
+          Suche Kurse
+        </LinkButton>
       </div>
       {filteredCourses.length === 0 ? (
         <Empty
