@@ -276,6 +276,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
         category: formValues.category,
         tags: formValues.tags || [],
         submit: props.course?.submit ?? false,
+        image: props.course?.image,
       };
       const subCourse: SubCourse = {
         instructors: props.subCourse ? props.subCourse.instructors : [],

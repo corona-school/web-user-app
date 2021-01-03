@@ -661,3 +661,19 @@ export const axiosAddInstructor = (
       });
   });
 };
+
+export const axiosDeleteCourseImage = async (
+  token: string,
+  courseID: number
+) => {
+  const url = `${apiURL}/course/${courseID}/image`;
+  await axios
+    .delete(url, {
+      headers: { token },
+    })
+    .catch(logError('deleteCourseImage'));
+};
+
+// ========================================================================
+export const editCourseImageURL = (courseID: number) =>
+  `${apiURL}/course/${courseID}/image`;

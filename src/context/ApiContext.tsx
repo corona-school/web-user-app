@@ -118,6 +118,7 @@ interface IApiContext {
     projectCoacheeData: BecomeProjectCoachee
   ) => Promise<void>;
   addInstructor: (courseId: number, email: string) => Promise<void>;
+  deleteCourseImage: (courseID: number) => Promise<void>;
 }
 
 const reject = () => Promise.reject();
@@ -164,6 +165,7 @@ export const ApiContext = React.createContext<IApiContext>({
   postUserRoleProjectCoach: reject,
   postUserRoleProjectCoachee: reject,
   addInstructor: reject,
+  deleteCourseImage: reject,
 });
 
 export function useAPI<N extends keyof IApiContext>(name: N): IApiContext[N] {
@@ -364,6 +366,9 @@ export const ApiProvider: React.FC = ({ children }) => {
   const addInstructor = (courseId: number, email: string) =>
     api.axiosAddInstructor(token, courseId, email);
 
+  const deleteCourseImage = (courseID: number): Promise<void> =>
+    api.axiosDeleteCourseImage(token, courseID);
+
   return (
     <ApiContext.Provider
       value={{
@@ -408,6 +413,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         postUserRoleProjectCoach,
         postUserRoleProjectCoachee,
         addInstructor,
+        deleteCourseImage,
       }}
     >
       {children}
