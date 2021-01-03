@@ -61,6 +61,12 @@ export const CourseHeader: React.FC<Props> = (props) => {
       )
       .filter((c) => {
         const schoolTime = moment('13:00am', 'HH:mm');
+        if (
+          allowedTime.includes('vormittags') &&
+          allowedTime.includes('nachmittags')
+        ) {
+          return true;
+        }
 
         if (allowedTime.includes('vormittags')) {
           return c.subcourse?.lectures.some((l) =>
@@ -80,6 +86,7 @@ export const CourseHeader: React.FC<Props> = (props) => {
       props.onChange(null);
       return;
     }
+
     props.onChange(filteredCourses);
   }, [search, allowedGrades, allowedTime]);
 
