@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import Icons from '../assets/icons';
-import Button from '../components/button';
+import Button, { LinkButton } from '../components/button';
 import SignupContainer from '../components/container/SignupContainer';
 import {
   DataProtectionField,
@@ -67,6 +67,30 @@ export const RegisterDrehtuerTutor: React.FC = () => {
     }
   };
 
+  const renderForm = () => {
+    if (formState === 'done') {
+      return (
+        <div className={classes.successContainer}>
+          <Title className={classes.loginTitle} size="h4">
+            Wir haben dir eine E-Mail geschickt.
+          </Title>
+          <Icons.SignupEmailSent />
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <NameField className={classes.formItem} />
+        <EmailField className={classes.formItem} />
+        <StateField className={classes.formItem} />
+        <UniversityField className={classes.formItem} />
+        <MessageField className={classes.formItem} isGroups />
+        <DataProtectionField className={classes.formItem} />
+      </>
+    );
+  };
+
   return (
     <SignupContainer shouldShowBackButton>
       <div className={classes.signupContainer}>
@@ -99,14 +123,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         initialValues={{ remember: true }}
       >
         {!loading ? (
-          <>
-            <NameField className={classes.formItem} />
-            <EmailField className={classes.formItem} />
-            <StateField className={classes.formItem} />
-            <UniversityField className={classes.formItem} />
-            <MessageField className={classes.formItem} isGroups />
-            <DataProtectionField className={classes.formItem} />
-          </>
+          renderForm()
         ) : (
           <div className={classes.loadingContainer}>
             <ClipLoader size={100} color="#123abc" loading />
@@ -114,14 +131,27 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         )}
 
         <div className={classes.buttonContainer}>
-          <Button
-            onClick={registerTutor}
-            className={classes.signupButton}
-            color="white"
-            backgroundColor="#4E6AE6"
-          >
-            Registrieren
-          </Button>
+          {formState === 'start' && (
+            <Button
+              onClick={registerTutor}
+              className={classes.signupButton}
+              color="white"
+              backgroundColor="#4E6AE6"
+            >
+              Registrieren
+            </Button>
+          )}
+          {formState === 'done' && (
+            <LinkButton
+              href="/login"
+              local
+              className={classes.signupButton}
+              color="white"
+              backgroundColor="#4E6AE6"
+            >
+              Anmelden
+            </LinkButton>
+          )}
         </div>
       </Form>
       <Text className={classes.helpText}>

@@ -79,5 +79,10 @@
     margin-top: 8px;
     color: #1890ff;
     outline-color: #1890ff;
+    transition: opacity 0.15s ease-in-out;
+
+    &.hideResetButton {
+      opacity: 0;
+    }
   }
 }

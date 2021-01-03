@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox, Divider, Input } from 'antd';
 import moment from 'moment';
+import classNames from 'classnames';
 import classes from './CourseHeader.module.scss';
 import { ParsedCourseOverview } from '../../types/Course';
 import { Title } from '../Typography';
@@ -170,18 +171,19 @@ export const CourseHeader: React.FC<Props> = (props) => {
             onChange={(e) => onSearch(e.target.value)}
             style={{ width: '100%', margin: '0 10px' }}
           />
-          {!isReset() && (
-            <button
-              onClick={() => {
-                setAllowedGrades(grades);
-                setSearch('');
-                setAllowedTime(['vormittags', 'nachmittags']);
-              }}
-              className={classes.resetButton}
-            >
-              Filter zurücksetzen
-            </button>
-          )}
+
+          <button
+            onClick={() => {
+              setAllowedGrades(grades);
+              setSearch('');
+              setAllowedTime(['vormittags', 'nachmittags']);
+            }}
+            className={classNames(classes.resetButton, {
+              [classes.hideResetButton]: isReset(),
+            })}
+          >
+            Filter zurücksetzen
+          </button>
         </div>
       </div>
     </div>
