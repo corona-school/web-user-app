@@ -226,7 +226,7 @@ export const axiosGetCourses = async (
   const params = new URLSearchParams();
   params.append(
     'fields',
-    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
+    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart,image'
   );
 
   return axios
