@@ -12,6 +12,9 @@ import classes from './CourseOverview.module.scss';
 
 export const CourseOverview: React.FC = () => {
   const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<
+    ParsedCourseOverview[] | null
+  >(null);
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(false);
   const apiContext = useContext(ApiContext);
@@ -59,21 +62,36 @@ export const CourseOverview: React.FC = () => {
       );
     }
 
-    return tags.map((t) => (
-      <CourseList
-        tag={t}
-        key={t.id}
-        courses={courses.filter((c) => c.tags.map((t) => t.id).includes(t.id))}
-      />
-    ));
+    const courseLists = tags.map((t) => {
+      const isFiltering = filteredCourses !== null;
+      const courseList = isFiltering
+        ? filteredCourses.filter((c) => c.tags.map((t) => t.id).includes(t.id))
+        : courses.filter((c) => c.tags.map((t) => t.id).includes(t.id));
+
+      if (courseList.length === 0 && isFiltering) {
+        return null;
+      }
+
+      return <CourseList tag={t} key={t.id} courses={courseList} />;
+    });
+
+    if (courseLists.filter((b) => b !== null).length === 0) {
+      return (
+        <div className={classes.loadingContainer}>
+          <Empty description="Es wurden keine Kurse für deine Suche gefunden." />
+        </div>
+      );
+    }
+
+    return courseLists;
   };
 
   return (
     <>
       <CourseHeader
         courses={courses}
-        onChange={(filteredCourses) => {
-          console.log(filteredCourses);
+        onChange={(courseList) => {
+          setFilteredCourses(courseList);
         }}
       />
       {loading ? (
