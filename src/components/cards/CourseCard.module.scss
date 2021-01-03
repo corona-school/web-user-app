@@ -7,18 +7,19 @@
   flex-direction: column;
   background: white;
   width: 100%;
-
+  min-height: 500px;
+  max-height: 500px;
   max-width: 360px;
   min-width: 360px;
   box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.02);
 
-  .highlight {
-    height: 8px;
-    background: #f4486d;
-  }
-
   .contentContainer {
     padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 300px;
 
     .title {
       margin-left: 0px;
@@ -32,6 +33,7 @@
     .text {
       margin-left: 0px;
       margin-right: 0px;
+      display: -webkit-box;
       -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
       overflow: hidden;
