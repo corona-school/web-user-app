@@ -20,6 +20,7 @@ import { ReactComponent as Celebration } from './celebration_blue.svg';
 
 import DrehtuerDefaultCourseCover from './drehtuer.png';
 import { ReactComponent as Empty } from './empty.svg';
+import { ReactComponent as Graduation } from './graduation.svg';
 
 const ImageList = {
   StepsMatched,
@@ -41,6 +42,7 @@ const ImageList = {
   TrashIllustration,
   DrehtuerDefaultCourseCover,
   Empty,
+  Graduation,
 };
 
 const Images: {

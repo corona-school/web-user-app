@@ -55,6 +55,7 @@ import { ReactComponent as Calendar } from './calendar.svg';
 import { ReactComponent as School } from './school.svg';
 import { ReactComponent as ChevronLeft } from './chevron-left.svg';
 import { ReactComponent as ChevronRight } from './chevron-right.svg';
+import { ReactComponent as Search } from './search.svg';
 
 const IconsList = {
   Edit,
@@ -110,6 +111,7 @@ const IconsList = {
   School,
   ChevronLeft,
   ChevronRight,
+  Search,
 };
 
 const Icons: {

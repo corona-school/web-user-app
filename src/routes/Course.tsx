@@ -1,54 +1,30 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Empty } from 'antd';
-import { useHistory } from 'react-router-dom';
 import Context from '../context';
 import { Title } from '../components/Typography';
-import Button, { LinkButton } from '../components/button';
+import { LinkButton } from '../components/button';
 import Icons from '../assets/icons';
 import { ParsedCourseOverview } from '../types/Course';
 import MyCourseCard from '../components/cards/MyCourseCard';
 
 import classes from './Course.module.scss';
-import { parseCourse, defaultPublicCourseSort } from '../utils/CourseUtil';
+import { parseCourse } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
+import Images from '../assets/images';
 
 const MAX_COURSES = 25;
 
-const canJoinCourse = (grade?: number) => (c: ParsedCourseOverview) => {
-  if (!c.subcourse) {
-    return false;
-  }
-
-  if (c.subcourse.participants >= c.subcourse.maxParticipants) {
-    return false;
-  }
-
-  if (!grade) {
-    return true;
-  }
-
-  return c.subcourse.minGrade <= grade && grade <= c.subcourse.maxGrade;
-};
-
 const Course = () => {
   const [loading, setLoading] = useState(false);
-  const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
   const [myCourses, setMyCourses] = useState<ParsedCourseOverview[]>([]);
   const apiContext = useContext(Context.Api);
   const userContext = useContext(UserContext);
-  const history = useHistory();
-
-  const filteredCourses = courses.filter(canJoinCourse(userContext.user.grade));
 
   useEffect(() => {
     setLoading(true);
 
     apiContext
-      .getCourses()
-      .then((c) => {
-        setCourses(c.map(parseCourse).sort(defaultPublicCourseSort));
-        return apiContext.getMyCourses(userContext.user.type);
-      })
+      .getMyCourses(userContext.user.type)
       .then((c) => {
         setMyCourses(c.map(parseCourse));
       })
@@ -67,21 +43,39 @@ const Course = () => {
   return (
     <div className={classes.container}>
       <div className={classes.containerRequests}>
+        <div className={classes.courseOverviewContainer}>
+          <div className={classes.hightightCourse} />
+          <div className={classes.couseOverviewContent}>
+            <Title size="h1" className={classes.title}>
+              Unser neues Kursangebot
+            </Title>
+            <Images.Graduation className={classes.graduationImage} />
+            <LinkButton
+              href="/courses/overview"
+              local
+              backgroundColor="#4E6AE6"
+              color="white"
+              className={classes.courseButton}
+            >
+              <Icons.Search height="16px" />
+              Kursangebote ansehen
+            </LinkButton>
+          </div>
+        </div>
         <div className={classes.header}>
           <Title size="h1">Deine Kurse</Title>
           {userContext.user.type === 'student' &&
             myCourses.length <= MAX_COURSES && (
-              <Button
-                onClick={() => {
-                  history.push('/courses/create');
-                }}
+              <LinkButton
+                href="/courses/create"
+                local
                 backgroundColor="#4E6AE6"
                 color="white"
                 className={classes.courseButton}
               >
                 <Icons.Add height="16px" />
                 Erstelle einen Kurs
-              </Button>
+              </LinkButton>
             )}
         </div>
         <div className={classes.myCoursesContainer}>
@@ -94,24 +88,6 @@ const Course = () => {
           )}
         </div>
       </div>
-      <Title size="h2">Alle Kurse</Title>
-      <div>
-        <LinkButton local href="/courses/overview">
-          Suche Kurse
-        </LinkButton>
-      </div>
-      {filteredCourses.length === 0 ? (
-        <Empty
-          style={{ marginBottom: '64px' }}
-          description={`Es gibt im Moment keine Kurse${
-            userContext.user.type === 'pupil' ? ' für deine Klassenstufe' : ''
-          }`}
-        />
-      ) : (
-        filteredCourses.map((c) => {
-          return <MyCourseCard course={c} showCourseState />;
-        })
-      )}
     </div>
   );
 };

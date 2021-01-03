@@ -1,9 +1,10 @@
 .header {
   display: flex;
   width: 100%;
+  max-width: 1000px;
   justify-content: space-between;
   align-items: center;
-  padding-right: 32px;
+  margin-left: 8px;
 
   @media only screen and (max-width: 768px) {
     padding-right: 0px;
@@ -15,6 +16,9 @@
   height: 40px;
   font-size: 15px;
   padding-right: 16px;
+  max-width: 300px;
+  margin-right: 0px;
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 
   @media only screen and (max-width: 768px) {
     padding-right: 8px;
@@ -41,6 +45,35 @@
     .openRequests {
       display: flex;
       flex-wrap: wrap;
+    }
+  }
+}
+
+.courseOverviewContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 1000px;
+  box-shadow: 0px 0px 20px 20px rgba(0, 0, 0, 0.04);
+  background: white;
+  margin: 8px 8px 32px 8px;
+
+  .hightightCourse {
+    min-width: 8px;
+    max-width: 8px;
+    background: #4e6ae6;
+  }
+
+  .couseOverviewContent {
+    width: 1000%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 16px;
+
+    .graduationImage {
+      margin-top: -32px;
+      width: 100%;
     }
   }
 }
