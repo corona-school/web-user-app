@@ -56,6 +56,10 @@ export interface Tag {
   name: string;
   category: string;
 }
+export interface TagAndCategory {
+  ids: string[];
+  name: string;
+}
 
 export interface CourseOverview {
   id: number;

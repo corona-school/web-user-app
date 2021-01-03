@@ -7,7 +7,7 @@ import { CourseHeader } from '../components/course/CourseHeader';
 import { CourseList } from '../components/course/CourseList';
 import { ApiContext } from '../context/ApiContext';
 import { UserContext } from '../context/UserContext';
-import { ParsedCourseOverview, Tag } from '../types/Course';
+import { ParsedCourseOverview, Tag, TagAndCategory } from '../types/Course';
 import { parseCourse } from '../utils/CourseUtil';
 import classes from './CourseOverview.module.scss';
 import { Text } from '../components/Typography';
@@ -63,21 +63,56 @@ export const CourseOverview: React.FC = () => {
         </div>
       );
     }
+    const coachingTag = tags
+      .filter((t) => t.category === 'coaching')
+      .reduce<TagAndCategory>(
+        (acc, t) => {
+          acc.ids.push(t.id);
+          return acc;
+        },
+        { ids: [], name: 'Lernunterstützung' }
+      );
 
-    const courseLists = tags.map((t) => {
-      const isFiltering = filteredCourses !== null;
-      const courseList = isFiltering
-        ? filteredCourses.filter((c) => c.tags.map((t) => t.id).includes(t.id))
-        : courses.filter((c) => c.tags.map((t) => t.id).includes(t.id));
+    const revisionTag = tags
+      .filter((t) => t.category === 'revision')
+      .reduce<TagAndCategory>(
+        (acc, t) => {
+          acc.ids.push(t.id);
+          return acc;
+        },
+        { ids: [], name: 'Repetitorium' }
+      );
 
-      if (courseList.length === 0 && isFiltering) {
-        return null;
-      }
+    const clubTags = tags
+      .filter((t) => t.category === 'club')
+      .map<TagAndCategory>((t) => ({ ids: [t.id], name: t.name }));
 
-      return <CourseList tag={t} key={t.id} courses={courseList} />;
-    });
+    const courseLists = [...clubTags, revisionTag, coachingTag]
+      .map((t, i) => {
+        const isFiltering = filteredCourses !== null;
+        const list = isFiltering ? filteredCourses : courses;
+        const courseList = list.filter(
+          (c) =>
+            c.tags.filter((courseTag) => t.ids.includes(courseTag.id))
+              .length !== 0
+        );
 
-    if (courseLists.filter((b) => b !== null).length === 0) {
+        if (courseList.length === 0 && isFiltering) {
+          return null;
+        }
+
+        return (
+          <CourseList
+            name={t.name}
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${t.name}-${i}`}
+            courses={courseList}
+          />
+        );
+      })
+      .filter((c) => c !== null);
+
+    if (courseLists.length === 0) {
       return (
         <div className={classes.loadingContainer}>
           <Images.Empty className={classes.emptyImage} />

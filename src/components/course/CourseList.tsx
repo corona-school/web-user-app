@@ -1,13 +1,13 @@
 import React, { useRef } from 'react';
 import useSmoothScroll from 'react-smooth-scroll-hook';
 import Icons from '../../assets/icons';
-import { ParsedCourseOverview, Tag } from '../../types/Course';
+import { ParsedCourseOverview } from '../../types/Course';
 import CourseCard from '../cards/CourseCard';
 import { Text, Title } from '../Typography';
 import classes from './CourseList.module.scss';
 
 interface Props {
-  tag: Tag;
+  name: string;
   courses: ParsedCourseOverview[];
 }
 
@@ -22,7 +22,7 @@ export const CourseList: React.FC<Props> = (props) => {
   return (
     <div className={classes.listContainer}>
       <div className={classes.headerContainer}>
-        <Title size="h3">{props.tag.name}</Title>
+        <Title size="h3">{props.name}</Title>
         <div className={classes.scrollControls}>
           <button
             className={classes.chevronButton}
