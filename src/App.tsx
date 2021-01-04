@@ -93,8 +93,7 @@ const App: React.FC = () => {
         <Route path="/register/tutee">
           <RegisterTutee
             isJufoSubdomain={isJufoSubdomain}
-            // TODO
-            isDrehtuerSubdomain={true || isDrehtuerSubdomain}
+            isDrehtuerSubdomain={isDrehtuerSubdomain}
           />
         </Route>
         <Route path="/register/internship">
@@ -109,7 +108,7 @@ const App: React.FC = () => {
         <Route path="/register/tutor">
           <RegisterTutor
             isJufoSubdomain={isJufoSubdomain}
-            isDrehtuerSubdomain={true || isDrehtuerSubdomain}
+            isDrehtuerSubdomain={isDrehtuerSubdomain}
           />
         </Route>
         <Route path="/register">
