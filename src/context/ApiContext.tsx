@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AxiosResponse } from 'axios';
 import { AuthContext } from './AuthContext';
 import { User, Subject } from '../types';
@@ -24,6 +24,11 @@ import {
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
 import { RequestCode, VerifyCode } from '../types/Phone';
+import {
+  IExposedCertificate,
+  ISupportedLanguage,
+  supportedLanguages,
+} from '../types/Certificate';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
@@ -35,10 +40,14 @@ interface IApiContext {
   putUserProjectFields: (projectFields: ApiProjectFieldInfo[]) => Promise<void>;
   becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
   putUserActiveFalse: () => Promise<void>;
-  getCertificate: (
+  createCertificate: (
     cerfiticateData: CertificateData
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) => Promise<AxiosResponse<any>>;
+  ) => Promise<AxiosResponse<string>>;
+  getCertificate: (
+    uuid: IExposedCertificate['uuid'],
+    lang: ISupportedLanguage
+  ) => Promise<string>;
+  getCertificates: () => Promise<IExposedCertificate[]>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourseTags: () => Promise<Tag[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
@@ -113,10 +122,12 @@ interface IApiContext {
   postVerifyCode: (verifyCodeData: VerifyCode) => Promise<void>;
 }
 
+const reject = () => Promise.reject();
+
 export const ApiContext = React.createContext<IApiContext>({
-  getUserData: () => Promise.reject(),
-  dissolveMatch: (uuid, reason?) => Promise.reject(),
-  dissolveProjectMatch: (uuid, reason?) => Promise.reject(),
+  getUserData: reject,
+  dissolveMatch: reject,
+  dissolveProjectMatch: reject,
   requestNewToken: api.axiosRequestNewToken,
   putUser: (user) => Promise.reject(),
   putUserSubjects: (subjects) => Promise.reject(),
@@ -159,12 +170,44 @@ export const ApiContext = React.createContext<IApiContext>({
   postVerifyCode: () => Promise.reject(),
 });
 
+export function useAPI<N extends keyof IApiContext>(name: N): IApiContext[N] {
+  return useContext(ApiContext)[name];
+}
+
+export function useAPIResult<N extends keyof IApiContext>(name: N) {
+  const [value, setValue] = useState<{
+    loading?: boolean;
+    error?: Error;
+    value?: ReturnType<IApiContext[N]> extends Promise<infer T> ? T : never;
+  }>({ loading: true });
+  const api = useAPI(name);
+
+  function reload() {
+    // eslint-disable-next-line
+    (api as any)()
+      .then((value) => setValue({ value }))
+      .catch((error) => setValue({ error }));
+  }
+
+  useEffect(() => {
+    reload();
+  }, []);
+
+  return [value, reload] as const;
+}
+
 export const ApiProvider: React.FC = ({ children }) => {
   const authContext = useContext(AuthContext);
 
   const {
     credentials: { id, token },
   } = authContext;
+
+  /* NOTE: Maybe we can migrate more APIs to this, then this file will get slightly smaller ... */
+  // eslint-disable-next-line
+  const withToken = <R, P extends Array<any>>(
+    api: (token: string, ...params: P) => R
+  ) => (...args: P): R => api(token, ...args);
 
   const getUserData = (): Promise<User> => api.axiosGetUser(id, token);
 
@@ -191,11 +234,10 @@ export const ApiProvider: React.FC = ({ children }) => {
   const putUserActiveFalse = (): Promise<void> =>
     api.axiosPutUserActive(id, token, false);
 
-  const getCertificate = (
+  const createCertificate = (
     certificateDate: CertificateData
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ): Promise<AxiosResponse<any>> =>
-    api.axiosGetCertificate(id, token, certificateDate);
+  ): Promise<AxiosResponse<string>> =>
+    api.axiosCreateCertificate(id, token, certificateDate);
 
   const getCourses = (): Promise<CourseOverview[]> =>
     api.axiosGetCourses(token);
@@ -341,7 +383,9 @@ export const ApiProvider: React.FC = ({ children }) => {
         putUserProjectFields,
         becomeInstructor,
         putUserActiveFalse,
-        getCertificate,
+        createCertificate,
+        getCertificate: withToken(api.axiosGetCertificate),
+        getCertificates: withToken(api.axiosGetCertificates),
         getCourses,
         getCourseTags,
         getCourse,

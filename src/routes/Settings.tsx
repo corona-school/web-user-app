@@ -1,5 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Button, Select, Space, Table, Tag } from 'antd';
 import Context from '../context';
 
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
@@ -13,6 +14,13 @@ import { isProjectCoachButNotTutor } from '../utils/UserUtils';
 import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
+import { useAPI, useAPIResult } from '../context/ApiContext';
+import {
+  defaultLanguage,
+  IExposedCertificate,
+  ISupportedLanguage,
+  supportedLanguages,
+} from '../types/Certificate';
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,6 +32,16 @@ const Wrapper = styled.div`
 const Settings: React.FC = () => {
   const modalContext = useContext(Context.Modal);
   const userContext = useContext(Context.User);
+  const [certificates, reloadCertificates] = useAPIResult('getCertificates');
+  const getCertificate = useAPI('getCertificate');
+  const [language, setLanguage] = useState<ISupportedLanguage>(defaultLanguage);
+
+  async function showCertificate(uuid: IExposedCertificate['uuid']) {
+    const response = await getCertificate(uuid, language);
+    window.open(
+      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
+    );
+  }
 
   const { setOpenedModal } = modalContext;
 
@@ -100,13 +118,119 @@ const Settings: React.FC = () => {
     );
   };
 
+  const stateTranslation: { [key in IExposedCertificate['state']]: string } = {
+    manual: 'Unbestätigt',
+    'awaiting-approval': 'Bestätigung ausstehend',
+    approved: 'Bestätigt',
+  };
+
+  const renderCertificatesTable = () => {
+    const columns = [
+      {
+        title: 'Schüler*in',
+        key: 'pupil',
+        render: (certificate: IExposedCertificate) =>
+          `${certificate.pupil.firstname} ${certificate.pupil.lastname}`,
+      },
+      {
+        title: 'Student*in',
+        key: 'student',
+        render: (certificate: IExposedCertificate) =>
+          `${certificate.student.firstname} ${certificate.student.lastname}`,
+      },
+      {
+        title: 'Fächer',
+        key: 'subjects',
+        render: (certificate: IExposedCertificate) => (
+          <>
+            {certificate.subjects.split(',').map((subject) => (
+              <Tag key={subject}>{subject.toUpperCase()}</Tag>
+            ))}
+          </>
+        ),
+      },
+      {
+        title: 'Status',
+        key: 'status',
+        filters: ['manual', 'awaiting-approval', 'approved'].map((s) => ({
+          value: s,
+          text: stateTranslation[s],
+        })),
+        filterMultiple: false,
+        onFilter: (value: string, certificate: IExposedCertificate) =>
+          certificate.state === value,
+        // defaultSortOrder: 'descend',
+        sorter: (a: IExposedCertificate, b: IExposedCertificate) =>
+          a.state.length - b.state.length,
+        // sortDirections: ['descend', 'ascend'],
+        render: (certificate: IExposedCertificate) => (
+          <>
+            <Tag
+              color={
+                (certificate.state === 'manual' && 'green') ||
+                (certificate.state === 'awaiting-approval' && 'yellow') ||
+                (certificate.state === 'approved' && 'green')
+              }
+              key={certificate.state}
+            >
+              {stateTranslation[certificate.state]}
+            </Tag>
+          </>
+        ),
+      },
+      {
+        title: 'Aktion',
+        key: 'action',
+        render: (certificate: IExposedCertificate) => (
+          <Space size="middle">
+            {userContext.user.isTutor &&
+              certificate.state !== 'awaiting-approval' && (
+                <>
+                  <Select
+                    defaultValue={defaultLanguage}
+                    onChange={(event) => setLanguage(event)}
+                    style={{ width: 120 }}
+                  >
+                    {Object.entries(supportedLanguages).map(([code, value]) => (
+                      <Select.Option value={code}>{value}</Select.Option>
+                    ))}
+                  </Select>
+                  <Button
+                    type="primary"
+                    onClick={() => showCertificate(certificate.uuid)}
+                  >
+                    Ansehen
+                  </Button>
+                </>
+              )}
+
+            {/* <Button danger>Löschen</Button> */}
+          </Space>
+        ),
+      },
+    ];
+
+    return (
+      <>
+        <Title size="h3" className={classes.subjectTitle}>
+          Zertifikate
+        </Title>
+        <Table dataSource={certificates.value ?? []} columns={columns} />
+      </>
+    );
+  };
+
   return (
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
-      <SettingsCard user={userContext.user} />
+      <SettingsCard
+        user={userContext.user}
+        reloadCertificates={reloadCertificates}
+      />
       {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}
+      {renderCertificatesTable()}
       <AccountNotScreenedModal />
     </div>
   );

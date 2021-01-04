@@ -427,7 +427,9 @@ const RegisterTutee: React.FC<Props> = ({
             <Option value="11">11. Klasse</Option>
             <Option value="12">12. Klasse</Option>
             <Option value="13">13. Klasse</Option>
-            {isOnlyJufo && <Option value={null}>Keine Angabe</Option>}
+            {isOnlyJufo && !stateCooperationInfo && (
+              <Option value={null}>Keine Angabe</Option>
+            )}
           </Select>
         </Form.Item>
         {isJufo && (

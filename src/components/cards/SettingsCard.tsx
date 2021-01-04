@@ -8,7 +8,7 @@ import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import CertificateModal from '../Modals/CerificateModal';
-import { getUserType, isProjectCoachButNotTutor } from '../../utils/UserUtils';
+import { isProjectCoachButNotTutor, getUserTags } from '../../utils/UserUtils';
 
 import { Tag } from '../Tag';
 import context from '../../context';
@@ -24,9 +24,10 @@ import SaveEditButton from '../button/SaveEditButton';
 
 interface Props {
   user: User;
+  reloadCertificates: () => void;
 }
 
-const SettingsCard: React.FC<Props> = ({ user }) => {
+const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
   const modalContext = useContext(context.Modal);
   const ApiContext = useContext(context.Api);
 
@@ -102,6 +103,8 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
     );
   };
 
+  const userTags = getUserTags(user);
+
   return (
     <>
       <CardBase highlightColor="#F4486D" className={classes.baseContainer}>
@@ -115,13 +118,15 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             </Text>
           </div>
           <div className={classes.tagContainer}>
-            <Tag
-              background="#4E555C"
-              color="#ffffff"
-              style={{ marginLeft: '10px' }}
-            >
-              {getUserType(user)}
-            </Tag>
+            {userTags.map((tag) => (
+              <Tag
+                background="#4E555C"
+                color="#ffffff"
+                style={{ marginLeft: '10px' }}
+              >
+                {tag}
+              </Tag>
+            ))}
           </div>
           {user.isProjectCoach && (
             <div className={classes.subjectContainer}>
@@ -133,7 +138,7 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
               </Text>
             </div>
           )}
-          {!isProjectCoachButNotTutor(user) && (
+          {!isProjectCoachButNotTutor(user) && user.subjects.length > 0 && (
             <div className={classes.subjectContainer}>
               <Text large>
                 <b>Fächer</b>
@@ -176,23 +181,21 @@ const SettingsCard: React.FC<Props> = ({ user }) => {
             >
               <Icons.Delete /> Deaktivieren
             </Button>
-            {!user.isProjectCoach && !user.isProjectCoachee && (
-              <SaveEditButton
-                isEditing={isEditing}
-                isLoading={isSaving}
-                onEditChange={(nowEditing) => {
-                  if (!nowEditing) {
-                    saveUserChanges();
-                  } else {
-                    setIsEditing(nowEditing);
-                  }
-                }}
-              />
-            )}
+            <SaveEditButton
+              isEditing={isEditing}
+              isLoading={isSaving}
+              onEditChange={(nowEditing) => {
+                if (!nowEditing) {
+                  saveUserChanges();
+                } else {
+                  setIsEditing(nowEditing);
+                }
+              }}
+            />
           </div>
         </div>
       </CardBase>
-      <CertificateModal user={user} />
+      <CertificateModal user={user} reloadCertificates={reloadCertificates} />
       <BecomeInstructorModal user={user} />
       <BecomeInternModal user={user} />
       <PhoneModal user={user} />
