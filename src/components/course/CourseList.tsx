@@ -19,6 +19,10 @@ export const CourseList: React.FC<Props> = (props) => {
     direction: 'x',
   });
 
+  if (props.courses.length <= 0) {
+    return null;
+  }
+
   return (
     <div className={classes.listContainer}>
       <div className={classes.headerContainer}>
@@ -42,9 +46,6 @@ export const CourseList: React.FC<Props> = (props) => {
         {props.courses.map((course) => (
           <CourseCard course={course} key={course.id} />
         ))}
-        {props.courses.length === 0 && (
-          <Text large>Leider haben wir keine Kurse für diese Kategorie</Text>
-        )}
       </div>
     </div>
   );
