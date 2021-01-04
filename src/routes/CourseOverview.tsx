@@ -12,7 +12,11 @@ import { parseCourse } from '../utils/CourseUtil';
 import classes from './CourseOverview.module.scss';
 import { Text } from '../components/Typography';
 
-export const CourseOverview: React.FC = () => {
+interface Props {
+  customCourseLink?: (course: ParsedCourseOverview) => string;
+}
+
+export const CourseOverview: React.FC<Props> = ({ customCourseLink }) => {
   const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<
     ParsedCourseOverview[] | null
@@ -107,6 +111,7 @@ export const CourseOverview: React.FC = () => {
             // eslint-disable-next-line react/no-array-index-key
             key={`${t.name}-${i}`}
             courses={courseList}
+            customCourseLink={customCourseLink}
           />
         );
       })

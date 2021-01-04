@@ -9,6 +9,7 @@ import classes from './CourseList.module.scss';
 interface Props {
   name: string;
   courses: ParsedCourseOverview[];
+  customCourseLink?: (course: ParsedCourseOverview) => string;
 }
 
 export const CourseList: React.FC<Props> = (props) => {
@@ -44,7 +45,11 @@ export const CourseList: React.FC<Props> = (props) => {
       </div>
       <div className={classes.courseContainer} ref={courseContainer}>
         {props.courses.map((course) => (
-          <CourseCard course={course} key={course.id} />
+          <CourseCard
+            course={course}
+            key={course.id}
+            customCourseLink={props.customCourseLink?.(course)}
+          />
         ))}
       </div>
     </div>
