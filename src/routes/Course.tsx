@@ -42,7 +42,11 @@ const Course = () => {
 
   return (
     <div className={classes.container}>
-      <CourseBanner />
+      <CourseBanner
+        targetGroup={
+          userContext.user.type === 'student' ? 'instructors' : 'participants'
+        }
+      />
       <div className={classes.containerRequests}>
         <div className={classes.header}>
           <Title size="h1">Deine Kurse</Title>

@@ -7,6 +7,7 @@ import { Title, Text } from '../Typography';
 
 interface Props {
   showImage?: boolean;
+  targetGroup: 'participants' | 'instructors';
 }
 
 export const CourseBanner: React.FC<Props> = (props) => {
@@ -20,9 +21,9 @@ export const CourseBanner: React.FC<Props> = (props) => {
               Unser neues Kursangebot
             </Title>
             <Text large>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam
+              {props.targetGroup === 'participants'
+                ? 'Schau gerne durch unser Angebot neuer und spannender Kurse und melde dich zu unseren Gruppenkursen an!'
+                : 'Hier kannst du dir alle Kurse auf unserer Plattform anschauen und auch deine zugelassenen Kurse findest du dort wieder.'}
             </Text>
           </div>
           <LinkButton
