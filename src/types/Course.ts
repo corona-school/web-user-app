@@ -56,6 +56,10 @@ export interface Tag {
   name: string;
   category: string;
 }
+export interface TagAndCategory {
+  ids: string[];
+  name: string;
+}
 
 export interface CourseOverview {
   id: number;
@@ -69,6 +73,7 @@ export interface CourseOverview {
   instructors: Instructor[];
   subcourses: CourseSubCourse[];
   joinAfterStart: boolean;
+  image?: string;
 }
 
 export interface ParsedCourseOverview {
@@ -82,6 +87,7 @@ export interface ParsedCourseOverview {
   category: CourseCategory;
   instructors: Instructor[];
   subcourse?: CourseSubCourse;
+  image?: string;
 }
 
 export interface Course {
@@ -92,6 +98,7 @@ export interface Course {
   category: 'revision' | 'club' | 'coaching';
   tags: string[];
   submit: boolean;
+  image?: string;
 }
 
 export interface SubCourse {

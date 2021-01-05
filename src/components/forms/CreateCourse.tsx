@@ -168,7 +168,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
           initialValue={props.course?.name}
           rules={[
             { required: true, message: 'Bitte trage einen Kursnamen ein' },
-            { max: 30, message: 'Bitte beschränke dich auf 30 Zeichen' },
+            { max: 100, message: 'Bitte beschränke dich auf 100 Zeichen' },
           ]}
         >
           <Input placeholder="Mathematik Hilfe" />
@@ -238,9 +238,13 @@ export const CreateCourse: React.FC<Props> = (props) => {
             </Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item className={classes.formItem} label="Tags" name="tags">
+        <Form.Item
+          className={classes.formItem}
+          label="Tags"
+          name="tags"
+          initialValue={editTags}
+        >
           <Select
-            defaultValue={editTags}
             onChange={(v: string[]) => {
               setEditTags(v);
             }}
@@ -271,7 +275,8 @@ export const CreateCourse: React.FC<Props> = (props) => {
         description: formValues.description,
         category: formValues.category,
         tags: formValues.tags || [],
-        submit: false,
+        submit: props.course?.submit ?? false,
+        image: props.course?.image,
       };
       const subCourse: SubCourse = {
         instructors: props.subCourse ? props.subCourse.instructors : [],
@@ -279,7 +284,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
         maxGrade,
         maxParticipants,
         joinAfterStart: !!joinAfterStart,
-        published: false,
+        published: props.subCourse?.published ?? false,
       };
 
       if (dev) {

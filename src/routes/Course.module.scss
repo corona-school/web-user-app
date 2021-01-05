@@ -1,9 +1,10 @@
 .header {
   display: flex;
   width: 100%;
+  max-width: 1000px;
   justify-content: space-between;
   align-items: center;
-  padding-right: 32px;
+  margin-left: 8px;
 
   @media only screen and (max-width: 768px) {
     padding-right: 0px;
@@ -15,6 +16,9 @@
   height: 40px;
   font-size: 15px;
   padding-right: 16px;
+  max-width: 300px;
+  margin-right: 0px;
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 
   @media only screen and (max-width: 768px) {
     padding-right: 8px;

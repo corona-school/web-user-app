@@ -24,6 +24,14 @@ export const CourseContainer: React.FC<Props> = (props) => {
               }
             />
             <Step
+              title="Bild"
+              description={
+                <div className={classes.stepDescription}>
+                  Lade ein Bild zu deinem Kurs hoch.
+                </div>
+              }
+            />
+            <Step
               title="Termine"
               description={
                 <div className={classes.stepDescription}>

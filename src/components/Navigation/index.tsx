@@ -102,7 +102,7 @@ const Navigation: React.FC<Props> = (props) => {
             Projektcoaching
           </NavButton>
         )}
-        {(isTutor || isInstructor) && (
+        {isTutor && (
           <NavButton
             to="/mentoring"
             icon={<Icons.Mentoring />}
@@ -111,7 +111,7 @@ const Navigation: React.FC<Props> = (props) => {
             Mentoring
           </NavButton>
         )}
-        {(isTutor || isInstructor) && (
+        {isTutor && (
           <NavButton
             to="/support"
             icon={<Icons.Support />}
