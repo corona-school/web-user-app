@@ -35,7 +35,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         email: formValues.email,
         state: formValues.state?.toLowerCase(),
         university: formValues.university,
-        msg: formValues.msg,
+        msg: formValues.msg ?? '',
         // empty
         isTutor: false,
         isOfficial: false,
