@@ -145,7 +145,7 @@ const App: React.FC = () => {
                   ScreeningStatus.Accepted
               }
             >
-              <CourseOverview />
+              <CourseOverview backButtonRoute="/courses" />
             </PrivateRoute>
             <PrivateRoute path="/courses/:id" comeback>
               <CourseDetail />

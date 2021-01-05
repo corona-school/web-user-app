@@ -14,9 +14,13 @@ import { Text } from '../components/Typography';
 
 interface Props {
   customCourseLink?: (course: ParsedCourseOverview) => string;
+  backButtonRoute?: string;
 }
 
-export const CourseOverview: React.FC<Props> = ({ customCourseLink }) => {
+export const CourseOverview: React.FC<Props> = ({
+  customCourseLink,
+  backButtonRoute,
+}) => {
   const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<
     ParsedCourseOverview[] | null
@@ -136,6 +140,7 @@ export const CourseOverview: React.FC<Props> = ({ customCourseLink }) => {
         onChange={(courseList) => {
           setFilteredCourses(courseList);
         }}
+        backButtonRoute={backButtonRoute}
       />
       {loading ? (
         <div className={classes.loadingContainer}>

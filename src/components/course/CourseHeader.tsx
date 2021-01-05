@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, Divider, Input } from 'antd';
 import moment from 'moment';
 import classNames from 'classnames';
+import { useHistory } from 'react-router-dom';
 import classes from './CourseHeader.module.scss';
 import { ParsedCourseOverview } from '../../types/Course';
 import { Title } from '../Typography';
+import Icons from '../../assets/icons';
 
 const { Search } = Input;
 
 interface Props {
   courses: ParsedCourseOverview[];
   onChange: (filteredCourses: ParsedCourseOverview[] | null) => void;
+  backButtonRoute?: string;
 }
 
 const grades = [
@@ -33,6 +36,8 @@ export const CourseHeader: React.FC<Props> = (props) => {
   const [allowedGrades, setAllowedGrades] = useState(grades);
   const [allowedTime, setAllowedTime] = useState(['vormittags', 'nachmittags']);
   const [search, setSearch] = useState('');
+
+  const history = useHistory();
 
   const isReset = () => {
     return (
@@ -104,6 +109,19 @@ export const CourseHeader: React.FC<Props> = (props) => {
 
   return (
     <div className={classes.headerContainer}>
+      {props.backButtonRoute && (
+        <div className={classes.backButtonContainer}>
+          <button
+            className={classes.backButton}
+            onClick={() => {
+              history.push(props.backButtonRoute);
+            }}
+          >
+            <Icons.ChevronLeft />
+            Zurück
+          </button>
+        </div>
+      )}
       <div className={classes.headerCenterContainer}>
         <div className={classes.advancedFilterContainer}>
           <div className={classes.filterContainer}>
