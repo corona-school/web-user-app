@@ -55,7 +55,7 @@ const Course = () => {
               <LinkButton
                 href="/courses/create"
                 local
-                backgroundColor="#4E6AE6"
+                backgroundColor="#F4486D"
                 color="white"
                 className={classes.courseButton}
               >
