@@ -91,8 +91,17 @@ export const CourseOverview: React.FC<Props> = ({
         { ids: [], name: 'Repetitorium' }
       );
 
+    const invisibleClubTagIds = [
+      'material-no',
+      'material-required',
+      'priorknowledge-no',
+      'priorknowledge-required',
+    ];
+
     const clubTags = tags
-      .filter((t) => t.category === 'club')
+      .filter(
+        (t) => t.category === 'club' && !invisibleClubTagIds.includes(t.id)
+      )
       .map<TagAndCategory>((t) => ({ ids: [t.id], name: t.name }));
 
     const noTags = { ids: [], name: 'Sonstiges' };
