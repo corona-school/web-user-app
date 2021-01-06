@@ -228,7 +228,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
             }}
           >
             <Radio style={radioStyle} value="revision">
-              Repititorien
+              Repetitorien
             </Radio>
             <Radio style={radioStyle} value="club">
               AGs
