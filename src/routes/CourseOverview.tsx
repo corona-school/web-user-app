@@ -78,7 +78,7 @@ export const CourseOverview: React.FC<Props> = ({
           acc.ids.push(t.id);
           return acc;
         },
-        { ids: [], name: 'Lernunterstützung' }
+        { ids: [], name: 'Lerncoaching' }
       );
 
     const revisionTag = tags
