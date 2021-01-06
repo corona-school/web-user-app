@@ -95,14 +95,17 @@ export const CourseOverview: React.FC<Props> = ({
       .filter((t) => t.category === 'club')
       .map<TagAndCategory>((t) => ({ ids: [t.id], name: t.name }));
 
-    const courseLists = [...clubTags, revisionTag, coachingTag]
+    const noTags = { ids: [], name: 'Sonstiges' };
+
+    const courseLists = [...clubTags, revisionTag, coachingTag, noTags]
       .map((t, i) => {
         const isFiltering = filteredCourses !== null;
         const list = isFiltering ? filteredCourses : courses;
         const courseList = list.filter(
           (c) =>
             c.tags.filter((courseTag) => t.ids.includes(courseTag.id))
-              .length !== 0
+              .length !== 0 ||
+            (c.tags.length === 0 && t.ids.length === 0)
         );
 
         if (courseList.length === 0 && isFiltering) {
