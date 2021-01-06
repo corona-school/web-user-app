@@ -19,8 +19,8 @@ import classes from './RegisterTutee.module.scss';
 import { Subject } from '../types';
 import Context from '../context';
 import { SchoolInfo, Tutee } from '../types/Registration';
-import { StateCooperationInfo } from '../assets/supportedStateCooperations';
 import { emailDomainIsEqual } from '../utils/EmailUtils';
+import { CooperationMode } from '../utils/RegistrationCooperationUtils';
 import { RegisterDrehtuerTutee } from './RegisterDrehtuerTutee';
 import {
   DataProtectionField,
@@ -60,15 +60,14 @@ interface FormData {
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
-
 interface Props {
-  stateCooperationInfo?: StateCooperationInfo;
+  cooperationMode?: CooperationMode;
   isJufoSubdomain?: boolean;
   isDrehtuerSubdomain?: boolean;
 }
 
 const RegisterTutee: React.FC<Props> = ({
-  stateCooperationInfo,
+  cooperationMode,
   isJufoSubdomain,
   isDrehtuerSubdomain,
 }) => {
@@ -91,11 +90,15 @@ const RegisterTutee: React.FC<Props> = ({
 
   const isOnlyJufo = isJufo && !isTutee && !isGroups;
 
-  if (stateCooperationInfo && !loading && schoolInfo == null) {
+  if (!!cooperationMode && !loading && schoolInfo == null) {
     // load school info
     setLoading(true);
     apiContext
-      .getCooperatingSchools(stateCooperationInfo.abbrev)
+      .getCooperatingSchools(
+        cooperationMode.kind === 'SpecificStateCooperation'
+          ? cooperationMode.stateInfo.abbrev
+          : null
+      )
       .then((schools) => {
         setSchoolInfo(schools);
         setLoading(false);
@@ -283,24 +286,27 @@ const RegisterTutee: React.FC<Props> = ({
   const renderDetail = () => {
     return (
       <>
-        {!stateCooperationInfo && (
+        {!cooperationMode && (
           <SchoolKindField
             isJufo={isJufo}
             className={classes.formItem}
             defaultSchoolKind={formData.school}
           />
         )}
-        <StateField
-          className={classes.formItem}
-          defaultState={
-            stateCooperationInfo?.abbrev.toUpperCase() ?? formData.state
-          }
-          disabled={!!stateCooperationInfo}
-        />
+
+        {cooperationMode?.kind !== 'GeneralSchoolCooperation' && (
+          <StateField
+            className={classes.formItem}
+            defaultState={
+              cooperationMode?.stateInfo?.abbrev.toUpperCase() ?? formData.state
+            }
+            disabled={!!cooperationMode}
+          />
+        )}
         <GradeField
           className={classes.formItem}
           defaultGrade={formData.grade ? `${formData.grade}` : undefined}
-          emptyOption={isOnlyJufo && !stateCooperationInfo}
+          emptyOption={isOnlyJufo && !cooperationMode}
           allowEverything={isOnlyJufo}
         />
         {isJufo && (
@@ -467,7 +473,7 @@ const RegisterTutee: React.FC<Props> = ({
             </Select>
           </Form.Item>
         )}
-        {!!stateCooperationInfo && (
+        {!!cooperationMode && (
           <Form.Item
             className={classes.formItem}
             label="E-Mail-Adresse Lehrer*in"
@@ -486,7 +492,7 @@ const RegisterTutee: React.FC<Props> = ({
                   if (
                     schoolInfo?.length === 0 || // then check if submitted to server
                     schoolInfo
-                      .map((s) => s.emailDomain)
+                      ?.map((s) => s.emailDomain)
                       .some((d) => emailDomainIsEqual(value, d))
                   ) {
                     return Promise.resolve();
@@ -569,7 +575,9 @@ const RegisterTutee: React.FC<Props> = ({
       !data.lastname ||
       !data.email ||
       (!data.grade && !isOnlyJufo) ||
-      !data.state
+      (!data.state &&
+        (!cooperationMode ||
+          cooperationMode.kind === 'SpecificStateCooperation'))
     ) {
       return null;
     }
@@ -601,7 +609,7 @@ const RegisterTutee: React.FC<Props> = ({
     }
     console.log(tutee);
 
-    const registerAPICall = stateCooperationInfo
+    const registerAPICall = cooperationMode
       ? apiContext.registerStateTutee
       : apiContext.registerTutee;
 
@@ -699,7 +707,7 @@ const RegisterTutee: React.FC<Props> = ({
   }
 
   return (
-    <SignupContainer shouldShowBackButton={!stateCooperationInfo}>
+    <SignupContainer shouldShowBackButton={!cooperationMode}>
       <div className={classes.signupContainer}>
         <a
           rel="noopener noreferrer"
@@ -707,8 +715,9 @@ const RegisterTutee: React.FC<Props> = ({
           target="_blank"
         >
           <Icons.Logo className={classes.logo} />
-          {stateCooperationInfo?.coatOfArms &&
-            React.createElement(stateCooperationInfo.coatOfArms, {
+          {cooperationMode?.kind === 'SpecificStateCooperation' &&
+            cooperationMode.stateInfo.coatOfArms &&
+            React.createElement(cooperationMode.stateInfo.coatOfArms, {
               className: classes.stateLogo,
             })}
           <Title size="h2" bold>

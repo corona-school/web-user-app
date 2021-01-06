@@ -6,6 +6,7 @@ const liveDomains = [
   'web-user-app-live.herokuapp.com',
   'nrw.corona-school.de',
   'jufo.corona-school.de',
+  'partnerschule.corona-school.de',
   'drehtuer.corona-school.de',
 ];
 
