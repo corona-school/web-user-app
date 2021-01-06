@@ -13,6 +13,7 @@ import {
   ShareAltOutlined,
   WhatsAppOutlined,
   CopyOutlined,
+  UserAddOutlined,
 } from '@ant-design/icons';
 import {
   Empty,
@@ -24,6 +25,7 @@ import {
   List,
   Tooltip,
 } from 'antd';
+import AddInstructorModal from '../components/Modals/AddInstructorModal';
 import { ApiContext } from '../context/ApiContext';
 import { AuthContext } from '../context/AuthContext';
 import {
@@ -73,21 +75,19 @@ const CourseDetail = (params: { id?: string }) => {
   const modalContext = useContext(ModalContext);
   const userId = auth.credentials.id;
 
-  useEffect(() => {
-    if (id) {
-      setLoading(true);
-      api
-        .getCourse(id)
-        .then((course) => {
-          setCourse(parseCourse(course));
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
+  const updateCourseDetails = () => {
+    setLoading(true);
+    api
+      .getCourse(id)
+      .then((course) => {
+        setCourse(parseCourse(course));
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
     setLoading(true);
     api
       .getCourseTags()
@@ -96,6 +96,12 @@ const CourseDetail = (params: { id?: string }) => {
       })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    if (id) {
+      updateCourseDetails();
+    }
   }, [api, id, setTags]);
 
   if (loading) {
@@ -381,6 +387,9 @@ const CourseDetail = (params: { id?: string }) => {
           if (param.key === '5') {
             history.push(`/courses/edit/${course.id}`);
           }
+          if (param.key === '6') {
+            modalContext.setOpenedModal('addInstructorModal');
+          }
         }}
       >
         {course.state === CourseState.CREATED && (
@@ -401,9 +410,13 @@ const CourseDetail = (params: { id?: string }) => {
           </Menu.Item>
         )}
 
-        {course.state === CourseState.CREATED && (
-          <Menu.Item key="5" icon={<CheckCircleOutlined />}>
-            Bearbeiten
+        <Menu.Item key="5" icon={<CheckCircleOutlined />}>
+          Bearbeiten
+        </Menu.Item>
+
+        {course.state !== CourseState.CANCELLED && (
+          <Menu.Item key="6" icon={<UserAddOutlined />}>
+            Tutor*in hinzufügen
           </Menu.Item>
         )}
       </Menu>
@@ -626,6 +639,10 @@ const CourseDetail = (params: { id?: string }) => {
         subcourseId={course.subcourse.id}
       />
       <CourseDeletionConfirmationModal courseId={course.id} />
+      <AddInstructorModal
+        courseId={course.id}
+        updateDetails={updateCourseDetails}
+      />
     </div>
   );
 };

@@ -29,6 +29,7 @@ import PublicCourseDetail from './routes/PublicCourseDetail';
 import { getDomainComponents } from './utils/DomainUtils';
 import ProjectCoach from './routes/ProjectCoach';
 import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
+import { CourseOverview } from './routes/CourseOverview';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -74,6 +75,7 @@ const App: React.FC = () => {
   }
   // jufo cooperation
   const isJufoSubdomain = subdomain === 'jufo';
+  const isDrehtuerSubdomain = subdomain === 'drehtuer';
 
   return (
     <>
@@ -83,7 +85,10 @@ const App: React.FC = () => {
           <Login />
         </Route>
         <Route path="/register/tutee">
-          <RegisterTutee isJufoSubdomain={isJufoSubdomain} />
+          <RegisterTutee
+            isJufoSubdomain={isJufoSubdomain}
+            isDrehtuerSubdomain={isDrehtuerSubdomain}
+          />
         </Route>
         <Route path="/register/internship">
           <RegisterTutor isInternship />
@@ -95,7 +100,10 @@ const App: React.FC = () => {
           <RegisterTutor isStudent isJufoSubdomain={isJufoSubdomain} />
         </Route>
         <Route path="/register/tutor">
-          <RegisterTutor isJufoSubdomain={isJufoSubdomain} />
+          <RegisterTutor
+            isJufoSubdomain={isJufoSubdomain}
+            isDrehtuerSubdomain={isDrehtuerSubdomain}
+          />
         </Route>
         <Route path="/register">
           <Register />
@@ -123,6 +131,16 @@ const App: React.FC = () => {
             <Dashboard />
           </PrivateRoute>
           <Switch>
+            <PrivateRoute
+              path="/courses/overview"
+              active={
+                userContext.user.type === 'pupil' ||
+                userContext.user.instructorScreeningStatus ===
+                  ScreeningStatus.Accepted
+              }
+            >
+              <CourseOverview backButtonRoute="/courses" />
+            </PrivateRoute>
             <PrivateRoute path="/courses/:id" comeback>
               <CourseDetail />
             </PrivateRoute>
