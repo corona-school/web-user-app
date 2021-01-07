@@ -126,6 +126,7 @@ const CourseDetail = (params: { id?: string }) => {
       category: course.category,
       tags: course.tags.map((t) => tagObj.find((o) => o.name === t.name)?.id),
       submit: true,
+      allowContact: course.allowContact,
     };
 
     const apiSubCourse: SubCourse = {

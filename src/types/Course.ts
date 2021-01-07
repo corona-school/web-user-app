@@ -74,6 +74,7 @@ export interface CourseOverview {
   subcourses: CourseSubCourse[];
   joinAfterStart: boolean;
   image?: string;
+  allowContact: boolean;
 }
 
 export interface ParsedCourseOverview {
@@ -88,6 +89,7 @@ export interface ParsedCourseOverview {
   instructors: Instructor[];
   subcourse?: CourseSubCourse;
   image?: string;
+  allowContact: boolean;
 }
 
 export interface Course {
@@ -99,6 +101,7 @@ export interface Course {
   tags: string[];
   submit: boolean;
   image?: string;
+  allowContact: boolean;
 }
 
 export interface SubCourse {

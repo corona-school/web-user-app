@@ -49,6 +49,7 @@ export const CourseForm: React.FC = () => {
     tags: course.tags.map((t) => t.id),
     submit: course.state !== CourseState.CREATED,
     image: course.image,
+    allowContact: course.allowContact,
   });
 
   const parseSubCourse = (course: CourseOverview) => {

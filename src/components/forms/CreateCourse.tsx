@@ -40,6 +40,9 @@ export const CreateCourse: React.FC<Props> = (props) => {
   const [joinAfterStart, setJoinAfterStart] = useState(
     props.subCourse ? props.subCourse.joinAfterStart : null
   );
+  const [allowContact, setAllowContact] = useState(
+    props.course ? props.course.allowContact : null
+  );
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState(
     props.course ? props.course.category : 'revision'
@@ -137,6 +140,17 @@ export const CreateCourse: React.FC<Props> = (props) => {
             }}
           />
           Teilnehmer dürfen nach Kursbeginn beitreten
+        </Form.Item>
+
+        <Form.Item className={classes.formItem} name="allowContact">
+          <Switch
+            style={{ margin: '0px 4px' }}
+            checked={allowContact}
+            onChange={(v) => {
+              setAllowContact(v);
+            }}
+          />
+          Teilnehmer dürfen Kursleiter*innen kontaktieren
         </Form.Item>
       </>
     );
@@ -277,6 +291,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
         tags: formValues.tags || [],
         submit: props.course?.submit ?? false,
         image: props.course?.image,
+        allowContact: !!allowContact,
       };
       const subCourse: SubCourse = {
         instructors: props.subCourse ? props.subCourse.instructors : [],

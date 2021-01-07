@@ -18,6 +18,7 @@ export const parseCourse = (course: CourseOverview): ParsedCourseOverview => {
     instructors: course.instructors,
     subcourse: course.subcourses[0],
     image: course.image,
+    allowContact: course.allowContact,
   };
 };
 
