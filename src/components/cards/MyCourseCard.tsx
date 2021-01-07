@@ -131,7 +131,8 @@ const MyCourseCard: React.FC<Props> = ({
             )}
 
             <div className={classes.metaInfo}>
-              {subCourse?.participants}/{subCourse?.maxParticipants} Teilnehmer
+              {subCourse?.participants}/{subCourse?.maxParticipants}{' '}
+              Teilnehmende
             </div>
           </div>
           <div className={classes.metaInfo1}>

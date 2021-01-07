@@ -340,7 +340,7 @@ const CourseDetail = (params: { id?: string }) => {
       return null;
     }
     if (course.subcourse.participants === 0) {
-      return <Empty description="Du hast noch keine Teilnehmer" />;
+      return <Empty description="Du hast noch keine Teilnehmer*innen" />;
     }
 
     return (
@@ -569,7 +569,7 @@ const CourseDetail = (params: { id?: string }) => {
           <Descriptions.Item label="Kategorie">
             {CategoryToLabel.get(course.category)}
           </Descriptions.Item>
-          <Descriptions.Item label="Teilnehmer">
+          <Descriptions.Item label="Teilnehmende">
             {course.subcourse.participants}/{course.subcourse.maxParticipants}
           </Descriptions.Item>
           <Descriptions.Item label="Klasse">
@@ -583,7 +583,7 @@ const CourseDetail = (params: { id?: string }) => {
               .map((l) => `${l.duration}min.`)
               .join(', ')}{' '}
           </Descriptions.Item>
-          <Descriptions.Item label="Tutoren">
+          <Descriptions.Item label="Tutor*innen">
             {instructors
               .filter((item, pos) => instructors.indexOf(item) === pos)
               .join(', ')}
@@ -609,7 +609,7 @@ const CourseDetail = (params: { id?: string }) => {
         {isMyCourse && (
           <div>
             <Title size="h3" style={{ margin: '0px 10px' }}>
-              Teilnehmer
+              Teilnehmer*innen
             </Title>
             <div>{renderParticipants()}</div>
           </div>

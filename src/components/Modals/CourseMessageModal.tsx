@@ -70,7 +70,7 @@ const CourseMessageModal: React.FC<Props> = (props) => {
         <Images.StepsContact width="180" height="140" />
         <Title size="h2">Nachricht schreiben</Title>
         <Text style={{ marginTop: '-16px' }} large>
-          Diese Nachricht wird an alle Teilnehmer des Kurses verschickt.
+          Diese Nachricht wird an alle Teilnehmenden des Kurses verschickt.
         </Text>
 
         <Text className={classes.label}>Betreff:</Text>

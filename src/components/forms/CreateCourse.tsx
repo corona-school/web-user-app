@@ -72,7 +72,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
     return (
       <>
         <Form.Item
-          label="Beschränkungen (Klasse, Teilnehmer)"
+          label="Beschränkungen (Klasse, Teilnehmende)"
           className={classes.formItem}
           name="class"
           rules={[
@@ -89,7 +89,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
                 }
                 if (maxParticipants < 3) {
                   return Promise.reject(
-                    'Die Anzahl an Teilnehmer muss mindestens 3 sein.'
+                    'Die Anzahl an Teilnehmenden muss mindestens 3 sein.'
                   );
                 }
                 return Promise.resolve();
@@ -124,7 +124,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
             max={99}
             placeholder="14"
           />{' '}
-          Teilnehmer.
+          Teilnehmenden.
         </Form.Item>
 
         <Form.Item
@@ -139,7 +139,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
               setJoinAfterStart(v);
             }}
           />
-          Teilnehmer dürfen nach Kursbeginn beitreten
+          Teilnehmende dürfen nach Kursbeginn beitreten
         </Form.Item>
 
         <Form.Item className={classes.formItem} name="allowContact">
@@ -150,7 +150,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
               setAllowContact(v);
             }}
           />
-          Teilnehmer dürfen Kursleiter*innen kontaktieren
+          Teilnehmende dürfen Kursleiter*innen kontaktieren
         </Form.Item>
       </>
     );
