@@ -7,6 +7,7 @@ import classes from './CourseHeader.module.scss';
 import { ParsedCourseOverview } from '../../types/Course';
 import { Title } from '../Typography';
 import Icons from '../../assets/icons';
+import { setNonTimeComponentsCopy } from '../../utils/DateUtils';
 
 const { Search } = Input;
 
@@ -66,7 +67,7 @@ export const CourseHeader: React.FC<Props> = (props) => {
         })
       )
       .filter((c) => {
-        const schoolTime = moment('13:00am', 'HH:mm');
+        const schoolTime = moment('13:00am', 'HH:mm'); // ... on the CURRENT day
         if (
           allowedTime.includes('vormittags') &&
           allowedTime.includes('nachmittags')
@@ -76,13 +77,18 @@ export const CourseHeader: React.FC<Props> = (props) => {
 
         if (allowedTime.includes('vormittags')) {
           return c.subcourse?.lectures.some((l) =>
-            moment.unix(l.start).add(l.duration, 'minutes').isBefore(schoolTime)
+            setNonTimeComponentsCopy(moment.unix(l.start), schoolTime).isBefore(
+              schoolTime
+            )
           );
         }
 
         if (allowedTime.includes('nachmittags')) {
           return c.subcourse?.lectures.some((l) =>
-            moment.unix(l.start).add(l.duration, 'minutes').isAfter(schoolTime)
+            setNonTimeComponentsCopy(
+              moment.unix(l.start),
+              schoolTime
+            ).isSameOrAfter(schoolTime)
           );
         }
         return false;
