@@ -588,6 +588,11 @@ const CourseDetail = (params: { id?: string }) => {
               .filter((item, pos) => instructors.indexOf(item) === pos)
               .join(', ')}
           </Descriptions.Item>
+          {isMyCourse && (
+            <Descriptions.Item label="Kontaktieren">
+              {course.allowContact ? 'erlaubt' : 'deaktiviert'}
+            </Descriptions.Item>
+          )}
         </Descriptions>
         <Descriptions
           size="small"
