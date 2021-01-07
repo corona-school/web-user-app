@@ -8,7 +8,7 @@ import { CourseList } from '../components/course/CourseList';
 import { ApiContext } from '../context/ApiContext';
 import { UserContext } from '../context/UserContext';
 import { ParsedCourseOverview, Tag, TagAndCategory } from '../types/Course';
-import { parseCourse } from '../utils/CourseUtil';
+import { defaultPublicCourseSort, parseCourse } from '../utils/CourseUtil';
 import classes from './CourseOverview.module.scss';
 import { Text } from '../components/Typography';
 
@@ -121,12 +121,15 @@ export const CourseOverview: React.FC<Props> = ({
           return null;
         }
 
+        // sort courses in every row
+        const sortedCourseList = courseList.sort(defaultPublicCourseSort);
+
         return (
           <CourseList
             name={t.name}
             // eslint-disable-next-line react/no-array-index-key
             key={`${t.name}-${i}`}
-            courses={courseList}
+            courses={sortedCourseList}
             customCourseLink={customCourseLink}
           />
         );
