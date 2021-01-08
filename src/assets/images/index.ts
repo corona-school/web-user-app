@@ -18,7 +18,8 @@ import { ReactComponent as MentoringPic } from './mentoring.svg';
 
 import { ReactComponent as Celebration } from './celebration_blue.svg';
 
-import DrehtuerDefaultCourseCover from './drehtuer.png';
+import DrehtuerImage from './drehtuer.png';
+import DefaultCourseCover from './course_default_cover.jpg';
 import { ReactComponent as Empty } from './empty.svg';
 import { ReactComponent as Graduation } from './graduation.svg';
 
@@ -40,7 +41,8 @@ const ImageList = {
   Celebration,
   MentoringPic,
   TrashIllustration,
-  DrehtuerDefaultCourseCover,
+  DrehtuerImage,
+  DefaultCourseCover,
   Empty,
   Graduation,
 };

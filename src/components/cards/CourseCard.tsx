@@ -24,7 +24,7 @@ const CourseCard: React.FC<Props> = ({ course, customCourseLink }) => {
         <div className={classes.coverImageContainer}>
           <img
             className={classes.coverImage}
-            src={course.image ?? (Images.DrehtuerDefaultCourseCover as string)}
+            src={course.image ?? (Images.DefaultCourseCover as string)}
             alt="Cover-Bild des Kurses"
           />
         </div>
