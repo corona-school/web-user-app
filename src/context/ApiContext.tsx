@@ -120,6 +120,8 @@ interface IApiContext {
   ) => Promise<void>;
   postRequestCode: (requestCodeData: RequestCode) => Promise<void>;
   postVerifyCode: (verifyCodeData: VerifyCode) => Promise<void>;
+  addInstructor: (courseId: number, email: string) => Promise<void>;
+  deleteCourseImage: (courseID: number) => Promise<void>;
 }
 
 const reject = () => Promise.reject();
@@ -167,6 +169,8 @@ export const ApiContext = React.createContext<IApiContext>({
   postUserRoleProjectCoachee: reject,
   postRequestCode: reject,
   postVerifyCode: reject,
+  addInstructor: reject,
+  deleteCourseImage: reject,
 });
 
 export function useAPI<N extends keyof IApiContext>(name: N): IApiContext[N] {
@@ -346,7 +350,7 @@ export const ApiProvider: React.FC = ({ children }) => {
   const joinBBBmeeting = (courseId: number, subcourseId: number) =>
     api.axiosJoinBBBmeeting(token, courseId, subcourseId);
 
-  const getCooperatingSchools = (state: string): Promise<SchoolInfo[]> =>
+  const getCooperatingSchools = (state?: string): Promise<SchoolInfo[]> =>
     api.axiosGetCooperatingSchool(state);
 
   const getMentoringMaterial = (type: string, location: string) =>
@@ -369,6 +373,12 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const postVerifyCode = (verifyCodeData: VerifyCode) =>
     api.axiosPostVerifyCode(token, id, verifyCodeData);
+
+  const addInstructor = (courseId: number, email: string) =>
+    api.axiosAddInstructor(token, courseId, email);
+
+  const deleteCourseImage = (courseID: number): Promise<void> =>
+    api.axiosDeleteCourseImage(token, courseID);
 
   return (
     <ApiContext.Provider
@@ -415,6 +425,8 @@ export const ApiProvider: React.FC = ({ children }) => {
         postUserRoleProjectCoachee,
         postRequestCode,
         postVerifyCode,
+        addInstructor,
+        deleteCourseImage,
       }}
     >
       {children}

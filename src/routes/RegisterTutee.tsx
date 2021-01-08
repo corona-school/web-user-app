@@ -19,8 +19,19 @@ import classes from './RegisterTutee.module.scss';
 import { Subject } from '../types';
 import Context from '../context';
 import { SchoolInfo, Tutee } from '../types/Registration';
-import { StateCooperationInfo } from '../assets/supportedStateCooperations';
 import { emailDomainIsEqual } from '../utils/EmailUtils';
+import { CooperationMode } from '../utils/RegistrationCooperationUtils';
+import { RegisterDrehtuerTutee } from './RegisterDrehtuerTutee';
+import {
+  DataProtectionField,
+  EmailField,
+  GradeField,
+  NameField,
+  NewsletterField,
+  SchoolKindField,
+  StateField,
+  MessageField,
+} from '../components/forms/registration';
 
 const { Option } = Select;
 
@@ -50,15 +61,16 @@ interface FormData {
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
-
 interface Props {
-  stateCooperationInfo?: StateCooperationInfo;
+  cooperationMode?: CooperationMode;
   isJufoSubdomain?: boolean;
+  isDrehtuerSubdomain?: boolean;
 }
 
 const RegisterTutee: React.FC<Props> = ({
-  stateCooperationInfo,
+  cooperationMode,
   isJufoSubdomain,
+  isDrehtuerSubdomain,
 }) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -68,6 +80,7 @@ const RegisterTutee: React.FC<Props> = ({
   const [isTutee, setTutee] = useState(false);
   const [isGroups, setGroups] = useState(false);
   const [isJufo, setJufo] = useState(isJufoSubdomain ?? false);
+
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
@@ -78,11 +91,15 @@ const RegisterTutee: React.FC<Props> = ({
 
   const isOnlyJufo = isJufo && !isTutee && !isGroups;
 
-  if (stateCooperationInfo && !loading && schoolInfo == null) {
+  if (!!cooperationMode && !loading && schoolInfo == null) {
     // load school info
     setLoading(true);
     apiContext
-      .getCooperatingSchools(stateCooperationInfo.abbrev)
+      .getCooperatingSchools(
+        cooperationMode.kind === 'SpecificStateCooperation'
+          ? cooperationMode.stateInfo.abbrev
+          : null
+      )
       .then((schools) => {
         setSchoolInfo(schools);
         setLoading(false);
@@ -264,50 +281,16 @@ const RegisterTutee: React.FC<Props> = ({
   const renderStart = () => {
     return (
       <>
-        <div className={classes.formContainerGroup}>
-          <Form.Item
-            className={classes.formItem}
-            label="Vorname"
-            name="firstname"
-            rules={[
-              { required: true, message: 'Bitte trage deinen Vornamen ein' },
-            ]}
-            initialValue={formData.firstname}
-          >
-            <Input placeholder="Max" />
-          </Form.Item>
-          <Form.Item
-            className={classes.formItem}
-            label="Nachname"
-            name="lastname"
-            rules={[
-              { required: true, message: 'Bitte trage deinen Nachnamen ein' },
-            ]}
-            initialValue={formData.lastname}
-          >
-            <Input placeholder="Mustermann" />
-          </Form.Item>
-        </div>
-
-        <Form.Item
+        <NameField
+          firstname={formData.firstname}
+          lastname={formData.lastname}
           className={classes.formItem}
-          label="E-Mail-Adresse"
-          name="email"
+        />
+
+        <EmailField
           initialValue={formData.email}
-          rules={[
-            {
-              required: true,
-              message: 'Bitte trage deine E-Mail-Adresse ein!',
-            },
-            {
-              type: 'email',
-              message: 'Bitte trage eine gültige E-Mail-Adresse ein!',
-              validateTrigger: 'onSubmit',
-            },
-          ]}
-        >
-          <Input type="email" placeholder="max.musterman@email.com" />
-        </Form.Item>
+          className={classes.formItem}
+        />
 
         <Form.Item
           className={classes.formItem}
@@ -338,100 +321,29 @@ const RegisterTutee: React.FC<Props> = ({
   const renderDetail = () => {
     return (
       <>
-        {!stateCooperationInfo && (
-          <Form.Item
+        {!cooperationMode && (
+          <SchoolKindField
+            isJufo={isJufo}
             className={classes.formItem}
-            label="Schulform"
-            name="school"
-            rules={[
-              { required: true, message: 'Bitte trage deine Schulform ein' },
-            ]}
-            initialValue={formData.school}
-          >
-            <Select placeholder="Grundschule..">
-              <Option value="Grundschule">Grundschule</Option>
-              <Option value="Gesamtschule">Gesamtschule</Option>
-              <Option value="Hauptschule">Hauptschule</Option>
-              <Option value="Realschule">Realschule</Option>
-              <Option value="Gymnasium">Gymnasium</Option>
-              <Option value="Förderschule">Förderschule</Option>
-              {isJufo && <Option value="Berufsschule">Berufsschule</Option>}
-              <Option value="other">Sonstige</Option>
-            </Select>
-          </Form.Item>
+            defaultSchoolKind={formData.school}
+          />
         )}
-        <Form.Item
-          className={classes.formItem}
-          label="Bundesland"
-          name="state"
-          rules={[
-            { required: true, message: 'Bitte trage dein Bundesland ein' },
-          ]}
-          initialValue={
-            stateCooperationInfo?.abbrev.toUpperCase() ?? formData.state
-          }
-        >
-          <Select
-            disabled={!!stateCooperationInfo}
-            placeholder="Baden-Württemberg"
-          >
-            <Option value="BW"> Baden-Württemberg</Option>
-            <Option value="BY"> Bayern</Option>
-            <Option value="BE"> Berlin</Option>
-            <Option value="BB"> Brandenburg</Option>
-            <Option value="HB"> Bremen</Option>
-            <Option value="HH"> Hamburg</Option>
-            <Option value="HE"> Hessen</Option>
-            <Option value="MV"> Mecklenburg-Vorpommern</Option>
-            <Option value="NI"> Niedersachsen</Option>
-            <Option value="NW"> Nordrhein-Westfalen</Option>
-            <Option value="RP"> Rheinland-Pfalz</Option>
-            <Option value="SL"> Saarland</Option>
-            <Option value="SN"> Sachsen</Option>
-            <Option value="ST"> Sachsen-Anhalt</Option>
-            <Option value="SH"> Schleswig-Holstein</Option>
-            <Option value="TH"> Thüringen</Option>
-            <Option value="other">anderer Wohnort</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          className={classes.formItem}
-          label="Klasse"
-          name="grade"
-          rules={[
-            {
-              required: true,
-              validator(_, value) {
-                if ((isOnlyJufo && value !== undefined) || value) {
-                  // accept everything, including undefined/no explicit grade information
-                  return Promise.resolve();
-                }
 
-                return Promise.reject('Bitte trage deine Klasse ein!');
-              },
-            },
-          ]}
-          initialValue={formData.grade ? `${formData.grade}` : undefined}
-        >
-          <Select placeholder="Bitte wähle deine Klasse aus">
-            <Option value="1">1. Klasse</Option>
-            <Option value="2">2. Klasse</Option>
-            <Option value="3">3. Klasse</Option>
-            <Option value="4">4. Klasse</Option>
-            <Option value="5">5. Klasse</Option>
-            <Option value="6">6. Klasse</Option>
-            <Option value="7">7. Klasse</Option>
-            <Option value="8">8. Klasse</Option>
-            <Option value="9">9. Klasse</Option>
-            <Option value="10">10. Klasse</Option>
-            <Option value="11">11. Klasse</Option>
-            <Option value="12">12. Klasse</Option>
-            <Option value="13">13. Klasse</Option>
-            {isOnlyJufo && !stateCooperationInfo && (
-              <Option value={null}>Keine Angabe</Option>
-            )}
-          </Select>
-        </Form.Item>
+        {cooperationMode?.kind !== 'GeneralSchoolCooperation' && (
+          <StateField
+            className={classes.formItem}
+            defaultState={
+              cooperationMode?.stateInfo?.abbrev.toUpperCase() ?? formData.state
+            }
+            disabled={!!cooperationMode}
+          />
+        )}
+        <GradeField
+          className={classes.formItem}
+          defaultGrade={formData.grade ? `${formData.grade}` : undefined}
+          emptyOption={isOnlyJufo && !cooperationMode}
+          allowEverything={isOnlyJufo}
+        />
         {isJufo && (
           <Form.Item
             className={classes.formItem}
@@ -596,7 +508,7 @@ const RegisterTutee: React.FC<Props> = ({
             </Select>
           </Form.Item>
         )}
-        {!!stateCooperationInfo && (
+        {!!cooperationMode && (
           <Form.Item
             className={classes.formItem}
             label="E-Mail-Adresse Lehrer*in"
@@ -615,7 +527,7 @@ const RegisterTutee: React.FC<Props> = ({
                   if (
                     schoolInfo?.length === 0 || // then check if submitted to server
                     schoolInfo
-                      .map((s) => s.emailDomain)
+                      ?.map((s) => s.emailDomain)
                       .some((d) => emailDomainIsEqual(value, d))
                   ) {
                     return Promise.resolve();
@@ -634,14 +546,7 @@ const RegisterTutee: React.FC<Props> = ({
             />
           </Form.Item>
         )}
-        <Form.Item
-          className={classes.formItem}
-          label="Nachricht"
-          name="msg"
-          initialValue={formData.msg}
-        >
-          <Input.TextArea placeholder="Hier deine Nachricht" />
-        </Form.Item>
+        <MessageField className={classes.formItem} />
       </>
     );
   };
@@ -649,83 +554,12 @@ const RegisterTutee: React.FC<Props> = ({
   const renderFinnish = () => {
     return (
       <>
-        <Form.Item
+        <NewsletterField
           className={classes.formItem}
-          label="Newsletter"
-          name="newsletter"
-        >
-          <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox value="newsletter" defaultChecked={formData.newsletter}>
-              Ich möchte den Newsletter der Corona School erhalten und über
-              Angebote, Aktionen und weitere Unterstützungsmöglichkeiten per
-              E-Mail informiert werden.
-            </Checkbox>
-          </Checkbox.Group>
-        </Form.Item>
-        <Form.Item
-          className={classes.formItem}
-          label="Datenschutzrechtliche Einwilligung"
-          name="dataprotection"
-          rules={[
-            {
-              required: true,
-              message: 'Bitte akzeptiere die Datenschutzerklärung',
-            },
-          ]}
-        >
-          <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox value="dataprotection">
-              Ich habe die{' '}
-              <a
-                href="https://www.corona-school.de/datenschutz-2"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Datenschutzerklärung
-              </a>{' '}
-              des Corona School e.V. zur Kenntnis genommen und willige in die
-              Verarbeitung personenbezogener Daten zu den angegebenen Zwecken
-              ein. Mir ist insbesondere bekannt, dass meine Angaben an geeignete
-              Matchingpartner*innen übermittelt werden. Die Verarbeitung der
-              personenbezogenen Daten erfolgt auf privaten IT-Geräten der
-              Matchingpartner*innen. Es kann im Rahmen der Übermittlung dazu
-              kommen, dass personenbezogene Daten an E-Mail Server (bspw.
-              google-mail oder @me.com) außerhalb der Europäischen Union
-              übermittelt werden. In Ländern außerhalb der Europäischen Union
-              besteht ggf. kein adäquates Datenschutzniveau. Zudem kann die
-              Durchsetzung von Rechten erschwert bzw. ausgeschlossen sein. Mir
-              sind diese Risiken bewusst und bekannt.
-              <br />
-              Mir ist außerdem bekannt, dass meine Einwilligung freiwillig und
-              jederzeit mit Wirkung für die Zukunft widerruflich ist. Ein
-              Widerruf der Einwilligung kann formlos erfolgen (bspw. an{' '}
-              <a href="mailto:datenschutz@corona-school.de">
-                datenschutz@corona-school.de
-              </a>
-              ). Mir ist bewusst, dass der Widerruf nur für die Zukunft gilt und
-              daher Datenverarbeitungen bis zum Widerruf, insbesondere die
-              Weitergabe von meinen personenbezogenen Daten an geeignete
-              Matchingpartner*innen bis zum Zeitpunkt des Widerrufs unberührt
-              bleiben. Weitere Datenschutzinformationen sind abrufbar unter{' '}
-              <a
-                href="https://www.corona-school.de/datenschutz-2"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                www.corona-school.de/datenschutz-2
-              </a>
-              .
-              <br />
-              <br />
-              <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
-              <span style={{ fontStyle: 'italic' }}>
-                Für den Fall, dass die einwilligende Person das 18. Lebensjahr
-                noch nicht vollendet hat, hat der Träger der elterlichen
-                Verantwortung für die Person die Einwilligung zu erklären.
-              </span>
-            </Checkbox>
-          </Checkbox.Group>
-        </Form.Item>
+          defaultChecked={formData.newsletter}
+          isPupil
+        />
+        <DataProtectionField className={classes.formItem} />
       </>
     );
   };
@@ -776,7 +610,9 @@ const RegisterTutee: React.FC<Props> = ({
       !data.lastname ||
       !data.email ||
       (!data.grade && !isOnlyJufo) ||
-      !data.state
+      (!data.state &&
+        (!cooperationMode ||
+          cooperationMode.kind === 'SpecificStateCooperation'))
     ) {
       return null;
     }
@@ -809,7 +645,7 @@ const RegisterTutee: React.FC<Props> = ({
     }
     console.log(tutee);
 
-    const registerAPICall = stateCooperationInfo
+    const registerAPICall = cooperationMode
       ? apiContext.registerStateTutee
       : apiContext.registerTutee;
 
@@ -906,8 +742,12 @@ const RegisterTutee: React.FC<Props> = ({
     }
   };
 
+  if (isDrehtuerSubdomain) {
+    return <RegisterDrehtuerTutee />;
+  }
+
   return (
-    <SignupContainer shouldShowBackButton={!stateCooperationInfo}>
+    <SignupContainer shouldShowBackButton={!cooperationMode}>
       <div className={classes.signupContainer}>
         <a
           rel="noopener noreferrer"
@@ -915,8 +755,9 @@ const RegisterTutee: React.FC<Props> = ({
           target="_blank"
         >
           <Icons.Logo className={classes.logo} />
-          {stateCooperationInfo?.coatOfArms &&
-            React.createElement(stateCooperationInfo.coatOfArms, {
+          {cooperationMode?.kind === 'SpecificStateCooperation' &&
+            cooperationMode.stateInfo.coatOfArms &&
+            React.createElement(cooperationMode.stateInfo.coatOfArms, {
               className: classes.stateLogo,
             })}
           <Title size="h2" bold>

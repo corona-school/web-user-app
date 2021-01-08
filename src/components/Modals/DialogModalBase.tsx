@@ -7,6 +7,7 @@ import { hexToRGB } from '../../utils/DashboardUtils';
 import { ReactComponent as Cross } from '../../assets/icons/cancel-symbol.svg';
 import { Checkbox as CheckboxBase } from '../button/Checkbox';
 import AccentColorButton from '../button/AccentColorButton';
+import Textbox from '../misc/Textbox';
 
 const DialogContext = React.createContext(null);
 
@@ -92,6 +93,30 @@ const Icon = ({ Icon }) => {
     >
       <Icon style={{ fill: accentColor }} />
     </div>
+  );
+};
+
+/*
+Error box
+ */
+const Error2 = (props) => {
+  return <div className={styles.error}>{props.children}</div>;
+};
+
+/*
+Uses the Textbox component to create a textbox.
+ */
+const TextBox: React.FC<{
+  onChange: any;
+  value: string;
+  label: string;
+}> = (props) => {
+  return (
+    <Textbox
+      onChange={props.onChange}
+      value={props.value}
+      label={props.label}
+    />
   );
 };
 
@@ -260,5 +285,7 @@ DialogModalBase.CloseButton = CloseButton;
 DialogModalBase.Content = Content;
 DialogModalBase.ButtonBox = ButtonBox;
 DialogModalBase.Button = Button;
+DialogModalBase.Error = Error2;
+DialogModalBase.TextBox = TextBox;
 
 export default DialogModalBase;

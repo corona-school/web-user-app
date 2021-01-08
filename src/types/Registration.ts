@@ -20,6 +20,7 @@ export interface Tutee {
   newsletter: boolean;
   redirectTo?: string;
   teacherEmail?: string;
+  registrationSource?: string;
 }
 
 export interface SchoolInfo {
@@ -53,4 +54,5 @@ export interface Tutor {
   // finnish
   newsletter: boolean;
   redirectTo?: string;
+  registrationSource?: string;
 }

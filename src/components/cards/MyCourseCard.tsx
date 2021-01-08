@@ -32,7 +32,7 @@ export const CourseStateToLabel = new Map([
 ]);
 
 export const CategoryToLabel = new Map([
-  [CourseCategory.REVISION, 'Repititorium'],
+  [CourseCategory.REVISION, 'Repetitorium'],
   [CourseCategory.COACHING, 'Lern-Coaching'],
   [CourseCategory.CLUB, 'AGs'],
 ]);

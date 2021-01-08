@@ -21,3 +21,15 @@ export function nextDateOfYearAfterDate(
   }
   return resultDate.year(afterDate.clone().add(1, 'year').year());
 }
+
+/// Returns a copy of the targetDate where all non time components (i.e. year, month, date) are set according to the sourceDate
+export function setNonTimeComponentsCopy(
+  targetDate: moment.Moment,
+  sourceDate: moment.Moment
+) {
+  return moment(targetDate).set({
+    year: sourceDate.year(),
+    month: sourceDate.month(),
+    date: sourceDate.date(),
+  });
+}

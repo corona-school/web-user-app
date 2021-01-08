@@ -227,7 +227,7 @@ export const axiosGetCourses = async (
   const params = new URLSearchParams();
   params.append(
     'fields',
-    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
+    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart,image'
   );
 
   return axios
@@ -572,9 +572,9 @@ export const axiosJoinBBBmeeting = (
 };
 
 export const axiosGetCooperatingSchool = (
-  state: string
+  state?: string
 ): Promise<SchoolInfo[]> => {
-  const url = `${apiURL}/register/${state}/schools`;
+  const url = `${apiURL}/register/schools/${state ?? ''}`;
 
   return axios
     .get(url)
@@ -670,3 +670,41 @@ export const axiosPostVerifyCode = (
       .catch((err) => reject(err));
   });
 };
+
+export const axiosAddInstructor = (
+  token: string,
+  courseId: number,
+  email: string
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/course/${courseId}/instructor`,
+        { email },
+        {
+          headers: { token },
+        }
+      )
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosDeleteCourseImage = async (
+  token: string,
+  courseID: number
+) => {
+  const url = `${apiURL}/course/${courseID}/image`;
+  await axios
+    .delete(url, {
+      headers: { token },
+    })
+    .catch(logError('deleteCourseImage'));
+};
+
+// ========================================================================
+export const editCourseImageURL = (courseID: number) =>
+  `${apiURL}/course/${courseID}/image`;
