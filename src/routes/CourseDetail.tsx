@@ -209,6 +209,10 @@ const CourseDetail = (params: { id?: string }) => {
       });
   };
 
+  const openWriteMessageModal = () => {
+    modalContext.setOpenedModal('courseMessageModal');
+  };
+
   const shareData = {
     title: course.name,
     text: 'Guck dir diesen kostenlosen Kurs der Corona School an!',
@@ -380,7 +384,7 @@ const CourseDetail = (params: { id?: string }) => {
             submitCourse();
           }
           if (param.key === '3') {
-            modalContext.setOpenedModal('courseMessageModal');
+            openWriteMessageModal();
           }
           if (param.key === '4') {
             modalContext.setOpenedModal('courseDeletionConfirmationModal');
@@ -502,6 +506,24 @@ const CourseDetail = (params: { id?: string }) => {
                 color="#123abc"
                 loading={isLoadingVideoChat}
               />
+            </div>
+            <div className={classes.contactInstructorsAction}>
+              {course.subcourse.joined && course.allowContact && (
+                <AntdButton
+                  type="primary"
+                  style={{
+                    backgroundColor: '#FCD95C',
+                    borderColor: '#FCD95C',
+                    color: '#373E47',
+                    width: '120px',
+                    margin: '5px 10px',
+                  }}
+                  onClick={openWriteMessageModal}
+                  icon={<MailOutlined />}
+                >
+                  Kontakt
+                </AntdButton>
+              )}
             </div>
             <div className={classes.shareAction}>
               <Dropdown
@@ -643,6 +665,9 @@ const CourseDetail = (params: { id?: string }) => {
       <CourseMessageModal
         courseId={course.id}
         subcourseId={course.subcourse.id}
+        type={
+          isMyCourse ? 'instructorToParticipants' : 'participantToInstructors'
+        }
       />
       <CourseDeletionConfirmationModal courseId={course.id} />
       <AddInstructorModal

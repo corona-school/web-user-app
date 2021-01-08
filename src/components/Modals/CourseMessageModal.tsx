@@ -13,6 +13,7 @@ import { ApiContext } from '../../context/ApiContext';
 interface Props {
   courseId: number;
   subcourseId: number;
+  type: 'instructorToParticipants' | 'participantToInstructors';
 }
 
 const CourseMessageModal: React.FC<Props> = (props) => {
@@ -22,6 +23,11 @@ const CourseMessageModal: React.FC<Props> = (props) => {
 
   const api = useContext(ApiContext);
   const modalContext = useContext(ModalContext);
+
+  const apiMethod =
+    props.type === 'instructorToParticipants'
+      ? api.sendCourseGroupMail
+      : api.sendCourseInstructorMail;
 
   const sendMessage = () => {
     if (!title || title.trim().length === 0) {
@@ -35,8 +41,7 @@ const CourseMessageModal: React.FC<Props> = (props) => {
 
     setLoading(true);
 
-    api
-      .sendCourseGroupMail(props.courseId, props.subcourseId, title, text)
+    apiMethod(props.courseId, props.subcourseId, title, text)
       .then(() => {
         message.success('Nachricht wurde versendet.');
         setText(null);
@@ -62,6 +67,23 @@ const CourseMessageModal: React.FC<Props> = (props) => {
     );
   }
 
+  const renderExplanationText = () => {
+    return (
+      <Text style={{ marginTop: '-16px' }} large>
+        {props.type === 'instructorToParticipants' && (
+          <>Diese Nachricht wird an alle Teilnehmenden des Kurses verschickt.</>
+        )}
+        {props.type === 'participantToInstructors' && (
+          <>
+            Hier kannst du den Kursleiter*innen dieses Kurses eine Nachricht
+            schreiben. Antworten auf deine Nachricht werden dir per E-Mail
+            zugestellt.
+          </>
+        )}
+      </Text>
+    );
+  };
+
   return (
     <StyledReactModal
       isOpen={modalContext.openedModal === 'courseMessageModal'}
@@ -69,10 +91,7 @@ const CourseMessageModal: React.FC<Props> = (props) => {
       <div className={classes.messageModal}>
         <Images.StepsContact width="180" height="140" />
         <Title size="h2">Nachricht schreiben</Title>
-        <Text style={{ marginTop: '-16px' }} large>
-          Diese Nachricht wird an alle Teilnehmenden des Kurses verschickt.
-        </Text>
-
+        {renderExplanationText()}
         <Text className={classes.label}>Betreff:</Text>
         <Input
           value={title}

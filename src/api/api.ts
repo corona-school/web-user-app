@@ -538,6 +538,24 @@ export const axiosSendCourseGroupMail = async (
     .catch(logError('sendGroupcourseMail'));
 };
 
+export const axiosSendCourseInstructorMail = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  subject: string,
+  body: string
+) => {
+  await axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/instructormail`,
+      { subject, body },
+      {
+        headers: { token },
+      }
+    )
+    .catch(logError('sendCourseInstructorMail'));
+};
+
 export const axiosBecomeInstructor = async (
   id: string,
   token: string,
