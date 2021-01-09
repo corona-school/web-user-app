@@ -50,6 +50,7 @@ import { ModalContext } from '../context/ModalContext';
 import CourseMessageModal from '../components/Modals/CourseMessageModal';
 import { dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
+import CourseEnrollConfirmationModal from '../components/Modals/CourseEnrollConfirmationModal';
 
 moment.locale('de');
 
@@ -171,17 +172,7 @@ const CourseDetail = (params: { id?: string }) => {
         message.success('Du hast den Kurs verlassen.');
       });
     } else {
-      api.joinCourse(course.id, course.subcourse.id, userId).then(() => {
-        setCourse({
-          ...course,
-          subcourse: {
-            ...course.subcourse,
-            participants: course.subcourse.participants + 1,
-            joined: true,
-          },
-        });
-        message.success('Du bist dem Kurs beigetreten.');
-      });
+      modalContext.setOpenedModal('courseEnrollConfirmationModal');
     }
   };
 
@@ -674,6 +665,7 @@ const CourseDetail = (params: { id?: string }) => {
         courseId={course.id}
         updateDetails={updateCourseDetails}
       />
+      <CourseEnrollConfirmationModal course={course} setCourse={setCourse} />
     </div>
   );
 };
