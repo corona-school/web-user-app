@@ -54,7 +54,10 @@ import CourseConfirmationModal from '../components/Modals/CourseConfirmationModa
 
 moment.locale('de');
 
-const CourseDetail = (params: { id?: string }) => {
+const CourseDetail = (params: {
+  id?: string;
+  setIsWaitingList?: (boolean) => void;
+}) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
   const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
@@ -84,7 +87,14 @@ const CourseDetail = (params: { id?: string }) => {
     api
       .getCourse(id)
       .then((course) => {
-        setCourse(parseCourse(course));
+        const parsedCourse = parseCourse(course);
+        setCourse(parsedCourse);
+        params.setIsWaitingList(
+          parsedCourse.subcourse
+            ? parsedCourse.subcourse.participants ===
+                parsedCourse.subcourse.maxParticipants
+            : false
+        );
       })
       .catch((err) => {
         console.log(err);
