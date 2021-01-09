@@ -2,7 +2,13 @@ import React from 'react';
 import styles from './AccentColorButton.module.scss';
 import { hexToRGB } from '../../utils/DashboardUtils';
 
-export default function AccentColorButton({ label, onClick, accentColor }) {
+const AccentColorButton: React.FC<{
+  label: string;
+  onClick: (e?) => void;
+  accentColor: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Icon?: any;
+}> = ({ label, onClick, accentColor, Icon }) => {
   return (
     <button
       onClick={onClick}
@@ -12,7 +18,12 @@ export default function AccentColorButton({ label, onClick, accentColor }) {
         color: accentColor,
       }}
     >
+      {Icon != null && (
+        <Icon className={styles.icon} style={{ fill: accentColor }} />
+      )}
       {label}
     </button>
   );
-}
+};
+
+export default AccentColorButton;
