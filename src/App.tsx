@@ -13,6 +13,7 @@ import Support from './routes/Support';
 import Feedback from './routes/Feedback';
 import Help from './routes/Help';
 import Login from './routes/Login';
+import Logout from './routes/Logout';
 import Verify from './routes/Verify';
 import PublicCourse from './routes/PublicCourse';
 
@@ -83,6 +84,9 @@ const App: React.FC = () => {
       <Switch>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/logout">
+          <Logout />
         </Route>
         <Route path="/register/tutee">
           <RegisterTutee
