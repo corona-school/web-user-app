@@ -47,6 +47,7 @@ export interface CourseSubCourse {
   joinAfterStart: boolean;
   participantList: CourseParticipant[];
   joined: boolean;
+  onWaitingList: boolean;
   published: boolean;
   cancelled: boolean;
 }
