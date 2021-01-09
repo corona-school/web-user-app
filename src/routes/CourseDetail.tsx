@@ -50,7 +50,7 @@ import { ModalContext } from '../context/ModalContext';
 import CourseMessageModal from '../components/Modals/CourseMessageModal';
 import { dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
-import CourseEnrollConfirmationModal from '../components/Modals/CourseEnrollConfirmationModal';
+import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 
 moment.locale('de');
 
@@ -58,6 +58,9 @@ const CourseDetail = (params: { id?: string }) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
   const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
+  const [courseConfirmationMode, setCourseConfirmationMode] = useState<
+    'quit' | 'join'
+  >('join'); // Mode for the confirmation modal
   const [isCustomShareMenuVisible, setIsCustomShareMenuVisible] = useState(
     false
   );
@@ -160,19 +163,11 @@ const CourseDetail = (params: { id?: string }) => {
 
   const joinCourse = () => {
     if (course.subcourse.joined) {
-      api.leaveCourse(course.id, course.subcourse.id, userId).then(() => {
-        setCourse({
-          ...course,
-          subcourse: {
-            ...course.subcourse,
-            participants: course.subcourse.participants - 1,
-            joined: false,
-          },
-        });
-        message.success('Du hast den Kurs verlassen.');
-      });
+      setCourseConfirmationMode('quit');
+      modalContext.setOpenedModal('courseConfirmationModal');
     } else {
-      modalContext.setOpenedModal('courseEnrollConfirmationModal');
+      setCourseConfirmationMode('join');
+      modalContext.setOpenedModal('courseConfirmationModal');
     }
   };
 
@@ -665,7 +660,11 @@ const CourseDetail = (params: { id?: string }) => {
         courseId={course.id}
         updateDetails={updateCourseDetails}
       />
-      <CourseEnrollConfirmationModal course={course} setCourse={setCourse} />
+      <CourseConfirmationModal
+        mode={courseConfirmationMode}
+        course={course}
+        setCourse={setCourse}
+      />
     </div>
   );
 };
