@@ -7,6 +7,7 @@ import { ParsedCourseOverview } from '../../types/Course';
 import { AuthContext } from '../../context/AuthContext';
 import { ReactComponent as EnrollIcon } from '../../assets/icons/sign-in-alt-solid.svg';
 import { ReactComponent as VideoIcon } from '../../assets/icons/video-solid.svg';
+import { apiURL } from '../../api/config';
 
 const accentColorJoin = '#009d41';
 const accentColorQuit = '#ba0707';
@@ -42,6 +43,16 @@ const CourseConfirmationModal: React.FC<{
           modalContext.setOpenedModal(null);
         });
     } else {
+      if (pageIndex === 1) {
+        const newWindow = window.open(
+          `${apiURL}/course/test/meeting/join`,
+          '_blank',
+          'noopener,noreferrer'
+        );
+        if (newWindow) newWindow.opener = null;
+        modalContext.setOpenedModal(null);
+        return;
+      }
       apiContext.joinCourse(course.id, course.subcourse.id, userId).then(() => {
         setCourse({
           ...course,

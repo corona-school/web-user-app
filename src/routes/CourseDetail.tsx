@@ -48,7 +48,7 @@ import {
 
 import { ModalContext } from '../context/ModalContext';
 import CourseMessageModal from '../components/Modals/CourseMessageModal';
-import { dev } from '../api/config';
+import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 
@@ -195,6 +195,15 @@ const CourseDetail = (params: { id?: string }) => {
       });
   };
 
+  const joinTestMeeting = () => {
+    const newWindow = window.open(
+      `${apiURL}/course/test/meeting/join`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+    if (newWindow) newWindow.opener = null;
+  };
+
   const openWriteMessageModal = () => {
     modalContext.setOpenedModal('courseMessageModal');
   };
@@ -282,6 +291,14 @@ const CourseDetail = (params: { id?: string }) => {
     }
 
     return course.subcourse.joined;
+  };
+
+  const getNextLecture = () => {
+    const futureCourses = course.subcourse.lectures.filter((x) =>
+      moment.unix(x.start).isAfter(Date.now())
+    );
+
+    return futureCourses.sort((a, b) => a.start - b.start)[0];
   };
 
   const renderLectures = () => {
@@ -462,7 +479,7 @@ const CourseDetail = (params: { id?: string }) => {
                     : '#FCD95C',
                   borderColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
                   color: course.subcourse.joined ? 'white' : '#373E47',
-                  width: '120px',
+                  width: '140px',
                   margin: '0px 10px',
                 }}
                 onClick={joinCourse}
@@ -479,10 +496,15 @@ const CourseDetail = (params: { id?: string }) => {
                     backgroundColor: '#FCD95C',
                     borderColor: '#FCD95C',
                     color: '#373E47',
-                    width: '120px',
+                    width: '140px',
                     margin: '5px 10px',
                   }}
                   onClick={joinBBBmeeting}
+                  disabled={
+                    moment
+                      .unix(getNextLecture().start)
+                      .diff(moment.now(), 'minutes') > 30
+                  }
                 >
                   Zum Videochat
                 </AntdButton>
@@ -493,6 +515,33 @@ const CourseDetail = (params: { id?: string }) => {
                 loading={isLoadingVideoChat}
               />
             </div>
+            {moment.unix(getNextLecture().start).diff(moment.now(), 'minutes') >
+              30 && (
+              <div className={classes.videochatAction}>
+                {((isMyCourse && course.state === CourseState.ALLOWED) ||
+                  course.subcourse.joined) && (
+                  <AntdButton
+                    type="primary"
+                    style={{
+                      backgroundColor: '#FCD95C',
+                      borderColor: '#FCD95C',
+                      color: '#373E47',
+                      width: '140px',
+                      margin: '5px 10px',
+                    }}
+                    onClick={joinTestMeeting}
+                  >
+                    Videochat testen
+                  </AntdButton>
+                )}
+                <ClipLoader
+                  size={15}
+                  color="#123abc"
+                  loading={isLoadingVideoChat}
+                />
+              </div>
+            )}
+
             <div className={classes.contactInstructorsAction}>
               {course.subcourse.joined && course.allowContact && (
                 <AntdButton
@@ -501,7 +550,7 @@ const CourseDetail = (params: { id?: string }) => {
                     backgroundColor: '#FCD95C',
                     borderColor: '#FCD95C',
                     color: '#373E47',
-                    width: '120px',
+                    width: '140px',
                     margin: '5px 10px',
                   }}
                   onClick={openWriteMessageModal}
@@ -524,7 +573,7 @@ const CourseDetail = (params: { id?: string }) => {
                     backgroundColor: '#FCD95C',
                     borderColor: '#FCD95C',
                     color: '#373E47',
-                    width: '120px',
+                    width: '140px',
                     margin: '5px 10px',
                   }}
                   onClick={shareCourse}
