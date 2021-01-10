@@ -592,7 +592,7 @@ const CourseDetail = (params: {
               />
             </div>
             <div className={classes.contactInstructorsAction}>
-              {course.subcourse.joined && course.allowContact && (
+              {!isStudent && course.allowContact && (
                 <AntdButton
                   type="primary"
                   style={{
