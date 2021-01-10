@@ -1,4 +1,4 @@
-export interface FeedbackCall {
+export interface PeerToPeerCall {
   time?: string;
   link?: string;
 }

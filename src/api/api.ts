@@ -12,7 +12,7 @@ import {
 import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
-import { FeedbackCall } from '../types/FeedbackCall';
+import { PeerToPeerCall } from '../types/PeerToPeerCall';
 import {
   ApiProjectFieldInfo,
   BecomeProjectCoach,
@@ -600,7 +600,7 @@ export const axiosGetMentoringMaterial = (
 
 export const axiosGetFeedbackCallData = (
   token: string
-): Promise<FeedbackCall> => {
+): Promise<PeerToPeerCall> => {
   return axios
     .get(`${apiURL}/mentoring/feedbackCall`, { headers: { token } })
     .then((response) => response.data)

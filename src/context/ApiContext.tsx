@@ -17,7 +17,7 @@ import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { CompletedSubCourse } from '../components/forms/CreateCourse';
 import { CompletedLecture } from '../routes/CourseForm';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
-import { FeedbackCall } from '../types/FeedbackCall';
+import { PeerToPeerCall } from '../types/PeerToPeerCall';
 import {
   ApiProjectFieldInfo,
   BecomeProjectCoach,
@@ -109,7 +109,7 @@ interface IApiContext {
     type: string,
     location: string
   ) => Promise<Mentoring[]>;
-  getFeedbackCallData: () => Promise<FeedbackCall>;
+  getPeerToPeerCallData: () => Promise<PeerToPeerCall>;
   postContactMentor: (message: MenteeMessage) => Promise<void>;
   postUserRoleProjectCoach: (
     projectCoachData: BecomeProjectCoach
@@ -160,7 +160,7 @@ export const ApiContext = React.createContext<IApiContext>({
   joinBBBmeeting: reject,
   getCooperatingSchools: reject,
   getMentoringMaterial: reject,
-  getFeedbackCallData: reject,
+  getPeerToPeerCallData: reject,
   postContactMentor: reject,
   postUserRoleProjectCoach: reject,
   postUserRoleProjectCoachee: reject,
@@ -404,7 +404,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         publishSubCourse,
         joinBBBmeeting,
         getMentoringMaterial,
-        getFeedbackCallData,
+        getPeerToPeerCallData: getFeedbackCallData,
         postContactMentor,
         editCourse,
         editSubCourse,

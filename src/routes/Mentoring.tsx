@@ -2,7 +2,7 @@ import React from 'react';
 
 import { LinkButton } from '../components/button';
 import ContactCard from '../components/cards/ContactCard';
-import FeedbackCallCard from '../components/cards/FeedbackCallCard';
+import PeerToPeerCallCard from '../components/cards/PeerToPeerCallCard';
 import { Text, Title } from '../components/Typography';
 
 import classes from './Mentoring.module.scss';
@@ -35,7 +35,7 @@ const Mentoring: React.FC = () => {
           <ContactCard />
         </div>
         <div className={classes.feedbackCall}>
-          <FeedbackCallCard />
+          <PeerToPeerCallCard />
         </div>
         <div className={classes.facebookCard}>
           <FacebookCard />
