@@ -10,7 +10,7 @@ import { Title } from '../components/Typography';
 
 import classes from './Settings.module.scss';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
-import { isProjectCoachButNotTutor } from '../utils/UserUtils';
+// import { isProjectCoachButNotTutor } from '../utils/UserUtils';
 import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
@@ -92,7 +92,7 @@ const Settings: React.FC = () => {
       </>
     );
   };
-
+  // mfelöf
   const renderProjectFields = () => {
     return (
       <>
