@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { message } from 'antd';
 import DialogModalBase from './DialogModalBase';
 import Context from '../../context';
@@ -6,9 +6,10 @@ import { ModalContext } from '../../context/ModalContext';
 import { ParsedCourseOverview } from '../../types/Course';
 import { AuthContext } from '../../context/AuthContext';
 import { ReactComponent as EnrollIcon } from '../../assets/icons/sign-in-alt-solid.svg';
+import { ReactComponent as VideoIcon } from '../../assets/icons/video-solid.svg';
 
 const accentColorJoin = '#009d41';
-const accentColorQuit = '#9d0025';
+const accentColorQuit = '#ba0707';
 
 /*
 Used for confirming if a user actually wants to quit / join a course or not
@@ -22,6 +23,7 @@ const CourseConfirmationModal: React.FC<{
   const auth = useContext(AuthContext);
   const userId = auth.credentials.id;
   const modalContext = useContext(ModalContext);
+  const [pageIndex, setPageIndex] = useState<0 | 1>(0);
 
   const submit = () => {
     if (mode === 'quit') {
@@ -50,7 +52,7 @@ const CourseConfirmationModal: React.FC<{
           },
         });
         message.success('Du bist dem Kurs beigetreten.');
-        modalContext.setOpenedModal(null);
+        setPageIndex(1);
       });
     }
   };
@@ -60,31 +62,62 @@ const CourseConfirmationModal: React.FC<{
       accentColor={mode === 'quit' ? accentColorQuit : accentColorJoin}
     >
       <DialogModalBase.Modal modalName="courseConfirmationModal">
-        <DialogModalBase.Header>
-          <DialogModalBase.Icon Icon={EnrollIcon} />
-          <DialogModalBase.Title>
-            {mode === 'quit' ? 'Kurs verlassen' : 'An Kurs teilnehmen'}
-          </DialogModalBase.Title>
-          <DialogModalBase.CloseButton />
-        </DialogModalBase.Header>
-        <div>
-          <DialogModalBase.Description>
-            Bist du dir sicher, dass du{' '}
-            {mode === 'quit' ? 'den Kurs verlassen' : 'an dem Kurs teilnehmen'}{' '}
-            möchtest?
-          </DialogModalBase.Description>
+        {(mode === 'quit' || (mode === 'join' && pageIndex === 0)) && (
+          <div>
+            <DialogModalBase.Header>
+              <DialogModalBase.Icon Icon={EnrollIcon} />
+              <DialogModalBase.Title>
+                {mode === 'quit' ? 'Kurs verlassen' : 'An Kurs teilnehmen'}
+              </DialogModalBase.Title>
+              <DialogModalBase.CloseButton />
+            </DialogModalBase.Header>
+            <div>
+              <DialogModalBase.Description>
+                Bist du dir sicher, dass du{' '}
+                {mode === 'quit'
+                  ? 'den Kurs verlassen'
+                  : 'an dem Kurs teilnehmen'}{' '}
+                möchtest?
+              </DialogModalBase.Description>
 
-          <DialogModalBase.Content>
-            <DialogModalBase.Form>
-              <DialogModalBase.ButtonBox>
-                <DialogModalBase.Button
-                  label={mode === 'quit' ? 'Verlassen' : 'Teilnehmen'}
-                  onClick={submit}
-                />
-              </DialogModalBase.ButtonBox>
-            </DialogModalBase.Form>
-          </DialogModalBase.Content>
-        </div>
+              <DialogModalBase.Content>
+                <DialogModalBase.Form>
+                  <DialogModalBase.ButtonBox>
+                    <DialogModalBase.Button
+                      label={mode === 'quit' ? 'Verlassen' : 'Teilnehmen'}
+                      onClick={submit}
+                    />
+                  </DialogModalBase.ButtonBox>
+                </DialogModalBase.Form>
+              </DialogModalBase.Content>
+            </div>
+          </div>
+        )}
+        {mode === 'join' && pageIndex === 1 && (
+          <div>
+            <DialogModalBase.Header>
+              <DialogModalBase.Icon Icon={VideoIcon} />
+              <DialogModalBase.Title>Video-Chat testen</DialogModalBase.Title>
+              <DialogModalBase.CloseButton />
+            </DialogModalBase.Header>
+            <div>
+              <DialogModalBase.Description>
+                Möchtest du den Video-Chat testen? Dieser Schritt ist optional.
+              </DialogModalBase.Description>
+
+              <DialogModalBase.Content>
+                <DialogModalBase.Form>
+                  <DialogModalBase.ButtonBox>
+                    <DialogModalBase.Button
+                      label="Teste Video-Chat"
+                      onClick={submit}
+                    />
+                  </DialogModalBase.ButtonBox>
+                </DialogModalBase.Form>
+              </DialogModalBase.Content>
+            </div>
+          </div>
+        )}
       </DialogModalBase.Modal>
     </DialogModalBase>
   );
