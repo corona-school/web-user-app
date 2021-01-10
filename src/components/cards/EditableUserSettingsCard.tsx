@@ -62,7 +62,7 @@ const EditableUserSettingsCard: React.FC<Props> = ({
           />
         </SettingWrapper>
       )}
-      {personType === 'tutee' && (
+      {personType === 'tutee' && editableUserSettings.grade != null && (
         <SettingWrapper
           title="Klassenstufe"
           value={`${editableUserSettings.grade}. Klasse`}
