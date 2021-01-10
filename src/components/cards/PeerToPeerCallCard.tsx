@@ -7,6 +7,7 @@ import { Text, Title } from '../Typography';
 import { LinkButton } from '../button';
 
 import classes from './PeerToPeerCallCard.module.scss';
+import { PeerToPeerCall } from '../../types/PeerToPeerCall';
 import { ApiContext } from '../../context/ApiContext';
 import { PeerToPeerCallText } from '../../assets/mentoringPageAssets';
 import { LeftHighlightCard } from './FlexibleHighlightCard';
