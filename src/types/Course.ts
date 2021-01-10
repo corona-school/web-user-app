@@ -76,6 +76,7 @@ export interface CourseOverview {
   joinAfterStart: boolean;
   image?: string;
   allowContact: boolean;
+  correspondentID?: string;
 }
 
 export interface ParsedCourseOverview {
@@ -93,8 +94,7 @@ export interface ParsedCourseOverview {
   allowContact: boolean;
 }
 
-export interface Course {
-  instructors: string[];
+export interface BasicCourse {
   name: string;
   outline: string;
   description: string;
@@ -103,6 +103,10 @@ export interface Course {
   submit: boolean;
   image?: string;
   allowContact: boolean;
+  correspondentID?: string;
+}
+export interface Course extends BasicCourse {
+  instructors: string[];
 }
 
 export interface SubCourse {
