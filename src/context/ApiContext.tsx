@@ -64,6 +64,16 @@ interface IApiContext {
     subCourseId: number,
     participantId: string
   ) => Promise<void>;
+  joinCourseWaitingList: (
+    courseId: number,
+    subCourseId: number,
+    participantId: string
+  ) => Promise<void>;
+  leaveCourseWaitingList: (
+    courseId: number,
+    subCourseId: number,
+    participantId: string
+  ) => Promise<void>;
   submitCourse: (id: number, course: Course) => Promise<void>;
   publishSubCourse: (
     courseId: number,
@@ -151,6 +161,8 @@ export const ApiContext = React.createContext<IApiContext>({
   editCourse: reject,
   joinCourse: reject,
   leaveCourse: reject,
+  joinCourseWaitingList: reject,
+  leaveCourseWaitingList: reject,
   submitCourse: reject,
   publishSubCourse: reject,
   createSubCourse: reject,
@@ -332,6 +344,25 @@ export const ApiProvider: React.FC = ({ children }) => {
   const leaveCourse = (courseId: number, subCourseId, participantId: string) =>
     api.axiosLeaveCourse(token, courseId, subCourseId, participantId);
 
+  const joinCourseWaitingList = (
+    courseId: number,
+    subCourseId,
+    participantId: string
+  ) =>
+    api.axiosJoinCourseWaitingList(token, courseId, subCourseId, participantId);
+
+  const leaveCourseWaitingList = (
+    courseId: number,
+    subCourseId,
+    participantId: string
+  ) =>
+    api.axiosLeaveCourseWaitingList(
+      token,
+      courseId,
+      subCourseId,
+      participantId
+    );
+
   const submitCourse = (id: number, course: Course) =>
     api.axiosSubmitCourse(token, id, course);
 
@@ -416,6 +447,8 @@ export const ApiProvider: React.FC = ({ children }) => {
         sendCourseInstructorMail,
         joinCourse,
         leaveCourse,
+        joinCourseWaitingList,
+        leaveCourseWaitingList,
         submitCourse,
         createCourse,
         createSubCourse,

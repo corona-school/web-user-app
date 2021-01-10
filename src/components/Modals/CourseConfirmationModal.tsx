@@ -60,6 +60,7 @@ const CourseConfirmationModal: React.FC<{
             ...course.subcourse,
             participants: course.subcourse.participants + 1,
             joined: true,
+            onWaitingList: false,
           },
         });
         message.success('Du bist dem Kurs beigetreten.');

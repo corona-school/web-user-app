@@ -54,7 +54,10 @@ import CourseConfirmationModal from '../components/Modals/CourseConfirmationModa
 
 moment.locale('de');
 
-const CourseDetail = (params: { id?: string }) => {
+const CourseDetail = (params: {
+  id?: string;
+  setIsWaitingList?: (boolean) => void;
+}) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
   const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
@@ -84,7 +87,14 @@ const CourseDetail = (params: { id?: string }) => {
     api
       .getCourse(id)
       .then((course) => {
-        setCourse(parseCourse(course));
+        const parsedCourse = parseCourse(course);
+        setCourse(parsedCourse);
+        params.setIsWaitingList(
+          parsedCourse.subcourse
+            ? parsedCourse.subcourse.participants ===
+                parsedCourse.subcourse.maxParticipants
+            : false
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -168,6 +178,39 @@ const CourseDetail = (params: { id?: string }) => {
     } else {
       setCourseConfirmationMode('join');
       modalContext.setOpenedModal('courseConfirmationModal');
+    }
+  };
+
+  const joinWaitingList = () => {
+    if (course.subcourse.onWaitingList) {
+      api
+        .leaveCourseWaitingList(course.id, course.subcourse.id, userId)
+        .then(() => {
+          setCourse({
+            ...course,
+            subcourse: {
+              ...course.subcourse,
+              onWaitingList: false,
+            },
+          });
+          message.success('Du hast die Warteliste verlassen.');
+        });
+    } else {
+      api
+        .joinCourseWaitingList(course.id, course.subcourse.id, userId)
+        .then(() => {
+          setCourse({
+            ...course,
+            subcourse: {
+              ...course.subcourse,
+              onWaitingList: true,
+            },
+          });
+          message.success(
+            'Du wurdest erfolgreich zur Warteliste hinzugefügt. Wir benachrichtigen dich, falls ein Platz frei wird. Schau also regelmäßig in deine Mails.',
+            6 // for longer time
+          );
+        });
     }
   };
 
@@ -259,15 +302,17 @@ const CourseDetail = (params: { id?: string }) => {
     }
   };
 
-  const canJoinCourse = () => {
-    if (!course.subcourse || isStudent) {
+  const hasJoiningRights = () => {
+    return !(!course.subcourse || isStudent);
+  };
+
+  const isEligibleForJoining = () => {
+    // correct values?
+    if (!hasJoiningRights()) {
       return false;
     }
 
-    if (course.subcourse.participants >= course.subcourse.maxParticipants) {
-      return false;
-    }
-
+    // already started or late join?
     const hasCourseStarted = course.subcourse.lectures.some((l) =>
       moment.unix(l.start).isBefore(moment())
     );
@@ -275,6 +320,7 @@ const CourseDetail = (params: { id?: string }) => {
       return false;
     }
 
+    // fitting grades?
     if (
       userContext.user.grade >= course.subcourse.minGrade &&
       userContext.user.grade <= course.subcourse.maxGrade
@@ -285,12 +331,51 @@ const CourseDetail = (params: { id?: string }) => {
     return false;
   };
 
+  const canJoinWaitingList = () => {
+    return (
+      isEligibleForJoining() &&
+      course.subcourse.participants >= course.subcourse.maxParticipants
+    );
+  };
+
+  const canJoinCourse = () => {
+    return (
+      isEligibleForJoining() &&
+      !course.subcourse.joined &&
+      course.subcourse.participants < course.subcourse.maxParticipants
+    );
+  };
+
   const canDisjoinCourse = () => {
-    if (!course.subcourse || isStudent) {
-      return false;
+    return hasJoiningRights() && course.subcourse.joined;
+  };
+
+  const canDisjoinWaitingList = () => {
+    return hasJoiningRights && course.subcourse.onWaitingList;
+  };
+
+  const joinButtonTitle = () => {
+    if (canJoinCourse()) {
+      return `Teilnehmen${
+        course.subcourse.onWaitingList ? ' und Warteliste verlassen' : ''
+      }`;
+    }
+    if (course.subcourse.joined) {
+      return 'Verlassen';
+    }
+    if (course.subcourse.onWaitingList) {
+      return 'Warteliste verlassen';
     }
 
-    return course.subcourse.joined;
+    return 'auf Warteliste';
+  };
+
+  const joinButtonAction = () => {
+    if (canJoinCourse() || canDisjoinCourse()) {
+      joinCourse();
+    } else if (canJoinWaitingList() || canDisjoinWaitingList()) {
+      joinWaitingList();
+    }
   };
 
   const getNextLecture = () => {
@@ -470,21 +555,34 @@ const CourseDetail = (params: { id?: string }) => {
                 )}
               </Dropdown>
             )}
-            {(canJoinCourse() || canDisjoinCourse()) && (
+            {(canJoinCourse() ||
+              canJoinWaitingList() ||
+              canDisjoinCourse() ||
+              canDisjoinWaitingList()) && (
               <AntdButton
                 type="primary"
                 style={{
-                  backgroundColor: course.subcourse.joined
-                    ? '#F4486D'
-                    : '#FCD95C',
-                  borderColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
-                  color: course.subcourse.joined ? 'white' : '#373E47',
+                  backgroundColor:
+                    course.subcourse.joined || course.subcourse.onWaitingList
+                      ? '#F4486D'
+                      : '#FCD95C',
+                  borderColor:
+                    course.subcourse.joined || course.subcourse.onWaitingList
+                      ? '#F4486D'
+                      : '#FCD95C',
+                  color:
+                    course.subcourse.joined || course.subcourse.onWaitingList
+                      ? 'white'
+                      : '#373E47',
                   width: '140px',
                   margin: '0px 10px',
+                  height: 'auto',
+                  overflow: 'hidden',
+                  whiteSpace: 'normal',
                 }}
-                onClick={joinCourse}
+                onClick={joinButtonAction}
               >
-                {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
+                {joinButtonTitle()}
               </AntdButton>
             )}
             <div className={classes.videochatAction}>
@@ -543,7 +641,7 @@ const CourseDetail = (params: { id?: string }) => {
             )}
 
             <div className={classes.contactInstructorsAction}>
-              {course.subcourse.joined && course.allowContact && (
+              {!isStudent && course.allowContact && (
                 <AntdButton
                   type="primary"
                   style={{

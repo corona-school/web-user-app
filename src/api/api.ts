@@ -423,6 +423,35 @@ export const axiosLeaveCourse = async (
     .catch(logError('leaveCourse'));
 };
 
+export const axiosJoinCourseWaitingList = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  participant: string
+) => {
+  await axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/waitinglist/${participant}`,
+      {},
+      { headers: { token } }
+    )
+    .catch(logError('joinCourse'));
+};
+
+export const axiosLeaveCourseWaitingList = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  participant: string
+) => {
+  await axios
+    .delete(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/waitinglist/${participant}`,
+      { headers: { token } }
+    )
+    .catch(logError('leaveCourse'));
+};
+
 export const axiosCancelCourse = async (token: string, courseId: number) => {
   await axios
     .delete(`${apiURL}/course/${courseId}`, { headers: { token } })

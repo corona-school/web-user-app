@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useParams, useHistory, Redirect } from 'react-router-dom';
 import { Button as AntdButton } from 'antd';
 import moment from 'moment';
@@ -18,6 +18,8 @@ const PublicCourseDetail = () => {
   const history = useHistory();
   const auth = useContext(AuthContext);
 
+  const [isWaitingList, setIsWaitingList] = useState(false);
+
   const privateCoursePage = `/courses/${id}`;
 
   if (auth.status === 'authorized') {
@@ -34,11 +36,21 @@ const PublicCourseDetail = () => {
         {/* header */}
         <div className={classes.headerText}>
           <h1 className={classes.headerTitle}>Interessanter Kurs?</h1>
-          <Text>
-            Erstelle dir jetzt einen Account oder melde dich in deinem vorhanden
-            Konto an. Dann kannst du dich sofort für diesen{' '}
-            <b>kostenlosen Kurs</b> anmelden! 🥳
-          </Text>
+          {isWaitingList && (
+            <Text>
+              Der Kurs ist bereits gefüllt – du kannst dich allerdings für die
+              Warteliste eintragen und nachrücken, falls ein Platz frei wird.
+              Erstelle dir dazu jetzt einen Account oder melde dich in deinem
+              vorhanden Konto an!
+            </Text>
+          )}
+          {!isWaitingList && (
+            <Text>
+              Erstelle dir jetzt einen Account oder melde dich in deinem
+              vorhanden Konto an. Dann kannst du dich sofort für diesen{' '}
+              <b>kostenlosen Kurs</b> anmelden! 🥳
+            </Text>
+          )}
         </div>
         <div className={classes.headerAction}>
           <AntdButton
@@ -57,7 +69,7 @@ const PublicCourseDetail = () => {
       </div>
       <div>
         {/* content */}
-        <CourseDetail id={id} />
+        <CourseDetail id={id} setIsWaitingList={setIsWaitingList} />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Form, Input, Radio, Select, InputNumber, Switch, message } from 'antd';
+import classnames from 'classnames';
 import Button from '../button';
 import Context from '../../context';
 
@@ -56,6 +57,15 @@ export const CreateCourse: React.FC<Props> = (props) => {
 
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
+  const userContext = useContext(Context.User);
+
+  const instructors = props.course?.instructors ?? [
+    {
+      id: userContext.user.id,
+      firstname: userContext.user.firstname,
+      lastname: userContext.user.lastname,
+    },
+  ];
 
   useEffect(() => {
     apiContext
@@ -150,7 +160,33 @@ export const CreateCourse: React.FC<Props> = (props) => {
               setAllowContact(v);
             }}
           />
-          Teilnehmende dürfen Kursleiter*innen kontaktieren
+          Kontaktaufnahme erlaubt
+        </Form.Item>
+        <Form.Item
+          className={classnames(classes.formItem, classes.correspondentPicker, {
+            [classes.hidden]: !allowContact,
+          })}
+          name="correspondent"
+          initialValue={props.course?.correspondentID}
+          rules={[
+            () => ({
+              required: !!allowContact,
+              message:
+                'Du musst eine Person auswählen, die die Kontaktanfragen bearbeiten soll.',
+            }),
+          ]}
+        >
+          <Select placeholder="Wähle eine Kursleiter*in aus, die/der die Kontaktanfragen erhält">
+            {instructors?.map((i) => (
+              <Option value={i.id}>{`${i.firstname} ${i.lastname} ${
+                i.id === userContext.user.id ? '(Ich)' : ''
+              }`}</Option>
+            ))}
+            <Option disabled value={null}>
+              Weitere Kursleiter*innen können in der Übersicht hinzugefügt
+              werden
+            </Option>
+          </Select>
         </Form.Item>
       </>
     );
@@ -280,9 +316,9 @@ export const CreateCourse: React.FC<Props> = (props) => {
 
   const handleCourseCreation = async () => {
     try {
-      setLoading(true);
       const formValues = await form.validateFields();
-      const course: Course = {
+      setLoading(true);
+      const newCourse = {
         instructors: props.course ? props.course.instructors : [],
         name: formValues.name,
         outline: formValues.outline,
@@ -292,6 +328,13 @@ export const CreateCourse: React.FC<Props> = (props) => {
         submit: props.course?.submit ?? false,
         image: props.course?.image,
         allowContact: !!allowContact,
+        correspondentID: formValues.correspondent,
+      };
+      const course: Course = {
+        ...newCourse,
+        instructors: props.course
+          ? props.course.instructors.map((i) => i.id)
+          : [],
       };
       const subCourse: SubCourse = {
         instructors: props.subCourse ? props.subCourse.instructors : [],
@@ -308,7 +351,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
 
       if (props.edit && props.course) {
         await apiContext.editCourse(props.course.id, course);
-        props.setCourse({ ...course, id: props.course.id });
+        props.setCourse({ ...newCourse, id: props.course.id });
 
         if (props.subCourse) {
           await apiContext.editSubCourse(props.course.id, {
@@ -330,7 +373,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
       }
 
       const courseId = await apiContext.createCourse(course);
-      props.setCourse({ ...course, id: courseId });
+      props.setCourse({ ...newCourse, id: courseId });
 
       const subCourseId = await apiContext.createSubCourse(courseId, subCourse);
       props.setSubCourse({ ...subCourse, id: subCourseId });
