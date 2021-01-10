@@ -316,8 +316,8 @@ export const CreateCourse: React.FC<Props> = (props) => {
 
   const handleCourseCreation = async () => {
     try {
-      setLoading(true);
       const formValues = await form.validateFields();
+      setLoading(true);
       const newCourse = {
         instructors: props.course ? props.course.instructors : [],
         name: formValues.name,
