@@ -599,6 +599,7 @@ const CourseDetail = (params: {
                   }}
                   onClick={joinBBBmeeting}
                   disabled={
+                    getNextLecture() &&
                     moment
                       .unix(getNextLecture().start)
                       .diff(moment.now(), 'minutes') > 30
@@ -613,32 +614,34 @@ const CourseDetail = (params: {
                 loading={isLoadingVideoChat}
               />
             </div>
-            {moment.unix(getNextLecture().start).diff(moment.now(), 'minutes') >
-              30 && (
-              <div className={classes.videochatAction}>
-                {((isMyCourse && course.state === CourseState.ALLOWED) ||
-                  course.subcourse.joined) && (
-                  <AntdButton
-                    type="primary"
-                    style={{
-                      backgroundColor: '#FCD95C',
-                      borderColor: '#FCD95C',
-                      color: '#373E47',
-                      width: '140px',
-                      margin: '5px 10px',
-                    }}
-                    onClick={joinTestMeeting}
-                  >
-                    Videochat testen
-                  </AntdButton>
-                )}
-                <ClipLoader
-                  size={15}
-                  color="#123abc"
-                  loading={isLoadingVideoChat}
-                />
-              </div>
-            )}
+            {getNextLecture() &&
+              moment
+                .unix(getNextLecture().start)
+                .diff(moment.now(), 'minutes') > 30 && (
+                <div className={classes.videochatAction}>
+                  {((isMyCourse && course.state === CourseState.ALLOWED) ||
+                    course.subcourse.joined) && (
+                    <AntdButton
+                      type="primary"
+                      style={{
+                        backgroundColor: '#FCD95C',
+                        borderColor: '#FCD95C',
+                        color: '#373E47',
+                        width: '140px',
+                        margin: '5px 10px',
+                      }}
+                      onClick={joinTestMeeting}
+                    >
+                      Videochat testen
+                    </AntdButton>
+                  )}
+                  <ClipLoader
+                    size={15}
+                    color="#123abc"
+                    loading={isLoadingVideoChat}
+                  />
+                </div>
+              )}
 
             <div className={classes.contactInstructorsAction}>
               {!isStudent && course.allowContact && (
