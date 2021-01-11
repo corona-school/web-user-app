@@ -92,6 +92,7 @@ export interface ParsedCourseOverview {
   subcourse?: CourseSubCourse;
   image?: string;
   allowContact: boolean;
+  correspondentID?: string;
 }
 
 export interface BasicCourse {

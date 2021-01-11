@@ -141,6 +141,7 @@ const CourseDetail = (params: {
       tags: course.tags.map((t) => tagObj.find((o) => o.name === t.name)?.id),
       submit: true,
       allowContact: course.allowContact,
+      correspondentID: course.correspondentID,
     };
 
     const apiSubCourse: SubCourse = {

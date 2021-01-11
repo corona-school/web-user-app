@@ -19,6 +19,7 @@ export const parseCourse = (course: CourseOverview): ParsedCourseOverview => {
     subcourse: course.subcourses[0],
     image: course.image,
     allowContact: course.allowContact,
+    correspondentID: course.correspondentID,
   };
 };
 
