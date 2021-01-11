@@ -171,9 +171,14 @@ const EditExpertProfileModal = () => {
             />
           </DialogModalBase.InputCompound>
           <DialogModalBase.Spacer />
-          <DialogModalBase.Label>
-            Möchtest du als Expert*in vorgeschlagen werden?
-          </DialogModalBase.Label>
+          <DialogModalBase.Description>
+            Ich stimme zu, dass meine angegebenen Infomationen, außer der
+            E-Mail-Adresse, veröffentlicht werden. Ich bin einverstanden, dass
+            die Schüler*innen mich kontaktieren können und ich Kontaktanfragen
+            per E-Mail bekomme. Die Einverständnis gilt bis auf Widerruf,
+            welcher jederzeit möglich ist und nur die zukünftige Kommunikation
+            beeinflussen kann.
+          </DialogModalBase.Description>
           <DialogModalBase.InputCompound direction="horizontal">
             <DialogModalBase.CheckboxSingle
               label="Ja"
