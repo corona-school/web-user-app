@@ -240,7 +240,7 @@ const CourseDetail = (params: {
 
   const joinTestMeeting = () => {
     const newWindow = window.open(
-      `${apiURL}/course/test/meeting/join`,
+      `${apiURL}/course/test/meeting/join?Token=${auth.credentials.token}`,
       '_blank',
       'noopener,noreferrer'
     );
