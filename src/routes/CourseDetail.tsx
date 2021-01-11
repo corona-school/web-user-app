@@ -378,12 +378,30 @@ const CourseDetail = (params: {
     }
   };
 
-  const getNextLecture = () => {
-    const futureCourses = course.subcourse.lectures.filter((x) =>
-      moment.unix(x.start).isAfter(Date.now())
+  const getTodaysLectures = () => {
+    return course.subcourse?.lectures?.filter((l) =>
+      moment.unix(l.start).isSame(moment(), 'day')
     );
+  };
 
-    return futureCourses.sort((a, b) => a.start - b.start)[0];
+  const shouldEnableVideoChat = () => {
+    // activate 30 minutes before start and 30 minutes after end of a lecture
+    const lecturesToday = getTodaysLectures()?.sort(
+      (a, b) => a.start - b.start
+    );
+    const firstLecture = lecturesToday?.[0];
+    const lastLecture = lecturesToday?.[lecturesToday.length - 1];
+
+    if (!firstLecture || !lastLecture) {
+      return false;
+    }
+    const start = moment.unix(firstLecture.start).subtract(30, 'minutes');
+    const end = moment
+      .unix(lastLecture.start)
+      .add(lastLecture.duration, 'minutes')
+      .add(30, 'minutes');
+
+    return moment().isBetween(start, end);
   };
 
   const renderLectures = () => {
@@ -598,12 +616,7 @@ const CourseDetail = (params: {
                     margin: '5px 10px',
                   }}
                   onClick={joinBBBmeeting}
-                  disabled={
-                    getNextLecture() &&
-                    moment
-                      .unix(getNextLecture().start)
-                      .diff(moment.now(), 'minutes') > 30
-                  }
+                  disabled={!shouldEnableVideoChat()}
                 >
                   Zum Videochat
                 </AntdButton>
@@ -614,34 +627,26 @@ const CourseDetail = (params: {
                 loading={isLoadingVideoChat}
               />
             </div>
-            {getNextLecture() &&
-              moment
-                .unix(getNextLecture().start)
-                .diff(moment.now(), 'minutes') > 30 && (
-                <div className={classes.videochatAction}>
-                  {((isMyCourse && course.state === CourseState.ALLOWED) ||
-                    course.subcourse.joined) && (
-                    <AntdButton
-                      type="primary"
-                      style={{
-                        backgroundColor: '#FCD95C',
-                        borderColor: '#FCD95C',
-                        color: '#373E47',
-                        width: '140px',
-                        margin: '5px 10px',
-                      }}
-                      onClick={joinTestMeeting}
-                    >
-                      Videochat testen
-                    </AntdButton>
-                  )}
-                  <ClipLoader
-                    size={15}
-                    color="#123abc"
-                    loading={isLoadingVideoChat}
-                  />
-                </div>
-              )}
+            {!shouldEnableVideoChat() && (
+              <div className={classes.videochatAction}>
+                {((isMyCourse && course.state === CourseState.ALLOWED) ||
+                  course.subcourse.joined) && (
+                  <AntdButton
+                    type="primary"
+                    style={{
+                      backgroundColor: '#FCD95C',
+                      borderColor: '#FCD95C',
+                      color: '#373E47',
+                      width: '140px',
+                      margin: '5px 10px',
+                    }}
+                    onClick={joinTestMeeting}
+                  >
+                    Videochat testen
+                  </AntdButton>
+                )}
+              </div>
+            )}
 
             <div className={classes.contactInstructorsAction}>
               {!isStudent && course.allowContact && (
