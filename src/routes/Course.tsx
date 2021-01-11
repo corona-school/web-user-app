@@ -12,8 +12,6 @@ import { parseCourse } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
 import { CourseBanner } from '../components/course/CourseBanner';
 
-const MAX_COURSES = 25;
-
 const Course = () => {
   const [loading, setLoading] = useState(false);
   const [myCourses, setMyCourses] = useState<ParsedCourseOverview[]>([]);
@@ -50,19 +48,18 @@ const Course = () => {
       <div className={classes.containerRequests}>
         <div className={classes.header}>
           <Title size="h1">Deine Kurse</Title>
-          {userContext.user.type === 'student' &&
-            myCourses.length <= MAX_COURSES && (
-              <LinkButton
-                href="/courses/create"
-                local
-                backgroundColor="#F4486D"
-                color="white"
-                className={classes.courseButton}
-              >
-                <Icons.Add height="16px" />
-                Erstelle einen Kurs
-              </LinkButton>
-            )}
+          {userContext.user.type === 'student' && (
+            <LinkButton
+              href="/courses/create"
+              local
+              backgroundColor="#F4486D"
+              color="white"
+              className={classes.courseButton}
+            >
+              <Icons.Add height="16px" />
+              Erstelle einen Kurs
+            </LinkButton>
+          )}
         </div>
         <div className={classes.myCoursesContainer}>
           {myCourses.length === 0 ? (

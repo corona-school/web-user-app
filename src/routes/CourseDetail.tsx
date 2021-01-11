@@ -48,15 +48,22 @@ import {
 
 import { ModalContext } from '../context/ModalContext';
 import CourseMessageModal from '../components/Modals/CourseMessageModal';
-import { dev } from '../api/config';
+import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
+import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 
 moment.locale('de');
 
-const CourseDetail = (params: { id?: string }) => {
+const CourseDetail = (params: {
+  id?: string;
+  setIsWaitingList?: (boolean) => void;
+}) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
   const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
+  const [courseConfirmationMode, setCourseConfirmationMode] = useState<
+    'quit' | 'join'
+  >('join'); // Mode for the confirmation modal
   const [isCustomShareMenuVisible, setIsCustomShareMenuVisible] = useState(
     false
   );
@@ -80,7 +87,14 @@ const CourseDetail = (params: { id?: string }) => {
     api
       .getCourse(id)
       .then((course) => {
-        setCourse(parseCourse(course));
+        const parsedCourse = parseCourse(course);
+        setCourse(parsedCourse);
+        params.setIsWaitingList(
+          parsedCourse.subcourse
+            ? parsedCourse.subcourse.participants ===
+                parsedCourse.subcourse.maxParticipants
+            : false
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -126,6 +140,7 @@ const CourseDetail = (params: { id?: string }) => {
       category: course.category,
       tags: course.tags.map((t) => tagObj.find((o) => o.name === t.name)?.id),
       submit: true,
+      allowContact: course.allowContact,
     };
 
     const apiSubCourse: SubCourse = {
@@ -158,29 +173,44 @@ const CourseDetail = (params: { id?: string }) => {
 
   const joinCourse = () => {
     if (course.subcourse.joined) {
-      api.leaveCourse(course.id, course.subcourse.id, userId).then(() => {
-        setCourse({
-          ...course,
-          subcourse: {
-            ...course.subcourse,
-            participants: course.subcourse.participants - 1,
-            joined: false,
-          },
-        });
-        message.success('Du hast den Kurs verlassen.');
-      });
+      setCourseConfirmationMode('quit');
+      modalContext.setOpenedModal('courseConfirmationModal');
     } else {
-      api.joinCourse(course.id, course.subcourse.id, userId).then(() => {
-        setCourse({
-          ...course,
-          subcourse: {
-            ...course.subcourse,
-            participants: course.subcourse.participants + 1,
-            joined: true,
-          },
+      setCourseConfirmationMode('join');
+      modalContext.setOpenedModal('courseConfirmationModal');
+    }
+  };
+
+  const joinWaitingList = () => {
+    if (course.subcourse.onWaitingList) {
+      api
+        .leaveCourseWaitingList(course.id, course.subcourse.id, userId)
+        .then(() => {
+          setCourse({
+            ...course,
+            subcourse: {
+              ...course.subcourse,
+              onWaitingList: false,
+            },
+          });
+          message.success('Du hast die Warteliste verlassen.');
         });
-        message.success('Du bist dem Kurs beigetreten.');
-      });
+    } else {
+      api
+        .joinCourseWaitingList(course.id, course.subcourse.id, userId)
+        .then(() => {
+          setCourse({
+            ...course,
+            subcourse: {
+              ...course.subcourse,
+              onWaitingList: true,
+            },
+          });
+          message.success(
+            'Du wurdest erfolgreich zur Warteliste hinzugefügt. Wir benachrichtigen dich, falls ein Platz frei wird. Schau also regelmäßig in deine Mails.',
+            6 // for longer time
+          );
+        });
     }
   };
 
@@ -206,6 +236,19 @@ const CourseDetail = (params: { id?: string }) => {
           );
         }
       });
+  };
+
+  const joinTestMeeting = () => {
+    const newWindow = window.open(
+      `${apiURL}/course/test/meeting/join?Token=${auth.credentials.token}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+    if (newWindow) newWindow.opener = null;
+  };
+
+  const openWriteMessageModal = () => {
+    modalContext.setOpenedModal('courseMessageModal');
   };
 
   const shareData = {
@@ -259,15 +302,17 @@ const CourseDetail = (params: { id?: string }) => {
     }
   };
 
-  const canJoinCourse = () => {
-    if (!course.subcourse || isStudent) {
+  const hasJoiningRights = () => {
+    return !(!course.subcourse || isStudent);
+  };
+
+  const isEligibleForJoining = () => {
+    // correct values?
+    if (!hasJoiningRights()) {
       return false;
     }
 
-    if (course.subcourse.participants >= course.subcourse.maxParticipants) {
-      return false;
-    }
-
+    // already started or late join?
     const hasCourseStarted = course.subcourse.lectures.some((l) =>
       moment.unix(l.start).isBefore(moment())
     );
@@ -275,6 +320,7 @@ const CourseDetail = (params: { id?: string }) => {
       return false;
     }
 
+    // fitting grades?
     if (
       userContext.user.grade >= course.subcourse.minGrade &&
       userContext.user.grade <= course.subcourse.maxGrade
@@ -285,12 +331,77 @@ const CourseDetail = (params: { id?: string }) => {
     return false;
   };
 
+  const canJoinWaitingList = () => {
+    return (
+      isEligibleForJoining() &&
+      course.subcourse.participants >= course.subcourse.maxParticipants
+    );
+  };
+
+  const canJoinCourse = () => {
+    return (
+      isEligibleForJoining() &&
+      !course.subcourse.joined &&
+      course.subcourse.participants < course.subcourse.maxParticipants
+    );
+  };
+
   const canDisjoinCourse = () => {
-    if (!course.subcourse || isStudent) {
-      return false;
+    return hasJoiningRights() && course.subcourse.joined;
+  };
+
+  const canDisjoinWaitingList = () => {
+    return hasJoiningRights && course.subcourse.onWaitingList;
+  };
+
+  const joinButtonTitle = () => {
+    if (canJoinCourse()) {
+      return `Teilnehmen${
+        course.subcourse.onWaitingList ? ' und Warteliste verlassen' : ''
+      }`;
+    }
+    if (course.subcourse.joined) {
+      return 'Verlassen';
+    }
+    if (course.subcourse.onWaitingList) {
+      return 'Warteliste verlassen';
     }
 
-    return course.subcourse.joined;
+    return 'auf Warteliste';
+  };
+
+  const joinButtonAction = () => {
+    if (canJoinCourse() || canDisjoinCourse()) {
+      joinCourse();
+    } else if (canJoinWaitingList() || canDisjoinWaitingList()) {
+      joinWaitingList();
+    }
+  };
+
+  const getTodaysLectures = () => {
+    return course.subcourse?.lectures?.filter((l) =>
+      moment.unix(l.start).isSame(moment(), 'day')
+    );
+  };
+
+  const shouldEnableVideoChat = () => {
+    // activate 30 minutes before start and 30 minutes after end of a lecture
+    const lecturesToday = getTodaysLectures()?.sort(
+      (a, b) => a.start - b.start
+    );
+    const firstLecture = lecturesToday?.[0];
+    const lastLecture = lecturesToday?.[lecturesToday.length - 1];
+
+    if (!firstLecture || !lastLecture) {
+      return false;
+    }
+    const start = moment.unix(firstLecture.start).subtract(30, 'minutes');
+    const end = moment
+      .unix(lastLecture.start)
+      .add(lastLecture.duration, 'minutes')
+      .add(30, 'minutes');
+
+    return moment().isBetween(start, end);
   };
 
   const renderLectures = () => {
@@ -339,7 +450,7 @@ const CourseDetail = (params: { id?: string }) => {
       return null;
     }
     if (course.subcourse.participants === 0) {
-      return <Empty description="Du hast noch keine Teilnehmer" />;
+      return <Empty description="Du hast noch keine Teilnehmer*innen" />;
     }
 
     return (
@@ -379,7 +490,7 @@ const CourseDetail = (params: { id?: string }) => {
             submitCourse();
           }
           if (param.key === '3') {
-            modalContext.setOpenedModal('courseMessageModal');
+            openWriteMessageModal();
           }
           if (param.key === '4') {
             modalContext.setOpenedModal('courseDeletionConfirmationModal');
@@ -462,21 +573,34 @@ const CourseDetail = (params: { id?: string }) => {
                 )}
               </Dropdown>
             )}
-            {(canJoinCourse() || canDisjoinCourse()) && (
+            {(canJoinCourse() ||
+              canJoinWaitingList() ||
+              canDisjoinCourse() ||
+              canDisjoinWaitingList()) && (
               <AntdButton
                 type="primary"
                 style={{
-                  backgroundColor: course.subcourse.joined
-                    ? '#F4486D'
-                    : '#FCD95C',
-                  borderColor: course.subcourse.joined ? '#F4486D' : '#FCD95C',
-                  color: course.subcourse.joined ? 'white' : '#373E47',
-                  width: '120px',
+                  backgroundColor:
+                    course.subcourse.joined || course.subcourse.onWaitingList
+                      ? '#F4486D'
+                      : '#FCD95C',
+                  borderColor:
+                    course.subcourse.joined || course.subcourse.onWaitingList
+                      ? '#F4486D'
+                      : '#FCD95C',
+                  color:
+                    course.subcourse.joined || course.subcourse.onWaitingList
+                      ? 'white'
+                      : '#373E47',
+                  width: '140px',
                   margin: '0px 10px',
+                  height: 'auto',
+                  overflow: 'hidden',
+                  whiteSpace: 'normal',
                 }}
-                onClick={joinCourse}
+                onClick={joinButtonAction}
               >
-                {course.subcourse.joined ? 'Verlassen' : 'Teilnehmen'}
+                {joinButtonTitle()}
               </AntdButton>
             )}
             <div className={classes.videochatAction}>
@@ -488,10 +612,11 @@ const CourseDetail = (params: { id?: string }) => {
                     backgroundColor: '#FCD95C',
                     borderColor: '#FCD95C',
                     color: '#373E47',
-                    width: '120px',
+                    width: '140px',
                     margin: '5px 10px',
                   }}
                   onClick={joinBBBmeeting}
+                  disabled={!shouldEnableVideoChat()}
                 >
                   Zum Videochat
                 </AntdButton>
@@ -501,6 +626,45 @@ const CourseDetail = (params: { id?: string }) => {
                 color="#123abc"
                 loading={isLoadingVideoChat}
               />
+            </div>
+            {!shouldEnableVideoChat() && (
+              <div className={classes.videochatAction}>
+                {((isMyCourse && course.state === CourseState.ALLOWED) ||
+                  course.subcourse.joined) && (
+                  <AntdButton
+                    type="primary"
+                    style={{
+                      backgroundColor: '#FCD95C',
+                      borderColor: '#FCD95C',
+                      color: '#373E47',
+                      width: '140px',
+                      margin: '5px 10px',
+                    }}
+                    onClick={joinTestMeeting}
+                  >
+                    Videochat testen
+                  </AntdButton>
+                )}
+              </div>
+            )}
+
+            <div className={classes.contactInstructorsAction}>
+              {!isStudent && course.allowContact && (
+                <AntdButton
+                  type="primary"
+                  style={{
+                    backgroundColor: '#FCD95C',
+                    borderColor: '#FCD95C',
+                    color: '#373E47',
+                    width: '140px',
+                    margin: '5px 10px',
+                  }}
+                  onClick={openWriteMessageModal}
+                  icon={<MailOutlined />}
+                >
+                  Kontakt
+                </AntdButton>
+              )}
             </div>
             <div className={classes.shareAction}>
               <Dropdown
@@ -515,7 +679,7 @@ const CourseDetail = (params: { id?: string }) => {
                     backgroundColor: '#FCD95C',
                     borderColor: '#FCD95C',
                     color: '#373E47',
-                    width: '120px',
+                    width: '140px',
                     margin: '5px 10px',
                   }}
                   onClick={shareCourse}
@@ -568,7 +732,7 @@ const CourseDetail = (params: { id?: string }) => {
           <Descriptions.Item label="Kategorie">
             {CategoryToLabel.get(course.category)}
           </Descriptions.Item>
-          <Descriptions.Item label="Teilnehmer">
+          <Descriptions.Item label="Teilnehmende">
             {course.subcourse.participants}/{course.subcourse.maxParticipants}
           </Descriptions.Item>
           <Descriptions.Item label="Klasse">
@@ -582,11 +746,16 @@ const CourseDetail = (params: { id?: string }) => {
               .map((l) => `${l.duration}min.`)
               .join(', ')}{' '}
           </Descriptions.Item>
-          <Descriptions.Item label="Tutoren">
+          <Descriptions.Item label="Tutor*innen">
             {instructors
               .filter((item, pos) => instructors.indexOf(item) === pos)
               .join(', ')}
           </Descriptions.Item>
+          {isMyCourse && (
+            <Descriptions.Item label="Kontaktieren">
+              {course.allowContact ? 'erlaubt' : 'deaktiviert'}
+            </Descriptions.Item>
+          )}
         </Descriptions>
         <Descriptions
           size="small"
@@ -608,7 +777,7 @@ const CourseDetail = (params: { id?: string }) => {
         {isMyCourse && (
           <div>
             <Title size="h3" style={{ margin: '0px 10px' }}>
-              Teilnehmer
+              Teilnehmer*innen
             </Title>
             <div>{renderParticipants()}</div>
           </div>
@@ -637,11 +806,19 @@ const CourseDetail = (params: { id?: string }) => {
       <CourseMessageModal
         courseId={course.id}
         subcourseId={course.subcourse.id}
+        type={
+          isMyCourse ? 'instructorToParticipants' : 'participantToInstructors'
+        }
       />
       <CourseDeletionConfirmationModal courseId={course.id} />
       <AddInstructorModal
         courseId={course.id}
         updateDetails={updateCourseDetails}
+      />
+      <CourseConfirmationModal
+        mode={courseConfirmationMode}
+        course={course}
+        setCourse={setCourse}
       />
     </div>
   );

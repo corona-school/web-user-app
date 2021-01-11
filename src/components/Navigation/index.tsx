@@ -1,15 +1,12 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 import classnames from 'classnames';
-
-import { AuthContext } from '../../context/AuthContext';
 import { UserContext } from '../../context/UserContext';
 import Icons from '../../assets/icons';
 import { ScreeningStatus } from '../../types';
 import classes from './index.module.scss';
-import { NavButton, NavActionButton } from './NavButton';
+import { NavButton } from './NavButton';
 import Welcome from './Welcome';
-import { SocialMediaButton } from '../button/IconButton';
+import { SocialMediaButton } from '../button';
 
 interface Props {
   isMenuOpen: boolean;
@@ -17,7 +14,7 @@ interface Props {
 }
 
 const Navigation: React.FC<Props> = (props) => {
-  const authContext = useContext(AuthContext);
+  // const authContext = useContext(AuthContext);
   const {
     user: {
       type,
@@ -32,14 +29,14 @@ const Navigation: React.FC<Props> = (props) => {
     },
     user,
   } = useContext(UserContext);
-  const history = useHistory();
 
-  const handleLogoutClick = () => {
-    authContext.setCredentials({ id: '', token: '' });
-    authContext.setStatus('missing');
-    authContext.deleteStoredCredentials();
-    history.push('/login');
-  };
+  // const history = useHistory();
+  // const handleLogoutClick = () => {
+  //   authContext.setCredentials({ id: '', token: '' });
+  //   authContext.setStatus('missing');
+  //   authContext.deleteStoredCredentials();
+  //   history.push('/login');
+  // };
 
   return (
     <div
@@ -160,9 +157,9 @@ const Navigation: React.FC<Props> = (props) => {
         </div>
       </div>
       <div className={classes.logoutContainer}>
-        <NavActionButton icon={<Icons.Logout />} onClick={handleLogoutClick}>
-          Ausloggen
-        </NavActionButton>
+        {/*  <NavActionButton icon={<Icons.Logout />} onClick={handleLogoutClick}> */}
+        {/*    Ausloggen */}
+        {/*  </NavActionButton> */}
       </div>
     </div>
   );

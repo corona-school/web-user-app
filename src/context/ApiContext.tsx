@@ -64,6 +64,16 @@ interface IApiContext {
     subCourseId: number,
     participantId: string
   ) => Promise<void>;
+  joinCourseWaitingList: (
+    courseId: number,
+    subCourseId: number,
+    participantId: string
+  ) => Promise<void>;
+  leaveCourseWaitingList: (
+    courseId: number,
+    subCourseId: number,
+    participantId: string
+  ) => Promise<void>;
   submitCourse: (id: number, course: Course) => Promise<void>;
   publishSubCourse: (
     courseId: number,
@@ -95,6 +105,12 @@ interface IApiContext {
   registerStateTutee: (tutee: Tutee) => Promise<void>;
   registerTutor: (tutor: Tutor) => Promise<void>;
   sendCourseGroupMail: (
+    courseId: number,
+    subCourseId: number,
+    subject: string,
+    body: string
+  ) => Promise<void>;
+  sendCourseInstructorMail: (
     courseId: number,
     subCourseId: number,
     subject: string,
@@ -145,6 +161,8 @@ export const ApiContext = React.createContext<IApiContext>({
   editCourse: reject,
   joinCourse: reject,
   leaveCourse: reject,
+  joinCourseWaitingList: reject,
+  leaveCourseWaitingList: reject,
   submitCourse: reject,
   publishSubCourse: reject,
   createSubCourse: reject,
@@ -157,6 +175,7 @@ export const ApiContext = React.createContext<IApiContext>({
   registerStateTutee: reject,
   registerTutor: reject,
   sendCourseGroupMail: reject,
+  sendCourseInstructorMail: reject,
   joinBBBmeeting: reject,
   getCooperatingSchools: reject,
   getMentoringMaterial: reject,
@@ -325,6 +344,25 @@ export const ApiProvider: React.FC = ({ children }) => {
   const leaveCourse = (courseId: number, subCourseId, participantId: string) =>
     api.axiosLeaveCourse(token, courseId, subCourseId, participantId);
 
+  const joinCourseWaitingList = (
+    courseId: number,
+    subCourseId,
+    participantId: string
+  ) =>
+    api.axiosJoinCourseWaitingList(token, courseId, subCourseId, participantId);
+
+  const leaveCourseWaitingList = (
+    courseId: number,
+    subCourseId,
+    participantId: string
+  ) =>
+    api.axiosLeaveCourseWaitingList(
+      token,
+      courseId,
+      subCourseId,
+      participantId
+    );
+
   const submitCourse = (id: number, course: Course) =>
     api.axiosSubmitCourse(token, id, course);
 
@@ -341,6 +379,20 @@ export const ApiProvider: React.FC = ({ children }) => {
     body: string
   ) =>
     api.axiosSendCourseGroupMail(token, courseId, subCourseId, subject, body);
+
+  const sendCourseInstructorMail = (
+    courseId: number,
+    subCourseId: number,
+    subject: string,
+    body: string
+  ) =>
+    api.axiosSendCourseInstructorMail(
+      token,
+      courseId,
+      subCourseId,
+      subject,
+      body
+    );
 
   const joinBBBmeeting = (courseId: number, subcourseId: number) =>
     api.axiosJoinBBBmeeting(token, courseId, subcourseId);
@@ -392,8 +444,11 @@ export const ApiProvider: React.FC = ({ children }) => {
         registerStateTutee,
         registerTutor,
         sendCourseGroupMail,
+        sendCourseInstructorMail,
         joinCourse,
         leaveCourse,
+        joinCourseWaitingList,
+        leaveCourseWaitingList,
         submitCourse,
         createCourse,
         createSubCourse,
