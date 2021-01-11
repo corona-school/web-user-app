@@ -89,7 +89,7 @@ const CourseDetail = (params: {
       .then((course) => {
         const parsedCourse = parseCourse(course);
         setCourse(parsedCourse);
-        params.setIsWaitingList(
+        params?.setIsWaitingList(
           parsedCourse.subcourse
             ? parsedCourse.subcourse.participants ===
                 parsedCourse.subcourse.maxParticipants
@@ -210,6 +210,11 @@ const CourseDetail = (params: {
           message.success(
             'Du wurdest erfolgreich zur Warteliste hinzugefügt. Wir benachrichtigen dich, falls ein Platz frei wird. Schau also regelmäßig in deine Mails.',
             6 // for longer time
+          );
+        })
+        .catch(() => {
+          message.error(
+            'Es ist ein Fehler aufgetreten. Bitte versuche es später noch einmal '
           );
         });
     }
