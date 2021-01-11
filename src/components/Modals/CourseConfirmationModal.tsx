@@ -45,7 +45,7 @@ const CourseConfirmationModal: React.FC<{
     } else {
       if (pageIndex === 1) {
         const newWindow = window.open(
-          `${apiURL}/course/test/meeting/join`,
+          `${apiURL}/course/test/meeting/join?Token=${auth.credentials.token}`,
           '_blank',
           'noopener,noreferrer'
         );
