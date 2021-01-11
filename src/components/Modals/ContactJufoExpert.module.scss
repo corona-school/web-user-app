@@ -20,6 +20,12 @@
     margin-bottom: 4px;
   }
 
+  .checkboxContainer {
+    display: flex;
+    flex-direction: row;
+    margin-top: 16px;
+  }
+
   .buttonContainer {
     width: 100%;
     display: flex;
