@@ -231,12 +231,16 @@ const Settings: React.FC = () => {
         user={userContext.user}
         reloadCertificates={reloadCertificates}
       />
+
       <JufoExpertCard />
+
+      {(userContext.user.isTutor || userContext.user.isPupil) &&
+        renderSubjects()}
 
       {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}
-      {renderCertificatesTable()}
+      {userContext.user.isTutor && renderCertificatesTable()}
       <AccountNotScreenedModal />
     </div>
   );

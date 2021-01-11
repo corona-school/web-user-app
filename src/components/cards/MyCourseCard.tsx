@@ -32,7 +32,7 @@ export const CourseStateToLabel = new Map([
 ]);
 
 export const CategoryToLabel = new Map([
-  [CourseCategory.REVISION, 'Repititorium'],
+  [CourseCategory.REVISION, 'Repetitorium'],
   [CourseCategory.COACHING, 'Lern-Coaching'],
   [CourseCategory.CLUB, 'AGs'],
 ]);
@@ -131,7 +131,8 @@ const MyCourseCard: React.FC<Props> = ({
             )}
 
             <div className={classes.metaInfo}>
-              {subCourse?.participants}/{subCourse?.maxParticipants} Teilnehmer
+              {subCourse?.participants}/{subCourse?.maxParticipants}{' '}
+              Teilnehmende
             </div>
           </div>
           <div className={classes.metaInfo1}>

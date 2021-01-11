@@ -6,16 +6,23 @@ import {
   CreateCourse,
   CompletedSubCourse,
 } from '../components/forms/CreateCourse';
-import { Course, Lecture, CourseOverview } from '../types/Course';
+import {
+  Lecture,
+  CourseOverview,
+  CourseState,
+  BasicCourse,
+} from '../types/Course';
 import { CreateLecture } from '../components/forms/CreateLecture';
 import CourseSuccess from '../components/forms/CourseSuccess';
 
 import classes from './CourseForm.module.scss';
 import { ApiContext } from '../context/ApiContext';
 import { dev } from '../api/config';
+import { EditCourseImage } from '../components/forms/EditCourseImage';
 
-export interface CompletedCourse extends Course {
+export interface CompletedCourse extends BasicCourse {
   id: number;
+  instructors: { id: string; firstname: string; lastname: string }[];
 }
 
 export interface CompletedLecture extends Lecture {
@@ -40,13 +47,20 @@ export const CourseForm: React.FC = () => {
 
   const parseCourse = (course: CourseOverview) => ({
     id: course.id,
-    instructors: course.instructors.map((i) => i.id),
+    instructors: course.instructors.map((i) => ({
+      id: i.id,
+      firstname: i.firstname,
+      lastname: i.lastname,
+    })),
     name: course.name,
     outline: course.outline,
     description: course.description,
     category: course.category,
     tags: course.tags.map((t) => t.id),
-    submit: false,
+    submit: course.state !== CourseState.CREATED,
+    image: course.image,
+    allowContact: course.allowContact,
+    correspondentID: course.correspondentID,
   });
 
   const parseSubCourse = (course: CourseOverview) => {
@@ -126,12 +140,27 @@ export const CourseForm: React.FC = () => {
 
     if (position === 1) {
       return (
+        <EditCourseImage
+          course={course}
+          next={() => {
+            setPosition(2);
+          }}
+          onSuccess={(imageURL) => {
+            setCourse({ ...course, image: imageURL });
+          }}
+          edit={!!params?.id}
+        />
+      );
+    }
+
+    if (position === 2) {
+      return (
         <CreateLecture
           lectures={lectures}
           subCourse={subCourse}
           course={course}
           next={() => {
-            setPosition(2);
+            setPosition(3);
           }}
           onCancelLecture={(id) => {
             setLectures([...lectures.filter((s) => s.id !== id)]);
@@ -139,11 +168,12 @@ export const CourseForm: React.FC = () => {
           onSuccess={(lecture) => {
             setLectures([...lectures, lecture]);
           }}
+          edit={!!params?.id}
         />
       );
     }
 
-    if (position === 2) {
+    if (position === 3) {
       return (
         <CourseSuccess
           course={course}
@@ -165,9 +195,14 @@ export const CourseForm: React.FC = () => {
 
   return (
     <CourseContainer position={position}>
-      {position === 0 && <Title size="h2">Erstelle einen Kurs</Title>}
-      {position === 1 && <Title size="h2">Lege deine Kurstermine fest</Title>}
-      {position === 2 && (
+      {position === 0 && (
+        <Title size="h2">
+          {params?.id ? 'Bearbeite diesen Kurs' : 'Erstelle einen Kurs'}
+        </Title>
+      )}
+      {position === 1 && <Title size="h2">Lade ein Bild hoch</Title>}
+      {position === 2 && <Title size="h2">Lege deine Kurstermine fest</Title>}
+      {position === 3 && (
         <Title size="h2">Der Kurs wurde erfolgreich erstellt.</Title>
       )}
       <div className={classes.formContainer}>{renderForm()}</div>

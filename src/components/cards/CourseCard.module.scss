@@ -1,50 +1,65 @@
+.marginContainer {
+  padding: 0px 16px 0px 0px;
+}
+
 .baseContainer {
-  @media only screen and (max-width: 992px) {
-    max-width: 400px !important;
-    min-width: 400px;
-  }
-}
-
-.container {
-  display: flex;
-  justify-content: space-around;
+  display: inline-flex;
+  flex-direction: column;
+  background: white;
   width: 100%;
-  align-items: center;
+  min-height: 500px;
+  max-height: 500px;
+  max-width: 360px;
+  min-width: 360px;
+  box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.02);
 
-  @media only screen and (max-width: 992px) {
+  .contentContainer {
+    padding: 0 20px;
+    display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 300px;
+
+    .title {
+      margin-left: 0px;
+      margin-right: 0px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .text {
+      margin-left: 0px;
+      margin-right: 0px;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
-  @media only screen and (max-width: 768px) {
+
+  .infoContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0px;
+    .info {
+      display: flex;
+      align-items: center;
+    }
   }
-}
-
-.matchInfoContainer {
-  flex-grow: 1;
-
-  .emailText {
-    margin-top: -12px !important;
-  }
-
-  .outlineText {
-    margin-top: -8px !important;
-    max-width: 340px !important;
-    line-height: 24px;
-  }
-}
-
-.tagContainer {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.subjectContainer {
-  flex-grow: 1;
-  width: 300px;
-
-  .emailText {
-    margin-top: -16px !important;
+  .coverImageContainer {
+    width: 100%;
+    height: 200px;
+    .coverImage {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 }

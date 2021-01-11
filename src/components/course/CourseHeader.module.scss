@@ -1,0 +1,104 @@
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+  background: #f4f6ff;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: 20px;
+
+  .advancedFilterContainer {
+    max-width: 920px;
+    grid-template-columns: 2fr 1fr;
+    display: grid;
+    @media only screen and (max-width: 992px) {
+      grid-template-columns: 2fr 1fr;
+    }
+    @media only screen and (max-width: 400px) {
+      grid-template-columns: 1fr;
+    }
+
+    .filterContainer {
+      display: flex;
+      flex-direction: column;
+      margin-right: 8px;
+      margin-left: 8px;
+
+      .gradeGrid {
+        display: grid;
+        grid-template-columns: 110px 110px 110px;
+        column-gap: 8px;
+        row-gap: 8px;
+        @media only screen and (max-width: 600px) {
+          grid-template-columns: 110px 110px;
+        }
+      }
+      .smallGrid {
+        display: grid;
+        grid-template-columns: 120px;
+        column-gap: 8px;
+        row-gap: 8px;
+      }
+      .normalGrid {
+        display: grid;
+        grid-template-columns: 150px;
+        column-gap: 8px;
+        row-gap: 8px;
+      }
+      .bigGrid {
+        display: grid;
+        grid-template-columns: 200px;
+        column-gap: 8px;
+        row-gap: 8px;
+      }
+
+      .checkbox {
+        margin-left: 0px;
+      }
+
+      .title {
+        margin: 8px;
+      }
+    }
+  }
+}
+
+.headerCenterContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.backButtonContainer {
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  .backButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.searchContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .resetButton {
+    width: 180px;
+    padding: 4px;
+    margin-top: 8px;
+    color: #1890ff;
+    outline-color: #1890ff;
+    transition: opacity 0.15s ease-in-out;
+
+    &.hideResetButton {
+      opacity: 0;
+    }
+  }
+}

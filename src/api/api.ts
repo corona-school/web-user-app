@@ -230,7 +230,7 @@ export const axiosGetCourses = async (
   const params = new URLSearchParams();
   params.append(
     'fields',
-    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
+    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart,image'
   );
 
   return axios
@@ -427,6 +427,35 @@ export const axiosLeaveCourse = async (
     .catch(logError('leaveCourse'));
 };
 
+export const axiosJoinCourseWaitingList = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  participant: string
+) => {
+  await axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/waitinglist/${participant}`,
+      {},
+      { headers: { token } }
+    )
+    .catch(logError('joinCourse'));
+};
+
+export const axiosLeaveCourseWaitingList = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  participant: string
+) => {
+  await axios
+    .delete(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/waitinglist/${participant}`,
+      { headers: { token } }
+    )
+    .catch(logError('leaveCourse'));
+};
+
 export const axiosCancelCourse = async (token: string, courseId: number) => {
   await axios
     .delete(`${apiURL}/course/${courseId}`, { headers: { token } })
@@ -540,6 +569,24 @@ export const axiosSendCourseGroupMail = async (
     .catch(logError('sendGroupcourseMail'));
 };
 
+export const axiosSendCourseInstructorMail = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  subject: string,
+  body: string
+) => {
+  await axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/instructormail`,
+      { subject, body },
+      {
+        headers: { token },
+      }
+    )
+    .catch(logError('sendCourseInstructorMail'));
+};
+
 export const axiosBecomeInstructor = async (
   id: string,
   token: string,
@@ -573,9 +620,9 @@ export const axiosJoinBBBmeeting = (
 };
 
 export const axiosGetCooperatingSchool = (
-  state: string
+  state?: string
 ): Promise<SchoolInfo[]> => {
-  const url = `${apiURL}/register/${state}/schools`;
+  const url = `${apiURL}/register/schools/${state ?? ''}`;
 
   return axios
     .get(url)
@@ -641,6 +688,44 @@ export const axiosPostUserRoleProjectCoachee = async (
     })
     .catch(logError('becomeProjectCoachee'));
 };
+
+export const axiosAddInstructor = (
+  token: string,
+  courseId: number,
+  email: string
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/course/${courseId}/instructor`,
+        { email },
+        {
+          headers: { token },
+        }
+      )
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosDeleteCourseImage = async (
+  token: string,
+  courseID: number
+) => {
+  const url = `${apiURL}/course/${courseID}/image`;
+  await axios
+    .delete(url, {
+      headers: { token },
+    })
+    .catch(logError('deleteCourseImage'));
+};
+
+// ========================================================================
+export const editCourseImageURL = (courseID: number) =>
+  `${apiURL}/course/${courseID}/image`;
 
 export const axiosGetJufoExperts = (token: string): Promise<Expert[]> => {
   return new Promise<Expert[]>((resolve, reject) => {
