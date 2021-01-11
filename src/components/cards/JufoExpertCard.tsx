@@ -32,15 +32,21 @@ export const JufoExpertCard: React.FC = () => {
     return renderExpertListContent(
       'Willst du als Expert*in gelistet werden?',
       <Text className={classes.emailText} large>
-        Hier hast du die Möglichkeit, ein Profil für unsere Expert*innenliste zu
-        erstellen.
+        Hier hast du die Möglichkeit, dir ein Profil für unsere
+        Expert*innenliste anzulegen.
         <br />
-        Die Expert*innenliste ist eine Möglichkeit für Teilnehmer*innen des
-        Projektcoachings, um Hilfe bei sehr spezifischen/fachlichen Fragen zu
-        finden. In deinem Profil beschreibst du, auf welchem spezifischen Gebiet
-        du Expert*in bist, sodass die Schüler*innen dich bei fachlichen Fragen
-        aus diesem Gebiet kontaktieren können. Dein Profil wird dazu in einer
-        für alle registrierten Schüler*innen zugänglichen Liste aufgeführt.
+        Die Expert*innenliste bildet ein Angebot für Schüler*innen im Rahmen des
+        Projektcoachings, um Ansprechpartner*innen bei fachlichen Fragen in
+        ihren Themengebieten zu finden. In deinem Profil beschreibst du
+        deswegen, in welchem spezifischen Bereichen du Expert*in bist, sodass
+        die Schüler*innen dich bei Bedarf dazu kontaktieren können. Dein Profil
+        wird dann in einer für alle registrierten Schüler*innen zugänglichen
+        Liste aufgeführt.
+        <br />
+        Die Kontaktaufnahme der Schüler*innen verläuft One-Way, das heißt, deine
+        E-Mailadresse wird nicht öffentlich dargestellt. Über das Formular
+        können die Schüler*innen dir aber eine E-Mail schreiben, der du dann
+        gerne antworten kannst.
         <br />
         Um Missbrauch vorzubeugen, wird dein Profil vor Veröffentlichung von
         unserem Team überprüft. Du hast außerdem jederzeit die Möglichkeit, dein
