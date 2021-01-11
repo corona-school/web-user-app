@@ -49,8 +49,9 @@ export const JufoExpertCard: React.FC = () => {
         gerne antworten kannst.
         <br />
         Um Missbrauch vorzubeugen, wird dein Profil vor Veröffentlichung von
-        unserem Team überprüft. Du hast außerdem jederzeit die Möglichkeit, dein
-        Profil aus der öffentliche Liste zu entfernen.
+        unserem Team überprüft, du musst außerdem erfolgreich gescreent sein. Du
+        hast außerdem jederzeit die Möglichkeit, dein Profil aus der
+        öffentlichen Liste zu entfernen.
       </Text>
     );
   };
