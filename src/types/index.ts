@@ -1,4 +1,5 @@
 import { subjectOptions } from '../assets/subjects';
+import { ExpertData } from './Expert';
 import {
   TuteeJufoParticipationIndication,
   TutorJufoParticipationIndication,
@@ -49,6 +50,7 @@ export interface User {
   schoolType?: string;
   lastUpdatedSettingsViaBlocker: number;
   registrationDate: number;
+  expertData?: ExpertData;
 }
 
 export enum ScreeningStatus {

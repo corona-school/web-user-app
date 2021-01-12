@@ -31,6 +31,7 @@ import { getDomainComponents } from './utils/DomainUtils';
 import ProjectCoach from './routes/ProjectCoach';
 import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
 import { CourseOverview } from './routes/CourseOverview';
+import { Modals } from './Modals';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -81,6 +82,7 @@ const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
+      <Modals />
       <Switch>
         <Route path="/login">
           <Login />

@@ -3,7 +3,7 @@ import useSmoothScroll from 'react-smooth-scroll-hook';
 import Icons from '../../assets/icons';
 import { ParsedCourseOverview } from '../../types/Course';
 import CourseCard from '../cards/CourseCard';
-import { Text, Title } from '../Typography';
+import { Title } from '../Typography';
 import classes from './CourseList.module.scss';
 
 interface Props {

@@ -1,0 +1,51 @@
+.container {
+  display: flex;
+  text-align: left;
+  width: 100%;
+  flex-grow: 1;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 16px;
+  white-space: normal;
+
+  &:last-child {
+    border: none;
+  }
+
+  .infoContainer {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .cardDescription {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .rightHeader {
+        display: flex;
+        align-items: center;
+      }
+    }
+    .expertTags {
+      margin: 10px 8px 8px 8px;
+    }
+  }
+
+  .emailButton {
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+  }
+}
+.containerButton {
+  width: 100%;
+}

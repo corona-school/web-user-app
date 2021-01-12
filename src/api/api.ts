@@ -18,6 +18,9 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
+
+import { Expert, ExpertTag, ExpertUpdate } from '../types/Expert';
+
 import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
 
 const logError = (apiName: string) => (error: Error) => {
@@ -176,6 +179,7 @@ export const axiosPutUserActive = async (
   active: boolean
 ) => {
   const url = `${apiURL}/user/${id}/active/${active ? 'true' : 'false'}`;
+
   console.log(url);
   await axios
     .put(url, undefined, { headers: { token } })
@@ -463,8 +467,6 @@ export const axiosCreateSubCourse = (
   courseId: number,
   subCourse: SubCourse
 ): Promise<number> => {
-  console.log(subCourse);
-
   return axios
     .post(`${apiURL}/course/${courseId}/subcourse`, subCourse, {
       headers: { token },
@@ -724,3 +726,72 @@ export const axiosDeleteCourseImage = async (
 // ========================================================================
 export const editCourseImageURL = (courseID: number) =>
   `${apiURL}/course/${courseID}/image`;
+
+export const axiosGetJufoExperts = (token: string): Promise<Expert[]> => {
+  return new Promise<Expert[]>((resolve, reject) => {
+    axios
+      .get(`${apiURL}/expert`, {
+        headers: { token },
+      })
+      .then((response) => resolve(response.data))
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosGetUsedExpertTags = (token: string): Promise<ExpertTag[]> => {
+  return new Promise<ExpertTag[]>((resolve, reject) => {
+    axios
+      .get(`${apiURL}/expert/tags`, {
+        headers: { token },
+      })
+      .then((response) => resolve(response.data))
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosContactJufoExpert = (
+  token: string,
+  id: string,
+  emailText: string,
+  subject: string
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/expert/${id}/contact`,
+        { emailText, subject },
+        {
+          headers: { token },
+        }
+      )
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosUpdateJufoExpert = (
+  token: string,
+  id: string,
+  data: ExpertUpdate
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .put(`${apiURL}/expert/${id}`, data, {
+        headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
