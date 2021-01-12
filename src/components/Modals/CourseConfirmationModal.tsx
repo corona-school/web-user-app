@@ -53,19 +53,30 @@ const CourseConfirmationModal: React.FC<{
         modalContext.setOpenedModal(null);
         return;
       }
-      apiContext.joinCourse(course.id, course.subcourse.id, userId).then(() => {
-        setCourse({
-          ...course,
-          subcourse: {
-            ...course.subcourse,
-            participants: course.subcourse.participants + 1,
-            joined: true,
-            onWaitingList: false,
-          },
+      apiContext
+        .joinCourse(course.id, course.subcourse.id, userId)
+        .then(() => {
+          setCourse({
+            ...course,
+            subcourse: {
+              ...course.subcourse,
+              participants: course.subcourse.participants + 1,
+              joined: true,
+              onWaitingList: false,
+            },
+          });
+          message.success('Du bist dem Kurs beigetreten.');
+          setPageIndex(1);
+        })
+        .catch((e) => {
+          if (e?.request.status === 429) {
+            message.error(
+              'Teilnahme nicht möglich! Du kannst nur an maximal drei aktiven Kursen teilnehmen!'
+            );
+          } else {
+            message.error('Es ist ein Fehler aufgetreten');
+          }
         });
-        message.success('Du bist dem Kurs beigetreten.');
-        setPageIndex(1);
-      });
     }
   };
 
