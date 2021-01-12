@@ -17,6 +17,8 @@ import { Title, Text } from '../components/Typography';
 import { ApiContext } from '../context/ApiContext';
 import { Tutor } from '../types/Registration';
 import classes from './RegisterDrehtuerTutor.module.scss';
+import { env } from '../api/config';
+import NoRegistrationsPage from '../components/NoRegistrationsPage';
 
 export const RegisterDrehtuerTutor: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -24,6 +26,10 @@ export const RegisterDrehtuerTutor: React.FC = () => {
 
   const [form] = Form.useForm();
   const apiContext = useContext(ApiContext);
+
+  if (env.REACT_APP_DREHTUER === 'disabled') {
+    return <NoRegistrationsPage />;
+  }
 
   const registerTutor = async () => {
     try {
