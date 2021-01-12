@@ -237,7 +237,6 @@ const Settings: React.FC = () => {
       {(userContext.user.isTutor || userContext.user.isPupil) &&
         renderSubjects()}
 
-      {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}
       {userContext.user.isTutor && renderCertificatesTable()}
