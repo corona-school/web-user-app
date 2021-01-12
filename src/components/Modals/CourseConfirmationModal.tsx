@@ -79,17 +79,15 @@ const CourseConfirmationModal: React.FC<{
             <DialogModalBase.Header>
               <DialogModalBase.Icon Icon={EnrollIcon} />
               <DialogModalBase.Title>
-                {mode === 'quit' ? 'Kurs verlassen' : 'An Kurs teilnehmen'}
+                {mode === 'quit' ? 'Kurs verlassen' : 'Verbindliche Anmeldung'}
               </DialogModalBase.Title>
               <DialogModalBase.CloseButton />
             </DialogModalBase.Header>
             <div>
               <DialogModalBase.Description>
-                Bist du dir sicher, dass du{' '}
                 {mode === 'quit'
-                  ? 'den Kurs verlassen'
-                  : 'an dem Kurs teilnehmen'}{' '}
-                möchtest?
+                  ? 'Bist du dir sicher, dass du den Kurs verlassen möchtest?'
+                  : 'Wenn du dich für diesen Kurs anmeldest, werden wir einen Platz für dich reservieren. Bist du sicher, dass du teilnehmen möchtest und zu den Kurszeiten verfügbar bist?'}
               </DialogModalBase.Description>
 
               <DialogModalBase.Content>
