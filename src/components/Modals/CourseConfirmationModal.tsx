@@ -109,12 +109,21 @@ const CourseConfirmationModal: React.FC<{
           <div>
             <DialogModalBase.Header>
               <DialogModalBase.Icon Icon={VideoIcon} />
-              <DialogModalBase.Title>Video-Chat testen</DialogModalBase.Title>
+              <DialogModalBase.Title>
+                Erfolgreiche Registrierung
+              </DialogModalBase.Title>
               <DialogModalBase.CloseButton />
             </DialogModalBase.Header>
             <div>
               <DialogModalBase.Description>
-                Möchtest du den Video-Chat testen? Dieser Schritt ist optional.
+                Du hast dich erfolgreich für den Kurs{' '}
+                <span style={{ fontStyle: 'italic' }}>{course.name}</span>{' '}
+                angemeldet. Falls du kurzfristig doch nicht teilnehmen kannst,
+                dann verlasse den Kurs, damit dein Platz für andere
+                Schüler*innen frei wird. <br />
+                <br />
+                In Vorbereitung auf den Kurs solltest du das Videokonferenz-Tool
+                einmal testen.
               </DialogModalBase.Description>
 
               <DialogModalBase.Content>
