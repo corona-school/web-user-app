@@ -11,6 +11,8 @@ import classes from './Course.module.scss';
 import { parseCourse } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
 import { CourseBanner } from '../components/course/CourseBanner';
+import { env } from '../api/config';
+import { NoCourses } from '../components/NoService';
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,11 @@ const Course = () => {
   const apiContext = useContext(Context.Api);
   const userContext = useContext(UserContext);
 
+  const courseOverviewDisabled = env.REACT_APP_COURSE_OVERVIEW === 'disabled';
+
   useEffect(() => {
+    if (courseOverviewDisabled) return;
+
     setLoading(true);
 
     apiContext
@@ -33,6 +39,10 @@ const Course = () => {
         setLoading(false);
       });
   }, [apiContext, userContext.user.type]);
+
+  if (courseOverviewDisabled) {
+    return <NoCourses />;
+  }
 
   if (loading) {
     return <div>Kurse werden geladen...</div>;

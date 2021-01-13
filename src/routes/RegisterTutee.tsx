@@ -32,6 +32,8 @@ import {
   StateField,
   MessageField,
 } from '../components/forms/registration';
+import { env } from '../api/config';
+import { NoRegistration } from '../components/NoService';
 
 const { Option } = Select;
 
@@ -89,6 +91,10 @@ const RegisterTutee: React.FC<Props> = ({
   const [schoolInfo, setSchoolInfo] = useState<SchoolInfo[]>(null);
 
   const isOnlyJufo = isJufo && !isTutee && !isGroups;
+
+  if (env.REACT_APP_TUTEE_REGISTRATION === 'disabled') {
+    return <NoRegistration />;
+  }
 
   if (!!cooperationMode && !loading && schoolInfo == null) {
     // load school info
