@@ -43,6 +43,20 @@ const Settings: React.FC = () => {
     );
   }
 
+  async function rejectCertificate(uuid: IExposedCertificate['uuid']) {
+    const response = await getCertificate(uuid, language);
+    window.open(
+      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
+    );
+  }
+
+  async function reviewCertificate(uuid: IExposedCertificate['uuid']) {
+    const response = await getCertificate(uuid, language);
+    window.open(
+      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
+    );
+  }
+
   const { setOpenedModal } = modalContext;
 
   useEffect(() => {
@@ -167,7 +181,7 @@ const Settings: React.FC = () => {
           <>
             <Tag
               color={
-                (certificate.state === 'manual' && 'green') ||
+                (certificate.state === 'manual' && 'grey') ||
                 (certificate.state === 'awaiting-approval' && 'yellow') ||
                 (certificate.state === 'approved' && 'green')
               }
@@ -183,28 +197,40 @@ const Settings: React.FC = () => {
         key: 'action',
         render: (certificate: IExposedCertificate) => (
           <Space size="middle">
-            {userContext.user.isTutor &&
-              certificate.state !== 'awaiting-approval' && (
-                <>
-                  <Select
-                    defaultValue={defaultLanguage}
-                    onChange={(event) => setLanguage(event)}
-                    style={{ width: 120 }}
-                  >
-                    {Object.entries(supportedLanguages).map(([code, value]) => (
-                      <Select.Option value={code}>{value}</Select.Option>
-                    ))}
-                  </Select>
-                  <Button
-                    type="primary"
-                    onClick={() => showCertificate(certificate.uuid)}
-                  >
-                    Ansehen
-                  </Button>
-                </>
-              )}
+            {userContext.user.isTutor && certificate.state === 'approved' && (
+              <>
+                <Select
+                  defaultValue={defaultLanguage}
+                  onChange={(event) => setLanguage(event)}
+                  style={{ width: 120 }}
+                >
+                  {Object.entries(supportedLanguages).map(([code, value]) => (
+                    <Select.Option value={code}>{value}</Select.Option>
+                  ))}
+                </Select>
+                <Button
+                  type="primary"
+                  onClick={() => showCertificate(certificate.uuid)}
+                >
+                  Ansehen
+                </Button>
+              </>
+            )}
 
             {/* <Button danger>Löschen</Button> */}
+            {!userContext.user.isTutor && (
+              <>
+                <Button onClick={() => reviewCertificate(certificate.uuid)}>
+                  Genehmigen
+                </Button>
+                <Button
+                  danger
+                  onClick={() => rejectCertificate(certificate.uuid)}
+                >
+                  Ablehnen
+                </Button>
+              </>
+            )}
           </Space>
         ),
       },
