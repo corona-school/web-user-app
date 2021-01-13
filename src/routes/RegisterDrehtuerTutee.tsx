@@ -18,7 +18,7 @@ import { ApiContext } from '../context/ApiContext';
 import { Tutee } from '../types/Registration';
 import classes from './RegisterDrehtuerTutee.module.scss';
 import { env } from '../api/config';
-import NoRegistrationsPage from '../components/NoRegistrationsPage';
+import { NoRegistration } from '../components/NoService';
 
 export const RegisterDrehtuerTutee: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ export const RegisterDrehtuerTutee: React.FC = () => {
   const apiContext = useContext(ApiContext);
 
   if (env.REACT_APP_DREHTUER === 'disabled') {
-    return <NoRegistrationsPage />;
+    return <NoRegistration />;
   }
 
   const registerTutee = async () => {

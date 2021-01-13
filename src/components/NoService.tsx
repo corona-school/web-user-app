@@ -5,7 +5,7 @@ import { Title } from './Typography';
 import { WorkInProgress } from '../assets/animations/work-in-progress/WorkInProgress';
 import SignupContainer from './container/SignupContainer';
 
-const NoRegistrationsPage = () => {
+export const NoRegistration = () => {
   return (
     <SignupContainer>
       <div className={classes.signupContainer}>
@@ -31,4 +31,16 @@ const NoRegistrationsPage = () => {
   );
 };
 
-export default NoRegistrationsPage;
+export const NoCourses = () => {
+  return (
+    <div>
+      <Title size="h1" style={{ textAlign: 'center' }}>
+        Aktuell können leider keine Kurse angezeigt werden.
+      </Title>
+      <WorkInProgress />
+      <Title size="h4" style={{ textAlign: 'center' }}>
+        Bitte versuche es zu einem späteren Zeitpunkt nochmal.
+      </Title>
+    </div>
+  );
+};

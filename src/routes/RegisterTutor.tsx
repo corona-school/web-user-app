@@ -27,7 +27,7 @@ import {
   MessageField,
 } from '../components/forms/registration';
 import { env } from '../api/config';
-import NoRegistrationsPage from '../components/NoRegistrationsPage';
+import { NoRegistration } from '../components/NoService';
 
 const { Option } = Select;
 
@@ -94,7 +94,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const redirectTo = useQuery().get('redirectTo');
 
   if (env.REACT_APP_TUTOR_REGISTRATION === 'disabled') {
-    return <NoRegistrationsPage />;
+    return <NoRegistration />;
   }
 
   const renderIsTutorCheckbox = () => {

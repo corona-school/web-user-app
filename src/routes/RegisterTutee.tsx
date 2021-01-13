@@ -33,7 +33,7 @@ import {
   MessageField,
 } from '../components/forms/registration';
 import { env } from '../api/config';
-import NoRegistrationsPage from '../components/NoRegistrationsPage';
+import { NoRegistration } from '../components/NoService';
 
 const { Option } = Select;
 
@@ -93,7 +93,7 @@ const RegisterTutee: React.FC<Props> = ({
   const isOnlyJufo = isJufo && !isTutee && !isGroups;
 
   if (env.REACT_APP_TUTEE_REGISTRATION === 'disabled') {
-    return <NoRegistrationsPage />;
+    return <NoRegistration />;
   }
 
   if (!!cooperationMode && !loading && schoolInfo == null) {
