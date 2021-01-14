@@ -234,7 +234,7 @@ export const axiosGetCourses = async (
   );
 
   return axios
-    .get(url, { headers: { token }, params })
+    .get(url, { params })
     .then((response) => response.data)
     .catch(logError('getCourses'));
 };
