@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Empty } from 'antd';
 import Context from '../context';
-import { Text, Title } from '../components/Typography';
+import { Title } from '../components/Typography';
 import { LinkButton } from '../components/button';
 import Icons from '../assets/icons';
 import { ParsedCourseOverview } from '../types/Course';
@@ -58,12 +58,6 @@ const Course = () => {
       <div className={classes.containerRequests}>
         <div className={classes.header}>
           <Title size="h1">Deine Kurse</Title>
-          <Text style={{ color: 'rgb(244, 72, 109)' }} bold>
-            Aktuell werden hier alle Kurse angezeigt, dieser Fehler ist uns
-            bekannt und wir arbeiten an einer Lösung. Nach der erfolgreichen
-            Kursregistrierung erhältst du eine Bestätigungsmail, diese zeigt dir
-            an, dass du im jeweiligen Kurs erfolgreich angemeldet bist.
-          </Text>
           {userContext.user.type === 'student' && (
             <LinkButton
               href="/courses/create"
