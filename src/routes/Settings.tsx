@@ -133,7 +133,7 @@ const Settings: React.FC = () => {
   };
 
   const stateTranslation: { [key in IExposedCertificate['state']]: string } = {
-    manual: 'Unbestätigt',
+    manual: 'Manuell',
     'awaiting-approval': 'Bestätigung ausstehend',
     approved: 'Bestätigt',
   };
@@ -197,40 +197,43 @@ const Settings: React.FC = () => {
         key: 'action',
         render: (certificate: IExposedCertificate) => (
           <Space size="middle">
-            {userContext.user.isTutor && certificate.state === 'approved' && (
-              <>
-                <Select
-                  defaultValue={defaultLanguage}
-                  onChange={(event) => setLanguage(event)}
-                  style={{ width: 120 }}
-                >
-                  {Object.entries(supportedLanguages).map(([code, value]) => (
-                    <Select.Option value={code}>{value}</Select.Option>
-                  ))}
-                </Select>
-                <Button
-                  type="primary"
-                  onClick={() => showCertificate(certificate.uuid)}
-                >
-                  Ansehen
-                </Button>
-              </>
-            )}
+            {userContext.user.isTutor &&
+              (certificate.state === 'approved' ||
+                certificate.state === 'manual') && (
+                <>
+                  <Select
+                    defaultValue={defaultLanguage}
+                    onChange={(event) => setLanguage(event)}
+                    style={{ width: 120 }}
+                  >
+                    {Object.entries(supportedLanguages).map(([code, value]) => (
+                      <Select.Option value={code}>{value}</Select.Option>
+                    ))}
+                  </Select>
+                  <Button
+                    type="primary"
+                    onClick={() => showCertificate(certificate.uuid)}
+                  >
+                    Ansehen
+                  </Button>
+                </>
+              )}
 
             {/* <Button danger>Löschen</Button> */}
-            {!userContext.user.isTutor && (
-              <>
-                <Button onClick={() => reviewCertificate(certificate.uuid)}>
-                  Genehmigen
-                </Button>
-                <Button
-                  danger
-                  onClick={() => rejectCertificate(certificate.uuid)}
-                >
-                  Ablehnen
-                </Button>
-              </>
-            )}
+            {!userContext.user.isTutor &&
+              certificate.state === 'awaiting-approval' && (
+                <>
+                  <Button onClick={() => reviewCertificate(certificate.uuid)}>
+                    Genehmigen
+                  </Button>
+                  <Button
+                    danger
+                    onClick={() => rejectCertificate(certificate.uuid)}
+                  >
+                    Ablehnen
+                  </Button>
+                </>
+              )}
           </Space>
         ),
       },
