@@ -108,7 +108,17 @@ export const CourseOverview: React.FC<Props> = ({
       'priorknowledge-required',
     ];
 
-    const clubTags = tags
+    const priorityClubTagIDs = ['mint', 'language', 'environment']; // descending
+    const clubTags = [
+      ...tags
+        .filter((t) => priorityClubTagIDs.includes(t.id))
+        .sort(
+          (t1, t2) =>
+            priorityClubTagIDs.indexOf(t1.id) -
+            priorityClubTagIDs.indexOf(t2.id)
+        ),
+      ...tags.filter((t) => !priorityClubTagIDs.includes(t.id)),
+    ]
       .filter(
         (t) => t.category === 'club' && !invisibleClubTagIds.includes(t.id)
       )
