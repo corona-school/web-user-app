@@ -31,6 +31,7 @@
     height: 60px;
     border-radius: 100px;
     margin-right: 40px;
+    flex-shrink: 0;
     > svg {
       width: 20px;
     }
@@ -52,6 +53,10 @@
 
 .description {
   margin-top: 20px;
+  color: #666666;
+}
+
+.text {
   color: #666666;
 }
 

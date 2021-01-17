@@ -11,8 +11,8 @@ import classes from './Course.module.scss';
 import { parseCourse } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
 import { CourseBanner } from '../components/course/CourseBanner';
-
-const MAX_COURSES = 25;
+import { env } from '../api/config';
+import { NoCourses } from '../components/NoService';
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,11 @@ const Course = () => {
   const apiContext = useContext(Context.Api);
   const userContext = useContext(UserContext);
 
+  const courseOverviewDisabled = env.REACT_APP_COURSE_OVERVIEW === 'disabled';
+
   useEffect(() => {
+    if (courseOverviewDisabled) return;
+
     setLoading(true);
 
     apiContext
@@ -36,6 +40,10 @@ const Course = () => {
       });
   }, [apiContext, userContext.user.type]);
 
+  if (courseOverviewDisabled) {
+    return <NoCourses />;
+  }
+
   if (loading) {
     return <div>Kurse werden geladen...</div>;
   }
@@ -50,19 +58,18 @@ const Course = () => {
       <div className={classes.containerRequests}>
         <div className={classes.header}>
           <Title size="h1">Deine Kurse</Title>
-          {userContext.user.type === 'student' &&
-            myCourses.length <= MAX_COURSES && (
-              <LinkButton
-                href="/courses/create"
-                local
-                backgroundColor="#F4486D"
-                color="white"
-                className={classes.courseButton}
-              >
-                <Icons.Add height="16px" />
-                Erstelle einen Kurs
-              </LinkButton>
-            )}
+          {userContext.user.type === 'student' && (
+            <LinkButton
+              href="/courses/create"
+              local
+              backgroundColor="#F4486D"
+              color="white"
+              className={classes.courseButton}
+            >
+              <Icons.Add height="16px" />
+              Erstelle einen Kurs
+            </LinkButton>
+          )}
         </div>
         <div className={classes.myCoursesContainer}>
           {myCourses.length === 0 ? (

@@ -6,7 +6,12 @@ import {
   CreateCourse,
   CompletedSubCourse,
 } from '../components/forms/CreateCourse';
-import { Course, Lecture, CourseOverview, CourseState } from '../types/Course';
+import {
+  Lecture,
+  CourseOverview,
+  CourseState,
+  BasicCourse,
+} from '../types/Course';
 import { CreateLecture } from '../components/forms/CreateLecture';
 import CourseSuccess from '../components/forms/CourseSuccess';
 
@@ -15,8 +20,9 @@ import { ApiContext } from '../context/ApiContext';
 import { dev } from '../api/config';
 import { EditCourseImage } from '../components/forms/EditCourseImage';
 
-export interface CompletedCourse extends Course {
+export interface CompletedCourse extends BasicCourse {
   id: number;
+  instructors: { id: string; firstname: string; lastname: string }[];
 }
 
 export interface CompletedLecture extends Lecture {
@@ -41,7 +47,11 @@ export const CourseForm: React.FC = () => {
 
   const parseCourse = (course: CourseOverview) => ({
     id: course.id,
-    instructors: course.instructors.map((i) => i.id),
+    instructors: course.instructors.map((i) => ({
+      id: i.id,
+      firstname: i.firstname,
+      lastname: i.lastname,
+    })),
     name: course.name,
     outline: course.outline,
     description: course.description,
@@ -49,6 +59,8 @@ export const CourseForm: React.FC = () => {
     tags: course.tags.map((t) => t.id),
     submit: course.state !== CourseState.CREATED,
     image: course.image,
+    allowContact: course.allowContact,
+    correspondentID: course.correspondentID,
   });
 
   const parseSubCourse = (course: CourseOverview) => {

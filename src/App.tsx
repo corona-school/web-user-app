@@ -13,6 +13,7 @@ import Support from './routes/Support';
 import Feedback from './routes/Feedback';
 import Help from './routes/Help';
 import Login from './routes/Login';
+import Logout from './routes/Logout';
 import Verify from './routes/Verify';
 import PublicCourse from './routes/PublicCourse';
 
@@ -30,6 +31,7 @@ import { getDomainComponents } from './utils/DomainUtils';
 import ProjectCoach from './routes/ProjectCoach';
 import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
 import { CourseOverview } from './routes/CourseOverview';
+import { Modals } from './Modals';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -80,9 +82,13 @@ const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
+      <Modals />
       <Switch>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/logout">
+          <Logout />
         </Route>
         <Route path="/register/tutee">
           <RegisterTutee

@@ -16,6 +16,8 @@ import { ReactComponent as SignupBackgroundCircle2 } from './signup/yellow-circl
 import { ReactComponent as SignupBackgroundZickZack } from './signup/zick-zack-line.svg';
 import { ReactComponent as MentoringPic } from './mentoring.svg';
 
+import { ReactComponent as NotFound } from './not-found.svg';
+
 import { ReactComponent as Celebration } from './celebration_blue.svg';
 
 import DrehtuerImage from './drehtuer.png';
@@ -45,6 +47,7 @@ const ImageList = {
   DefaultCourseCover,
   Empty,
   Graduation,
+  NotFound,
 };
 
 const Images: {

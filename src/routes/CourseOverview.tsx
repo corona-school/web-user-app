@@ -11,6 +11,8 @@ import { ParsedCourseOverview, Tag, TagAndCategory } from '../types/Course';
 import { defaultPublicCourseSort, parseCourse } from '../utils/CourseUtil';
 import classes from './CourseOverview.module.scss';
 import { Text } from '../components/Typography';
+import { env } from '../api/config';
+import { NoCourses } from '../components/NoService';
 
 interface Props {
   customCourseLink?: (course: ParsedCourseOverview) => string;
@@ -30,7 +32,11 @@ export const CourseOverview: React.FC<Props> = ({
   const apiContext = useContext(ApiContext);
   const userContext = useContext(UserContext);
 
+  const courseOverviewDisabled = env.REACT_APP_COURSE_OVERVIEW === 'disabled';
+
   const loadCourses = () => {
+    if (courseOverviewDisabled) return;
+
     setLoading(true);
 
     apiContext
@@ -54,6 +60,10 @@ export const CourseOverview: React.FC<Props> = ({
   useEffect(() => {
     loadCourses();
   }, [userContext.user.type]);
+
+  if (courseOverviewDisabled) {
+    return <NoCourses />;
+  }
 
   const renderCourseLists = () => {
     if (tags.length === 0) {
@@ -98,7 +108,17 @@ export const CourseOverview: React.FC<Props> = ({
       'priorknowledge-required',
     ];
 
-    const clubTags = tags
+    const priorityClubTagIDs = ['mint', 'language', 'environment']; // descending
+    const clubTags = [
+      ...tags
+        .filter((t) => priorityClubTagIDs.includes(t.id))
+        .sort(
+          (t1, t2) =>
+            priorityClubTagIDs.indexOf(t1.id) -
+            priorityClubTagIDs.indexOf(t2.id)
+        ),
+      ...tags.filter((t) => !priorityClubTagIDs.includes(t.id)),
+    ]
       .filter(
         (t) => t.category === 'club' && !invisibleClubTagIds.includes(t.id)
       )

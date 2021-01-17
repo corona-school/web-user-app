@@ -1,7 +1,7 @@
 .header {
   position: sticky;
   top: 0;
-  left: 0; 
+  left: 0;
   right: 0;
   z-index: 800;
   min-height: 62px;
@@ -18,6 +18,13 @@
   .mobileNav {
     padding: 8px 16px;
     cursor: pointer;
+  }
+
+  .leftHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
   }
 }
 

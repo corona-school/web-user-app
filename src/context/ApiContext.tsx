@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useContext, useState, useEffect } from 'react';
 import { AxiosResponse } from 'axios';
 import { AuthContext } from './AuthContext';
@@ -23,11 +22,8 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
-import {
-  IExposedCertificate,
-  ISupportedLanguage,
-  supportedLanguages,
-} from '../types/Certificate';
+import { Expert, ExpertTag, ExpertUpdate } from '../types/Expert';
+import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
 
 interface IApiContext {
   getUserData: () => Promise<User>;
@@ -60,6 +56,16 @@ interface IApiContext {
     participantId: string
   ) => Promise<void>;
   leaveCourse: (
+    courseId: number,
+    subCourseId: number,
+    participantId: string
+  ) => Promise<void>;
+  joinCourseWaitingList: (
+    courseId: number,
+    subCourseId: number,
+    participantId: string
+  ) => Promise<void>;
+  leaveCourseWaitingList: (
     courseId: number,
     subCourseId: number,
     participantId: string
@@ -100,6 +106,12 @@ interface IApiContext {
     subject: string,
     body: string
   ) => Promise<void>;
+  sendCourseInstructorMail: (
+    courseId: number,
+    subCourseId: number,
+    subject: string,
+    body: string
+  ) => Promise<void>;
   joinBBBmeeting: (
     courseId: number,
     subcourseId: number
@@ -119,6 +131,14 @@ interface IApiContext {
   ) => Promise<void>;
   addInstructor: (courseId: number, email: string) => Promise<void>;
   deleteCourseImage: (courseID: number) => Promise<void>;
+  getJufoExperts: () => Promise<Expert[]>;
+  getUsedExpertTags: () => Promise<ExpertTag[]>;
+  contactJufoExpert: (
+    id: string,
+    emailText: string,
+    subject: string
+  ) => Promise<void>;
+  updateJufoExpert: (id: string, data: ExpertUpdate) => Promise<void>;
 }
 
 const reject = () => Promise.reject();
@@ -128,6 +148,10 @@ export const ApiContext = React.createContext<IApiContext>({
   dissolveMatch: reject,
   dissolveProjectMatch: reject,
   requestNewToken: api.axiosRequestNewToken,
+  getJufoExperts: reject,
+  getUsedExpertTags: reject,
+  contactJufoExpert: reject,
+  updateJufoExpert: reject,
   putUser: reject,
   putUserSubjects: reject,
   putUserProjectFields: reject,
@@ -145,6 +169,8 @@ export const ApiContext = React.createContext<IApiContext>({
   editCourse: reject,
   joinCourse: reject,
   leaveCourse: reject,
+  joinCourseWaitingList: reject,
+  leaveCourseWaitingList: reject,
   submitCourse: reject,
   publishSubCourse: reject,
   createSubCourse: reject,
@@ -157,6 +183,7 @@ export const ApiContext = React.createContext<IApiContext>({
   registerStateTutee: reject,
   registerTutor: reject,
   sendCourseGroupMail: reject,
+  sendCourseInstructorMail: reject,
   joinBBBmeeting: reject,
   getCooperatingSchools: reject,
   getMentoringMaterial: reject,
@@ -325,6 +352,25 @@ export const ApiProvider: React.FC = ({ children }) => {
   const leaveCourse = (courseId: number, subCourseId, participantId: string) =>
     api.axiosLeaveCourse(token, courseId, subCourseId, participantId);
 
+  const joinCourseWaitingList = (
+    courseId: number,
+    subCourseId,
+    participantId: string
+  ) =>
+    api.axiosJoinCourseWaitingList(token, courseId, subCourseId, participantId);
+
+  const leaveCourseWaitingList = (
+    courseId: number,
+    subCourseId,
+    participantId: string
+  ) =>
+    api.axiosLeaveCourseWaitingList(
+      token,
+      courseId,
+      subCourseId,
+      participantId
+    );
+
   const submitCourse = (id: number, course: Course) =>
     api.axiosSubmitCourse(token, id, course);
 
@@ -341,6 +387,20 @@ export const ApiProvider: React.FC = ({ children }) => {
     body: string
   ) =>
     api.axiosSendCourseGroupMail(token, courseId, subCourseId, subject, body);
+
+  const sendCourseInstructorMail = (
+    courseId: number,
+    subCourseId: number,
+    subject: string,
+    body: string
+  ) =>
+    api.axiosSendCourseInstructorMail(
+      token,
+      courseId,
+      subCourseId,
+      subject,
+      body
+    );
 
   const joinBBBmeeting = (courseId: number, subcourseId: number) =>
     api.axiosJoinBBBmeeting(token, courseId, subcourseId);
@@ -369,6 +429,16 @@ export const ApiProvider: React.FC = ({ children }) => {
   const deleteCourseImage = (courseID: number): Promise<void> =>
     api.axiosDeleteCourseImage(token, courseID);
 
+  const getJufoExperts = () => api.axiosGetJufoExperts(token);
+
+  const getUsedExpertTags = () => api.axiosGetUsedExpertTags(token);
+
+  const contactJufoExpert = (id: string, emailText: string, subject: string) =>
+    api.axiosContactJufoExpert(token, id, emailText, subject);
+
+  const updateJufoExpert = (id: string, data: ExpertUpdate) =>
+    api.axiosUpdateJufoExpert(token, id, data);
+
   return (
     <ApiContext.Provider
       value={{
@@ -392,8 +462,11 @@ export const ApiProvider: React.FC = ({ children }) => {
         registerStateTutee,
         registerTutor,
         sendCourseGroupMail,
+        sendCourseInstructorMail,
         joinCourse,
         leaveCourse,
+        joinCourseWaitingList,
+        leaveCourseWaitingList,
         submitCourse,
         createCourse,
         createSubCourse,
@@ -414,6 +487,10 @@ export const ApiProvider: React.FC = ({ children }) => {
         postUserRoleProjectCoachee,
         addInstructor,
         deleteCourseImage,
+        getJufoExperts,
+        getUsedExpertTags,
+        updateJufoExpert,
+        contactJufoExpert,
       }}
     >
       {children}

@@ -48,6 +48,9 @@ import { ReactComponent as SignupTutor } from './signup/tutor.svg';
 import { ReactComponent as CoatOfArmsNRW } from './states/nrw.svg';
 
 import { ReactComponent as ProjectCoachingIcon } from './project-coaching.svg';
+import { ReactComponent as EmailFilled } from './email-filled.svg';
+import { ReactComponent as BookmarkFilled } from './bookmark-filled.svg';
+import { ReactComponent as BookmarkSlashFilled } from './bookmark-slash-filled.svg';
 
 import { ReactComponent as Team } from './team.svg';
 import { ReactComponent as Hashtag } from './hashtag.svg';
@@ -112,6 +115,9 @@ const IconsList = {
   ChevronLeft,
   ChevronRight,
   Search,
+  EmailFilled,
+  BookmarkFilled,
+  BookmarkSlashFilled,
 };
 
 const Icons: {
