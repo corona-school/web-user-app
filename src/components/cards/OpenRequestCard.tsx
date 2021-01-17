@@ -107,8 +107,10 @@ const OpenRequestCard: React.FC<Props> = ({
               : disabled
               ? `Du kannst leider keine*n neue*n ${
                   projectCoaching ? 'Coach' : 'Student*in'
-                } anfordern, da du schon einen ${
-                  projectCoaching ? 'Student*in' : 'Coach'
+                } anfordern, da du schon eine*n ${
+                  projectCoaching
+                    ? 'Student*in für die 1:1-Lernunterstützung'
+                    : 'Coach'
                 } anforderst.`
               : `Hier kannst du ${
                   projectCoaching
