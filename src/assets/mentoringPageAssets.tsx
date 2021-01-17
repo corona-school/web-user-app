@@ -9,7 +9,7 @@ export const headerText =
   'Berufserfahrung und Expertise in verschiedenen Bereichen aus. Hier kannst ' +
   'du deine Fragen loswerden und wertvolle Tipps für gute, digitale ' +
   'Zusammenarbeit erhalten. Darüber hinaus kannst du dich mit anderen ' +
-  'Studierenden bei Feedback-Calls oder in der Facebook-Gruppe austauschen.';
+  'Studierenden bei Peer-to-Peer Calls oder in der Facebook-Gruppe austauschen.';
 
 export const facebookCardText =
   'Du möchtest dich mit anderen Studierenden über Unterrichtsmethoden ' +
@@ -19,7 +19,7 @@ export const facebookCardText =
 export const feedbackCallText =
   'Du hast Lust, dich mit anderen Studierenden über deine Erfahrungen und ' +
   'Herausforderungen bei der Online-Nachhilfe auszutauschen? Dann bist du ' +
-  'herzlich zu unseren gemeinsamen Feedback-Calls eingeladen. Der passende ' +
+  'herzlich zu unseren gemeinsamen Peer-to-Peer Calls eingeladen. Der passende ' +
   'Link wird immer am Tag des Calls veröffentlicht.';
 
 export const moreInformationButtonLink =
