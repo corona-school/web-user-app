@@ -90,7 +90,7 @@ const OpenRequestCard: React.FC<Props> = ({
         type="button"
         onClick={() => {
           if (!loading) {
-            if (projectCoaching) {
+            if (projectCoaching || user.type === 'student') {
               modifyMatchesRequested((x) => x + 1);
             } else {
               modalContext.setOpenedModal('newMatchConfirmationModal');
