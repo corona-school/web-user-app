@@ -140,7 +140,10 @@ const ProjectCoach: React.FC = () => {
               type="new"
               userType={userContext.user.type}
               projectCoaching
-              disabled={userContext.user.matchesRequested > 0}
+              disabled={
+                userContext.user.isPupil &&
+                userContext.user.matchesRequested > 0
+              }
             />
           );
         }

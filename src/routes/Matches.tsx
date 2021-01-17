@@ -24,7 +24,10 @@ const Matches: React.FC = () => {
             type="new"
             userType={userContext.user.type}
             projectCoaching={false}
-            disabled={userContext.user.projectMatchesRequested > 0}
+            disabled={
+              userContext.user.isProjectCoachee &&
+              userContext.user.projectMatchesRequested > 0
+            }
           />
         );
       }
