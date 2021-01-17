@@ -91,7 +91,7 @@ const Settings: React.FC = () => {
       </>
     );
   };
-  // mfelöf
+
   const renderProjectFields = () => {
     return (
       <>

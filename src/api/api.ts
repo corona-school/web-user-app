@@ -598,13 +598,13 @@ export const axiosGetMentoringMaterial = (
     .catch(logError('getMentoringMaterial'));
 };
 
-export const axiosGetFeedbackCallData = (
+export const axiosGetPeerToPeerCallData = (
   token: string
 ): Promise<PeerToPeerCall> => {
   return axios
-    .get(`${apiURL}/mentoring/feedbackCall`, { headers: { token } })
+    .get(`${apiURL}/mentoring/PeerToPeerCall`, { headers: { token } })
     .then((response) => response.data)
-    .catch(logError('getFeedbackCallData'));
+    .catch(logError('getPeerToPeerCallData'));
 };
 
 export const axiosPostContactMentor = async (

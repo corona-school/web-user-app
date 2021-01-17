@@ -351,7 +351,7 @@ export const ApiProvider: React.FC = ({ children }) => {
   const getMentoringMaterial = (type: string, location: string) =>
     api.axiosGetMentoringMaterial(token, type, location);
 
-  const getFeedbackCallData = () => api.axiosGetFeedbackCallData(token);
+  const getPeerToPeerCallData = () => api.axiosGetPeerToPeerCallData(token);
 
   const postContactMentor = (message: MenteeMessage) =>
     api.axiosPostContactMentor(token, message);
@@ -404,7 +404,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         publishSubCourse,
         joinBBBmeeting,
         getMentoringMaterial,
-        getPeerToPeerCallData: getFeedbackCallData,
+        getPeerToPeerCallData: getPeerToPeerCallData,
         postContactMentor,
         editCourse,
         editSubCourse,

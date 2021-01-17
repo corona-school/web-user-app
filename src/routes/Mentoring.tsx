@@ -34,7 +34,7 @@ const Mentoring: React.FC = () => {
         <div className={classes.contactCard}>
           <ContactCard />
         </div>
-        <div className={classes.feedbackCall}>
+        <div className={classes.PeerToPeerCall}>
           <PeerToPeerCallCard />
         </div>
         <div className={classes.facebookCard}>

@@ -48,7 +48,7 @@ const PeerToPeerCallCard = () => {
       <Text style={{ color: 'rgb(244, 72, 109)' }}>
         {PeerToPeerCall.time
           ? moment(PeerToPeerCall.time).format('DD.MM.YYYY HH:mm')
-          : 'Momentan ist leider kein PeerToPeer-Call geplant.'}
+          : 'Momentan ist leider kein Peer-to-Peer Call geplant.'}
       </Text>
       <Text>{PeerToPeerCallText}</Text>
       {linkActive && (
