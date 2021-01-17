@@ -4,7 +4,6 @@ import { message } from 'antd';
 
 import Button from '../button';
 import Icons from '../../assets/icons';
-import theme from '../../theme';
 import Context from '../../context';
 import { putUser } from '../../api/api';
 import CardBase from '../base/CardBase';
@@ -14,17 +13,20 @@ import { Text, Title } from '../Typography';
 import CardNewBase from '../base/CardNewBase';
 import NewMatchConfirmationModal from '../Modals/NewMatchConfirmationModal';
 import { ModalContext } from '../../context/ModalContext';
+import theme from '../../theme';
 
 interface Props {
   type: 'pending' | 'new';
   userType: 'student' | 'pupil';
   projectCoaching: boolean;
+  disabled: boolean;
 }
 
 const OpenRequestCard: React.FC<Props> = ({
   type,
   userType,
   projectCoaching,
+  disabled,
 }) => {
   const [loading, setLoading] = useState(false);
   const { credentials } = useContext(Context.Auth);
@@ -88,6 +90,7 @@ const OpenRequestCard: React.FC<Props> = ({
     <div>
       <button
         type="button"
+        disabled={disabled}
         onClick={() => {
           if (!loading) {
             if (projectCoaching || user.type === 'student') {
@@ -99,8 +102,9 @@ const OpenRequestCard: React.FC<Props> = ({
         }}
       >
         <CardNewBase
-          highlightColor={theme.color.cardHighlightBlue}
+          disabled={disabled}
           className={classes.pendingContainer}
+          highlightColor={theme.color.cardHighlightBlue}
         >
           <div className={classes.titleContainer}>
             <Icons.Add height="20px" />
@@ -110,8 +114,17 @@ const OpenRequestCard: React.FC<Props> = ({
             <ClipLoader size={100} color="#123abc" loading />
           ) : (
             <Text className={classes.newTextContainer}>
+              {/* eslint-disable-next-line no-nested-ternary */}
               {userType === 'student'
                 ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen möchtest.'
+                : disabled
+                ? `Du kannst leider keine*n neue*n ${
+                    projectCoaching ? 'Coach' : 'Student*in'
+                  } anfordern, da du schon eine*n ${
+                    projectCoaching
+                      ? 'Student*in für die 1:1-Lernunterstützung'
+                      : 'Coach'
+                  } anforderst.`
                 : `Hier kannst du ${
                     projectCoaching
                       ? 'einen neuen Coach anfordern, der'

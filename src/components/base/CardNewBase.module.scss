@@ -5,10 +5,20 @@
   height: 200px;
   margin: 8px;
   cursor: pointer;
+  &.disabled {
+    border: 1px dashed #585858;
+  }
   border: 1px dashed #4e6ae6;
+
   transition: all 0.2s ease-in-out;
   @media only screen and (max-width: 600px) {
     margin-top: 16px;
+  }
+
+  &.disabled {
+    * {
+      color: #585858 !important;
+    }
   }
 
   * {
