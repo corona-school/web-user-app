@@ -4,7 +4,6 @@ import { message } from 'antd';
 
 import Button from '../button';
 import Icons from '../../assets/icons';
-import theme from '../../theme';
 import Context from '../../context';
 import { putUser } from '../../api/api';
 import CardBase from '../base/CardBase';
@@ -17,12 +16,14 @@ interface Props {
   type: 'pending' | 'new';
   userType: 'student' | 'pupil';
   projectCoaching: boolean;
+  disabled: boolean;
 }
 
 const OpenRequestCard: React.FC<Props> = ({
   type,
   userType,
   projectCoaching,
+  disabled,
 }) => {
   const [loading, setLoading] = useState(false);
   const { credentials } = useContext(Context.Auth);
@@ -84,16 +85,14 @@ const OpenRequestCard: React.FC<Props> = ({
   return (
     <button
       type="button"
+      disabled={disabled}
       onClick={() => {
         if (!loading) {
           modifyMatchesRequested((x) => x + 1);
         }
       }}
     >
-      <CardNewBase
-        highlightColor={theme.color.cardHighlightBlue}
-        className={classes.pendingContainer}
-      >
+      <CardNewBase disabled={disabled} className={classes.pendingContainer}>
         <div className={classes.titleContainer}>
           <Icons.Add height="20px" />
           <Title size="h4">Neue Anfrage</Title>
@@ -102,8 +101,15 @@ const OpenRequestCard: React.FC<Props> = ({
           <ClipLoader size={100} color="#123abc" loading />
         ) : (
           <Text className={classes.newTextContainer}>
+            {/* eslint-disable-next-line no-nested-ternary */}
             {userType === 'student'
               ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen möchtest.'
+              : disabled
+              ? `Du kannst leider keine*n neue*n ${
+                  projectCoaching ? 'Coach' : 'Student*in'
+                } anfordern, da du schon einen ${
+                  projectCoaching ? 'Student*in' : 'Coach'
+                } anforderst.`
               : `Hier kannst du ${
                   projectCoaching
                     ? 'einen neuen Coach anfordern, der'

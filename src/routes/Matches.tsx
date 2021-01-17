@@ -24,6 +24,7 @@ const Matches: React.FC = () => {
             type="new"
             userType={userContext.user.type}
             projectCoaching={false}
+            disabled={userContext.user.projectMatchesRequested > 0}
           />
         );
       }
@@ -35,6 +36,7 @@ const Matches: React.FC = () => {
                 type="pending"
                 userType={userContext.user.type}
                 projectCoaching={false}
+                disabled={false}
               />
             ))}
           </>
@@ -48,6 +50,7 @@ const Matches: React.FC = () => {
           type="new"
           userType={userContext.user.type}
           projectCoaching={false}
+          disabled={false}
         />
       );
     }
@@ -59,6 +62,7 @@ const Matches: React.FC = () => {
             type="pending"
             userType={userContext.user.type}
             projectCoaching={false}
+            disabled={false}
           />
         ))}
         {userContext.user.matchesRequested < 3 && (
@@ -66,6 +70,7 @@ const Matches: React.FC = () => {
             type="new"
             userType={userContext.user.type}
             projectCoaching={false}
+            disabled={false}
           />
         )}
       </>
