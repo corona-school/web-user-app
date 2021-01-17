@@ -12,6 +12,8 @@ import CardBase from '../base/CardBase';
 import classes from './OpenRequestCard.module.scss';
 import { Text, Title } from '../Typography';
 import CardNewBase from '../base/CardNewBase';
+import NewMatchConfirmationModal from '../Modals/NewMatchConfirmationModal';
+import { ModalContext } from '../../context/ModalContext';
 
 interface Props {
   type: 'pending' | 'new';
@@ -27,6 +29,7 @@ const OpenRequestCard: React.FC<Props> = ({
   const [loading, setLoading] = useState(false);
   const { credentials } = useContext(Context.Auth);
   const { user, fetchUserData } = useContext(Context.User);
+  const modalContext = useContext(ModalContext);
 
   const modifyMatchesRequested = (f: (value: number) => number): void => {
     if (typeof user.matchesRequested !== 'number') return;
@@ -82,37 +85,46 @@ const OpenRequestCard: React.FC<Props> = ({
   }
 
   return (
-    <button
-      type="button"
-      onClick={() => {
-        if (!loading) {
-          modifyMatchesRequested((x) => x + 1);
-        }
-      }}
-    >
-      <CardNewBase
-        highlightColor={theme.color.cardHighlightBlue}
-        className={classes.pendingContainer}
+    <div>
+      <button
+        type="button"
+        onClick={() => {
+          if (!loading) {
+            if (projectCoaching || user.type === 'student') {
+              modifyMatchesRequested((x) => x + 1);
+            } else {
+              modalContext.setOpenedModal('newMatchConfirmationModal');
+            }
+          }
+        }}
       >
-        <div className={classes.titleContainer}>
-          <Icons.Add height="20px" />
-          <Title size="h4">Neue Anfrage</Title>
-        </div>
-        {loading ? (
-          <ClipLoader size={100} color="#123abc" loading />
-        ) : (
-          <Text className={classes.newTextContainer}>
-            {userType === 'student'
-              ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen möchtest.'
-              : `Hier kannst du ${
-                  projectCoaching
-                    ? 'einen neuen Coach anfordern, der'
-                    : 'eine*n neue*n Student*in anfordern, die'
-                }  dich beim Lernen unterstützt.`}
-          </Text>
-        )}
-      </CardNewBase>
-    </button>
+        <CardNewBase
+          highlightColor={theme.color.cardHighlightBlue}
+          className={classes.pendingContainer}
+        >
+          <div className={classes.titleContainer}>
+            <Icons.Add height="20px" />
+            <Title size="h4">Neue Anfrage</Title>
+          </div>
+          {loading ? (
+            <ClipLoader size={100} color="#123abc" loading />
+          ) : (
+            <Text className={classes.newTextContainer}>
+              {userType === 'student'
+                ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen möchtest.'
+                : `Hier kannst du ${
+                    projectCoaching
+                      ? 'einen neuen Coach anfordern, der'
+                      : 'eine*n neue*n Student*in anfordern, die'
+                  }  dich beim Lernen unterstützt.`}
+            </Text>
+          )}
+        </CardNewBase>
+      </button>
+      <NewMatchConfirmationModal
+        requestNewMatch={() => modifyMatchesRequested((x) => x + 1)}
+      />
+    </div>
   );
 };
 
