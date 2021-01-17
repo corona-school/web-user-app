@@ -4,6 +4,7 @@ import classes from './CardNewBase.module.scss';
 
 interface Props {
   className?: string;
+  highlightColor?: string;
   disabled: boolean;
 }
 

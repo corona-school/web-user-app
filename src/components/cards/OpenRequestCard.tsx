@@ -13,6 +13,7 @@ import { Text, Title } from '../Typography';
 import CardNewBase from '../base/CardNewBase';
 import NewMatchConfirmationModal from '../Modals/NewMatchConfirmationModal';
 import { ModalContext } from '../../context/ModalContext';
+import theme from '../../theme';
 
 interface Props {
   type: 'pending' | 'new';
