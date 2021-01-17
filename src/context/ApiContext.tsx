@@ -16,7 +16,7 @@ import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { CompletedSubCourse } from '../components/forms/CreateCourse';
 import { CompletedLecture } from '../routes/CourseForm';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
-import { PeerToPeerCall } from '../types/PeerToPeerCall';
+import { FeedbackCall } from '../types/FeedbackCall';
 import {
   ApiProjectFieldInfo,
   BecomeProjectCoach,
@@ -121,7 +121,7 @@ interface IApiContext {
     type: string,
     location: string
   ) => Promise<Mentoring[]>;
-  getPeerToPeerCallData: () => Promise<PeerToPeerCall>;
+  getFeedbackCallData: () => Promise<FeedbackCall>;
   postContactMentor: (message: MenteeMessage) => Promise<void>;
   postUserRoleProjectCoach: (
     projectCoachData: BecomeProjectCoach
@@ -187,7 +187,7 @@ export const ApiContext = React.createContext<IApiContext>({
   joinBBBmeeting: reject,
   getCooperatingSchools: reject,
   getMentoringMaterial: reject,
-  getPeerToPeerCallData: reject,
+  getFeedbackCallData: reject,
   postContactMentor: reject,
   postUserRoleProjectCoach: reject,
   postUserRoleProjectCoachee: reject,
@@ -411,7 +411,7 @@ export const ApiProvider: React.FC = ({ children }) => {
   const getMentoringMaterial = (type: string, location: string) =>
     api.axiosGetMentoringMaterial(token, type, location);
 
-  const getPeerToPeerCallData = () => api.axiosGetPeerToPeerCallData(token);
+  const getFeedbackCallData = () => api.axiosGetFeedbackCallData(token);
 
   const postContactMentor = (message: MenteeMessage) =>
     api.axiosPostContactMentor(token, message);
@@ -477,7 +477,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         publishSubCourse,
         joinBBBmeeting,
         getMentoringMaterial,
-        getPeerToPeerCallData: getPeerToPeerCallData,
+        getFeedbackCallData,
         postContactMentor,
         editCourse,
         editSubCourse,

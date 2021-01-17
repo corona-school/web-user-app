@@ -254,7 +254,6 @@ const RegisterTutee: React.FC<Props> = ({
             </div>
           }
         >
-          {renderIsTuteeCheckbox()}
           {renderIsGroupsCheckbox()}
         </Form.Item>
       </>

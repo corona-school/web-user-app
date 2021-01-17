@@ -1,98 +1,98 @@
 .container {
-	min-height: fit-content;
-	display: flex;
-	flex-direction: column;
-	padding-top: 60px;
-	width: 100%;
+  min-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  width: 100%;
 
-	&::after {
-		flex: 0 0 20px;
-		visibility: hidden;
-		content: 'spacer';
-	}
+  &::after {
+    flex: 0 0 20px;
+    visibility: hidden;
+    content: 'spacer';
+  }
 
-	.header {
-		padding-left: 40px;
-		padding-right: 40px;
-	}
+  .header {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
 
-	.cards {
-		margin-top: 20px;
-		padding: 20px 40px;
-		background-color: rgba(242, 111, 99, 0.06);
+  .cards {
+    margin-top: 20px;
+    padding: 20px 40px;
+    background-color: rgba(242, 111, 99, 0.06);
 
-		display: grid;
-		grid-template-columns: auto 400px;
-		grid-auto-rows: min-content;
-		grid-gap: 20px;
-		grid-column-gap: 40px;
+    display: grid;
+    grid-template-columns: auto 400px;
+    grid-auto-rows: min-content;
+    grid-gap: 20px;
+    grid-column-gap: 40px;
 
-		@media only screen and (max-width: 1365px) {
-			display: flex;
-			flex-direction: column;
-		}
+    @media only screen and (max-width: 1365px) {
+      display: flex;
+      flex-direction: column;
+    }
 
-		@media only screen and (max-width: 600px) {
-			padding: 20px 0px;
-		}
+    @media only screen and (max-width: 600px) {
+      padding: 20px 0px;
+    }
 
-		.contactCard {
-			grid-column: 1;
-			grid-row: 1 / 3;
-			height: 100%;
-		}
+    .contactCard {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      height: 100%;
+    }
 
-		.PeerToPeerCall {
-			grid-column: 2;
-			grid-row: 1;
-		}
+    .feedbackCall {
+      grid-column: 2;
+      grid-row: 1;
+    }
 
-		.facebookCard {
-			grid-column: 2;
-			grid-row: 2;
-		}
-	}
+    .facebookCard {
+      grid-column: 2;
+      grid-row: 2;
+    }
+  }
 
-	.subjectTitle {
-		margin-top: 32px;
-	}
+  .subjectTitle {
+    margin-top: 32px;
+  }
 }
 
 .screeningModalContainer {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-	background: white;
-	padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: white;
+  padding: 32px;
 
-	.title {
-		margin-top: -20px;
-	}
+  .title {
+    margin-top: -20px;
+  }
 
-	.text {
-		max-width: 400px;
-		margin-top: -8px;
-	}
+  .text {
+    max-width: 400px;
+    margin-top: -8px;
+  }
 
-	.buttonContainer {
-		display: flex;
-		margin-top: 16px;
+  .buttonContainer {
+    display: flex;
+    margin-top: 16px;
 
-		a,
-		button {
-			margin: 8px;
-		}
-	}
+    a,
+    button {
+      margin: 8px;
+    }
+  }
 }
 
 .buttonMoreInfo {
-	background-color: rgb(255, 204, 18);
-	color: white;
-	display: flex;
-	float: right;
+  background-color: rgb(255, 204, 18);
+  color: white;
+  display: flex;
+  float: right;
 
-	&:hover {
-		color: white;
-	}
+  &:hover {
+    color: white;
+  }
 }

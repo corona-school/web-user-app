@@ -6,23 +6,23 @@ import { Text, Title } from '../Typography';
 
 import { LinkButton } from '../button';
 
-import classes from './PeerToPeerCallCard.module.scss';
-import { PeerToPeerCall } from '../../types/PeerToPeerCall';
+import classes from './FeedbackCallCard.module.scss';
+import { FeedbackCall } from '../../types/FeedbackCall';
 import { ApiContext } from '../../context/ApiContext';
-import { PeerToPeerCallText } from '../../assets/mentoringPageAssets';
+import { feedbackCallText } from '../../assets/mentoringPageAssets';
 import { LeftHighlightCard } from './FlexibleHighlightCard';
 
-const PeerToPeerCallCard = () => {
-  const [PeerToPeerCall, setPeerToPeerCall] = useState<PeerToPeerCall>({});
+const FeedbackCallCard = () => {
+  const [feedbackCall, setFeedbackCall] = useState<FeedbackCall>({});
   const [linkActive, setLinkActive] = useState(false);
   const apiContext = useContext(ApiContext);
   const theme = useContext(ThemeContext);
 
   useEffect(() => {
     apiContext
-      .getPeerToPeerCallData()
+      .getFeedbackCallData()
       .then((res) => {
-        setPeerToPeerCall(res);
+        setFeedbackCall(res);
         return res;
       })
       .then((res) => {
@@ -36,9 +36,7 @@ const PeerToPeerCallCard = () => {
         }
       })
       .catch((err) =>
-        console.warn(
-          `Error when loading Peer-to-Peer call data: ${err.message}`
-        )
+        console.warn(`Error when loading Peer-to-Peer Call data: ${err.message}`)
       );
   }, [apiContext]);
 
@@ -46,15 +44,15 @@ const PeerToPeerCallCard = () => {
     <LeftHighlightCard highlightColor={theme.color.cardHighlightRed}>
       <Title size="h3">Peer-to-Peer Call</Title>
       <Text style={{ color: 'rgb(244, 72, 109)' }}>
-        {PeerToPeerCall.time
-          ? moment(PeerToPeerCall.time).format('DD.MM.YYYY HH:mm')
+        {feedbackCall.time
+          ? moment(feedbackCall.time).format('DD.MM.YYYY HH:mm')
           : 'Momentan ist leider kein Peer-to-Peer Call geplant.'}
       </Text>
-      <Text>{PeerToPeerCallText}</Text>
+      <Text>{feedbackCallText}</Text>
       {linkActive && (
         <LinkButton
           className={classes.buttonParticipate}
-          href={PeerToPeerCall.link}
+          href={feedbackCall.link}
           target="_blank"
           style={{ margin: '4px' }}
         >
@@ -64,7 +62,7 @@ const PeerToPeerCallCard = () => {
       {!linkActive && (
         <Tooltip
           title={
-            PeerToPeerCall.link
+            feedbackCall.link
               ? 'Der Link wird 30 Minuten vor dem Call freigeschaltet.'
               : 'Aktuell gibt es keinen Link.'
           }
@@ -82,4 +80,4 @@ const PeerToPeerCallCard = () => {
   );
 };
 
-export default PeerToPeerCallCard;
+export default FeedbackCallCard;

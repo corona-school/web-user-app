@@ -12,7 +12,7 @@ import {
 import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { MenteeMessage, Mentoring } from '../types/Mentoring';
-import { PeerToPeerCall } from '../types/PeerToPeerCall';
+import { FeedbackCall } from '../types/FeedbackCall';
 import {
   ApiProjectFieldInfo,
   BecomeProjectCoach,
@@ -647,13 +647,13 @@ export const axiosGetMentoringMaterial = (
     .catch(logError('getMentoringMaterial'));
 };
 
-export const axiosGetPeerToPeerCallData = (
+export const axiosGetFeedbackCallData = (
   token: string
-): Promise<PeerToPeerCall> => {
+): Promise<FeedbackCall> => {
   return axios
-    .get(`${apiURL}/mentoring/PeerToPeerCall`, { headers: { token } })
+    .get(`${apiURL}/mentoring/feedbackCall`, { headers: { token } })
     .then((response) => response.data)
-    .catch(logError('getPeerToPeerCallData'));
+    .catch(logError('getFeedbackCallData'));
 };
 
 export const axiosPostContactMentor = async (
