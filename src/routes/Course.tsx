@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import moment from 'moment';
 import Context from '../context';
 import { LinkButton } from '../components/button';
 import Icons from '../assets/icons';
@@ -36,6 +37,33 @@ const Course = () => {
     return <div>Kurse werden geladen...</div>;
   }
 
+  const getPreviousCourses = () => {
+    const previousCourses = [];
+    myCourses.forEach((course) => {
+      const lectures = course.subcourse?.lectures.sort(
+        (a, b) => a.start - b.start
+      );
+      const lastLecture = lectures?.[lectures.length - 1];
+      if (lastLecture != null) {
+        const lectureEnd = moment
+          .unix(lastLecture.start)
+          .add(lastLecture.duration, 'minutes');
+
+        console.log(
+          course.name,
+          lectureEnd.toISOString(),
+          moment().isAfter(lectureEnd)
+        );
+
+        if (moment().isAfter(lectureEnd)) {
+          previousCourses.push(course);
+        }
+      }
+    });
+
+    return previousCourses;
+  };
+
   return (
     <div className={classes.container}>
       <CourseBanner
@@ -58,8 +86,21 @@ const Course = () => {
             </LinkButton>
           )}
         </div>
-        {myCourses.length > 0 && (
-          <CourseList name="Deine aktuellen Kurse" courses={myCourses} />
+        {myCourses.filter((x) => !getPreviousCourses().some((y) => y === x))
+          .length > 0 && (
+          <CourseList
+            name="Deine aktuellen Kurse"
+            courses={myCourses.filter(
+              (x) => !getPreviousCourses().some((y) => y === x)
+            )}
+          />
+        )}
+
+        {getPreviousCourses().length > 0 && (
+          <CourseList
+            name="Deine vergangenen Kurse"
+            courses={getPreviousCourses()}
+          />
         )}
       </div>
     </div>
