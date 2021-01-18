@@ -22,6 +22,8 @@ import {
   supportedLanguages,
 } from '../types/Certificate';
 
+// import SignCertificateModal from '../components/Modals/SignCertificateModal';
+
 const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -43,19 +45,16 @@ const Settings: React.FC = () => {
     );
   }
 
-  async function rejectCertificate(uuid: IExposedCertificate['uuid']) {
-    const response = await getCertificate(uuid, language);
-    window.open(
-      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
-    );
-  }
+  // async function rejectCertificate(uuid: IExposedCertificate['uuid']) {
+  //    const response = await getCertificate(uuid, language);
+  //    window.open(
+  //      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
+  //    );
+  // }
 
-  async function reviewCertificate(uuid: IExposedCertificate['uuid']) {
-    const response = await getCertificate(uuid, language);
-    window.open(
-      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
-    );
-  }
+  // async function reviewCertificate(uuid: IExposedCertificate['uuid']) {
+
+  // }
 
   const { setOpenedModal } = modalContext;
 
@@ -197,10 +196,51 @@ const Settings: React.FC = () => {
         key: 'action',
         render: (certificate: IExposedCertificate) => (
           <Space size="middle">
-            {userContext.user.isTutor &&
-              (certificate.state === 'approved' ||
-                certificate.state === 'manual') && (
+            {userContext.user.isTutor && (
+              <>
+                <Select
+                  defaultValue={defaultLanguage}
+                  onChange={(event) => setLanguage(event)}
+                  style={{ width: 120 }}
+                >
+                  {Object.entries(supportedLanguages).map(([code, value]) => (
+                    <Select.Option value={code}>{value}</Select.Option>
+                  ))}
+                </Select>
+                <Button
+                  type="primary"
+                  onClick={() => showCertificate(certificate.uuid)}
+                >
+                  Ansehen
+                </Button>
+                {certificate.state === 'manual' && (
+                  <Button
+                    type="primary"
+                    onClick={() => showCertificate(certificate.uuid)}
+                  >
+                    Beantragen
+                  </Button>
+                )}
+              </>
+            )}
+
+            {/* <Button danger>Löschen</Button> */}
+            {!userContext.user.isTutor &&
+              certificate.state === 'awaiting-approval' && (
                 <>
+                  <Button
+                    onClick={() =>
+                      modalContext.setOpenedModal('signCertificateModal')
+                    }
+                  >
+                    Genehmigen
+                  </Button>
+                  <Button
+                    danger
+                    onClick={() => rejectCertificate(certificate.uuid)}
+                  >
+                    Ablehnen
+                  </Button>
                   <Select
                     defaultValue={defaultLanguage}
                     onChange={(event) => setLanguage(event)}
@@ -215,22 +255,6 @@ const Settings: React.FC = () => {
                     onClick={() => showCertificate(certificate.uuid)}
                   >
                     Ansehen
-                  </Button>
-                </>
-              )}
-
-            {/* <Button danger>Löschen</Button> */}
-            {!userContext.user.isTutor &&
-              certificate.state === 'awaiting-approval' && (
-                <>
-                  <Button onClick={() => reviewCertificate(certificate.uuid)}>
-                    Genehmigen
-                  </Button>
-                  <Button
-                    danger
-                    onClick={() => rejectCertificate(certificate.uuid)}
-                  >
-                    Ablehnen
                   </Button>
                 </>
               )}
