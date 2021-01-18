@@ -619,6 +619,19 @@ export const axiosJoinBBBmeeting = (
     .catch(logError('JoinBBBmeeting'));
 };
 
+export const axiosGuestJoinBBBmeeting = (
+  token: string
+): Promise<{ url: string }> => {
+  const url = `${apiURL}/course/meeting/external/join/${token}`;
+
+  return axios
+    .get(url)
+    .then((response) => {
+      return response.data;
+    })
+    .catch(logError('GuestJoinBBBmeeting'));
+};
+
 export const axiosGetCooperatingSchool = (
   state?: string
 ): Promise<SchoolInfo[]> => {

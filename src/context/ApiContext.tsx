@@ -116,6 +116,7 @@ interface IApiContext {
     courseId: number,
     subcourseId: number
   ) => Promise<CourseOverview>;
+  guestJoinBBBmeeting: (token: string) => Promise<{ url: string }>;
   getCooperatingSchools: (state: string) => Promise<SchoolInfo[]>;
   getMentoringMaterial: (
     type: string,
@@ -185,6 +186,7 @@ export const ApiContext = React.createContext<IApiContext>({
   sendCourseGroupMail: reject,
   sendCourseInstructorMail: reject,
   joinBBBmeeting: reject,
+  guestJoinBBBmeeting: reject,
   getCooperatingSchools: reject,
   getMentoringMaterial: reject,
   getFeedbackCallData: reject,
@@ -405,6 +407,9 @@ export const ApiProvider: React.FC = ({ children }) => {
   const joinBBBmeeting = (courseId: number, subcourseId: number) =>
     api.axiosJoinBBBmeeting(token, courseId, subcourseId);
 
+  const guestJoinBBBmeeting = (token: string) =>
+    api.axiosGuestJoinBBBmeeting(token);
+
   const getCooperatingSchools = (state?: string): Promise<SchoolInfo[]> =>
     api.axiosGetCooperatingSchool(state);
 
@@ -476,6 +481,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         cancelLecture,
         publishSubCourse,
         joinBBBmeeting,
+        guestJoinBBBmeeting,
         getMentoringMaterial,
         getFeedbackCallData,
         postContactMentor,
