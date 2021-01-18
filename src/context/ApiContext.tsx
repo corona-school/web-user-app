@@ -131,6 +131,12 @@ interface IApiContext {
     projectCoacheeData: BecomeProjectCoachee
   ) => Promise<void>;
   addInstructor: (courseId: number, email: string) => Promise<void>;
+  inviteCourseGuest: (
+    courseID: number,
+    email: string,
+    firstname: string,
+    lastname: string
+  ) => Promise<void>;
   deleteCourseImage: (courseID: number) => Promise<void>;
   getJufoExperts: () => Promise<Expert[]>;
   getUsedExpertTags: () => Promise<ExpertTag[]>;
@@ -194,6 +200,7 @@ export const ApiContext = React.createContext<IApiContext>({
   postUserRoleProjectCoach: reject,
   postUserRoleProjectCoachee: reject,
   addInstructor: reject,
+  inviteCourseGuest: reject,
   deleteCourseImage: reject,
 });
 
@@ -431,6 +438,13 @@ export const ApiProvider: React.FC = ({ children }) => {
   const addInstructor = (courseId: number, email: string) =>
     api.axiosAddInstructor(token, courseId, email);
 
+  const inviteCourseGuest = (
+    courseID: number,
+    email: string,
+    firstname: string,
+    lastname: string
+  ) => api.axiosInviteCourseGuest(token, courseID, email, firstname, lastname);
+
   const deleteCourseImage = (courseID: number): Promise<void> =>
     api.axiosDeleteCourseImage(token, courseID);
 
@@ -492,6 +506,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         postUserRoleProjectCoach,
         postUserRoleProjectCoachee,
         addInstructor,
+        inviteCourseGuest,
         deleteCourseImage,
         getJufoExperts,
         getUsedExpertTags,

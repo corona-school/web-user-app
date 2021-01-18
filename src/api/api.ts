@@ -724,6 +724,30 @@ export const axiosAddInstructor = (
   });
 };
 
+export const axiosInviteCourseGuest = (
+  token: string,
+  courseID: number,
+  email: string,
+  firstname: string,
+  lastname: string
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/course/${courseID}/inviteexternal`,
+        { email, firstname, lastname },
+        {
+          headers: { token },
+        }
+      )
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
 export const axiosDeleteCourseImage = async (
   token: string,
   courseID: number

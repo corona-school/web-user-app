@@ -51,6 +51,7 @@ import CourseMessageModal from '../components/Modals/CourseMessageModal';
 import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
+import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
 
 moment.locale('de');
 
@@ -524,6 +525,9 @@ const CourseDetail = (params: {
           if (param.key === '6') {
             modalContext.setOpenedModal('addInstructorModal');
           }
+          if (param.key === '7') {
+            modalContext.setOpenedModal('addCourseGuestModal');
+          }
         }}
       >
         {course.state === CourseState.CREATED && (
@@ -551,6 +555,12 @@ const CourseDetail = (params: {
         {course.state !== CourseState.CANCELLED && (
           <Menu.Item key="6" icon={<UserAddOutlined />}>
             Tutor*in hinzufügen
+          </Menu.Item>
+        )}
+
+        {course.state === CourseState.ALLOWED && (
+          <Menu.Item key="7" icon={<UserAddOutlined />}>
+            Gäst*in einladen
           </Menu.Item>
         )}
       </Menu>
@@ -840,6 +850,7 @@ const CourseDetail = (params: {
         courseId={course.id}
         updateDetails={updateCourseDetails}
       />
+      <AddCourseGuestModal courseId={course.id} />
       <CourseConfirmationModal
         mode={courseConfirmationMode}
         course={course}
