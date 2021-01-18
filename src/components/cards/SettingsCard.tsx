@@ -69,10 +69,6 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
       return null;
     }
 
-    if (isProjectCoachButNotTutor(user)) {
-      return null;
-    }
-
     if (user.isInstructor) {
       return null;
     }
