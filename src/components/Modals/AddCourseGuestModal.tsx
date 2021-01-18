@@ -101,7 +101,7 @@ const AddCourseGuestModal: React.FC<{
           <DialogModalBase.Content>
             <DialogModalBase.Form>
               <DialogModalBase.TextBox
-                label="E-Mail-Adresse des/der Tutor*in"
+                label="E-Mail-Adresse des/der Gäst*in"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
