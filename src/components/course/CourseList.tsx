@@ -27,7 +27,9 @@ export const CourseList: React.FC<Props> = (props) => {
   return (
     <div className={classes.listContainer}>
       <div className={classes.headerContainer}>
-        <Title size="h3">{props.name}</Title>
+        <div className={classes.titleWrapper}>
+          <Title size="h3">{props.name}</Title>
+        </div>
         <div className={classes.scrollControls}>
           <button
             className={classes.chevronButton}

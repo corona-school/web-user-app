@@ -1,18 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Empty } from 'antd';
+import moment from 'moment';
 import Context from '../context';
-import { Title } from '../components/Typography';
 import { LinkButton } from '../components/button';
 import Icons from '../assets/icons';
 import { ParsedCourseOverview } from '../types/Course';
-import MyCourseCard from '../components/cards/MyCourseCard';
 
 import classes from './Course.module.scss';
 import { parseCourse } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
 import { CourseBanner } from '../components/course/CourseBanner';
-import { env } from '../api/config';
-import { NoCourses } from '../components/NoService';
+import { CourseList } from '../components/course/CourseList';
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
@@ -20,11 +17,7 @@ const Course = () => {
   const apiContext = useContext(Context.Api);
   const userContext = useContext(UserContext);
 
-  const courseOverviewDisabled = env.REACT_APP_COURSE_OVERVIEW === 'disabled';
-
   useEffect(() => {
-    if (courseOverviewDisabled) return;
-
     setLoading(true);
 
     apiContext
@@ -40,13 +33,30 @@ const Course = () => {
       });
   }, [apiContext, userContext.user.type]);
 
-  if (courseOverviewDisabled) {
-    return <NoCourses />;
-  }
-
   if (loading) {
     return <div>Kurse werden geladen...</div>;
   }
+
+  const getPreviousCourses = () => {
+    const previousCourses = [];
+    myCourses.forEach((course) => {
+      const lectures = course.subcourse.lectures.sort(
+        (a, b) => a.start - b.start
+      );
+      const lastLecture = lectures[lectures.length - 1];
+      if (lastLecture != null) {
+        const lectureEnd = moment
+          .unix(lastLecture.start)
+          .add(lastLecture.duration, 'minutes');
+
+        if (moment().isAfter(lectureEnd)) {
+          previousCourses.push(course);
+        }
+      }
+    });
+
+    return previousCourses;
+  };
 
   return (
     <div className={classes.container}>
@@ -57,7 +67,6 @@ const Course = () => {
       />
       <div className={classes.containerRequests}>
         <div className={classes.header}>
-          <Title size="h1">Deine Kurse</Title>
           {userContext.user.type === 'student' && (
             <LinkButton
               href="/courses/create"
@@ -71,15 +80,22 @@ const Course = () => {
             </LinkButton>
           )}
         </div>
-        <div className={classes.myCoursesContainer}>
-          {myCourses.length === 0 ? (
-            <Empty description="Du hast im Moment keine Kurse" />
-          ) : (
-            myCourses.map((c) => {
-              return <MyCourseCard course={c} ownedByMe showCourseState />;
-            })
-          )}
-        </div>
+        {myCourses.filter((x) => !getPreviousCourses().some((y) => y === x))
+          .length > 0 && (
+          <CourseList
+            name="Deine aktuellen Kurse"
+            courses={myCourses.filter(
+              (x) => !getPreviousCourses().some((y) => y === x)
+            )}
+          />
+        )}
+
+        {getPreviousCourses().length > 0 && (
+          <CourseList
+            name="Deine vergangenen Kurse"
+            courses={getPreviousCourses()}
+          />
+        )}
       </div>
     </div>
   );

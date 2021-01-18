@@ -619,6 +619,19 @@ export const axiosJoinBBBmeeting = (
     .catch(logError('JoinBBBmeeting'));
 };
 
+export const axiosGuestJoinBBBmeeting = (
+  token: string
+): Promise<{ url: string }> => {
+  const url = `${apiURL}/course/meeting/external/join/${token}`;
+
+  return axios
+    .get(url)
+    .then((response) => {
+      return response.data;
+    })
+    .catch(logError('GuestJoinBBBmeeting'));
+};
+
 export const axiosGetCooperatingSchool = (
   state?: string
 ): Promise<SchoolInfo[]> => {
@@ -699,6 +712,30 @@ export const axiosAddInstructor = (
       .post(
         `${apiURL}/course/${courseId}/instructor`,
         { email },
+        {
+          headers: { token },
+        }
+      )
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosInviteCourseGuest = (
+  token: string,
+  courseID: number,
+  email: string,
+  firstname: string,
+  lastname: string
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/course/${courseID}/inviteexternal`,
+        { email, firstname, lastname },
         {
           headers: { token },
         }

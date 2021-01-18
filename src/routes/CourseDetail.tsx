@@ -51,6 +51,7 @@ import CourseMessageModal from '../components/Modals/CourseMessageModal';
 import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
+import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
 
 moment.locale('de');
 
@@ -352,8 +353,25 @@ const CourseDetail = (params: {
     );
   };
 
+  const hasEnded = () => {
+    const lectures = course.subcourse.lectures.sort(
+      (a, b) => a.start - b.start
+    );
+    const lastLecture = lectures[lectures.length - 1];
+    if (lastLecture != null) {
+      const lectureEnd = moment
+        .unix(lastLecture.start)
+        .add(lastLecture.duration, 'minutes');
+
+      console.log('is after', moment().isAfter(lectureEnd));
+      return moment().isAfter(lectureEnd);
+    }
+    console.log('last lecture is null');
+    return false;
+  };
+
   const canDisjoinCourse = () => {
-    return hasJoiningRights() && course.subcourse.joined;
+    return hasJoiningRights() && course.subcourse.joined && !hasEnded();
   };
 
   const canDisjoinWaitingList = () => {
@@ -507,6 +525,9 @@ const CourseDetail = (params: {
           if (param.key === '6') {
             modalContext.setOpenedModal('addInstructorModal');
           }
+          if (param.key === '7') {
+            modalContext.setOpenedModal('addCourseGuestModal');
+          }
         }}
       >
         {course.state === CourseState.CREATED && (
@@ -534,6 +555,12 @@ const CourseDetail = (params: {
         {course.state !== CourseState.CANCELLED && (
           <Menu.Item key="6" icon={<UserAddOutlined />}>
             Tutor*in hinzufügen
+          </Menu.Item>
+        )}
+
+        {course.state === CourseState.ALLOWED && (
+          <Menu.Item key="7" icon={<UserAddOutlined />}>
+            Gäst*in einladen
           </Menu.Item>
         )}
       </Menu>
@@ -611,32 +638,8 @@ const CourseDetail = (params: {
             )}
             <div className={classes.videochatAction}>
               {((isMyCourse && course.state === CourseState.ALLOWED) ||
-                course.subcourse.joined) && (
-                <AntdButton
-                  type="primary"
-                  style={{
-                    backgroundColor: '#FCD95C',
-                    borderColor: '#FCD95C',
-                    color: '#373E47',
-                    width: '140px',
-                    margin: '5px 10px',
-                  }}
-                  onClick={joinBBBmeeting}
-                  disabled={!shouldEnableVideoChat()}
-                >
-                  Zum Videochat
-                </AntdButton>
-              )}
-              <ClipLoader
-                size={15}
-                color="#123abc"
-                loading={isLoadingVideoChat}
-              />
-            </div>
-            {!shouldEnableVideoChat() && (
-              <div className={classes.videochatAction}>
-                {((isMyCourse && course.state === CourseState.ALLOWED) ||
-                  course.subcourse.joined) && (
+                course.subcourse.joined) &&
+                !hasEnded() && (
                   <AntdButton
                     type="primary"
                     style={{
@@ -646,11 +649,37 @@ const CourseDetail = (params: {
                       width: '140px',
                       margin: '5px 10px',
                     }}
-                    onClick={joinTestMeeting}
+                    onClick={joinBBBmeeting}
+                    disabled={!shouldEnableVideoChat()}
                   >
-                    Videochat testen
+                    Zum Videochat
                   </AntdButton>
                 )}
+              <ClipLoader
+                size={15}
+                color="#123abc"
+                loading={isLoadingVideoChat}
+              />
+            </div>
+            {!shouldEnableVideoChat() && (
+              <div className={classes.videochatAction}>
+                {((isMyCourse && course.state === CourseState.ALLOWED) ||
+                  course.subcourse.joined) &&
+                  !hasEnded() && (
+                    <AntdButton
+                      type="primary"
+                      style={{
+                        backgroundColor: '#FCD95C',
+                        borderColor: '#FCD95C',
+                        color: '#373E47',
+                        width: '140px',
+                        margin: '5px 10px',
+                      }}
+                      onClick={joinTestMeeting}
+                    >
+                      Videochat testen
+                    </AntdButton>
+                  )}
               </div>
             )}
 
@@ -821,6 +850,7 @@ const CourseDetail = (params: {
         courseId={course.id}
         updateDetails={updateCourseDetails}
       />
+      <AddCourseGuestModal courseId={course.id} />
       <CourseConfirmationModal
         mode={courseConfirmationMode}
         course={course}
