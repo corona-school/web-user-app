@@ -419,7 +419,10 @@ const CourseDetail = (params: {
     if (!firstLecture || !lastLecture) {
       return false;
     }
-    const start = moment.unix(firstLecture.start).subtract(30, 'minutes');
+    const preJoinTime = isStudent ? 30 : 10; // minutes
+    const start = moment
+      .unix(firstLecture.start)
+      .subtract(preJoinTime, 'minutes');
     const end = moment
       .unix(lastLecture.start)
       .add(lastLecture.duration, 'minutes')
