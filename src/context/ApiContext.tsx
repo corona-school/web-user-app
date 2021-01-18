@@ -47,6 +47,14 @@ interface IApiContext {
     lang: ISupportedLanguage
   ) => Promise<string>;
   getCertificates: () => Promise<IExposedCertificate[]>;
+  signCertificate: (
+    uuid: string,
+    body: {
+      signaturePupil?: string;
+      signatureParent?: string;
+      signatureLocation: string;
+    }
+  ) => Promise<boolean>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourseTags: () => Promise<Tag[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
@@ -134,6 +142,7 @@ export const ApiContext = React.createContext<IApiContext>({
   createCertificate: reject,
   getCertificate: reject,
   getCertificates: reject,
+  signCertificate: reject,
   getCourses: reject,
   getCourseTags: reject,
   getCourse: reject,
@@ -374,6 +383,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         createCertificate,
         getCertificate: withToken(api.axiosGetCertificate),
         getCertificates: withToken(api.axiosGetCertificates),
+        signCertificate: withToken(api.axiosSignCertificate),
         getCourses,
         getCourseTags,
         getCourse,
