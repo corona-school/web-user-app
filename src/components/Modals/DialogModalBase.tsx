@@ -129,6 +129,13 @@ const Description = (props) => {
 };
 
 /*
+Styled block of text, wrapped in a div
+ */
+const TextBlock = (props) => {
+  return <div className={styles.text}>{props.children}</div>;
+};
+
+/*
 Indented component for forms
  */
 const Form = (props) => {
@@ -300,6 +307,7 @@ DialogModalBase.Modal = Modal;
 DialogModalBase.Title = Title;
 DialogModalBase.Icon = Icon;
 DialogModalBase.Description = Description;
+DialogModalBase.TextBlock = TextBlock;
 DialogModalBase.Spacer = Spacer;
 DialogModalBase.Subheading = Subheading;
 DialogModalBase.Form = Form;

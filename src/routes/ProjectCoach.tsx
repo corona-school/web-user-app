@@ -140,6 +140,10 @@ const ProjectCoach: React.FC = () => {
               type="new"
               userType={userContext.user.type}
               projectCoaching
+              disabled={
+                userContext.user.isPupil &&
+                userContext.user.matchesRequested > 0
+              }
             />
           );
         }
@@ -152,6 +156,7 @@ const ProjectCoach: React.FC = () => {
                     type="pending"
                     userType={userContext.user.type}
                     projectCoaching
+                    disabled={false}
                   />
                 )
               )}
@@ -166,6 +171,7 @@ const ProjectCoach: React.FC = () => {
             type="new"
             userType={userContext.user.type}
             projectCoaching
+            disabled={false}
           />
         );
       }
@@ -180,6 +186,7 @@ const ProjectCoach: React.FC = () => {
                 type="pending"
                 userType={userContext.user.type}
                 projectCoaching
+                disabled={false}
               />
             )
           )}
@@ -188,6 +195,7 @@ const ProjectCoach: React.FC = () => {
               type="new"
               userType={userContext.user.type}
               projectCoaching
+              disabled={false}
             />
           )}
         </>

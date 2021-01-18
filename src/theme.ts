@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 const colorScheme = {
   black: '#000000',
   gray1: '#333333',
@@ -15,6 +13,7 @@ const coronaSchoolTheme = {
     cardHighlightYellow: '#f2c47e',
     cardHighlightGreen: '#9fe88d',
     cardHighlightBlue: '#8dcce8',
+    cardHighlightGray: '#585858',
     cardBackground: '#ffffff',
     legalText: '#828282',
     logo: '#B79210',
