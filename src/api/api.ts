@@ -41,6 +41,21 @@ const getAPI = <R = void, P extends Array<any> = Array<void>>(
     .then(returns ?? ((() => {}) as () => R))
     .catch(logError(name));
 
+// eslint-disable-next-line
+const postAPI = <R = void, P extends Array<any> = Array<void>>(
+  name: string,
+  url: string | ((...params: P) => string),
+  returns?: (res: AxiosResponse) => R,
+  options: AxiosRequestConfig = {}
+) => (token: string, ...args: P): Promise<R> =>
+  axios
+    .post(apiURL + (typeof url === 'string' ? url : url(...args)), {
+      headers: { token },
+      ...options,
+    })
+    .then(returns ?? ((() => {}) as () => R))
+    .catch(logError(name));
+
 export class APIError extends Error {
   constructor(public readonly code: number, message: string) {
     super(message);
@@ -216,6 +231,22 @@ export const axiosGetCertificates = getAPI(
   'getCertificates',
   '/certificates',
   (res) => res.data.certificates as IExposedCertificate[]
+);
+
+export const axiosSignCertificate = postAPI<
+  boolean,
+  [
+    string,
+    {
+      signaturePupil?: string;
+      signatureParent?: string;
+      signatureLocation: string;
+    }
+  ]
+>(
+  'signCertificate',
+  (uuid: string) => `/certificate/${uuid}/sign`,
+  (res) => res.status === 200
 );
 
 export const axiosGetCourses = async (

@@ -22,6 +22,8 @@ import {
   supportedLanguages,
 } from '../types/Certificate';
 
+import SignCertificateModal from '../components/Modals/SignCertificateModal';
+
 const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -33,6 +35,9 @@ const Settings: React.FC = () => {
   const modalContext = useContext(Context.Modal);
   const userContext = useContext(Context.User);
   const [certificates, reloadCertificates] = useAPIResult('getCertificates');
+  const [certificateToSign, setCertificateToSign] = useState<
+    IExposedCertificate
+  >();
   const getCertificate = useAPI('getCertificate');
   const [language, setLanguage] = useState<ISupportedLanguage>(defaultLanguage);
 
@@ -41,6 +46,17 @@ const Settings: React.FC = () => {
     window.open(
       URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
     );
+  }
+
+  async function rejectCertificate(uuid: IExposedCertificate['uuid']) {
+    const response = await getCertificate(uuid, language);
+    window.open(
+      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
+    );
+  }
+
+  async function signCertificate(uuid: IExposedCertificate['uuid']) {
+    console.log(uuid);
   }
 
   const { setOpenedModal } = modalContext;
@@ -119,7 +135,7 @@ const Settings: React.FC = () => {
   };
 
   const stateTranslation: { [key in IExposedCertificate['state']]: string } = {
-    manual: 'Unbestätigt',
+    manual: 'Manuell',
     'awaiting-approval': 'Bestätigung ausstehend',
     approved: 'Bestätigt',
   };
@@ -167,7 +183,7 @@ const Settings: React.FC = () => {
           <>
             <Tag
               color={
-                (certificate.state === 'manual' && 'green') ||
+                (certificate.state === 'manual' && 'grey') ||
                 (certificate.state === 'awaiting-approval' && 'yellow') ||
                 (certificate.state === 'approved' && 'green')
               }
@@ -183,9 +199,47 @@ const Settings: React.FC = () => {
         key: 'action',
         render: (certificate: IExposedCertificate) => (
           <Space size="middle">
-            {userContext.user.isTutor &&
-              certificate.state !== 'awaiting-approval' && (
+            {userContext.user.isTutor && (
+              <>
+                <Select
+                  defaultValue={defaultLanguage}
+                  onChange={(event) => setLanguage(event)}
+                  style={{ width: 120 }}
+                >
+                  {Object.entries(supportedLanguages).map(([code, value]) => (
+                    <Select.Option value={code}>{value}</Select.Option>
+                  ))}
+                </Select>
+                <Button
+                  type="primary"
+                  onClick={() => showCertificate(certificate.uuid)}
+                >
+                  Ansehen
+                </Button>
+                {certificate.state === 'manual' && (
+                  <Button
+                    type="primary"
+                    onClick={() => showCertificate(certificate.uuid)}
+                  >
+                    Beantragen
+                  </Button>
+                )}
+              </>
+            )}
+
+            {/* <Button danger>Löschen</Button> */}
+            {!userContext.user.isTutor &&
+              certificate.state === 'awaiting-approval' && (
                 <>
+                  <Button onClick={() => setCertificateToSign(certificate)}>
+                    Genehmigen
+                  </Button>
+                  <Button
+                    danger
+                    onClick={() => rejectCertificate(certificate.uuid)}
+                  >
+                    Ablehnen
+                  </Button>
                   <Select
                     defaultValue={defaultLanguage}
                     onChange={(event) => setLanguage(event)}
@@ -203,8 +257,6 @@ const Settings: React.FC = () => {
                   </Button>
                 </>
               )}
-
-            {/* <Button danger>Löschen</Button> */}
           </Space>
         ),
       },
@@ -232,6 +284,13 @@ const Settings: React.FC = () => {
         renderProjectFields()}
       {renderCertificatesTable()}
       <AccountNotScreenedModal />
+      {certificateToSign && (
+        <SignCertificateModal
+          certificate={certificateToSign}
+          signCertificate={signCertificate}
+          close={() => setCertificateToSign(undefined)}
+        />
+      )}
     </div>
   );
 };
