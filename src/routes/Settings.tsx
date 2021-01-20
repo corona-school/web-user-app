@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Button, Select, Space, Table, Tag } from 'antd';
 import Context from '../context';
 
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
@@ -15,14 +14,10 @@ import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
 import { useAPI, useAPIResult } from '../context/ApiContext';
-import {
-  defaultLanguage,
-  IExposedCertificate,
-  ISupportedLanguage,
-  supportedLanguages,
-} from '../types/Certificate';
+import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
 
 import SignCertificateModal from '../components/Modals/SignCertificateModal';
+import CertificateCard from '../components/cards/CertificateCard';
 
 const Wrapper = styled.div`
   display: flex;
@@ -39,20 +34,19 @@ const Settings: React.FC = () => {
     IExposedCertificate
   >();
   const getCertificate = useAPI('getCertificate');
-  const [language, setLanguage] = useState<ISupportedLanguage>(defaultLanguage);
 
-  async function showCertificate(uuid: IExposedCertificate['uuid']) {
-    const response = await getCertificate(uuid, language);
+  async function showCertificate(
+    certificate: IExposedCertificate,
+    language: ISupportedLanguage
+  ) {
+    const response = await getCertificate(certificate.uuid, language);
     window.open(
       URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
     );
   }
 
-  async function rejectCertificate(uuid: IExposedCertificate['uuid']) {
-    const response = await getCertificate(uuid, language);
-    window.open(
-      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
-    );
+  async function rejectCertificate(certificate: IExposedCertificate) {
+    console.log('reject certificate', certificate);
   }
 
   async function signCertificate(uuid: IExposedCertificate['uuid']) {
@@ -134,140 +128,24 @@ const Settings: React.FC = () => {
     );
   };
 
-  const stateTranslation: { [key in IExposedCertificate['state']]: string } = {
-    manual: 'Manuell',
-    'awaiting-approval': 'Bestätigung ausstehend',
-    approved: 'Bestätigt',
-  };
-
   const renderCertificatesTable = () => {
-    const columns = [
-      {
-        title: 'Schüler*in',
-        key: 'pupil',
-        render: (certificate: IExposedCertificate) =>
-          `${certificate.pupil.firstname} ${certificate.pupil.lastname}`,
-      },
-      {
-        title: 'Student*in',
-        key: 'student',
-        render: (certificate: IExposedCertificate) =>
-          `${certificate.student.firstname} ${certificate.student.lastname}`,
-      },
-      {
-        title: 'Fächer',
-        key: 'subjects',
-        render: (certificate: IExposedCertificate) => (
-          <>
-            {certificate.subjects.split(',').map((subject) => (
-              <Tag key={subject}>{subject.toUpperCase()}</Tag>
-            ))}
-          </>
-        ),
-      },
-      {
-        title: 'Status',
-        key: 'status',
-        filters: ['manual', 'awaiting-approval', 'approved'].map((s) => ({
-          value: s,
-          text: stateTranslation[s],
-        })),
-        filterMultiple: false,
-        onFilter: (value: string, certificate: IExposedCertificate) =>
-          certificate.state === value,
-        // defaultSortOrder: 'descend',
-        sorter: (a: IExposedCertificate, b: IExposedCertificate) =>
-          a.state.length - b.state.length,
-        // sortDirections: ['descend', 'ascend'],
-        render: (certificate: IExposedCertificate) => (
-          <>
-            <Tag
-              color={
-                (certificate.state === 'manual' && 'grey') ||
-                (certificate.state === 'awaiting-approval' && 'yellow') ||
-                (certificate.state === 'approved' && 'green')
-              }
-              key={certificate.state}
-            >
-              {stateTranslation[certificate.state]}
-            </Tag>
-          </>
-        ),
-      },
-      {
-        title: 'Aktion',
-        key: 'action',
-        render: (certificate: IExposedCertificate) => (
-          <Space size="middle">
-            {userContext.user.isTutor && (
-              <>
-                <Select
-                  defaultValue={defaultLanguage}
-                  onChange={(event) => setLanguage(event)}
-                  style={{ width: 120 }}
-                >
-                  {Object.entries(supportedLanguages).map(([code, value]) => (
-                    <Select.Option value={code}>{value}</Select.Option>
-                  ))}
-                </Select>
-                <Button
-                  type="primary"
-                  onClick={() => showCertificate(certificate.uuid)}
-                >
-                  Ansehen
-                </Button>
-                {certificate.state === 'manual' && (
-                  <Button
-                    type="primary"
-                    onClick={() => showCertificate(certificate.uuid)}
-                  >
-                    Beantragen
-                  </Button>
-                )}
-              </>
-            )}
-
-            {/* <Button danger>Löschen</Button> */}
-            {!userContext.user.isTutor &&
-              certificate.state === 'awaiting-approval' && (
-                <>
-                  <Button onClick={() => setCertificateToSign(certificate)}>
-                    Genehmigen
-                  </Button>
-                  <Button
-                    danger
-                    onClick={() => rejectCertificate(certificate.uuid)}
-                  >
-                    Ablehnen
-                  </Button>
-                  <Select
-                    defaultValue={defaultLanguage}
-                    onChange={(event) => setLanguage(event)}
-                    style={{ width: 120 }}
-                  >
-                    {Object.entries(supportedLanguages).map(([code, value]) => (
-                      <Select.Option value={code}>{value}</Select.Option>
-                    ))}
-                  </Select>
-                  <Button
-                    type="primary"
-                    onClick={() => showCertificate(certificate.uuid)}
-                  >
-                    Ansehen
-                  </Button>
-                </>
-              )}
-          </Space>
-        ),
-      },
-    ];
+    if (!certificates.value) return null;
 
     return (
       <>
         <Title size="h3" className={classes.subjectTitle}>
-          Zertifikate
+          Deine Zertifikate
         </Title>
-        <Table dataSource={certificates.value ?? []} columns={columns} />
+        <Wrapper>
+          {certificates.value?.map((certificate) => (
+            <CertificateCard
+              certificate={certificate}
+              showCertificate={showCertificate}
+              rejectCertificate={rejectCertificate}
+              startSigning={setCertificateToSign}
+            />
+          ))}
+        </Wrapper>
       </>
     );
   };
