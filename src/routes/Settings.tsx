@@ -22,7 +22,7 @@ import {
   supportedLanguages,
 } from '../types/Certificate';
 
-// import SignCertificateModal from '../components/Modals/SignCertificateModal';
+import SignCertificateModal from '../components/Modals/SignCertificateModal';
 
 const Wrapper = styled.div`
   display: flex;
@@ -35,6 +35,9 @@ const Settings: React.FC = () => {
   const modalContext = useContext(Context.Modal);
   const userContext = useContext(Context.User);
   const [certificates, reloadCertificates] = useAPIResult('getCertificates');
+  const [certificateToSign, setCertificateToSign] = useState<
+    IExposedCertificate
+  >();
   const getCertificate = useAPI('getCertificate');
   const [language, setLanguage] = useState<ISupportedLanguage>(defaultLanguage);
 
@@ -45,16 +48,16 @@ const Settings: React.FC = () => {
     );
   }
 
-  // async function rejectCertificate(uuid: IExposedCertificate['uuid']) {
-  //    const response = await getCertificate(uuid, language);
-  //    window.open(
-  //      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
-  //    );
-  // }
+  async function rejectCertificate(uuid: IExposedCertificate['uuid']) {
+    const response = await getCertificate(uuid, language);
+    window.open(
+      URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
+    );
+  }
 
-  // async function reviewCertificate(uuid: IExposedCertificate['uuid']) {
-
-  // }
+  async function signCertificate(uuid: IExposedCertificate['uuid']) {
+    console.log(uuid);
+  }
 
   const { setOpenedModal } = modalContext;
 
@@ -228,11 +231,7 @@ const Settings: React.FC = () => {
             {!userContext.user.isTutor &&
               certificate.state === 'awaiting-approval' && (
                 <>
-                  <Button
-                    onClick={() =>
-                      modalContext.setOpenedModal('signCertificateModal')
-                    }
-                  >
+                  <Button onClick={() => setCertificateToSign(certificate)}>
                     Genehmigen
                   </Button>
                   <Button
@@ -285,6 +284,13 @@ const Settings: React.FC = () => {
         renderProjectFields()}
       {renderCertificatesTable()}
       <AccountNotScreenedModal />
+      {certificateToSign && (
+        <SignCertificateModal
+          certificate={certificateToSign}
+          signCertificate={signCertificate}
+          close={() => setCertificateToSign(undefined)}
+        />
+      )}
     </div>
   );
 };
