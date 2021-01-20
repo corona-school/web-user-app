@@ -61,10 +61,6 @@ const Settings: React.FC = () => {
     );
   }
 
-  async function rejectCertificate(certificate: IExposedCertificate) {
-    console.log('reject certificate', certificate);
-  }
-
   const { setOpenedModal } = modalContext;
 
   useEffect(() => {
@@ -153,7 +149,6 @@ const Settings: React.FC = () => {
             <CertificateCard
               certificate={certificate}
               showCertificate={showCertificate}
-              rejectCertificate={rejectCertificate}
               startSigning={setCertificateToSign}
             />
           ))}

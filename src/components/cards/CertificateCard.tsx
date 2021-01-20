@@ -42,7 +42,6 @@ function CertificateCard({
   certificate,
   showCertificate,
   startSigning,
-  rejectCertificate,
 }: {
   certificate: IExposedCertificate;
   showCertificate(
@@ -50,7 +49,6 @@ function CertificateCard({
     language: ISupportedLanguage
   );
   startSigning(certificate: IExposedCertificate);
-  rejectCertificate(certificate: IExposedCertificate);
 }) {
   const userContext = useContext(Context.User);
   const [language, setLanguage] = useState<ISupportedLanguage>(defaultLanguage);
@@ -115,9 +113,6 @@ function CertificateCard({
                   onClick={() => startSigning(certificate)}
                 >
                   Genehmigen
-                </Button>
-                <Button danger onClick={() => rejectCertificate(certificate)}>
-                  Ablehnen
                 </Button>
               </>
             )}
