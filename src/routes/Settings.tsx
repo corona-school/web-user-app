@@ -14,7 +14,11 @@ import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
 import { useAPI, useAPIResult } from '../context/ApiContext';
-import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
+import {
+  ICertificateSignature,
+  IExposedCertificate,
+  ISupportedLanguage,
+} from '../types/Certificate';
 
 import SignCertificateModal from '../components/Modals/SignCertificateModal';
 import CertificateCard from '../components/cards/CertificateCard';
@@ -35,6 +39,18 @@ const Settings: React.FC = () => {
   >();
   const getCertificate = useAPI('getCertificate');
 
+  const signCertificateAPI = useAPI('signCertificate');
+
+  async function signCertificate(
+    certificate: IExposedCertificate,
+    signature: ICertificateSignature
+  ) {
+    const success = await signCertificateAPI(certificate.uuid, signature);
+    if (!success) return; // TODO: Show error popup
+
+    reloadCertificates();
+  }
+
   async function showCertificate(
     certificate: IExposedCertificate,
     language: ISupportedLanguage
@@ -47,10 +63,6 @@ const Settings: React.FC = () => {
 
   async function rejectCertificate(certificate: IExposedCertificate) {
     console.log('reject certificate', certificate);
-  }
-
-  async function signCertificate(uuid: IExposedCertificate['uuid']) {
-    console.log(uuid);
   }
 
   const { setOpenedModal } = modalContext;

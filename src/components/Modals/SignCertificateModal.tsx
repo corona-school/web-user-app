@@ -2,7 +2,10 @@ import React from 'react';
 import StyledReactModal from 'styled-react-modal';
 import { Descriptions } from 'antd';
 import moment from 'moment';
-import { IExposedCertificate } from '../../types/Certificate';
+import {
+  ICertificateSignature,
+  IExposedCertificate,
+} from '../../types/Certificate';
 import classes from './SignCertificateModal.module.scss';
 import Button from '../button';
 import { Title } from '../Typography';
@@ -10,7 +13,10 @@ import Icons from '../../assets/icons';
 
 interface Props {
   certificate: IExposedCertificate;
-  signCertificate: (uuid: string) => void;
+  signCertificate: (
+    certificate: IExposedCertificate,
+    signature: ICertificateSignature
+  ) => void;
   close();
 }
 

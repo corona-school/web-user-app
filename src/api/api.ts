@@ -18,7 +18,11 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
-import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
+import {
+  ICertificateSignature,
+  IExposedCertificate,
+  ISupportedLanguage,
+} from '../types/Certificate';
 
 const logError = (apiName: string) => (error: Error) => {
   if (dev) console.error(`${apiName} failed:`, error);
@@ -45,14 +49,19 @@ const getAPI = <R = void, P extends Array<any> = Array<void>>(
 const postAPI = <R = void, P extends Array<any> = Array<void>>(
   name: string,
   url: string | ((...params: P) => string),
+  body: (...params: P) => unknown,
   returns?: (res: AxiosResponse) => R,
   options: AxiosRequestConfig = {}
 ) => (token: string, ...args: P): Promise<R> =>
   axios
-    .post(apiURL + (typeof url === 'string' ? url : url(...args)), {
-      headers: { token },
-      ...options,
-    })
+    .post(
+      apiURL + (typeof url === 'string' ? url : url(...args)),
+      body(...args),
+      {
+        headers: { token },
+        ...options,
+      }
+    )
     .then(returns ?? ((() => {}) as () => R))
     .catch(logError(name));
 
@@ -235,17 +244,11 @@ export const axiosGetCertificates = getAPI(
 
 export const axiosSignCertificate = postAPI<
   boolean,
-  [
-    string,
-    {
-      signaturePupil?: string;
-      signatureParent?: string;
-      signatureLocation: string;
-    }
-  ]
+  [string, ICertificateSignature]
 >(
   'signCertificate',
-  (uuid: string) => `/certificate/${uuid}/sign`,
+  (uuid) => `/certificate/${uuid}/sign`,
+  (uuid, signature) => signature,
   (res) => res.status === 200
 );
 
