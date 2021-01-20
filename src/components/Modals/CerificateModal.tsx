@@ -319,16 +319,15 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
 
   const requestCertificate = () => {
     setLoading(true);
-    // ToDo: sent e-mail to tutee
     apiContext
       .createCertificate(certificateData)
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        // link.setAttribute('download', 'certificate.pdf');
-        // document.body.appendChild(link);
-        // link.click();
+        link.setAttribute('download', 'certificate.pdf');
+        document.body.appendChild(link);
+        link.click();
         setLoading(false);
       })
       .catch(() => {
@@ -365,7 +364,7 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
             {loading ? (
               <ClipLoader size={20} color="#ffffff" loading={loading} />
             ) : (
-              <>Beantragen</>
+              <>Download</>
             )}
           </Button>
         </div>
