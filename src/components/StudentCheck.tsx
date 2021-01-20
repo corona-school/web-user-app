@@ -9,7 +9,7 @@ const StudentCheck = () => {
   const modalContext = useContext(ModalContext);
   const history = useHistory();
 
-  useEffect(() => {
+  function getUserContext() {
     if (userContext.user.type !== 'student') {
       history.push('/');
     }
@@ -25,7 +25,8 @@ const StudentCheck = () => {
     ) {
       modalContext.setOpenedModal('accountNotScreened');
     }
-  }, [userContext.user.screeningStatus]);
+  }
+  useEffect(getUserContext, [userContext.user.screeningStatus]);
 };
 
 export default StudentCheck;

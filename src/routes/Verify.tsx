@@ -21,7 +21,7 @@ const Verify: React.FC = () => {
 
   const auth = useContext(AuthContext);
 
-  useEffect(() => {
+  function tokenVerification() {
     if (verificationToken) {
       setState('pending');
       redeemVerificationToken(verificationToken)
@@ -43,7 +43,9 @@ const Verify: React.FC = () => {
           setState('failed');
         });
     }
-  }, [verificationToken]);
+  }
+
+  useEffect(tokenVerification, [verificationToken]);
 
   return (
     <PageLoading>

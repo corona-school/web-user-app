@@ -176,16 +176,15 @@ export function useAPIResult<N extends keyof IApiContext>(name: N) {
   }>({ loading: true });
   const api = useAPI(name);
 
-  function reload() {
+  const reload = () => {
     // eslint-disable-next-line
     (api as any)()
       .then((value) => setValue({ value }))
       .catch((error) => setValue({ error }));
-  }
+  };
 
-  useEffect(() => {
-    reload();
-  }, []);
+  // Use function as useEffect callback
+  useEffect(reload, []);
 
   return [value, reload] as const;
 }

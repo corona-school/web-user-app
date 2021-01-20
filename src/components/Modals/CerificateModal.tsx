@@ -64,7 +64,7 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
   const modalContext = useContext(context.Modal);
   const apiContext = useContext(context.Api);
 
-  useEffect(() => {
+  function pupilCertificate() {
     const selectedPupil = allMatches.find(
       (s) => s.uuid === certificateData.student
     );
@@ -79,7 +79,9 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
         hoursTotal: certificateData.hoursPerWeek * weekCount,
       });
     }
-  }, [
+  }
+
+  useEffect(pupilCertificate, [
     certificateData.hoursPerWeek,
     certificateData.endDate,
     certificateData.student,

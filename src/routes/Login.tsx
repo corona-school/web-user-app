@@ -44,6 +44,7 @@ const Login: React.FC = () => {
   useEffect(() => {
     if (authContext.status === 'authorized') setState('success');
     if (authContext.status === 'invalid') setState('failed'); // if a stored token is invalid...
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authContext.status]);
 
   useEffect(() => {
@@ -67,6 +68,7 @@ const Login: React.FC = () => {
           setState('failed');
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const login = () => {

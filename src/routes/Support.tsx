@@ -27,7 +27,7 @@ const MaterialCard = ({
   const apiContext = useContext(ApiContext);
   const theme = useContext(ThemeContext);
 
-  useEffect(() => {
+  function settingLoadingFiles() {
     setLoading(true);
     apiContext
       .getMentoringMaterial('files', location)
@@ -39,7 +39,9 @@ const MaterialCard = ({
         )
       )
       .finally(() => setLoading(false));
-  }, [apiContext]);
+  }
+
+  useEffect(settingLoadingFiles, [apiContext]);
 
   return (
     <LeftHighlightCard highlightColor={theme.color.cardHighlightRed}>
@@ -66,7 +68,7 @@ const Playlist = ({ location }: { location: string }) => {
   const [loading, setLoading] = useState(false);
   const apiContext = useContext(ApiContext);
 
-  useEffect(() => {
+  function setLoadingPlaylist() {
     setLoading(true);
     apiContext
       .getMentoringMaterial('playlist', location)
@@ -77,7 +79,9 @@ const Playlist = ({ location }: { location: string }) => {
         )
       )
       .finally(() => setLoading(false));
-  }, [apiContext]);
+  }
+
+  useEffect(setLoadingPlaylist, [apiContext]);
 
   return (
     <div>

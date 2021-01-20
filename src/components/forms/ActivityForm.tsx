@@ -27,6 +27,7 @@ const initialActivities = [
   'Begleitung auf dem Weg zum selbstständigen Lernen',
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ActivityForm = ({ certificateData, setCertificateData }: Props) => {
   const [activityName, setActivityName] = useState('');
   const [activitesOptions, setActivitiesOptions] = useState([0]);
@@ -61,7 +62,7 @@ const ActivityForm = ({ certificateData, setCertificateData }: Props) => {
         <div className={classes.inputContainer}>
           <Input
             onKeyUp={(e) => {
-              if (e.keyCode === 13) {
+              if (e.key === 'Enter') {
                 e.preventDefault();
                 addItem();
               }
@@ -70,9 +71,9 @@ const ActivityForm = ({ certificateData, setCertificateData }: Props) => {
             value={activityName}
             onChange={(e) => setActivityName(e.target.value)}
           />
-          <a className={classes.addLink} onClick={addItem}>
+          <span className={classes.addLink} onClick={addItem}>
             Hinzufügen
-          </a>
+          </span>
         </div>
       </div>
     );
