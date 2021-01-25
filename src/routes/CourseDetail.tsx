@@ -402,6 +402,19 @@ const CourseDetail = (params: {
     }
   };
 
+  const issueParticipantCertificate = (participantID: string) => {
+    console.log(`Issue cert for ${participantID}`);
+    api
+      .issueCourseCertificates(course.id, course.subcourse.id, [participantID])
+      .then(() => {
+        message.success('Dem/Der Schüler*in wurde die Teilnahme bestätigt.');
+      })
+      .catch((err) => {
+        if (dev) console.error(err);
+        message.error('Es ist ein Fehler aufgetreten!');
+      });
+  };
+
   const getTodaysLectures = () => {
     return course.subcourse?.lectures?.filter((l) =>
       moment.unix(l.start).isSame(moment(), 'day')
@@ -496,6 +509,13 @@ const CourseDetail = (params: {
               actions={[
                 <div>{item.schooltype}</div>,
                 <span>{item.grade} Klasse</span>,
+                <AntdButton
+                  type="primary"
+                  onClick={() => issueParticipantCertificate(item.uuid)}
+                  disabled={!hasEnded()}
+                >
+                  Erfolgreiche Teilnahme
+                </AntdButton>,
               ]}
             >
               <List.Item.Meta

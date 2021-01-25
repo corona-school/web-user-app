@@ -632,6 +632,23 @@ export const axiosGuestJoinBBBmeeting = (
     .catch(logError('GuestJoinBBBmeeting'));
 };
 
+export const axiosIssueCourseCertificates = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  pupilUUIDs: string[]
+) => {
+  await axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/certificate`,
+      { receivers: pupilUUIDs },
+      {
+        headers: { token },
+      }
+    )
+    .catch(logError('issueCourseCertificates'));
+};
+
 export const axiosGetCooperatingSchool = (
   state?: string
 ): Promise<SchoolInfo[]> => {

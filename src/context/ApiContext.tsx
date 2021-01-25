@@ -106,6 +106,11 @@ interface IApiContext {
     subject: string,
     body: string
   ) => Promise<void>;
+  issueCourseCertificates: (
+    courseId: number,
+    subCourseId: number,
+    pupilUUIDs: string[]
+  ) => Promise<void>;
   sendCourseInstructorMail: (
     courseId: number,
     subCourseId: number,
@@ -190,6 +195,7 @@ export const ApiContext = React.createContext<IApiContext>({
   registerStateTutee: reject,
   registerTutor: reject,
   sendCourseGroupMail: reject,
+  issueCourseCertificates: reject,
   sendCourseInstructorMail: reject,
   joinBBBmeeting: reject,
   guestJoinBBBmeeting: reject,
@@ -397,6 +403,13 @@ export const ApiProvider: React.FC = ({ children }) => {
   ) =>
     api.axiosSendCourseGroupMail(token, courseId, subCourseId, subject, body);
 
+  const issueCourseCertificates = (
+    courseId: number,
+    subCourseId: number,
+    pupilUUIDs: string[]
+  ) =>
+    api.axiosIssueCourseCertificates(token, courseId, subCourseId, pupilUUIDs);
+
   const sendCourseInstructorMail = (
     courseId: number,
     subCourseId: number,
@@ -481,6 +494,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         registerStateTutee,
         registerTutor,
         sendCourseGroupMail,
+        issueCourseCertificates,
         sendCourseInstructorMail,
         joinCourse,
         leaveCourse,
