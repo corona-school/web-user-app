@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
@@ -14,6 +14,7 @@ import {
   WhatsAppOutlined,
   CopyOutlined,
   UserAddOutlined,
+  QuestionCircleOutlined,
 } from '@ant-design/icons';
 import {
   Empty,
@@ -24,6 +25,7 @@ import {
   Button as AntdButton,
   List,
   Tooltip,
+  Popconfirm,
 } from 'antd';
 import AddInstructorModal from '../components/Modals/AddInstructorModal';
 import { ApiContext } from '../context/ApiContext';
@@ -69,6 +71,9 @@ const CourseDetail = (params: {
     false
   );
   const [tags, setTags] = useState<CourseTag[]>([]);
+
+  const [loadingCerts, setLoadingCerts] = useState<Set<string>>(new Set());
+  const loadingCertsRef = useRef(loadingCerts);
 
   const { id: urlParamID } = useParams() as { id: string };
   const id = params.id ?? urlParamID;
@@ -402,6 +407,31 @@ const CourseDetail = (params: {
     }
   };
 
+  const isLoadingParticipantCertificate = (participantID: string) => {
+    return loadingCertsRef.current.has(participantID);
+  };
+
+  const issueParticipantCertificate = (participantID: string) => {
+    if (isLoadingParticipantCertificate(participantID)) {
+      // already loading that cert)
+      return;
+    }
+    setLoadingCerts(new Set(loadingCertsRef.current.add(participantID)));
+    api
+      .issueCourseCertificates(course.id, course.subcourse.id, [participantID])
+      .then(() => {
+        message.success('Dem/Der Schüler*in wurde die Teilnahme bestätigt.');
+      })
+      .catch((err) => {
+        if (dev) console.error(err);
+        message.error('Es ist ein Fehler aufgetreten!');
+      })
+      .finally(() => {
+        loadingCertsRef.current.delete(participantID);
+        setLoadingCerts(new Set(loadingCertsRef.current));
+      });
+  };
+
   const getTodaysLectures = () => {
     return course.subcourse?.lectures?.filter((l) =>
       moment.unix(l.start).isSame(moment(), 'day')
@@ -496,6 +526,28 @@ const CourseDetail = (params: {
               actions={[
                 <div>{item.schooltype}</div>,
                 <span>{item.grade} Klasse</span>,
+                <Popconfirm
+                  title={`Soll ${item.firstname} wirklich ein Zertifikat zugeschickt bekommen?`}
+                  icon={<QuestionCircleOutlined />}
+                  okText="Bestätigen"
+                  cancelText="Abbrechen"
+                  onConfirm={() => issueParticipantCertificate(item.uuid)}
+                  disabled={
+                    !hasEnded() || isLoadingParticipantCertificate(item.uuid)
+                  }
+                >
+                  <AntdButton
+                    type="primary"
+                    disabled={
+                      !hasEnded() || isLoadingParticipantCertificate(item.uuid)
+                    }
+                    loading={isLoadingParticipantCertificate(item.uuid)}
+                  >
+                    {isLoadingParticipantCertificate(item.uuid)
+                      ? 'Wird ausgestellt...'
+                      : 'Erfolgreiche Teilnahme'}
+                  </AntdButton>
+                </Popconfirm>,
               ]}
             >
               <List.Item.Meta

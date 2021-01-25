@@ -33,6 +33,7 @@ export interface Participant {
 export interface CourseParticipant extends Participant {
   grade: number;
   email: string;
+  uuid: string;
   schooltype: string;
 }
 
