@@ -545,7 +545,7 @@ const CourseDetail = (params: {
                   >
                     {isLoadingParticipantCertificate(item.uuid)
                       ? 'Wird ausgestellt...'
-                      : 'Erfolgreiche Teilnahme'}
+                      : 'Teilnahmezertifikat ausstellen'}
                   </AntdButton>
                 </Popconfirm>,
               ]}
