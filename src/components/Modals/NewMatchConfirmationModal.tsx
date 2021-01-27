@@ -1,10 +1,15 @@
-import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { message } from 'antd';
 import DialogModalBase from './DialogModalBase';
 import { ModalContext } from '../../context/ModalContext';
 import Illustration from '../../assets/images/confirmNewMatchIllustration.png';
 import { ReactComponent as Checkmark } from '../../assets/icons/check-double-solid.svg';
 import { UserContext } from '../../context/UserContext';
+import styles from './NewMatchConfirmationModal.module.scss';
+import EditableUserSettingsCard, {
+  EditableUserSettings,
+} from '../cards/EditableUserSettingsCard';
+import context from '../../context';
 
 const accentColor = '#FFCC12';
 
@@ -16,9 +21,45 @@ const NewMatchConfirmationModal: React.FC<{
 }> = ({ requestNewMatch }) => {
   const modalContext = useContext(ModalContext);
   const userContext = useContext(UserContext);
-  const history = useHistory();
   const { user } = userContext;
   const [pageIndex, setPageIndex] = useState(0);
+  const ApiContext = useContext(context.Api);
+
+  const [editableUserSettings, setEditableUserSettings] = useState<
+    EditableUserSettings
+  >({
+    state: user.state,
+    grade: user.grade,
+    schoolType: user.schoolType,
+    university: user.university,
+  });
+
+  useEffect(() => {
+    setEditableUserSettings({
+      state: user.state,
+      grade: user.grade,
+      schoolType: user.schoolType,
+      university: user.university,
+    });
+  }, [user.state, user.grade, user.schoolType, user.university]);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [, setIsSaving] = useState(false);
+
+  const saveUserChanges = async () => {
+    try {
+      setIsSaving(true);
+      await ApiContext.putUser({ ...user, ...editableUserSettings });
+      setIsSaving(false);
+      setIsEditing(false);
+      return Promise.resolve();
+    } catch {
+      setIsSaving(false);
+      return Promise.reject(
+        'Ein Fehler ist aufgetreten. Probiere es noch einmal!'
+      );
+    }
+  };
 
   return (
     <DialogModalBase accentColor={accentColor}>
@@ -32,13 +73,14 @@ const NewMatchConfirmationModal: React.FC<{
 
           {pageIndex === 0 && (
             <div>
-              <img
-                style={{
-                  width: '100%',
-                }}
-                src={Illustration}
-                alt="Mensch, der sich verschiedene Optionen ansieht"
-              />
+              <div className={styles.illustrationWrapper}>
+                <img
+                  className={styles.illustration}
+                  src={Illustration}
+                  alt="Mensch, der sich verschiedene Optionen ansieht"
+                />
+              </div>
+
               <DialogModalBase.TextBlock>
                 <h3>Wichtiger Hinweis</h3>
                 <p>
@@ -82,46 +124,66 @@ const NewMatchConfirmationModal: React.FC<{
                 überprüfen.
               </p>
 
-              <strong>
-                <p>
-                  {user.firstname} {user.lastname}
-                </p>
-              </strong>
+              {/* <strong> */}
+              {/*  <p> */}
+              {/*    {user.firstname} {user.lastname} */}
+              {/*  </p> */}
+              {/* </strong> */}
 
-              <strong>Fächer</strong>
-              <p>{user.subjects.map((s) => s.name).join(', ')}</p>
+              {/* <strong>Fächer</strong> */}
+              {/* <p>{user.subjects.map((s) => s.name).join(', ')}</p> */}
 
-              <strong>Klassenstufe</strong>
-              <p>{user.grade}. Klasse</p>
+              {/* <strong>Klassenstufe</strong> */}
+              {/* <p>{user.grade}. Klasse</p> */}
 
-              <strong>Bundesland</strong>
-              <p>{user.state === 'other' ? 'anderer Wohnort' : user.state}</p>
+              {/* <strong>Bundesland</strong> */}
+              {/* <p>{user.state === 'other' ? 'anderer Wohnort' : user.state}</p> */}
 
-              <strong>Schultyp</strong>
-              <p>
-                {user.schoolType === 'other' ? 'Sonstige' : user.schoolType}
-              </p>
+              {/* <strong>Schultyp</strong> */}
+              {/* <p> */}
+              {/*  {user.schoolType === 'other' ? 'Sonstige' : user.schoolType} */}
+              {/* </p> */}
+
+              <EditableUserSettingsCard
+                editableUserSettings={editableUserSettings}
+                onSettingChanges={setEditableUserSettings}
+                isEditing={isEditing}
+                personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
+              />
+
+              {/* <SettingsCard */}
+              {/*  user={userContext.user} */}
+              {/*  reloadCertificates={() => {}} */}
+              {/* /> */}
 
               <DialogModalBase.Content>
                 <DialogModalBase.Form>
                   <DialogModalBase.ButtonBox>
                     <DialogModalBase.Button
-                      label="Daten aktualisieren"
+                      label={isEditing ? 'Speichern' : 'Daten aktualisieren'}
                       onClick={() => {
-                        modalContext.setOpenedModal(null);
-                        setPageIndex(0);
-                        history.push('/settings');
+                        if (isEditing) {
+                          saveUserChanges().then(
+                            () =>
+                              message.success('Änderungen wurden gespeichert!'),
+                            (err) => message.error(err)
+                          );
+                        } else {
+                          setIsEditing(!isEditing);
+                        }
                       }}
                       accentColor="#626262"
                     />
-                    <DialogModalBase.Button
-                      label="Fertig"
-                      onClick={() => {
-                        requestNewMatch();
-                        modalContext.setOpenedModal(null);
-                        setPageIndex(0);
-                      }}
-                    />
+                    {!isEditing && (
+                      <DialogModalBase.Button
+                        label="Fertig"
+                        onClick={() => {
+                          requestNewMatch();
+                          modalContext.setOpenedModal(null);
+                          setPageIndex(0);
+                        }}
+                      />
+                    )}
                   </DialogModalBase.ButtonBox>
                 </DialogModalBase.Form>
               </DialogModalBase.Content>
