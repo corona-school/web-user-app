@@ -73,9 +73,15 @@ function CertificateCard({
     </>
   );
 
+  const stateToColor = {
+    manual: 'grey',
+    approved: 'green',
+    'awaiting-approval': 'yellow',
+  } as const;
+
   return (
     <CardContainer>
-      <StyledCard>
+      <StyledCard highlightColor={stateToColor[certificate.state]}>
         <SmallText>Schüler</SmallText>
         <Text>
           {certificate.pupil.firstname} {certificate.pupil.lastname}
