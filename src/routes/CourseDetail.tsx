@@ -54,6 +54,7 @@ import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
+import Icons from '../assets/icons';
 
 moment.locale('de');
 
@@ -628,6 +629,17 @@ const CourseDetail = (params: {
 
     return (
       <div className={classes.statusContainer}>
+        <div className={classes.backButtonContainer}>
+          <button
+            className={classes.backButton}
+            onClick={() => {
+              history.push('/courses');
+            }}
+          >
+            <Icons.ChevronLeft />
+            Zurück
+          </button>
+        </div>
         <div className={classes.headerContainer}>
           <div>
             <Title size="h1" style={{ margin: '0px 20px 10px 8px' }}>

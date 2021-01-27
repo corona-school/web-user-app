@@ -13,7 +13,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  padding-top: 20px;
 }
 
 .topGrid {
@@ -151,3 +151,18 @@
     }
   }
 }
+
+.backButtonContainer {
+  width: 100%;
+  padding-right: 20px;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  .backButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
