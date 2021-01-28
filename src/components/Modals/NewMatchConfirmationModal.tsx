@@ -104,8 +104,6 @@ const NewMatchConfirmationModal: React.FC<{
                     <DialogModalBase.Button
                       label="Fortfahren"
                       onClick={() => {
-                        // requestNewMatch();
-                        // modalContext.setOpenedModal(null);
                         setPageIndex(1);
                       }}
                     />
@@ -124,37 +122,12 @@ const NewMatchConfirmationModal: React.FC<{
                 überprüfen.
               </p>
 
-              {/* <strong> */}
-              {/*  <p> */}
-              {/*    {user.firstname} {user.lastname} */}
-              {/*  </p> */}
-              {/* </strong> */}
-
-              {/* <strong>Fächer</strong> */}
-              {/* <p>{user.subjects.map((s) => s.name).join(', ')}</p> */}
-
-              {/* <strong>Klassenstufe</strong> */}
-              {/* <p>{user.grade}. Klasse</p> */}
-
-              {/* <strong>Bundesland</strong> */}
-              {/* <p>{user.state === 'other' ? 'anderer Wohnort' : user.state}</p> */}
-
-              {/* <strong>Schultyp</strong> */}
-              {/* <p> */}
-              {/*  {user.schoolType === 'other' ? 'Sonstige' : user.schoolType} */}
-              {/* </p> */}
-
               <EditableUserSettingsCard
                 editableUserSettings={editableUserSettings}
                 onSettingChanges={setEditableUserSettings}
                 isEditing={isEditing}
                 personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
               />
-
-              {/* <SettingsCard */}
-              {/*  user={userContext.user} */}
-              {/*  reloadCertificates={() => {}} */}
-              {/* /> */}
 
               <DialogModalBase.Content>
                 <DialogModalBase.Form>
