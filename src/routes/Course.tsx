@@ -40,20 +40,14 @@ const Course = () => {
   const getPreviousCourses = () => {
     const previousCourses = [];
     myCourses.forEach((course) => {
-      const lectures = course.subcourse?.lectures.sort(
+      const lectures = course.subcourse.lectures.sort(
         (a, b) => a.start - b.start
       );
-      const lastLecture = lectures?.[lectures.length - 1];
+      const lastLecture = lectures[lectures.length - 1];
       if (lastLecture != null) {
         const lectureEnd = moment
           .unix(lastLecture.start)
           .add(lastLecture.duration, 'minutes');
-
-        console.log(
-          course.name,
-          lectureEnd.toISOString(),
-          moment().isAfter(lectureEnd)
-        );
 
         if (moment().isAfter(lectureEnd)) {
           previousCourses.push(course);
