@@ -26,7 +26,6 @@ const CloseButtonStyle = styled.button`
 
 const AccountNotScreenedModal = () => {
   const modalContext = useContext(Context.Modal);
-  const userContext = useContext(Context.User);
 
   return (
     <StyledReactModal

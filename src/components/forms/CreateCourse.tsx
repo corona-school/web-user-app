@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Form, Input, Radio, Select, InputNumber, Switch, message } from 'antd';
+import classnames from 'classnames';
 import Button from '../button';
 import Context from '../../context';
 
@@ -40,6 +41,9 @@ export const CreateCourse: React.FC<Props> = (props) => {
   const [joinAfterStart, setJoinAfterStart] = useState(
     props.subCourse ? props.subCourse.joinAfterStart : null
   );
+  const [allowContact, setAllowContact] = useState(
+    props.course ? props.course.allowContact : null
+  );
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState(
     props.course ? props.course.category : 'revision'
@@ -53,6 +57,15 @@ export const CreateCourse: React.FC<Props> = (props) => {
 
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
+  const userContext = useContext(Context.User);
+
+  const instructors = props.course?.instructors ?? [
+    {
+      id: userContext.user.id,
+      firstname: userContext.user.firstname,
+      lastname: userContext.user.lastname,
+    },
+  ];
 
   useEffect(() => {
     apiContext
@@ -69,7 +82,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
     return (
       <>
         <Form.Item
-          label="Beschränkungen (Klasse, Teilnehmer)"
+          label="Beschränkungen (Klasse, Teilnehmende)"
           className={classes.formItem}
           name="class"
           rules={[
@@ -86,7 +99,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
                 }
                 if (maxParticipants < 3) {
                   return Promise.reject(
-                    'Die Anzahl an Teilnehmer muss mindestens 3 sein.'
+                    'Die Anzahl an Teilnehmenden muss mindestens 3 sein.'
                   );
                 }
                 return Promise.resolve();
@@ -121,7 +134,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
             max={99}
             placeholder="14"
           />{' '}
-          Teilnehmer.
+          Teilnehmenden.
         </Form.Item>
 
         <Form.Item
@@ -136,7 +149,44 @@ export const CreateCourse: React.FC<Props> = (props) => {
               setJoinAfterStart(v);
             }}
           />
-          Teilnehmer dürfen nach Kursbeginn beitreten
+          Teilnehmende dürfen nach Kursbeginn beitreten
+        </Form.Item>
+
+        <Form.Item className={classes.formItem} name="allowContact">
+          <Switch
+            style={{ margin: '0px 4px' }}
+            checked={allowContact}
+            onChange={(v) => {
+              setAllowContact(v);
+            }}
+          />
+          Kontaktaufnahme erlaubt
+        </Form.Item>
+        <Form.Item
+          className={classnames(classes.formItem, classes.correspondentPicker, {
+            [classes.hidden]: !allowContact,
+          })}
+          name="correspondent"
+          initialValue={props.course?.correspondentID}
+          rules={[
+            () => ({
+              required: !!allowContact,
+              message:
+                'Du musst eine Person auswählen, die die Kontaktanfragen bearbeiten soll.',
+            }),
+          ]}
+        >
+          <Select placeholder="Wähle eine Kursleiter*in aus, die/der die Kontaktanfragen erhält">
+            {instructors?.map((i) => (
+              <Option value={i.id}>{`${i.firstname} ${i.lastname} ${
+                i.id === userContext.user.id ? '(Ich)' : ''
+              }`}</Option>
+            ))}
+            <Option disabled value={null}>
+              Weitere Kursleiter*innen können in der Übersicht hinzugefügt
+              werden
+            </Option>
+          </Select>
         </Form.Item>
       </>
     );
@@ -168,7 +218,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
           initialValue={props.course?.name}
           rules={[
             { required: true, message: 'Bitte trage einen Kursnamen ein' },
-            { max: 30, message: 'Bitte beschränke dich auf 30 Zeichen' },
+            { max: 100, message: 'Bitte beschränke dich auf 100 Zeichen' },
           ]}
         >
           <Input placeholder="Mathematik Hilfe" />
@@ -228,7 +278,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
             }}
           >
             <Radio style={radioStyle} value="revision">
-              Repititorien
+              Repetitorien
             </Radio>
             <Radio style={radioStyle} value="club">
               AGs
@@ -238,9 +288,13 @@ export const CreateCourse: React.FC<Props> = (props) => {
             </Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item className={classes.formItem} label="Tags" name="tags">
+        <Form.Item
+          className={classes.formItem}
+          label="Tags"
+          name="tags"
+          initialValue={editTags}
+        >
           <Select
-            defaultValue={editTags}
             onChange={(v: string[]) => {
               setEditTags(v);
             }}
@@ -262,16 +316,25 @@ export const CreateCourse: React.FC<Props> = (props) => {
 
   const handleCourseCreation = async () => {
     try {
-      setLoading(true);
       const formValues = await form.validateFields();
-      const course: Course = {
+      setLoading(true);
+      const newCourse = {
         instructors: props.course ? props.course.instructors : [],
         name: formValues.name,
         outline: formValues.outline,
         description: formValues.description,
         category: formValues.category,
         tags: formValues.tags || [],
-        submit: false,
+        submit: props.course?.submit ?? false,
+        image: props.course?.image,
+        allowContact: !!allowContact,
+        correspondentID: formValues.correspondent,
+      };
+      const course: Course = {
+        ...newCourse,
+        instructors: props.course
+          ? props.course.instructors.map((i) => i.id)
+          : [],
       };
       const subCourse: SubCourse = {
         instructors: props.subCourse ? props.subCourse.instructors : [],
@@ -279,7 +342,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
         maxGrade,
         maxParticipants,
         joinAfterStart: !!joinAfterStart,
-        published: false,
+        published: props.subCourse?.published ?? false,
       };
 
       if (dev) {
@@ -288,7 +351,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
 
       if (props.edit && props.course) {
         await apiContext.editCourse(props.course.id, course);
-        props.setCourse({ ...course, id: props.course.id });
+        props.setCourse({ ...newCourse, id: props.course.id });
 
         if (props.subCourse) {
           await apiContext.editSubCourse(props.course.id, {
@@ -310,7 +373,7 @@ export const CreateCourse: React.FC<Props> = (props) => {
       }
 
       const courseId = await apiContext.createCourse(course);
-      props.setCourse({ ...course, id: courseId });
+      props.setCourse({ ...newCourse, id: courseId });
 
       const subCourseId = await apiContext.createSubCourse(courseId, subCourse);
       props.setSubCourse({ ...subCourse, id: subCourseId });

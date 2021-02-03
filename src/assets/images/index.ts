@@ -16,7 +16,14 @@ import { ReactComponent as SignupBackgroundCircle2 } from './signup/yellow-circl
 import { ReactComponent as SignupBackgroundZickZack } from './signup/zick-zack-line.svg';
 import { ReactComponent as MentoringPic } from './mentoring.svg';
 
+import { ReactComponent as NotFound } from './not-found.svg';
+
 import { ReactComponent as Celebration } from './celebration_blue.svg';
+
+import DrehtuerImage from './drehtuer.png';
+import DefaultCourseCover from './course_default_cover.jpg';
+import { ReactComponent as Empty } from './empty.svg';
+import { ReactComponent as Graduation } from './graduation.svg';
 
 const ImageList = {
   StepsMatched,
@@ -36,9 +43,21 @@ const ImageList = {
   Celebration,
   MentoringPic,
   TrashIllustration,
+  DrehtuerImage,
+  DefaultCourseCover,
+  Empty,
+  Graduation,
+  NotFound,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Images: { [I in keyof typeof ImageList]: any } = ImageList;
+const Images: {
+  [I in keyof typeof ImageList]:
+    | React.FunctionComponent<
+        React.SVGProps<SVGSVGElement> & {
+          title?: string;
+        }
+      >
+    | string;
+} = ImageList;
 
 export default Images;

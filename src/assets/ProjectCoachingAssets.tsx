@@ -4,14 +4,14 @@ export const BecomeCoachText = (
   <>
     Immer noch ist der Schulalltag aufgrund der Corona-Pandemie stark
     eingeschränkt. Dabei fehlen den Schulen vor allem Kapazitäten zur Förderung
-    zusätzlicher Projekte wie beispielsweise im Rahmen von Jugend forscht, dem
+    zusätzlicher Projekte, wie beispielsweise im Rahmen von Jugend forscht, dem
     bekanntesten Schüler- und Jugendwettbewerb im Bereich Naturwissenschaften
-    und Technik. Daher wollen der Corona School e.V. gemeinsam mit der Stiftung
-    Jugend Forscht e.V. nun auch Schüler*innen im Rahmen des
-    1:1-Projektcoachings bei Ihren Projekten mit Rat und Tat zur Seite stehen.
+    und Technik. Daher wollen der Corona School e. V. gemeinsam mit der Stiftung
+    Jugend forscht e. V. nun auch Schüler*innen im Rahmen des
+    1:1-Projektcoachings bei ihren Projekten mit Rat und Tat zur Seite stehen.
     Zusätzlich können Gruppenkurse angeboten und bei speziellen Fragen auf eine
-    Expertendatenbank zurückgegriffen werden. Und genau dafür suchen wir dich!{' '}
-    <br />
+    Expert*innendatenbank zurückgegriffen werden. Und genau dafür suchen wir
+    dich! <br />
     Wie bei der 1:1-Lernunterstützung kannst du ein oder mehrere Projekte
     individuell begleiten und so durch dein Wissen Schüler*innen in ihrer
     Neugier fördern. Mehr Informationen findest du{' '}

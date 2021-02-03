@@ -13,6 +13,7 @@ import Support from './routes/Support';
 import Feedback from './routes/Feedback';
 import Help from './routes/Help';
 import Login from './routes/Login';
+import Logout from './routes/Logout';
 import Verify from './routes/Verify';
 import PublicCourse from './routes/PublicCourse';
 
@@ -27,11 +28,11 @@ import { CourseForm } from './routes/CourseForm';
 import CourseDetail from './routes/CourseDetail';
 import PublicCourseDetail from './routes/PublicCourseDetail';
 import { getDomainComponents } from './utils/DomainUtils';
-import {
-  isSupportedStateSubdomain,
-  stateInfoForStateSubdomain,
-} from './assets/supportedStateCooperations';
 import ProjectCoach from './routes/ProjectCoach';
+import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
+import { CourseOverview } from './routes/CourseOverview';
+import { Modals } from './Modals';
+import GuestJoinCourseMeeting from './routes/GuestJoinCourseMeeting';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -60,18 +61,15 @@ const App: React.FC = () => {
 
   const domainComponents = getDomainComponents();
   const subdomain = domainComponents?.length > 0 && domainComponents[0];
-  if (subdomain && isSupportedStateSubdomain(subdomain)) {
+  const cooperationMode = getCooperationModeForSubdomain(subdomain);
+  if (subdomain && cooperationMode) {
     // render the special page for cooperations with states of Germany
     return (
       <>
         <GlobalStyle />
         <Switch>
           <Route exact path="/">
-            <RegisterTutee
-              stateCooperationInfo={stateInfoForStateSubdomain(
-                domainComponents[0]
-              )}
-            />
+            <RegisterTutee cooperationMode={cooperationMode} />
           </Route>
           <Route component={NotFound} />
         </Switch>
@@ -80,16 +78,24 @@ const App: React.FC = () => {
   }
   // jufo cooperation
   const isJufoSubdomain = subdomain === 'jufo';
+  const isDrehtuerSubdomain = subdomain === 'drehtuer';
 
   return (
     <>
       <GlobalStyle />
+      <Modals />
       <Switch>
         <Route path="/login">
           <Login />
         </Route>
+        <Route path="/logout">
+          <Logout />
+        </Route>
         <Route path="/register/tutee">
-          <RegisterTutee isJufoSubdomain={isJufoSubdomain} />
+          <RegisterTutee
+            isJufoSubdomain={isJufoSubdomain}
+            isDrehtuerSubdomain={isDrehtuerSubdomain}
+          />
         </Route>
         <Route path="/register/internship">
           <RegisterTutor isInternship />
@@ -101,7 +107,10 @@ const App: React.FC = () => {
           <RegisterTutor isStudent isJufoSubdomain={isJufoSubdomain} />
         </Route>
         <Route path="/register/tutor">
-          <RegisterTutor isJufoSubdomain={isJufoSubdomain} />
+          <RegisterTutor
+            isJufoSubdomain={isJufoSubdomain}
+            isDrehtuerSubdomain={isDrehtuerSubdomain}
+          />
         </Route>
         <Route path="/register">
           <Register />
@@ -114,6 +123,9 @@ const App: React.FC = () => {
         </Route>
         <Route path="/verify">
           <Verify />
+        </Route>
+        <Route path="/video/:token">
+          <GuestJoinCourseMeeting />
         </Route>
         <PrivateRoute path="/courses/edit/:id">
           <CourseForm />
@@ -129,6 +141,16 @@ const App: React.FC = () => {
             <Dashboard />
           </PrivateRoute>
           <Switch>
+            <PrivateRoute
+              path="/courses/overview"
+              active={
+                userContext.user.type === 'pupil' ||
+                userContext.user.instructorScreeningStatus ===
+                  ScreeningStatus.Accepted
+              }
+            >
+              <CourseOverview backButtonRoute="/courses" />
+            </PrivateRoute>
             <PrivateRoute path="/courses/:id" comeback>
               <CourseDetail />
             </PrivateRoute>

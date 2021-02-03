@@ -36,17 +36,17 @@ const FeedbackCallCard = () => {
         }
       })
       .catch((err) =>
-        console.warn(`Error when loading feedback call data: ${err.message}`)
+        console.warn(`Error when loading Peer-to-Peer Call data: ${err.message}`)
       );
   }, [apiContext]);
 
   return (
     <LeftHighlightCard highlightColor={theme.color.cardHighlightRed}>
-      <Title size="h3">Feedback Call</Title>
+      <Title size="h3">Peer-to-Peer Call</Title>
       <Text style={{ color: 'rgb(244, 72, 109)' }}>
         {feedbackCall.time
           ? moment(feedbackCall.time).format('DD.MM.YYYY HH:mm')
-          : 'Momentan ist leider kein Feedback-Call geplant.'}
+          : 'Momentan ist leider kein Peer-to-Peer Call geplant.'}
       </Text>
       <Text>{feedbackCallText}</Text>
       {linkActive && (

@@ -9,10 +9,12 @@ import { Title } from '../components/Typography';
 
 import classes from './Settings.module.scss';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
-import { isProjectCoachButNotTutor } from '../utils/UserUtils';
 import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
+
+import { JufoExpertCard } from '../components/cards/JufoExpertCard';
+
 import { useAPI, useAPIResult } from '../context/ApiContext';
 import {
   ICertificateSignature,
@@ -160,14 +162,20 @@ const Settings: React.FC = () => {
   return (
     <div className={classes.container}>
       <Title>Deine Informationen</Title>
+
       <SettingsCard
         user={userContext.user}
         reloadCertificates={reloadCertificates}
       />
-      {!isProjectCoachButNotTutor(userContext.user) && renderSubjects()}
+
+      <JufoExpertCard />
+
+      {(userContext.user.isTutor || userContext.user.isPupil) &&
+        renderSubjects()}
+
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}
-      {renderCertificatesTable()}
+      {userContext.user.isTutor && renderCertificatesTable()}
       <AccountNotScreenedModal />
       {certificateToSign && (
         <SignCertificateModal

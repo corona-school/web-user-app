@@ -48,6 +48,17 @@ import { ReactComponent as SignupTutor } from './signup/tutor.svg';
 import { ReactComponent as CoatOfArmsNRW } from './states/nrw.svg';
 
 import { ReactComponent as ProjectCoachingIcon } from './project-coaching.svg';
+import { ReactComponent as EmailFilled } from './email-filled.svg';
+import { ReactComponent as BookmarkFilled } from './bookmark-filled.svg';
+import { ReactComponent as BookmarkSlashFilled } from './bookmark-slash-filled.svg';
+
+import { ReactComponent as Team } from './team.svg';
+import { ReactComponent as Hashtag } from './hashtag.svg';
+import { ReactComponent as Calendar } from './calendar.svg';
+import { ReactComponent as School } from './school.svg';
+import { ReactComponent as ChevronLeft } from './chevron-left.svg';
+import { ReactComponent as ChevronRight } from './chevron-right.svg';
+import { ReactComponent as Search } from './search.svg';
 
 const IconsList = {
   Edit,
@@ -97,9 +108,25 @@ const IconsList = {
   Palm,
   CoatOfArmsNRW,
   ProjectCoachingIcon,
+  Team,
+  Calendar,
+  Hashtag,
+  School,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  EmailFilled,
+  BookmarkFilled,
+  BookmarkSlashFilled,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Icons: { [I in keyof typeof IconsList]: any } = IconsList;
+const Icons: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [I in keyof typeof IconsList]: React.FunctionComponent<
+    React.SVGProps<SVGSVGElement> & {
+      title?: string;
+    }
+  >;
+} = IconsList;
 
 export default Icons;

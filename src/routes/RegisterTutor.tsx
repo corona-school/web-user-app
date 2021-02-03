@@ -19,7 +19,15 @@ import Context from '../context';
 import { Tutor } from '../types/Registration';
 
 import classes from './RegisterTutor.module.scss';
-import UniSelect from '../components/forms/select/UniSelect';
+import { RegisterDrehtuerTutor } from './RegisterDrehtuerTutor';
+import {
+  DataProtectionField,
+  NewsletterField,
+  UniversityField,
+  MessageField,
+} from '../components/forms/registration';
+import { env } from '../api/config';
+import { NoRegistration } from '../components/NoService';
 
 const { Option } = Select;
 
@@ -55,6 +63,7 @@ interface Props {
   isClub?: boolean;
   isStudent?: boolean;
   isJufoSubdomain?: boolean;
+  isDrehtuerSubdomain?: boolean;
 }
 
 const useQuery = () => {
@@ -83,6 +92,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const apiContext = useContext(Context.Api);
 
   const redirectTo = useQuery().get('redirectTo');
+
+  if (env.REACT_APP_TUTOR_REGISTRATION === 'disabled') {
+    return <NoRegistration />;
+  }
 
   const renderIsTutorCheckbox = () => {
     return (
@@ -589,15 +602,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
         )}
 
         {(isUniversityStudent || !isJufo) && (
-          <Form.Item
+          <UniversityField
             className={classes.formItem}
-            label="Universität/Hochschule"
-            name="university"
-            rules={[{ required: false }]}
-            initialValue={formData.university}
-          >
-            <UniSelect />
-          </Form.Item>
+            defaultUniversity={formData.university}
+          />
         )}
 
         {isOfficial && (
@@ -620,51 +628,21 @@ const RegisterTutor: React.FC<Props> = (props) => {
             />
           </Form.Item>
         )}
-        <Form.Item
+        <MessageField
           className={classes.formItem}
-          label={
-            // eslint-disable-next-line no-nested-ternary
-            isGroups
-              ? 'Beschreibe die Inhalte deines Gruppenkurses bzw. deiner Gruppenkurse (3-5 Sätze)'
-              : isJufo
-              ? 'Stelle dich kurz vor.'
-              : 'Nachricht hinzufügen'
-          }
-          name="msg"
-        >
-          <Input.TextArea
-            autoSize={{ minRows: isGroups ? 6 : 4 }}
-            placeholder={
-              // eslint-disable-next-line no-nested-ternary
-              isGroups
-                ? 'Kursthema, Zielgruppe, Kursgröße, Interaktion'
-                : isJufo
-                ? 'Stelle dich kurz vor.'
-                : 'Hier deine Nachricht für uns.'
-            }
-          />
-        </Form.Item>
+          isGroups={isGroups}
+          isJufo={isJufo}
+        />
       </>
     );
   };
   const renderFinnish = () => {
     return (
       <>
-        <Form.Item
+        <NewsletterField
           className={classes.formItem}
-          label="Newsletter"
-          name="newsletter"
-        >
-          <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox value="newsletter" defaultChecked={formData.newsletter}>
-              Ich möchte über weitere Aktionen, Angebote und
-              Unterstützungsmöglichkeiten der Corona School per E-Mail
-              informiert werden. Dazu gehören Möglichkeiten zur Vernetzung mit
-              anderen registrierten Studierenden, Mentoring und Nachrichten aus
-              dem Organisationsteam.
-            </Checkbox>
-          </Checkbox.Group>
-        </Form.Item>
+          defaultChecked={formData.newsletter}
+        />
         {formData.hasJufoCertificate === false && (
           <Form.Item
             className={classes.formItem}
@@ -673,9 +651,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
             rules={[
               {
                 required: formData.hasJufoCertificate === false,
-                message: `Die Übermittlung der Daten ist für deine Teilnahme 
-                zwingend notwendig. Alternativ kannst du uns auch bei deinem 
-                Kennenlerngespräch mit uns einen anderen Nachweis vorlegen. 
+                message: `Die Übermittlung der Daten ist für deine Teilnahme
+                zwingend notwendig. Alternativ kannst du uns auch bei deinem
+                Kennenlerngespräch mit uns einen anderen Nachweis vorlegen.
                 In diesem Fall gehe bitte noch einmal einen Schritt zurück.`,
               },
             ]}
@@ -690,70 +668,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             </Checkbox.Group>
           </Form.Item>
         )}
-        <Form.Item
-          className={classes.formItem}
-          label="Datenschutzrechtliche Einwilligung"
-          name="dataprotection"
-          rules={[
-            {
-              required: true,
-              message: 'Bitte akzeptiere die Datenschutzerklärung',
-            },
-          ]}
-        >
-          <Checkbox.Group className={classes.checkboxGroup}>
-            <Checkbox value="dataprotection">
-              Ich habe die{' '}
-              <a
-                href="https://www.corona-school.de/datenschutz-2"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Datenschutzerklärung
-              </a>{' '}
-              des Corona School e.V. zur Kenntnis genommen und willige in die
-              Verarbeitung personenbezogener Daten zu den angegebenen Zwecken
-              ein. Mir ist insbesondere bekannt, dass meine Angaben an geeignete
-              Matchingpartner*innen übermittelt werden. Die Verarbeitung der
-              personenbezogenen Daten erfolgt auf privaten IT-Geräten der
-              Matchingpartner*innen. Es kann im Rahmen der Übermittlung dazu
-              kommen, dass personenbezogene Daten an E-Mail Server (bspw.
-              google-mail oder @me.com) außerhalb der Europäischen Union
-              übermittelt werden. In Ländern außerhalb der Europäischen Union
-              besteht ggf. kein adäquates Datenschutzniveau. Zudem kann die
-              Durchsetzung von Rechten erschwert bzw. ausgeschlossen sein. Mir
-              sind diese Risiken bewusst und bekannt.
-              <br />
-              Mir ist außerdem bekannt, dass meine Einwilligung freiwillig und
-              jederzeit mit Wirkung für die Zukunft widerruflich ist. Ein
-              Widerruf der Einwilligung kann formlos erfolgen (bspw. an{' '}
-              <a href="mailto:datenschutz@corona-school.de">
-                datenschutz@corona-school.de
-              </a>
-              ). Mir ist bewusst, dass der Widerruf nur für die Zukunft gilt und
-              daher Datenverarbeitungen bis zum Widerruf, insbesondere die
-              Weitergabe von meinen personenbezogenen Daten an geeignete
-              Matchingpartner*innen bis zum Zeitpunkt des Widerrufs unberührt
-              bleiben. Weitere Datenschutzinformationen sind abrufbar unter{' '}
-              <a
-                href="https://www.corona-school.de/datenschutz-2"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                www.corona-school.de/datenschutz-2
-              </a>
-              .
-              <br />
-              <br />
-              <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
-              <span style={{ fontStyle: 'italic' }}>
-                Für den Fall, dass die einwilligende Person das 18. Lebensjahr
-                noch nicht vollendet hat, hat der Träger der elterlichen
-                Verantwortung für die Person die Einwilligung zu erklären.
-              </span>
-            </Checkbox>
-          </Checkbox.Group>
-        </Form.Item>
+        <DataProtectionField className={classes.formItem} />
       </>
     );
   };
@@ -927,6 +842,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
       console.log(e);
     }
   };
+
+  if (props.isDrehtuerSubdomain) {
+    return <RegisterDrehtuerTutor />;
+  }
 
   return (
     <SignupContainer>

@@ -3,10 +3,11 @@ import styled from 'styled-components';
 interface Props {
   background?: string;
   color?: string;
+  fontSize?: string;
 }
 
 export const Tag = styled.div<Props>`
-  font-size: 10px;
+  font-size: ${(props) => (props.fontSize ? props.fontSize : '10px')};
   border-radius: 4px;
   margin: 4px;
 

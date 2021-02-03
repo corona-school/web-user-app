@@ -15,6 +15,18 @@
   margin: 10px 16px;
 }
 
+.correspondentPicker {
+  margin-left: 70px;
+  opacity: 1;
+  transition: all 0.3s linear;
+  max-height: 100px;
+
+  &.hidden {
+    opacity: 0;
+    max-height: 0;
+  }
+}
+
 .checkboxGroup {
   display: flex;
   flex-direction: column;

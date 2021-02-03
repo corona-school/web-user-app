@@ -105,12 +105,13 @@ const BecomeProjectCoacheeModal = () => {
           </Form.Item>
           <Form.Item
             className={classes.formItem}
-            label="Wieviele Teinehmer hat dein Projekt?"
+            label="Wieviele Teilnehmende hat dein Projekt?"
             name="projectMemberCount"
             rules={[
               {
                 required: true,
-                message: 'Bitte gebe an, wieviele Teilnehmer dein Projekt hat.',
+                message:
+                  'Bitte gebe an, wieviele Teilnehmende dein Projekt hat.',
               },
             ]}
           >

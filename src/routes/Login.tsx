@@ -119,7 +119,6 @@ const Login: React.FC = () => {
       if (redirectPath && redirectPath !== '') {
         return <Redirect to={redirectPath} />;
       }
-      console.log(userContext.user);
 
       if (
         isProjectCoachButNotTutor(userContext.user) ||

@@ -28,9 +28,7 @@
     align-content: center;
     justify-items: stretch;
   
-    @media only screen and (max-width: 1340px) {
-      box-shadow: 0 4px 9px -10px black;
-    }
+    box-shadow: 0 4px 9px -10px black;
     
     .logo {
       display: flex;
@@ -46,91 +44,15 @@
         }
       }
     }
-    .filterButton {
-      flex-grow: 0;
-      text-align: right;
-    }
   }
 
   .main {
     overflow: scroll;
-    padding-left: 40px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    padding: 30px;
+    padding: 0px;
     flex-grow: 1;
-
-    .searchContainer {
-      max-width: 1000px;
-      margin: 10px 10px 10px 10px;
-    }
-
-    @media only screen and (max-width: 600px) {
-      padding: 16px;
-    }
-  }
-
-
-  .sideNav {
-    overflow-y: scroll;
-
-    position: fixed;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 4000;
-
-    display: flex;
-    flex-direction: column;
-
-    height: 100vh;
-    padding-top: 100px;
-    padding-left: 30px;
-    padding-bottom: 90px;
-    width: 100%;
-    max-width: 400px;
-    transition: max-width 0.2s;
-    transition: width 0.2s;
-    background: #ececec;
-
-    .checkboxContainer {
-      margin-top: 16px;
-    }
-
-    transform: translate(+100%);
-    transition: transform 0.2s ease-in-out;
-
-    @media only screen and (max-width: 1450px) {
-      max-width: 300px;
-      transition: max-width 0.2s;
-      transition: width 0.2s;
-    }
-
-    @media only screen and (max-width: 1340px) {
-        transform: translate(+100%);
-        transition: transform 0.2s ease-in-out;
-        
-        &.navOpen {
-          transform: translate(0%);
-          transition: transform 0.2s ease-in-out;
-        }
-    }
-    @media only screen and (min-width: 1340px) {
-        transform: translate(0%);
-        transition: transform 0.2s ease-in-out;
-    }
-
-    .closeButton {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 50px;
-      height: 50px;
-      @media only screen and (min-width: 1340px) {
-        display: none;
-      }
-    }
   }
 
   .legal {
