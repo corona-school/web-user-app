@@ -213,12 +213,6 @@ const EditableUserSettingsCard: React.FC<Props> = ({
               <Select.Option value="+43">+43</Select.Option>
             </Select>
           }
-          /* addonAfter={
-            user.phoneConfirmed === editableUserSettings.phone ?
-              <Button>Verifiziert</Button>
-            :
-              <Button>Unverifiziert</Button>
-          } */
           suffix={
             editableUserSettings.phone &&
             user.phoneConfirmed === editableUserSettings.phone
