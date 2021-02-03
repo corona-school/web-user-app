@@ -6,8 +6,9 @@ import styles from './DialogModalBase.module.scss';
 import { hexToRGB } from '../../utils/DashboardUtils';
 import { ReactComponent as Cross } from '../../assets/icons/cancel-symbol.svg';
 import { Checkbox as CheckboxBase } from '../button/Checkbox';
-import AccentColorButton from '../button/AccentColorButton';
 import Textbox from '../misc/Textbox';
+import AccentColorButton from '../button/AccentColorButton';
+import Textarea from '../misc/Textarea';
 
 const DialogContext = React.createContext(null);
 
@@ -35,7 +36,7 @@ function useDialogContext() {
   const context = React.useContext(DialogContext);
 
   if (!context) {
-    throw new Error(
+    throw Error(
       `Dialog compound components cannot be rendered outside the Dialog component`
     );
   }
@@ -97,30 +98,6 @@ const Icon = ({ Icon }) => {
 };
 
 /*
-Error box
- */
-const Error2 = (props) => {
-  return <div className={styles.error}>{props.children}</div>;
-};
-
-/*
-Uses the Textbox component to create a textbox.
- */
-const TextBox: React.FC<{
-  onChange: any;
-  value: string;
-  label: string;
-}> = (props) => {
-  return (
-    <Textbox
-      onChange={props.onChange}
-      value={props.value}
-      label={props.label}
-    />
-  );
-};
-
-/*
 The close button on the top right of the modal. Pass your modal's state setting methods if you want to clear them when the user closes the modal. The function passed as "hook" will be called when the user clicks on the button.
  */
 const CloseButton: React.FC<{
@@ -152,6 +129,13 @@ const Description = (props) => {
 };
 
 /*
+Styled block of text, wrapped in a div
+ */
+const TextBlock = (props) => {
+  return <div className={styles.text}>{props.children}</div>;
+};
+
+/*
 Indented component for forms
  */
 const Form = (props) => {
@@ -163,6 +147,14 @@ Styled subheading
  */
 const Subheading = (props) => {
   return <h3 className={styles.subheading}>{props.children}</h3>;
+};
+
+/*
+Styled label
+ */
+const Label = (props) => {
+  // eslint-disable-next-line jsx-a11y/label-has-associated-control
+  return <label className={styles.label}>{props.children}</label>;
 };
 
 /*
@@ -184,6 +176,13 @@ const ButtonBox = (props) => {
 };
 
 /*
+Error box
+ */
+const Error2 = (props) => {
+  return <div className={styles.error}>{props.children}</div>;
+};
+
+/*
 Uses the AccentColorButton component to create a button in the set accent color.
  */
 const Button: React.FC<{
@@ -197,6 +196,40 @@ const Button: React.FC<{
       onClick={props.onClick}
       label={props.label}
       accentColor={props.accentColor != null ? props.accentColor : accentColor}
+    />
+  );
+};
+
+/*
+Uses the Textbox component to create a textbox.
+ */
+const TextBox: React.FC<{
+  onChange: any;
+  value: string;
+  label: string;
+}> = (props) => {
+  return (
+    <Textbox
+      onChange={props.onChange}
+      value={props.value}
+      label={props.label}
+    />
+  );
+};
+
+/*
+Uses the Textarea component to create a textarea.
+ */
+const TextArea: React.FC<{
+  onChange: any;
+  value: string;
+  label: string;
+}> = (props) => {
+  return (
+    <Textarea
+      onChange={props.onChange}
+      value={props.value}
+      label={props.label}
     />
   );
 };
@@ -274,12 +307,14 @@ DialogModalBase.Modal = Modal;
 DialogModalBase.Title = Title;
 DialogModalBase.Icon = Icon;
 DialogModalBase.Description = Description;
+DialogModalBase.TextBlock = TextBlock;
 DialogModalBase.Spacer = Spacer;
 DialogModalBase.Subheading = Subheading;
 DialogModalBase.Form = Form;
 DialogModalBase.InputCompound = InputCompound;
 DialogModalBase.Checkbox = Checkbox;
 DialogModalBase.CheckboxSingle = CheckboxSingle;
+DialogModalBase.Error = Error2;
 DialogModalBase.Header = Header;
 DialogModalBase.CloseButton = CloseButton;
 DialogModalBase.Content = Content;
@@ -287,5 +322,8 @@ DialogModalBase.ButtonBox = ButtonBox;
 DialogModalBase.Button = Button;
 DialogModalBase.Error = Error2;
 DialogModalBase.TextBox = TextBox;
+DialogModalBase.TextBox = TextBox;
+DialogModalBase.TextArea = TextArea;
+DialogModalBase.Label = Label;
 
 export default DialogModalBase;

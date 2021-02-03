@@ -1,0 +1,11 @@
+.input {
+  width: 100%;
+  button {
+    background: #4e6ae6;
+    border: 1px solid #4e6ae6;
+  }
+
+  @media only screen and (min-width: 1200px) {
+    margin-left: 48px;
+  }
+}

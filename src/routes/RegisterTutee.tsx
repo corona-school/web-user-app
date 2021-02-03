@@ -7,6 +7,7 @@ import {
   message,
   Radio,
   InputNumber,
+  Tooltip,
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { useHistory, Link, useLocation } from 'react-router-dom';
@@ -32,6 +33,8 @@ import {
   StateField,
   MessageField,
 } from '../components/forms/registration';
+import { env } from '../api/config';
+import { NoRegistration } from '../components/NoService';
 
 const { Option } = Select;
 
@@ -91,6 +94,10 @@ const RegisterTutee: React.FC<Props> = ({
 
   const isOnlyJufo = isJufo && !isTutee && !isGroups;
 
+  if (env.REACT_APP_TUTEE_REGISTRATION === 'disabled') {
+    return <NoRegistration />;
+  }
+
   if (!!cooperationMode && !loading && schoolInfo == null) {
     // load school info
     setLoading(true);
@@ -111,6 +118,14 @@ const RegisterTutee: React.FC<Props> = ({
       });
   }
 
+  const DisabledExplanation = () => {
+    return (
+      <Tooltip title="Du kannst dich nicht gleichzeitig für die 1:1-Lernunterstützung und das 1:1-Projektcoaching anmelden.">
+        <Icons.Help fill="grey" />
+      </Tooltip>
+    );
+  };
+
   const renderIsTuteeCheckbox = () => {
     return (
       <>
@@ -121,14 +136,18 @@ const RegisterTutee: React.FC<Props> = ({
           style={{ lineHeight: '32px', marginLeft: '8px' }}
           checked={isTutee}
           defaultChecked={formData.isTutee}
+          disabled={isJufo}
         >
-          Ich möchte{' '}
-          <LinkText
-            text="Lernunterstützung im 1:1-Format"
-            href="https://www.corona-school.de/1-zu-1-lernbetreuung"
-            enableLink={isJufoSubdomain}
-          />{' '}
-          von einem/einer Student*in erhalten.
+          <>
+            Ich möchte{' '}
+            <LinkText
+              text="Lernunterstützung im 1:1-Format"
+              href="https://www.corona-school.de/1-zu-1-lernbetreuung"
+              enableLink={isJufoSubdomain}
+            />{' '}
+            von einem/einer Student*in erhalten.
+          </>
+          {isJufo && <DisabledExplanation />}
         </Checkbox>
         {isTutee && (
           <div className={classes.registrationHint}>
@@ -172,7 +191,7 @@ const RegisterTutee: React.FC<Props> = ({
   const renderIsJufoCheckbox = () => {
     return (
       <Checkbox
-        disabled={isJufoSubdomain}
+        disabled={isJufoSubdomain || isTutee}
         onChange={() => {
           setJufo(!isJufo);
         }}
@@ -181,18 +200,21 @@ const RegisterTutee: React.FC<Props> = ({
         className={isJufoSubdomain ? classes.disabledCheckbox : undefined}
         checked={isJufo}
       >
-        Ich suche Unterstützung bei der Erarbeitung meines (Forschungs-)Projekts
-        (z.{' '}B. im Rahmen einer Teilnahme an{' '}
-        <span style={{ fontWeight: isJufoSubdomain ? 'bolder' : 'normal' }}>
-          Jugend forscht
-        </span>
-        ) und möchte am{' '}
-        <LinkText
-          text="1:1-Projektcoaching"
-          href="https://www.corona-school.de/1-zu-1-projektcoaching"
-          enableLink={isJufoSubdomain}
-        />{' '}
-        teilnehmen.
+        <>
+          Ich suche Unterstützung bei der Erarbeitung meines
+          (Forschungs-)Projekts (z.{' '}B. im Rahmen einer Teilnahme an{' '}
+          <span style={{ fontWeight: isJufoSubdomain ? 'bolder' : 'normal' }}>
+            Jugend forscht
+          </span>
+          ) und möchte am{' '}
+          <LinkText
+            text="1:1-Projektcoaching"
+            href="https://www.corona-school.de/1-zu-1-projektcoaching"
+            enableLink={isJufoSubdomain}
+          />{' '}
+          teilnehmen.
+        </>
+        {isTutee && <DisabledExplanation />}
       </Checkbox>
     );
   };
@@ -233,7 +255,6 @@ const RegisterTutee: React.FC<Props> = ({
             </div>
           }
         >
-          {renderIsTuteeCheckbox()}
           {renderIsGroupsCheckbox()}
         </Form.Item>
       </>

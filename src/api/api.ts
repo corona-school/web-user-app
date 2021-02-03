@@ -19,6 +19,7 @@ import {
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
 import { RequestCode, VerifyCode } from '../types/Phone';
+import { Expert, ExpertTag, ExpertUpdate } from '../types/Expert';
 import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
 
 const logError = (apiName: string) => (error: Error) => {
@@ -177,6 +178,7 @@ export const axiosPutUserActive = async (
   active: boolean
 ) => {
   const url = `${apiURL}/user/${id}/active/${active ? 'true' : 'false'}`;
+
   console.log(url);
   await axios
     .put(url, undefined, { headers: { token } })
@@ -231,7 +233,7 @@ export const axiosGetCourses = async (
   );
 
   return axios
-    .get(url, { headers: { token }, params })
+    .get(url, { params })
     .then((response) => response.data)
     .catch(logError('getCourses'));
 };
@@ -424,6 +426,35 @@ export const axiosLeaveCourse = async (
     .catch(logError('leaveCourse'));
 };
 
+export const axiosJoinCourseWaitingList = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  participant: string
+) => {
+  await axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/waitinglist/${participant}`,
+      {},
+      { headers: { token } }
+    )
+    .catch(logError('joinCourse'));
+};
+
+export const axiosLeaveCourseWaitingList = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  participant: string
+) => {
+  await axios
+    .delete(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/waitinglist/${participant}`,
+      { headers: { token } }
+    )
+    .catch(logError('leaveCourse'));
+};
+
 export const axiosCancelCourse = async (token: string, courseId: number) => {
   await axios
     .delete(`${apiURL}/course/${courseId}`, { headers: { token } })
@@ -435,8 +466,6 @@ export const axiosCreateSubCourse = (
   courseId: number,
   subCourse: SubCourse
 ): Promise<number> => {
-  console.log(subCourse);
-
   return axios
     .post(`${apiURL}/course/${courseId}/subcourse`, subCourse, {
       headers: { token },
@@ -539,6 +568,24 @@ export const axiosSendCourseGroupMail = async (
     .catch(logError('sendGroupcourseMail'));
 };
 
+export const axiosSendCourseInstructorMail = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  subject: string,
+  body: string
+) => {
+  await axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/instructormail`,
+      { subject, body },
+      {
+        headers: { token },
+      }
+    )
+    .catch(logError('sendCourseInstructorMail'));
+};
+
 export const axiosBecomeInstructor = async (
   id: string,
   token: string,
@@ -569,6 +616,36 @@ export const axiosJoinBBBmeeting = (
       return response.data;
     })
     .catch(logError('JoinBBBmeeting'));
+};
+
+export const axiosGuestJoinBBBmeeting = (
+  token: string
+): Promise<{ url: string }> => {
+  const url = `${apiURL}/course/meeting/external/join/${token}`;
+
+  return axios
+    .get(url)
+    .then((response) => {
+      return response.data;
+    })
+    .catch(logError('GuestJoinBBBmeeting'));
+};
+
+export const axiosIssueCourseCertificates = async (
+  token: string,
+  courseId: number,
+  subCourseId: number,
+  pupilUUIDs: string[]
+) => {
+  await axios
+    .post(
+      `${apiURL}/course/${courseId}/subcourse/${subCourseId}/certificate`,
+      { receivers: pupilUUIDs },
+      {
+        headers: { token },
+      }
+    )
+    .catch(logError('issueCourseCertificates'));
 };
 
 export const axiosGetCooperatingSchool = (
@@ -693,6 +770,30 @@ export const axiosAddInstructor = (
   });
 };
 
+export const axiosInviteCourseGuest = (
+  token: string,
+  courseID: number,
+  email: string,
+  firstname: string,
+  lastname: string
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/course/${courseID}/inviteexternal`,
+        { email, firstname, lastname },
+        {
+          headers: { token },
+        }
+      )
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
 export const axiosDeleteCourseImage = async (
   token: string,
   courseID: number
@@ -708,3 +809,72 @@ export const axiosDeleteCourseImage = async (
 // ========================================================================
 export const editCourseImageURL = (courseID: number) =>
   `${apiURL}/course/${courseID}/image`;
+
+export const axiosGetJufoExperts = (token: string): Promise<Expert[]> => {
+  return new Promise<Expert[]>((resolve, reject) => {
+    axios
+      .get(`${apiURL}/expert`, {
+        headers: { token },
+      })
+      .then((response) => resolve(response.data))
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosGetUsedExpertTags = (token: string): Promise<ExpertTag[]> => {
+  return new Promise<ExpertTag[]>((resolve, reject) => {
+    axios
+      .get(`${apiURL}/expert/tags`, {
+        headers: { token },
+      })
+      .then((response) => resolve(response.data))
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosContactJufoExpert = (
+  token: string,
+  id: string,
+  emailText: string,
+  subject: string
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(
+        `${apiURL}/expert/${id}/contact`,
+        { emailText, subject },
+        {
+          headers: { token },
+        }
+      )
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};
+
+export const axiosUpdateJufoExpert = (
+  token: string,
+  id: string,
+  data: ExpertUpdate
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .put(`${apiURL}/expert/${id}`, data, {
+        headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => {
+        console.log(`Caught error: ${err}`);
+        reject(err);
+      });
+  });
+};

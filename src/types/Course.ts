@@ -33,6 +33,7 @@ export interface Participant {
 export interface CourseParticipant extends Participant {
   grade: number;
   email: string;
+  uuid: string;
   schooltype: string;
 }
 
@@ -47,6 +48,7 @@ export interface CourseSubCourse {
   joinAfterStart: boolean;
   participantList: CourseParticipant[];
   joined: boolean;
+  onWaitingList: boolean;
   published: boolean;
   cancelled: boolean;
 }
@@ -74,6 +76,8 @@ export interface CourseOverview {
   subcourses: CourseSubCourse[];
   joinAfterStart: boolean;
   image?: string;
+  allowContact: boolean;
+  correspondentID?: string;
 }
 
 export interface ParsedCourseOverview {
@@ -88,10 +92,11 @@ export interface ParsedCourseOverview {
   instructors: Instructor[];
   subcourse?: CourseSubCourse;
   image?: string;
+  allowContact: boolean;
+  correspondentID?: string;
 }
 
-export interface Course {
-  instructors: string[];
+export interface BasicCourse {
   name: string;
   outline: string;
   description: string;
@@ -99,6 +104,11 @@ export interface Course {
   tags: string[];
   submit: boolean;
   image?: string;
+  allowContact: boolean;
+  correspondentID?: string;
+}
+export interface Course extends BasicCourse {
+  instructors: string[];
 }
 
 export interface SubCourse {

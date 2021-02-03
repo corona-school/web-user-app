@@ -3,7 +3,7 @@ import useSmoothScroll from 'react-smooth-scroll-hook';
 import Icons from '../../assets/icons';
 import { ParsedCourseOverview } from '../../types/Course';
 import CourseCard from '../cards/CourseCard';
-import { Text, Title } from '../Typography';
+import { Title } from '../Typography';
 import classes from './CourseList.module.scss';
 
 interface Props {
@@ -27,7 +27,9 @@ export const CourseList: React.FC<Props> = (props) => {
   return (
     <div className={classes.listContainer}>
       <div className={classes.headerContainer}>
-        <Title size="h3">{props.name}</Title>
+        <div className={classes.titleWrapper}>
+          <Title size="h3">{props.name}</Title>
+        </div>
         <div className={classes.scrollControls}>
           <button
             className={classes.chevronButton}

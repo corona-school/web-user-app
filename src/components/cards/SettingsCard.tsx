@@ -72,10 +72,6 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
       return null;
     }
 
-    if (isProjectCoachButNotTutor(user)) {
-      return null;
-    }
-
     if (user.isInstructor) {
       return null;
     }
@@ -120,6 +116,7 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
           <div className={classes.tagContainer}>
             {userTags.map((tag) => (
               <Tag
+                key={tag}
                 background="#4E555C"
                 color="#ffffff"
                 style={{ marginLeft: '10px' }}

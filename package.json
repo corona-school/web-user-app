@@ -31,6 +31,7 @@
     "antd": "^4.9.4",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
+    "create-react-app": "^4.0.1",
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
     "husky": "^4.2.5",
