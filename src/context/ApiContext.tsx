@@ -23,11 +23,6 @@ import {
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
 import { RequestCode, VerifyCode } from '../types/Phone';
-import {
-  IExposedCertificate,
-  ISupportedLanguage,
-  supportedLanguages,
-} from '../types/Certificate';
 import { Expert, ExpertTag, ExpertUpdate } from '../types/Expert';
 import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
 
