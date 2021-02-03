@@ -313,7 +313,7 @@ export const axiosGetMyCourses = (
   const params = new URLSearchParams();
   params.append(
     'fields',
-    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
+    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart,image'
   );
   if (instructor) {
     params.append('instructor', instructor);
