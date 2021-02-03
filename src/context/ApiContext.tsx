@@ -288,8 +288,7 @@ export const ApiProvider: React.FC = ({ children }) => {
   ): Promise<AxiosResponse<string>> =>
     api.axiosCreateCertificate(id, token, certificateDate);
 
-  const getCourses = (): Promise<CourseOverview[]> =>
-    api.axiosGetCourses(token);
+  const getCourses = (): Promise<CourseOverview[]> => api.axiosGetCourses();
 
   const getCourseTags = (): Promise<Tag[]> => api.axiosGetCourseTags(token);
 

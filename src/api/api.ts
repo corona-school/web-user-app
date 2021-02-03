@@ -256,8 +256,7 @@ export const axiosSignCertificate = postAPI<
   (res) => res.status === 200
 );
 
-export const axiosGetCourses = async (
-): Promise<CourseOverview[]> => {
+export const axiosGetCourses = async (): Promise<CourseOverview[]> => {
   const url = `${apiURL}/courses`;
 
   const params = new URLSearchParams();

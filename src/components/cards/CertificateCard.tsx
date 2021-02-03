@@ -68,7 +68,7 @@ function CertificateCard({
         type="primary"
         onClick={() => showCertificate(certificate, language)}
       >
-        Runterladen
+        Herunterladen
       </Button>
     </>
   );

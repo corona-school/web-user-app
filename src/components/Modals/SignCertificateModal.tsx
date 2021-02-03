@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
-import { Descriptions, Input } from 'antd';
+import { Descriptions, Input, Radio } from 'antd';
 import moment from 'moment';
 import SignatureCanvas from 'react-signature-canvas';
 import {
@@ -54,12 +54,37 @@ const InfoPage: React.FC<Pick<Props, 'certificate'>> = ({ certificate }) => {
   );
 };
 
+interface WarningPageProps {
+  isMinor: boolean;
+  setIsMinor: (boolean) => void;
+}
+
+const WarningPage: React.FC<WarningPageProps> = ({ isMinor, setIsMinor }) => {
+  return (
+    <>
+      <div>
+        Achtung! Solltest Du nicht volljährig sein, muss ein
+        Erziehungsberechtigter unterschreiben.
+      </div>
+      <div>Ich bin:</div>
+      <Radio.Group
+        onChange={(e) => setIsMinor(e.target.value === 1)}
+        value={isMinor ? 1 : 2}
+      >
+        <Radio value={1}>Minderjährig</Radio>
+        <Radio value={2}>{'Volljährig (> 18 Jahre)'}</Radio>
+      </Radio.Group>
+    </>
+  );
+};
+
 interface SignPageProps {
   // eslint-disable-next-line
   signCanvas: React.MutableRefObject<any>;
   signatureLocation: string;
   setSignatureLocation: (string) => void;
   setIsSigned: (boolean) => void;
+  isMinor: boolean;
 }
 
 const SignPage: React.FC<SignPageProps> = ({
@@ -67,9 +92,11 @@ const SignPage: React.FC<SignPageProps> = ({
   signatureLocation,
   setSignatureLocation,
   setIsSigned,
+  isMinor,
 }) => {
   return (
     <div className={classes.signPage}>
+      <div>Unterschrift {isMinor ? 'Erziehungsberechtigter' : 'Schüler'}</div>
       <SignatureCanvas
         ref={(ref) => {
           // eslint-disable-next-line
@@ -93,22 +120,25 @@ const SignCertificateModal: React.FC<Props> = ({
   signCertificate,
   close,
 }) => {
-  const [currentStep, setCurrentStep] = useState<'info' | 'sign'>('info');
+  const [currentStep, setCurrentStep] = useState<'info' | 'warning' | 'sign'>(
+    'info'
+  );
   // eslint-disable-next-line
   const signCanvas = useRef<any>(); // https://www.npmjs.com/package/react-signature-canvas
   const [signatureLocation, setSignatureLocation] = useState('');
   const [isSigned, setIsSigned] = useState(false);
+  const [isMinor, setIsMinor] = useState(true);
 
   function prepareSignature() {
     const signatureBase64 = signCanvas.current.toDataURL('image/png', 1.0);
 
     const signature = {
-      signatureParent: undefined,
-      signaturePupil: signatureBase64,
+      signatureParent: isMinor ? signatureBase64 : undefined,
+      signaturePupil: !isMinor ? signatureBase64 : undefined,
       signatureLocation,
     };
-    console.log(signature);
     signCertificate(certificate, signature);
+    close();
   }
 
   function discardSignature() {
@@ -125,7 +155,7 @@ const SignCertificateModal: React.FC<Props> = ({
       <div className={classes.modal}>
         <div className={classes.stepContainer}>
           <div className={classes.titleBar}>
-            <Title size="h2">Bescheinigung beantragen</Title>
+            <Title size="h2">Zertifikat genehmigen</Title>
             <Button
               color="#B5B5B5"
               backgroundColor="#ffffff"
@@ -137,12 +167,16 @@ const SignCertificateModal: React.FC<Props> = ({
             </Button>
           </div>
           {currentStep === 'info' && <InfoPage certificate={certificate} />}
+          {currentStep === 'warning' && (
+            <WarningPage isMinor={isMinor} setIsMinor={setIsMinor} />
+          )}
           {currentStep === 'sign' && (
             <SignPage
               signCanvas={signCanvas}
               signatureLocation={signatureLocation}
               setSignatureLocation={setSignatureLocation}
               setIsSigned={setIsSigned}
+              isMinor={isMinor}
             />
           )}
         </div>
@@ -151,17 +185,35 @@ const SignCertificateModal: React.FC<Props> = ({
             <Button
               backgroundColor="#F4F6FF"
               color="#4E6AE6"
-              onClick={() => setCurrentStep('sign')}
+              onClick={() => setCurrentStep('warning')}
             >
               Informationen bestätigen
             </Button>
+          )}
+          {currentStep === 'warning' && (
+            <>
+              <Button
+                backgroundColor="#F4F6FF"
+                color="#4E6AE6"
+                onClick={() => setCurrentStep('info')}
+              >
+                Zurück
+              </Button>
+              <Button
+                backgroundColor="#F4F6FF"
+                color="#4E6AE6"
+                onClick={() => setCurrentStep('sign')}
+              >
+                Informationen bestätigen
+              </Button>
+            </>
           )}
           {currentStep === 'sign' && (
             <>
               <Button
                 backgroundColor="#F4F6FF"
                 color="#4E6AE6"
-                onClick={() => setCurrentStep('info')}
+                onClick={() => setCurrentStep('warning')}
               >
                 Zurück
               </Button>
@@ -174,8 +226,8 @@ const SignCertificateModal: React.FC<Props> = ({
                 Abschicken
               </Button>
               <Button
-                backgroundColor="#F4F6FF"
-                color="#4E6AE6"
+                backgroundColor="rgb(244, 246, 255)"
+                color="#FF0000"
                 onClick={() => discardSignature()}
               >
                 <Icons.Delete />

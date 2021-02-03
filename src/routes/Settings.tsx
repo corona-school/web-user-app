@@ -43,12 +43,14 @@ const Settings: React.FC = () => {
 
   const signCertificateAPI = useAPI('signCertificate');
 
+  console.log(certificates);
+
   async function signCertificate(
     certificate: IExposedCertificate,
     signature: ICertificateSignature
   ) {
     const success = await signCertificateAPI(certificate.uuid, signature);
-    if (!success) return; // TODO: Show error popup
+    if (!success) alert('Fail!'); // TODO: Show error popup
 
     reloadCertificates();
   }
@@ -175,7 +177,7 @@ const Settings: React.FC = () => {
 
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}
-      {userContext.user.isTutor && renderCertificatesTable()}
+      {renderCertificatesTable()}
       <AccountNotScreenedModal />
       {certificateToSign && (
         <SignCertificateModal

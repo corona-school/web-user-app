@@ -72,6 +72,8 @@
   & span>span>input {
     text-align: right !important;
     padding-right: 0px;
+    cursor: pointer;
+    &::placeholder{color: black; font-weight: bolder;}
   }
   & span>span>span {
     border: none;
