@@ -50,7 +50,10 @@ const Settings: React.FC = () => {
     signature: ICertificateSignature
   ) {
     const success = await signCertificateAPI(certificate.uuid, signature);
-    if (!success) alert('Fail!'); // TODO: Show error popup
+    if (!success)
+      alert(
+        'An error occured while signing certificates. Please contact our support.'
+      ); // TODO: Show error popup
 
     reloadCertificates();
   }
@@ -141,7 +144,7 @@ const Settings: React.FC = () => {
   };
 
   const renderCertificatesTable = () => {
-    if (!certificates.value) return null;
+    if (!certificates.value?.length) return null;
 
     return (
       <>
