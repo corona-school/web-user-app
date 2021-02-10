@@ -71,13 +71,11 @@
   }
   & span>span>input {
     text-align: right !important;
-    padding-right: 0px;
     cursor: pointer;
-    &::placeholder{color: black; font-weight: bolder;}
+    background: rgba(49,187,244,0.16);
   }
   & span>span>span {
     border: none;
     background-color: transparent;
-    padding-left: 0px;
   }
 }

@@ -45,15 +45,28 @@ const Settings: React.FC = () => {
 
   console.log(certificates);
 
+  // opens the pop-up for the signature if the user comes from the email
+  // urlSearchParams seems to be broken in the current enviroment
+  useEffect(() => {
+    const search = window.location.search?.match(/sign=([a-zA-Z0-9]+)/);
+    const uuid = search && search[1];
+    if (!uuid || certificateToSign || !certificates.value) {
+      return;
+    }
+    const certificate = certificates.value.find(
+      (it) => it.uuid === uuid && it.state === 'awaiting-approval'
+    );
+    if (certificate) {
+      setCertificateToSign(certificate);
+    }
+  }, [certificates]);
+
   async function signCertificate(
     certificate: IExposedCertificate,
     signature: ICertificateSignature
   ) {
     const success = await signCertificateAPI(certificate.uuid, signature);
-    if (!success)
-      alert(
-        'An error occured while signing certificates. Please contact our support.'
-      ); // TODO: Show error popup
+    if (!success) return; // TODO: Show error popup
 
     reloadCertificates();
   }

@@ -204,7 +204,7 @@ const SignCertificateModal: React.FC<Props> = ({
                 color="#4E6AE6"
                 onClick={() => setCurrentStep('sign')}
               >
-                Informationen bestätigen
+                Weiter
               </Button>
             </>
           )}
