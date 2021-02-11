@@ -210,11 +210,19 @@ export const axiosPutUserActive = async (
     .catch(logError('putUserActive'));
 };
 
-export const axiosCreateCertificate = async (
+export const axiosCreateCertificate = postAPI(
+  'createCertificate',
+  `${apiURL}/certificate/create`,
+  (data: CertificateData) => data,
+  (res) => res.data as { uuid: string; automatic: boolean }
+);
+
+// TODO: Adapt backend accordingly
+/* async (
   id: string,
   token: string,
   certificateData: CertificateData
-): Promise<AxiosResponse<string>> => {
+): Promise<{ uuid: string; automatic: boolean }> => {
   const url = `${apiURL}/certificate/create/${id}/${certificateData.student}`;
 
   const params = new URLSearchParams();
@@ -229,8 +237,9 @@ export const axiosCreateCertificate = async (
 
   return axios
     .get(url, { headers: { token }, responseType: 'blob', params })
-    .catch(logError('createCertificate'));
-};
+    .catch(logError('createCertificate'))
+    .then((res) => res);
+}; */
 
 export const axiosGetCertificate = getAPI(
   'getCertificate',
