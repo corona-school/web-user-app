@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile-App
+      args:
+        # [Choice] Node.js version: 14, 12, 10
+        VARIANT: 14
+        # On Linux, you may need to update USER_UID and USER_GID below if not your local UID is not 1000.
+        USER_UID: 1000
+        USER_GID: 1000
+
+    volumes:
+      - ..:/workspace:cached
+      - corona-school-web-user-app-node_modules:/workspace/node_modules # use separate volume for node_modules to improve performance
+      
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+volumes:
+  corona-school-web-user-app-node_modules:
