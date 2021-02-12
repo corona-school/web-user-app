@@ -39,8 +39,8 @@ export interface CertificateData {
   subjects: string[];
   mediaType: string | null;
   activities: string[];
-  ongoingLessons: boolean;
-  lang?: ISupportedLanguage;
+  ongoingLessons?: boolean;
+  automatic?: boolean;
 }
 
 const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
@@ -63,9 +63,10 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
             createCertificate={createCertificate}
           />
         )}
-        {createdCertificate.value && (
+        {createdCertificate.value && !createdCertificate.value.automatic && (
           <DownloadCertificate uuid={createdCertificate.value.uuid} />
         )}
+        {createdCertificate.value?.automatic && <StartedAutomatic />}
       </div>
     </StyledReactModal>
   );
@@ -238,8 +239,17 @@ function IntroductionStep({ setStep }: StepProps) {
         möglich zu gestalten, kannst du auf der folgenden Seite
         <li>das zeitliche Ausmaß der ehrenamtlichen Tätigkeit</li>
         <li>die genauen Inhalte und Aufgaben der ehrenamtlichen Tätigkeit</li>
-        angeben. Daraus erstellen wir dir ein fertiges PDF, welches du an
-        deine*n Schüler*in zum Unterschreiben schicken kannst.
+        angeben. Mit diesen Informationen werden wir deine*n Schüler*in
+        kontaktieren und uns eine Bestätigung durch den/die
+        Erziehungsberechtige*n einholen. Anschließend erhältst du eine
+        automatisierte E-Mail von uns mit deiner Bescheinigung.
+        <br />
+        Wenn du innerhalb einer Woche nichts von uns hörst, kannst du bei
+        deinem/deiner Schüler*in nochmal nachhaken oder uns unter{' '}
+        <a href="mailto:support@corona-school.de">
+          support@corona-school.de
+        </a>{' '}
+        kontaktieren.
       </Text>
     </StepContainer>
   );
@@ -481,10 +491,24 @@ function ChooseModeStep({ data, prevStep, createCertificate }: StepProps) {
   return (
     <StepContainer step="mode" prevStep={prevStep}>
       <StepHeader step="mode" title="Modus auswählen" />
-      {/* <Button onClick={() => createCertificate({ ...data, automatic: true })}>
-        Automatischer Prozess
-      </Button> */}
-      <Button onClick={() => createCertificate(data)}>Manuell</Button>
+      <Button onClick={() => createCertificate({ ...data, automatic: true })}>
+        Bescheinigung anfordern
+      </Button>
+      <Button onClick={() => createCertificate(data)}>
+        Stattdessen manuell erstellen
+      </Button>
+    </StepContainer>
+  );
+}
+
+function StartedAutomatic() {
+  return (
+    <StepContainer step="mode">
+      <StepHeader step="mode" title="Prozess gestartet" />
+      Geschafft! Wir haben eine E-Mail an deine*n Schüler*in gesendet und warten
+      auf die Bestätigung der Informationen durch den/die
+      Erziehungsberechtige*n. Wir melden uns danach sofort bei dir per E-Mail
+      mit der fertigen Bescheinigung.
     </StepContainer>
   );
 }
