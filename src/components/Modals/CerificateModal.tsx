@@ -303,7 +303,7 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
         <div className={classes.inputField}>
           <InputNumber
             min={0.25}
-            max={40}
+            max={500}
             step={0.25}
             value={Math.round(certificateData.hoursTotal * 4) / 4}
             onChange={(v) => {
