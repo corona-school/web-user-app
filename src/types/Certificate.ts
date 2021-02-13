@@ -17,6 +17,12 @@ export interface IExposedCertificate {
   medium: string;
 }
 
+export interface ICertificateSignature {
+  signatureParent?: string;
+  signaturePupil?: string;
+  signatureLocation: string;
+}
+
 export const supportedLanguages = { de: 'Deutsch', en: 'Englisch' } as const;
 export const defaultLanguage = 'de';
 export type ISupportedLanguage = keyof typeof supportedLanguages;

@@ -25,7 +25,7 @@ const Content = styled.div`
 `;
 
 const CardWrapper: React.FC<{
-  highlightColor?: 'red' | 'yellow' | 'green' | 'blue';
+  highlightColor?: 'red' | 'yellow' | 'green' | 'blue' | 'grey';
   className?: string;
 }> = ({
   children,
@@ -44,6 +44,8 @@ const CardWrapper: React.FC<{
         return theme.color.cardHighlightGreen;
       case 'blue':
         return theme.color.cardHighlightBlue;
+      case 'grey':
+        return theme.color.gray1;
       default:
         return theme.color.cardHighlightRed;
     }

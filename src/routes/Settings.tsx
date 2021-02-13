@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Button, Select, Space, Table, Tag } from 'antd';
 import Context from '../context';
 
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
@@ -18,11 +17,13 @@ import { JufoExpertCard } from '../components/cards/JufoExpertCard';
 
 import { useAPI, useAPIResult } from '../context/ApiContext';
 import {
-  defaultLanguage,
+  ICertificateSignature,
   IExposedCertificate,
   ISupportedLanguage,
-  supportedLanguages,
 } from '../types/Certificate';
+
+import SignCertificateModal from '../components/Modals/SignCertificateModal';
+import CertificateCard from '../components/cards/CertificateCard';
 
 const Wrapper = styled.div`
   display: flex;
@@ -35,11 +36,46 @@ const Settings: React.FC = () => {
   const modalContext = useContext(Context.Modal);
   const userContext = useContext(Context.User);
   const [certificates, reloadCertificates] = useAPIResult('getCertificates');
+  const [certificateToSign, setCertificateToSign] = useState<
+    IExposedCertificate
+  >();
   const getCertificate = useAPI('getCertificate');
-  const [language, setLanguage] = useState<ISupportedLanguage>(defaultLanguage);
 
-  async function showCertificate(uuid: IExposedCertificate['uuid']) {
-    const response = await getCertificate(uuid, language);
+  const signCertificateAPI = useAPI('signCertificate');
+
+  console.log(certificates);
+
+  // opens the pop-up for the signature if the user comes from the email
+  // urlSearchParams seems to be broken in the current enviroment
+  useEffect(() => {
+    const search = window.location.search?.match(/sign=([a-zA-Z0-9]+)/);
+    const uuid = search && search[1];
+    if (!uuid || certificateToSign || !certificates.value) {
+      return;
+    }
+    const certificate = certificates.value.find(
+      (it) => it.uuid === uuid && it.state === 'awaiting-approval'
+    );
+    if (certificate) {
+      setCertificateToSign(certificate);
+    }
+  }, [certificates]);
+
+  async function signCertificate(
+    certificate: IExposedCertificate,
+    signature: ICertificateSignature
+  ) {
+    const success = await signCertificateAPI(certificate.uuid, signature);
+    if (!success) return; // TODO: Show error popup
+
+    reloadCertificates();
+  }
+
+  async function showCertificate(
+    certificate: IExposedCertificate,
+    language: ISupportedLanguage
+  ) {
+    const response = await getCertificate(certificate.uuid, language);
     window.open(
       URL.createObjectURL(new Blob([response], { type: 'application/pdf' }))
     );
@@ -120,104 +156,23 @@ const Settings: React.FC = () => {
     );
   };
 
-  const stateTranslation: { [key in IExposedCertificate['state']]: string } = {
-    manual: 'Unbestätigt',
-    'awaiting-approval': 'Bestätigung ausstehend',
-    approved: 'Bestätigt',
-  };
-
   const renderCertificatesTable = () => {
-    const columns = [
-      {
-        title: 'Schüler*in',
-        key: 'pupil',
-        render: (certificate: IExposedCertificate) =>
-          `${certificate.pupil.firstname} ${certificate.pupil.lastname}`,
-      },
-      {
-        title: 'Student*in',
-        key: 'student',
-        render: (certificate: IExposedCertificate) =>
-          `${certificate.student.firstname} ${certificate.student.lastname}`,
-      },
-      {
-        title: 'Fächer',
-        key: 'subjects',
-        render: (certificate: IExposedCertificate) => (
-          <>
-            {certificate.subjects.split(',').map((subject) => (
-              <Tag key={subject}>{subject.toUpperCase()}</Tag>
-            ))}
-          </>
-        ),
-      },
-      {
-        title: 'Status',
-        key: 'status',
-        filters: ['manual', 'awaiting-approval', 'approved'].map((s) => ({
-          value: s,
-          text: stateTranslation[s],
-        })),
-        filterMultiple: false,
-        onFilter: (value: string, certificate: IExposedCertificate) =>
-          certificate.state === value,
-        // defaultSortOrder: 'descend',
-        sorter: (a: IExposedCertificate, b: IExposedCertificate) =>
-          a.state.length - b.state.length,
-        // sortDirections: ['descend', 'ascend'],
-        render: (certificate: IExposedCertificate) => (
-          <>
-            <Tag
-              color={
-                (certificate.state === 'manual' && 'green') ||
-                (certificate.state === 'awaiting-approval' && 'yellow') ||
-                (certificate.state === 'approved' && 'green')
-              }
-              key={certificate.state}
-            >
-              {stateTranslation[certificate.state]}
-            </Tag>
-          </>
-        ),
-      },
-      {
-        title: 'Aktion',
-        key: 'action',
-        render: (certificate: IExposedCertificate) => (
-          <Space size="middle">
-            {userContext.user.isTutor &&
-              certificate.state !== 'awaiting-approval' && (
-                <>
-                  <Select
-                    defaultValue={defaultLanguage}
-                    onChange={(event) => setLanguage(event)}
-                    style={{ width: 120 }}
-                  >
-                    {Object.entries(supportedLanguages).map(([code, value]) => (
-                      <Select.Option value={code}>{value}</Select.Option>
-                    ))}
-                  </Select>
-                  <Button
-                    type="primary"
-                    onClick={() => showCertificate(certificate.uuid)}
-                  >
-                    Ansehen
-                  </Button>
-                </>
-              )}
-
-            {/* <Button danger>Löschen</Button> */}
-          </Space>
-        ),
-      },
-    ];
+    if (!certificates.value?.length) return null;
 
     return (
       <>
         <Title size="h3" className={classes.subjectTitle}>
-          Zertifikate
+          Deine Zertifikate
         </Title>
-        <Table dataSource={certificates.value ?? []} columns={columns} />
+        <Wrapper>
+          {certificates.value?.map((certificate) => (
+            <CertificateCard
+              certificate={certificate}
+              showCertificate={showCertificate}
+              startSigning={setCertificateToSign}
+            />
+          ))}
+        </Wrapper>
       </>
     );
   };
@@ -238,8 +193,15 @@ const Settings: React.FC = () => {
 
       {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
         renderProjectFields()}
-      {userContext.user.isTutor && renderCertificatesTable()}
+      {renderCertificatesTable()}
       <AccountNotScreenedModal />
+      {certificateToSign && (
+        <SignCertificateModal
+          certificate={certificateToSign}
+          signCertificate={signCertificate}
+          close={() => setCertificateToSign(undefined)}
+        />
+      )}
     </div>
   );
 };

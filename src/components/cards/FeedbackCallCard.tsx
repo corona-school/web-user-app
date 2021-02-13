@@ -36,7 +36,9 @@ const FeedbackCallCard = () => {
         }
       })
       .catch((err) =>
-        console.warn(`Error when loading Peer-to-Peer Call data: ${err.message}`)
+        console.warn(
+          `Error when loading Peer-to-Peer Call data: ${err.message}`
+        )
       );
   }, [apiContext]);
 

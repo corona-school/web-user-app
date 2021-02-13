@@ -72,7 +72,7 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
       const b = moment(new Date(selectedPupil.date), 'DD/MM/YYYY');
       const a = moment(new Date(certificateData.endDate * 1000), 'DD/MM/YYYY');
 
-      const weekCount = a.diff(b, 'week');
+      const weekCount = a.diff(b, 'week') + 1;
       setCertificateData({
         ...certificateData,
         weekCount,
@@ -285,7 +285,7 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
             min={0.25}
             max={40}
             step={0.25}
-            value={certificateData.hoursPerWeek}
+            value={Math.round(certificateData.hoursPerWeek * 4) / 4}
             onChange={(v) => {
               if (typeof v === 'number') {
                 setCertificateData({ ...certificateData, hoursPerWeek: v });
@@ -297,7 +297,30 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
                 : null
             }
           />{' '}
-          h/Woche (insgesamt {certificateData.hoursTotal} h)
+          h/Woche
+        </div>
+        <br />
+        <div className={classes.inputField}>
+          <InputNumber
+            min={0.25}
+            max={500}
+            step={0.25}
+            value={Math.round(certificateData.hoursTotal * 4) / 4}
+            onChange={(v) => {
+              if (typeof v === 'number') {
+                setCertificateData({
+                  ...certificateData,
+                  hoursPerWeek: v / certificateData.weekCount,
+                });
+              }
+            }}
+            className={
+              !isWorkloadAllowedNumber()
+                ? classes.workloadInputFieldError
+                : null
+            }
+          />{' '}
+          h insgesamt
         </div>
       </div>
     );
@@ -317,7 +340,7 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
     );
   };
 
-  const downloadPDF = () => {
+  const requestCertificate = () => {
     setLoading(true);
     apiContext
       .createCertificate(certificateData)
@@ -359,15 +382,12 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
             className={classes.downloadButton}
             backgroundColor="#4E6AE6"
             color="#ffffff"
-            onClick={downloadPDF}
+            onClick={requestCertificate}
           >
             {loading ? (
               <ClipLoader size={20} color="#ffffff" loading={loading} />
             ) : (
-              <>
-                <Icons.DownloadWeb />
-                Download
-              </>
+              <>Download</>
             )}
           </Button>
         </div>

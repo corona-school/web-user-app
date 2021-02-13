@@ -1,0 +1,81 @@
+.modal {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: white;
+  max-width: 600px;
+  max-height: 100%;
+  overflow: scroll;
+  width: 100%;
+
+  align-items: center;
+
+  .buttonContainer {
+    margin-top: 12px;
+    display: flex;
+    button {
+      margin: 8px;
+    }
+  }
+  .stepContainer {
+    width: 100%;
+
+    .titleBar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .generalInformationContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .inputField {
+      margin: 4px 8px 10px 8px;
+    }
+    .workloadInputFieldError {
+      background-color: rgba(255, 0, 0, 0.507);
+    }
+  }
+
+  .downloadContainer {
+    display: flex;
+    flex-direction: row;
+    min-height: 120px;
+    justify-content: center;
+    align-items: center;
+
+    .downloadButton {
+      margin: 16px;
+      font-size: 15px;
+      font-weight: normal;
+      height: 40px;
+      padding-right: 14px;
+      min-width: 130px;
+    }
+  }
+}
+
+.description {
+  color: #8e8e8e !important;
+  margin-top: -16px !important;
+}
+
+.signPage {
+  margin: 0px 5%;
+  & canvas {
+    width: 100%;
+    border: 1px dotted gray;
+  }
+  & span>span>input {
+    text-align: right !important;
+    cursor: pointer;
+    background: rgba(49,187,244,0.16);
+  }
+  & span>span>span {
+    border: none;
+    background-color: transparent;
+  }
+}
