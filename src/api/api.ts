@@ -212,7 +212,7 @@ export const axiosPutUserActive = async (
 
 export const axiosCreateCertificate = postAPI(
   'createCertificate',
-  `${apiURL}/certificate/create`,
+  `/certificate/create`,
   (data: CertificateData) => data,
   (res) => res.data as { uuid: string; automatic: boolean }
 );

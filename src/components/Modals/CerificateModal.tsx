@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import StyledReactModal from 'styled-react-modal';
-import ClipLoader from 'react-spinners/ClipLoader';
-import { Select, DatePicker, InputNumber, message, Checkbox } from 'antd';
+import { Select, DatePicker, InputNumber, message, Checkbox, Spin } from 'antd';
 import moment from 'moment';
 
 import context from '../../context';
@@ -31,13 +30,12 @@ export interface Activity {
 }
 
 export interface CertificateData {
-  student?: string;
+  pupil?: string;
   endDate: number;
-  weekCount: number;
   hoursPerWeek: number;
   hoursTotal: number;
   subjects: string[];
-  mediaType: string | null;
+  medium: string | null;
   activities: string[];
   ongoingLessons?: boolean;
   automatic?: boolean;
@@ -45,7 +43,7 @@ export interface CertificateData {
 
 const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
   const modalContext = useContext(context.Modal);
-  const [createdCertificate, createCertificate] = useAPICallable(
+  const [createdCertificate, createCertificate, reset] = useAPICallable(
     'createCertificate'
   );
 
@@ -63,10 +61,34 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
             createCertificate={createCertificate}
           />
         )}
-        {createdCertificate.value && !createdCertificate.value.automatic && (
-          <DownloadCertificate uuid={createdCertificate.value.uuid} />
+        {createdCertificate.loading && (
+          <div className={classes.stepContainer}>
+            <div className={classes.titleBar}>
+              <Title size="h2">Bescheinigung wird erstellt</Title>
+            </div>
+            <Spin />
+          </div>
         )}
-        {createdCertificate.value?.automatic && <StartedAutomatic />}
+        {createdCertificate.error && (
+          <div className={classes.stepContainer}>
+            <div className={classes.titleBar}>
+              <Title size="h2">Ein Fehler ist aufgetreten!</Title>
+            </div>
+            Bitte kontaktiere das CoronaSchool Team unter{' '}
+            <a href="mailto:support@corona-school.de">
+              support@corona-school.de
+            </a>
+          </div>
+        )}
+        {createdCertificate.value && !createdCertificate.value.automatic && (
+          <DownloadCertificate
+            uuid={createdCertificate.value.uuid}
+            resetData={reset}
+          />
+        )}
+        {createdCertificate.value?.automatic && (
+          <StartedAutomatic resetData={reset} />
+        )}
       </div>
     </StyledReactModal>
   );
@@ -94,11 +116,10 @@ function CreateCertificate({
 
   const [data, setData] = useState<CertificateData>({
     endDate: moment().unix(),
-    weekCount: 0,
-    hoursPerWeek: 1.0,
+    hoursPerWeek: 0,
     hoursTotal: 0,
     subjects: [],
-    mediaType: null,
+    medium: null,
     activities: [],
     ongoingLessons: false,
   });
@@ -106,21 +127,6 @@ function CreateCertificate({
   function updateData(update: Partial<CertificateData>) {
     setData((prev) => ({ ...prev, ...update }));
   }
-
-  useEffect(() => {
-    const allMatches = [...user.matches, ...user.dissolvedMatches];
-    const selectedPupil = allMatches.find((s) => s.uuid === data.student);
-    if (selectedPupil) {
-      const b = moment(new Date(selectedPupil.date), 'DD/MM/YYYY');
-      const a = moment(new Date(data.endDate * 1000), 'DD/MM/YYYY');
-
-      const weekCount = a.diff(b, 'week');
-      updateData({
-        weekCount,
-        hoursTotal: data.hoursPerWeek * weekCount,
-      });
-    }
-  }, [data.hoursPerWeek, data.endDate, data.student]);
 
   /* Passing the same props to all steps is so beautiful, this rule just doesn't make sense */
   /* eslint react/jsx-props-no-spreading: "off" */
@@ -161,12 +167,14 @@ function StepContainer({
   step,
   onClose,
   children,
+  title,
 }: React.PropsWithChildren<{
   prevStep?: () => void;
   nextStep?: () => void;
   nextStepText?: string;
   onClose?: () => void;
   step: IStep;
+  title?: string;
 }>) {
   const modalContext = useContext(context.Modal);
 
@@ -174,7 +182,7 @@ function StepContainer({
     <>
       <div className={classes.stepContainer}>
         <div className={classes.titleBar}>
-          <Title size="h2">Bescheinigung beantragen</Title>
+          <Title size="h2">{title ?? 'Bescheinigung beantragen'}</Title>
           <Button
             color="#B5B5B5"
             backgroundColor="#ffffff"
@@ -258,29 +266,39 @@ function IntroductionStep({ setStep }: StepProps) {
 // TODO: Split this component up
 function InformationStep({
   user,
-  data: {
-    hoursPerWeek,
-    student,
-    endDate,
-    hoursTotal,
-    mediaType,
-    ongoingLessons,
-    subjects,
-    weekCount,
-  },
+  data,
   updateData,
   setStep,
   prevStep,
 }: StepProps) {
+  const {
+    hoursPerWeek,
+    pupil,
+    endDate,
+    hoursTotal,
+    medium,
+    ongoingLessons,
+    subjects,
+  } = data;
   const dateFormat = 'DD/MM/YYYY';
   const MediaTypes = ['Video-Chat', 'E-Mail', 'Telefon', 'Chat-Nachrichten'];
   const allMatches = [...user.matches, ...user.dissolvedMatches];
+
+  let weekCount = 0;
+
+  const selectedPupil = allMatches.find((s) => s.uuid === pupil);
+  if (selectedPupil) {
+    const b = moment(new Date(selectedPupil.date), 'DD/MM/YYYY');
+    const a = moment(new Date(endDate * 1000), 'DD/MM/YYYY');
+
+    weekCount = a.diff(b, 'week') + 1;
+  }
 
   const isWorkloadAllowed =
     hoursPerWeek % 0.25 === 0 && hoursPerWeek >= 0.25 && hoursPerWeek <= 40.0;
 
   function nextStep() {
-    if (!student) {
+    if (!pupil) {
       message.info('Ein*e Schüler*in muss ausgewählt sein.');
       return;
     }
@@ -288,7 +306,7 @@ function InformationStep({
       message.info('Mindestens ein Fach muss ausgewählt sein.');
       return;
     }
-    if (!mediaType) {
+    if (!medium) {
       message.info('Ein Medium muss ausgewählt sein.');
       return;
     }
@@ -313,10 +331,9 @@ function InformationStep({
     );
   }
 
-  const selectedPupil = allMatches.find((s) => s.uuid === student);
-
   return (
     <StepContainer step="information" prevStep={prevStep} nextStep={nextStep}>
+      <StepHeader step="information" title="Informationen eintragen" />
       <div className={classes.generalInformationContainer}>
         <Title size="h5" bold>
           Schüler*in
@@ -324,10 +341,10 @@ function InformationStep({
         <div className={classes.inputField}>
           <Select
             placeholder="Wähle deine*n Schüler*in"
-            value={student}
-            onChange={(v) => {
+            value={pupil}
+            onChange={(pupil) => {
               updateData({
-                student: v,
+                pupil,
                 subjects: [],
                 /* reset as otherwise an invalid value for the end date may occur 
                     if the current endDate value from a previously selected is before the 
@@ -428,10 +445,10 @@ function InformationStep({
           <Select
             placeholder="Wähle dein Medium aus"
             style={{ width: 200 }}
-            value={mediaType || undefined}
-            onChange={(v) => {
-              if (v) {
-                updateData({ mediaType: v });
+            value={medium || undefined}
+            onChange={(medium) => {
+              if (medium) {
+                updateData({ medium });
               }
             }}
           >
@@ -444,28 +461,79 @@ function InformationStep({
             })}
           </Select>
         </div>
-        <Title size="h5" bold>
-          Zeit
-        </Title>
-        <div className={classes.inputField}>
-          <InputNumber
-            min={0.25}
-            max={40}
-            step={0.25}
-            value={hoursPerWeek}
-            onChange={(v) => {
-              if (typeof v === 'number') {
-                updateData({ hoursPerWeek: v });
-              }
-            }}
-            className={
-              !isWorkloadAllowed ? classes.workloadInputFieldError : null
-            }
-          />{' '}
-          h/Woche (insgesamt {hoursTotal} h)
-        </div>
+        <WorkloadInput
+          hoursPerWeek={hoursPerWeek}
+          hoursTotal={hoursTotal}
+          isWorkloadAllowed={isWorkloadAllowed}
+          updateData={updateData}
+          weekCount={weekCount}
+        />
       </div>
     </StepContainer>
+  );
+}
+
+function WorkloadInput({
+  hoursPerWeek,
+  hoursTotal,
+  weekCount,
+  updateData,
+  isWorkloadAllowed,
+}: {
+  weekCount: number;
+  hoursPerWeek: number;
+  hoursTotal: number;
+  isWorkloadAllowed: boolean;
+  updateData(data: Partial<CertificateData>);
+}) {
+  const toQuarters = (it: number) => Math.round(it * 4) / 4;
+
+  function setHoursPerWeek(_hoursPerWeek: number) {
+    const hoursTotal = toQuarters(_hoursPerWeek * weekCount);
+    const hoursPerWeek = toQuarters(_hoursPerWeek);
+    updateData({ hoursPerWeek, hoursTotal });
+  }
+
+  function setHoursTotal(_hoursTotal: number) {
+    const hoursPerWeek = toQuarters(_hoursTotal / weekCount) || 0;
+    const hoursTotal = toQuarters(_hoursTotal);
+    updateData({ hoursPerWeek, hoursTotal });
+  }
+
+  return (
+    <>
+      <Title size="h5" bold>
+        Zeit
+      </Title>
+      <div className={classes.inputField}>
+        <InputNumber
+          min={0}
+          max={40}
+          step={0.25}
+          value={hoursPerWeek}
+          onChange={setHoursPerWeek}
+          disabled={!weekCount}
+          className={
+            !isWorkloadAllowed ? classes.workloadInputFieldError : null
+          }
+        />{' '}
+        h/Woche
+      </div>
+      <div className={classes.inputField}>
+        <InputNumber
+          min={0}
+          max={100000}
+          step={0.25}
+          value={hoursTotal}
+          onChange={setHoursTotal}
+          disabled={!weekCount}
+          className={
+            !isWorkloadAllowed ? classes.workloadInputFieldError : null
+          }
+        />{' '}
+        h insgesamt
+      </div>
+    </>
   );
 }
 
@@ -491,20 +559,34 @@ function ChooseModeStep({ data, prevStep, createCertificate }: StepProps) {
   return (
     <StepContainer step="mode" prevStep={prevStep}>
       <StepHeader step="mode" title="Modus auswählen" />
-      <Button onClick={() => createCertificate({ ...data, automatic: true })}>
-        Bescheinigung anfordern
+      Alles fertig ausgefüllt? Dann kannst du die Daten jetzt abschicken:
+      <Button
+        color="#ffffff"
+        backgroundColor="#4E6AE6"
+        onClick={() => createCertificate({ ...data, automatic: true })}
+      >
+        Bescheinigung automatisch anfordern
       </Button>
-      <Button onClick={() => createCertificate(data)}>
+      Alternativ kannst du die Bescheinigung auch manuell herunterladen, und an
+      deine*n Schüler*in per E-Mail verschicken:
+      <Button
+        backgroundColor="#585858"
+        color="white"
+        onClick={() => createCertificate(data)}
+      >
         Stattdessen manuell erstellen
       </Button>
     </StepContainer>
   );
 }
 
-function StartedAutomatic() {
+function StartedAutomatic({ resetData }: { resetData() }) {
   return (
-    <StepContainer step="mode">
-      <StepHeader step="mode" title="Prozess gestartet" />
+    <StepContainer
+      step="mode"
+      title="Automatischen Prozess gestartet!"
+      onClose={resetData}
+    >
       Geschafft! Wir haben eine E-Mail an deine*n Schüler*in gesendet und warten
       auf die Bestätigung der Informationen durch den/die
       Erziehungsberechtige*n. Wir melden uns danach sofort bei dir per E-Mail
@@ -515,7 +597,13 @@ function StartedAutomatic() {
 
 /* The DownloadCertificate is shown when the user chooses the Manual Process, and directly
    wants to download their certificate to send it to the pupil */
-function DownloadCertificate({ uuid }: { uuid: string }) {
+function DownloadCertificate({
+  uuid,
+  resetData,
+}: {
+  uuid: string;
+  resetData();
+}) {
   const [certificateBlob, loadCertificate] = useAPICallable('getCertificate');
   const [language, setLanguage] = useState<ISupportedLanguage>(defaultLanguage);
 
@@ -538,42 +626,37 @@ function DownloadCertificate({ uuid }: { uuid: string }) {
 
   if (certificateBlob.loading) {
     return (
-      <div>
-        <Text className={classes.description}>Bescheinigung herunterladen</Text>
-        <div className={classes.downloadContainer}>
-          <ClipLoader size={20} color="#ffffff" loading />
-        </div>
-      </div>
+      <StepContainer
+        step="mode"
+        title="Bescheinigung herunterladen"
+        onClose={resetData}
+      >
+        <Spin />
+      </StepContainer>
     );
   }
 
   if (certificateBlob.error) {
     return (
-      <div>
-        <Text className={classes.description}>Bescheinigung herunterladen</Text>
+      <StepContainer
+        step="mode"
+        title="Bescheinigung herunterladen"
+        onClose={resetData}
+      >
         <div className={classes.downloadContainer}>
           Ein Fehler ist aufgetreten. Bitte lade die Seite neu, und versuche es
           erneut.
         </div>
-      </div>
-    );
-  }
-
-  if (certificateBlob.value) {
-    return (
-      <div>
-        <Text className={classes.description}>Bescheinigung herunterladen</Text>
-        <div className={classes.downloadContainer}>
-          Die Bescheinigung wurde heruntergeladen
-        </div>
-      </div>
+      </StepContainer>
     );
   }
 
   return (
-    <div>
-      <Text className={classes.description}>Bescheinigung herunterladen</Text>
-
+    <StepContainer
+      step="mode"
+      title="Bescheinigung herunterladen"
+      onClose={resetData}
+    >
       <div className={classes.downloadContainer}>
         <Select
           value={language}
@@ -593,7 +676,7 @@ function DownloadCertificate({ uuid }: { uuid: string }) {
           Download
         </Button>
       </div>
-    </div>
+    </StepContainer>
   );
 }
 

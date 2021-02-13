@@ -261,7 +261,11 @@ export function useAPICallable<N extends keyof IApiContext>(name: N) {
       .catch((error) => setValue({ error }));
   }
 
-  return [value, doCall] as const;
+  function reset() {
+    setValue({ pending: true });
+  }
+
+  return [value, doCall, reset] as const;
 }
 
 export const ApiProvider: React.FC = ({ children }) => {
