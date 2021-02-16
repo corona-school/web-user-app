@@ -3,7 +3,7 @@ import styles from './AccentColorButton.module.scss';
 import { hexToRGB } from '../../utils/DashboardUtils';
 
 const AccentColorButton: React.FC<{
-  label: string;
+  label?: string;
   onClick: (e?) => void;
   accentColor: string;
   disabled?: boolean;
@@ -29,7 +29,8 @@ const AccentColorButton: React.FC<{
       className={
         (small || false ? styles.buttonSmall : styles.button) +
         (disabled ? ` ${styles.disabled}` : '') +
-        (` ${className}` || '')
+        (` ${className}` || '') +
+        (label == null ? ` ${styles.onlyIcon}` : '')
       }
       style={{
         backgroundColor: hexToRGB(

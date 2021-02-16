@@ -15,7 +15,17 @@
   >.icon {
     width: 20px;
     height: 20px;
-    margin-right: 5px;
+  }
+  &:not(.onlyIcon) {
+    > .icon {
+      margin-right: 5px;
+    }
+  }
+  &.onlyIcon {
+    > .icon {
+      width: 30px;
+      height: 30px;
+    }
   }
   &:hover {
     &:not(.disabled) {
@@ -39,10 +49,28 @@
     cursor: not-allowed;
   }
   >.icon {
-    width: 15px;
-    height: 15px;
-    margin-right: 4px;
+    width: 16px;
+    height: 16px;
   }
+  &:not(.onlyIcon) {
+    > .icon {
+      margin-right: 4px;
+    }
+  }
+  &.onlyIcon {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    > .icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+
   &:hover {
     &:not(.disabled) {
       border: 1px solid;
