@@ -204,7 +204,7 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
               Icon={Icons.Close}
             />
             <AccentColorButton
-              accentColor="D03D53"
+              accentColor="#D03D53"
               onClick={() =>
                 ApiContext.putUserActiveFalse().then(() =>
                   window.location.assign('https://corona-school.de/')

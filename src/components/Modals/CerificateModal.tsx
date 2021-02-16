@@ -16,6 +16,8 @@ import {
   ISupportedLanguage,
   supportedLanguages,
 } from '../../types/Certificate';
+import AccentColorButton from '../button/AccentColorButton';
+import styles from '../button/SaveEditButton.module.scss';
 
 const { Option } = Select;
 
@@ -43,6 +45,14 @@ export interface CertificateData {
   ongoingLessons: boolean;
   lang: ISupportedLanguage;
 }
+
+const Loader = () => {
+  return (
+    <div className={styles.LoaderWrapper}>
+      <ClipLoader size={15} loading />
+    </div>
+  );
+};
 
 const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
   const [loading, setLoading] = useState(false);
@@ -355,21 +365,13 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
               <Option value={code}>{value}</Option>
             ))}
           </Select>
-          <Button
+          <AccentColorButton
             className={classes.downloadButton}
-            backgroundColor="#4E6AE6"
-            color="#ffffff"
             onClick={downloadPDF}
-          >
-            {loading ? (
-              <ClipLoader size={20} color="#ffffff" loading={loading} />
-            ) : (
-              <>
-                <Icons.DownloadWeb />
-                Download
-              </>
-            )}
-          </Button>
+            accentColor="#4E6AE6"
+            Icon={loading ? Loader : Icons.DownloadWeb}
+            label="Download"
+          />
         </div>
       </div>
     );
@@ -442,22 +444,18 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
         </div>
         <div className={classes.buttonContainer}>
           {currentStep > 0 && currentStep < STEPS - 1 && (
-            <Button
-              backgroundColor="#F4F6FF"
-              color="#4E6AE6"
+            <AccentColorButton
+              accentColor="#4E6AE6"
               onClick={() => onClick(currentStep - 1)}
-            >
-              Zurück
-            </Button>
+              label="Zurück"
+            />
           )}
           {currentStep < STEPS - 1 && (
-            <Button
-              backgroundColor="#F4F6FF"
-              color="#4E6AE6"
+            <AccentColorButton
+              accentColor="#4E6AE6"
               onClick={() => onClick(currentStep + 1)}
-            >
-              {currentStep === STEPS - 2 ? 'Abschließen' : 'Weiter'}
-            </Button>
+              label={currentStep === STEPS - 2 ? 'Abschließen' : 'Weiter'}
+            />
           )}
         </div>
       </div>

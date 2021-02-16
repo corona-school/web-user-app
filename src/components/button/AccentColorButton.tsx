@@ -10,13 +10,24 @@ const AccentColorButton: React.FC<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Icon?: any;
   small?: boolean;
-}> = ({ label, onClick, accentColor, Icon, disabled, children, small }) => {
+  className?: string;
+}> = ({
+  label,
+  onClick,
+  accentColor,
+  Icon,
+  disabled,
+  children,
+  small,
+  className,
+}) => {
   return (
     <button
       onClick={onClick}
       className={
         (small || false ? styles.buttonSmall : styles.button) +
-        (disabled ? ` ${styles.disabled}` : '')
+        (disabled ? ` ${styles.disabled}` : '') +
+        (` ${className}` || '')
       }
       style={{
         backgroundColor: hexToRGB(
