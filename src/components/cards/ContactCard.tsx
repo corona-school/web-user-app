@@ -9,6 +9,7 @@ import { AgreementText, messageLabels } from '../../assets/mentoringPageAssets';
 import { MentoringCategory } from '../../types/Mentoring';
 import { ApiContext } from '../../context/ApiContext';
 import { TopHighlightCard } from './FlexibleHighlightCard';
+import Select from '../misc/Select';
 
 const ContactCard = () => {
   const apiContext = useContext(ApiContext);
@@ -57,7 +58,7 @@ const ContactCard = () => {
         </div>
         <div className={classes.categorySelect}>
           <Text large> Kategorie: </Text>
-          <select
+          <Select
             className={classes.selectElement}
             onChange={(e) => setCategory(e.target.value as MentoringCategory)}
             value={category}
@@ -65,7 +66,7 @@ const ContactCard = () => {
             {Object.values(MentoringCategory).map((c) => (
               <option value={c}>{messageLabels.get(c)}</option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className={classes.image}>
           <Images.MentoringPic />

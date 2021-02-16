@@ -42,13 +42,7 @@
     }
 
     .selectElement {
-      height: 28px;
-      padding: 2px 5px;
-      font-size: 15px;
-      line-height: 22px;
-      letter-spacing: -0.333333px;
-      border: 1px solid rgb(244, 72, 109);
-
+      width: auto;
       @media only screen and (max-width: 600px) {
         width: 100%;
       }
