@@ -9,7 +9,7 @@ import { ApiProjectFieldInfo } from '../../types/ProjectCoach';
 import Select from '../misc/Select';
 import AccentColorButton from '../button/AccentColorButton';
 import { ReactComponent as EditIcon } from '../../assets/icons/pen-solid.svg';
-import { ReactComponent as DeleteIcon } from '../../assets/icons/ico-delete.svg';
+import { ReactComponent as DeleteIcon } from '../../assets/icons/trashcan.svg';
 import { ReactComponent as AddIcon } from '../../assets/icons/plus-solid.svg';
 
 const CardWrapper = styled.div`
