@@ -18,7 +18,7 @@ const devAPI =
     : env.REACT_APP_BACKEND_URL ?? 'https://dev.api.corona-school.de/api';
 
 export const apiURL = liveDomains.includes(window.location.host)
-  ? 'https://api.corona-school.de/api'
+  ? env.REACT_APP_BACKEND_URL ?? 'https://api.corona-school.de/api'
   : devAPI;
 
 export const dev = process.env.NODE_ENV === 'development';
