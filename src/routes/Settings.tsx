@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Button, Select, Space, Table, Tag } from 'antd';
+import { Select, Space, Table, Tag } from 'antd';
 import Context from '../context';
 
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
@@ -10,7 +10,6 @@ import { Title } from '../components/Typography';
 
 import classes from './Settings.module.scss';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
-import { isProjectCoachButNotTutor } from '../utils/UserUtils';
 import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
@@ -21,6 +20,7 @@ import {
   ISupportedLanguage,
   supportedLanguages,
 } from '../types/Certificate';
+import AccentColorButton from '../components/button/AccentColorButton';
 
 const Wrapper = styled.div`
   display: flex;
@@ -195,12 +195,12 @@ const Settings: React.FC = () => {
                       <Select.Option value={code}>{value}</Select.Option>
                     ))}
                   </Select>
-                  <Button
-                    type="primary"
+                  <AccentColorButton
+                    accentColor="#4E6AE6"
                     onClick={() => showCertificate(certificate.uuid)}
-                  >
-                    Ansehen
-                  </Button>
+                    label="Ansehen"
+                    small
+                  />
                 </>
               )}
 
