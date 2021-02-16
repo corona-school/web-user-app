@@ -73,7 +73,10 @@
       width: 100%;
       min-height: 100%;
       border-radius: 5px;
-      border-color: rgb(244, 72, 109);
+      border: 1px solid rgb(244, 72, 109);
+      resize: none;
+      outline: none;
+      padding: 10px;
     }
   }
 
@@ -84,7 +87,7 @@
     grid-row: 4;
 
     .checkbox {
-      margin-top: 0px;
+      margin-top: 0;
       a {
         color: rgb(244, 72, 109);
       }

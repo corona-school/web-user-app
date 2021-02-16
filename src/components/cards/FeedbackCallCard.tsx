@@ -4,13 +4,12 @@ import { Tooltip } from 'antd';
 import { ThemeContext } from 'styled-components';
 import { Text, Title } from '../Typography';
 
-import { LinkButton } from '../button';
-
-import classes from './FeedbackCallCard.module.scss';
+import styles from './FeedbackCallCard.module.scss';
 import { FeedbackCall } from '../../types/FeedbackCall';
 import { ApiContext } from '../../context/ApiContext';
 import { feedbackCallText } from '../../assets/mentoringPageAssets';
 import { LeftHighlightCard } from './FlexibleHighlightCard';
+import AccentColorButton from '../button/AccentColorButton';
 
 const FeedbackCallCard = () => {
   const [feedbackCall, setFeedbackCall] = useState<FeedbackCall>({});
@@ -42,7 +41,7 @@ const FeedbackCallCard = () => {
 
   return (
     <LeftHighlightCard highlightColor={theme.color.cardHighlightRed}>
-      <Title size="h3">Feedback Call</Title>
+      <Title size="h3">Feedback-Call</Title>
       <Text style={{ color: 'rgb(244, 72, 109)' }}>
         {feedbackCall.time
           ? moment(feedbackCall.time).format('DD.MM.YYYY HH:mm')
@@ -50,14 +49,13 @@ const FeedbackCallCard = () => {
       </Text>
       <Text>{feedbackCallText}</Text>
       {linkActive && (
-        <LinkButton
-          className={classes.buttonParticipate}
-          href={feedbackCall.link}
-          target="_blank"
-          style={{ margin: '4px' }}
-        >
-          Teilnehmen
-        </LinkButton>
+        <AccentColorButton
+          onClick={() => window.open(feedbackCall.link, '_blank')}
+          accentColor="#F4486D"
+          label="Teilnehmen"
+          className={styles.buttonParticipate}
+          small
+        />
       )}
       {!linkActive && (
         <Tooltip
@@ -68,12 +66,19 @@ const FeedbackCallCard = () => {
           }
           placement="topRight"
         >
-          <LinkButton
-            className={classes.inactiveButtonParticipate}
-            style={{ margin: '4px' }}
-          >
-            Teilnehmen
-          </LinkButton>
+          <AccentColorButton
+            onClick={() => {}}
+            accentColor="#F4486D"
+            label="Teilnehmen"
+            className={styles.buttonParticipate}
+            disabled
+            title={
+              feedbackCall.link
+                ? 'Der Link wird 30 Minuten vor dem Call freigeschaltet.'
+                : 'Aktuell gibt es keinen Link.'
+            }
+            small
+          />
         </Tooltip>
       )}
     </LeftHighlightCard>

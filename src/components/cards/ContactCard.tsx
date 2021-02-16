@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { ThemeContext } from 'styled-components';
 import { Checkbox, message } from 'antd';
-import Button from '../button';
 import Images from '../../assets/images';
 import { Text, Title } from '../Typography';
 import classes from './ContactCard.module.scss';
@@ -10,6 +9,7 @@ import { MentoringCategory } from '../../types/Mentoring';
 import { ApiContext } from '../../context/ApiContext';
 import { TopHighlightCard } from './FlexibleHighlightCard';
 import Select from '../misc/Select';
+import AccentColorButton from '../button/AccentColorButton';
 
 const ContactCard = () => {
   const apiContext = useContext(ApiContext);
@@ -89,9 +89,11 @@ const ContactCard = () => {
           <Text className={classes.checkbox}>{AgreementText}</Text>
         </div>
         <div className={classes.buttonCell}>
-          <Button className={classes.button} onClick={SendMessage}>
-            Abschicken
-          </Button>
+          <AccentColorButton
+            onClick={SendMessage}
+            accentColor="#F4486D"
+            label="Abschicken"
+          />
         </div>
       </div>
     );

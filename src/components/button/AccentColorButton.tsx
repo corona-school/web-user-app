@@ -11,6 +11,7 @@ const AccentColorButton: React.FC<{
   Icon?: any;
   small?: boolean;
   className?: string;
+  title?: string;
 }> = ({
   label,
   onClick,
@@ -20,6 +21,7 @@ const AccentColorButton: React.FC<{
   children,
   small,
   className,
+  title,
 }) => {
   return (
     <button
@@ -37,6 +39,7 @@ const AccentColorButton: React.FC<{
         color: disabled || false ? '#000000' : accentColor,
       }}
       disabled={disabled || false}
+      title={title}
     >
       {children}
       {Icon != null && (
