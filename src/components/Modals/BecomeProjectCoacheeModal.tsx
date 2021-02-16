@@ -4,17 +4,16 @@ import { Form, message, Radio, Select, Slider } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { ModalContext } from '../../context/ModalContext';
 import { ApiContext } from '../../context/ApiContext';
-
 import classes from './BecomeProjectCoacheeModal.module.scss';
 import { Title } from '../Typography';
 import {
   BecomeProjectCoachee,
   TuteeJufoParticipationIndication,
 } from '../../types/ProjectCoach';
-import Button from '../button';
 import { UserContext } from '../../context/UserContext';
 import { dev } from '../../api/config';
 import { ProjectField } from '../../types';
+import AccentColorButton from '../button/AccentColorButton';
 
 const BecomeProjectCoacheeModal = () => {
   const [loading, setLoading] = useState(false);
@@ -61,9 +60,11 @@ const BecomeProjectCoacheeModal = () => {
           <Title size="h2">Projektcoach werden</Title>
           <ClipLoader size={100} color="#123abc" loading />
           <div className={classes.buttonContainer}>
-            <Button backgroundColor="#F4F6FF" color="#4E6AE6">
-              Anfordern
-            </Button>
+            <AccentColorButton
+              label="Anfordern"
+              onClick={() => {}}
+              accentColor="#e78b00"
+            />
           </div>
         </div>
       </StyledReactModal>
@@ -143,9 +144,11 @@ const BecomeProjectCoacheeModal = () => {
           </Form.Item>
           <Form.Item>
             <div className={classes.buttonContainer}>
-              <Button backgroundColor="#F4F6FF" color="#4E6AE6" type="submit">
-                Anfordern
-              </Button>
+              <AccentColorButton
+                label="Anfordern"
+                onClick={() => {}}
+                accentColor="#e78b00"
+              />
             </div>
           </Form.Item>
         </Form>

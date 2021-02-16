@@ -11,11 +11,11 @@ import {
   BecomeProjectCoach,
   TutorJufoParticipationIndication,
 } from '../../types/ProjectCoach';
-import Button from '../button';
 import { UserContext } from '../../context/UserContext';
 import { dev } from '../../api/config';
 import SelectProjectList from '../forms/SelectProjectField';
 import { ProjectField } from '../../types';
+import AccentColorButton from '../button/AccentColorButton';
 
 const BecomeProjectCoachModal = () => {
   const [loading, setLoading] = useState(false);
@@ -61,9 +61,11 @@ const BecomeProjectCoachModal = () => {
           <Title size="h2">Projektcoach werden</Title>
           <ClipLoader size={100} color="#123abc" loading />
           <div className={classes.buttonContainer}>
-            <Button backgroundColor="#F4F6FF" color="#4E6AE6">
-              Anmelden
-            </Button>
+            <AccentColorButton
+              label="Anmelden"
+              onClick={() => {}}
+              accentColor="#e78b00"
+            />
           </div>
         </div>
       </StyledReactModal>
@@ -123,7 +125,11 @@ const BecomeProjectCoachModal = () => {
           </Form.Item>
           <Form.Item>
             <div className={classes.buttonContainer}>
-              <Button type="submit">Anmelden</Button>
+              <AccentColorButton
+                label="Anmelden"
+                onClick={() => {}}
+                accentColor="#e78b00"
+              />
             </div>
           </Form.Item>
         </Form>
