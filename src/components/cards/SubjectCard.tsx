@@ -28,7 +28,6 @@ const StyledCard = styled(Card)`
   letter-spacing: -0.333333px;
   line-height: 36px;
   /* text-align: center; */
-  width: 300px;
   width: 290px;
   position: relative;
 
