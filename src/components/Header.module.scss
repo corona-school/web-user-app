@@ -1,15 +1,13 @@
 .header {
   position: sticky;
   top: 0;
-  left: 0; 
+  left: 0;
   right: 0;
   z-index: 800;
   min-height: 62px;
   max-height: 62px;
 
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
   background: white;
   align-items: center;
   max-width: 100vw;
@@ -18,6 +16,30 @@
   .mobileNav {
     padding: 8px 16px;
     cursor: pointer;
+  }
+  .backToWebsiteWrapperLink {
+    margin-left: auto;
+  }
+  .backToWebsiteWrapper {
+    border-bottom: 5px solid transparent;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    transition: 0.1s border-color ease-in-out;
+    &:hover {
+      border-bottom: 5px solid #000000;
+    }
+  }
+  .backToWebsite {
+    color: #000000;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .wirVsVirus{
+    margin-left: 20px;
+    margin-right: 20px;
   }
 }
 

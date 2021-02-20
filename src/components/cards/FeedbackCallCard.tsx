@@ -65,9 +65,9 @@ const FeedbackCallCard = () => {
               : 'Aktuell gibt es keinen Link.'
           }
           placement="topRight"
+          // TODO doesn't work
         >
           <AccentColorButton
-            onClick={() => {}}
             accentColor="#F4486D"
             label="Teilnehmen"
             className={styles.buttonParticipate}

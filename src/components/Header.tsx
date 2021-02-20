@@ -9,7 +9,16 @@ interface Props {
 const Header = (props: Props) => {
   return (
     <div className={classes.header}>
-      <Icons.WirVsVirusLogo />
+      <a
+        className={classes.backToWebsiteWrapperLink}
+        href="https://www.corona-school.de/"
+      >
+        <div className={classes.backToWebsiteWrapper}>
+          <span className={classes.backToWebsite}>Zurück zur Website</span>
+        </div>
+      </a>
+
+      <Icons.WirVsVirusLogo className={classes.wirVsVirus} />
       <button
         type="button"
         className={classes.mobileNav}
