@@ -1,9 +1,8 @@
 import React from 'react';
-import Icons from '../../assets/icons';
 import Images from '../../assets/images';
-import { LinkButton } from '../button';
 import classes from './CourseBanner.module.scss';
 import { Title, Text } from '../Typography';
+import AccentColorLinkButton from '../button/AccentColorLinkButton';
 
 interface Props {
   showImage?: boolean;
@@ -26,16 +25,14 @@ export const CourseBanner: React.FC<Props> = (props) => {
                 : 'Hier kannst du dir alle Kurse auf unserer Plattform anschauen und auch deine zugelassenen Kurse findest du dort wieder.'}
             </Text>
           </div>
-          <LinkButton
-            href="/courses/overview"
+          <AccentColorLinkButton
+            link="/courses/overview"
             local
-            backgroundColor="#4E6AE6"
-            color="white"
-            className={classes.courseButton}
-          >
-            <Icons.Search height="16px" />
-            Kursangebote entdecken
-          </LinkButton>
+            accentColor="#4E6AE6"
+            // className={classes.courseButton}
+            label="🔎 Kursangebote entdecken"
+            small
+          />
         </div>
         {props.showImage && (
           <Images.Graduation className={classes.graduationImage} />
