@@ -4,7 +4,7 @@ import { hexToRGB } from '../../utils/DashboardUtils';
 
 const AccentColorButton: React.FC<{
   label?: string;
-  onClick: (e?) => void;
+  onClick?: (e?) => void;
   accentColor: string;
   disabled?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

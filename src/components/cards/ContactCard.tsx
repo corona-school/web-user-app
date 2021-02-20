@@ -93,6 +93,7 @@ const ContactCard = () => {
             onClick={SendMessage}
             accentColor="#F4486D"
             label="Abschicken"
+            small
           />
         </div>
       </div>

@@ -9,7 +9,7 @@ import Icons from '../../assets/icons';
 import AccentColorButton from '../button/AccentColorButton';
 import Select from '../misc/Select';
 import { ReactComponent as AddIcon } from '../../assets/icons/plus-solid.svg';
-import { ReactComponent as DeleteIcon } from '../../assets/icons/ico-delete.svg';
+import { ReactComponent as Trashcan } from '../../assets/icons/trashcan.svg';
 import { ReactComponent as EditIcon } from '../../assets/icons/pen-solid.svg';
 
 const CardWrapper = styled.div`
@@ -162,7 +162,7 @@ const SubjectCard: React.FC<{
             )}
             <IconButtonWrapper>
               <AccentColorButton
-                Icon={isStudent ? EditIcon : DeleteIcon}
+                Icon={isStudent ? EditIcon : Trashcan}
                 label={isStudent ? 'Bearbeiten' : 'Entfernen'}
                 onClick={isStudent ? () => setEdit(true) : handleDelete}
                 accentColor="#4db534"

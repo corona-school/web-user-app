@@ -2,6 +2,7 @@ import React from 'react';
 import { User, ScreeningStatus } from '../types';
 import Images from '../assets/images';
 import { LinkButton } from '../components/button';
+import AccentColorLinkButton from '../components/button/AccentColorLinkButton';
 
 const StatusTexts = new Map([
   [
@@ -141,9 +142,13 @@ const ContactMatchStep: Step = {
     ' Gerne könnt ihr genaue Inhalte schon vor dem ersten Gespräch abstimmen.',
   ],
   action: (
-    <LinkButton href="/matches" local>
-      Kontaktieren
-    </LinkButton>
+    <AccentColorLinkButton
+      link="/matches"
+      local
+      accentColor="#F4486D"
+      label="Kontaktieren"
+      small
+    />
   ),
 };
 
@@ -156,13 +161,12 @@ const PrepareLessonStep: Step = {
     'Profitiere von unseren Empfehlungen für gute, digitale Lernunterstützung.',
   ],
   action: (
-    <LinkButton
-      href="https://www.corona-school.de/vorbereitung"
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      Vorbereiten
-    </LinkButton>
+    <AccentColorLinkButton
+      link="https://www.corona-school.de/vorbereitung"
+      accentColor="#F4486D"
+      label="Vorbereiten"
+      small
+    />
   ),
 };
 
@@ -175,9 +179,13 @@ const LessonStep: Step = {
     'Bei Schwierigkeiten kannst du dich an support@corona-school.de wenden.',
   ],
   action: (
-    <LinkButton href="/matches" local>
-      Lernen
-    </LinkButton>
+    <AccentColorLinkButton
+      link="/matches"
+      local
+      accentColor="#F4486D"
+      label="Lernen"
+      small
+    />
   ),
 };
 
@@ -189,7 +197,15 @@ const FeedbackStep: Step = {
     'Der Fragebogen ist anonymisiert und dauert nicht länger als 5 Minuten.',
     'Falls du differenziertes Feedback an uns richten möchtest, schreibe eine Mail an feedback@corona-school.de',
   ],
-  action: <LinkButton>Feedback</LinkButton>,
+  action: (
+    <AccentColorLinkButton
+      link="/"
+      local
+      accentColor="#F4486D"
+      label="Feedback"
+      small
+    />
+  ),
 };
 
 const RequestMatchStep: Step = {
@@ -201,9 +217,13 @@ const RequestMatchStep: Step = {
     'Ganz nach deinen zeitlichen Kapazitäten kannst du jederzeit mehr oder auch weniger helfen.',
   ],
   action: (
-    <LinkButton href="/matches" local>
-      Anfordern
-    </LinkButton>
+    <AccentColorLinkButton
+      link="/matches"
+      local
+      accentColor="#F4486D"
+      label="Anfordern"
+      small
+    />
   ),
 };
 

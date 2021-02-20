@@ -50,6 +50,7 @@ const ProjectCoach: React.FC = () => {
           className={classes.buttonParticipate}
           onClick={() => modalContext.setOpenedModal('becomeProjectCoachee')}
           label="Jetzt anmelden"
+          small
         />
       </LeftHighlightCard>
     );
