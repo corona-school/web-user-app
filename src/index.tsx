@@ -13,6 +13,8 @@ import { UserProvider } from './context/UserContext';
 import { ModalProvider } from './context/ModalContext';
 import App from './App';
 
+document.documentElement.lang = 'de';
+
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
