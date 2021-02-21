@@ -3,6 +3,7 @@ import Images from '../../assets/images';
 import classes from './CourseBanner.module.scss';
 import { Title, Text } from '../Typography';
 import AccentColorLinkButton from '../button/AccentColorLinkButton';
+import { ReactComponent as MagnifyingGlass } from '../../assets/icons/search-solid.svg';
 
 interface Props {
   showImage?: boolean;
@@ -30,8 +31,9 @@ export const CourseBanner: React.FC<Props> = (props) => {
             local
             accentColor="#4E6AE6"
             // className={classes.courseButton}
-            label="🔎 Kursangebote entdecken"
+            label="Kursangebote entdecken"
             small
+            Icon={MagnifyingGlass}
           />
         </div>
         {props.showImage && (
