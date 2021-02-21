@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Form, Input, Radio, Select, InputNumber, Switch, message } from 'antd';
-import Button from '../button';
 import Context from '../../context';
 
 import classes from './CreateCourse.module.scss';
 import { Course, SubCourse, Tag } from '../../types/Course';
 import { CompletedCourse } from '../../routes/CourseForm';
 import { dev } from '../../api/config';
+import AccentColorButton from '../button/AccentColorButton';
 
 const { Option } = Select;
 
@@ -348,14 +348,11 @@ export const CreateCourse: React.FC<Props> = (props) => {
       )}
 
       <div className={classes.buttonContainer}>
-        <Button
+        <AccentColorButton
+          accentColor="#4E6AE6"
+          label={props.edit ? 'Bearbeiten' : 'Erstellen'}
           onClick={handleCourseCreation}
-          className={classes.button}
-          color="white"
-          backgroundColor="#4E6AE6"
-        >
-          {props.edit ? 'Bearbeiten' : 'Erstellen'}
-        </Button>
+        />
       </div>
     </Form>
   );

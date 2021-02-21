@@ -388,6 +388,10 @@ export const axiosRegisterTutor = (tutor: Tutor) => {
 };
 
 export const axiosCreateCourse = (token: string, course: Course) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line no-param-reassign
+  course.allowContact = false;
   return axios
     .post(`${apiURL}/course`, course, { headers: { token } })
     .then((response) => response.data.id)
