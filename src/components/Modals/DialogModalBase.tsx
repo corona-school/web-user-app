@@ -5,7 +5,7 @@ import { ModalContext } from '../../context/ModalContext';
 import styles from './DialogModalBase.module.scss';
 import { hexToRGB } from '../../utils/DashboardUtils';
 import { ReactComponent as Cross } from '../../assets/icons/cancel-symbol.svg';
-import { Checkbox as CheckboxBase } from '../button/Checkbox';
+import CheckboxBase from '../button/Checkbox';
 import AccentColorButton from '../button/AccentColorButton';
 import Textbox from '../misc/Textbox';
 

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { ThemeContext } from 'styled-components';
-import { Checkbox, message } from 'antd';
+import { message } from 'antd';
 import Images from '../../assets/images';
 import { Text, Title } from '../Typography';
 import classes from './ContactCard.module.scss';
@@ -10,6 +10,7 @@ import { ApiContext } from '../../context/ApiContext';
 import { TopHighlightCard } from './FlexibleHighlightCard';
 import Select from '../misc/Select';
 import AccentColorButton from '../button/AccentColorButton';
+import CheckboxBase from '../button/Checkbox';
 
 const ContactCard = () => {
   const apiContext = useContext(ApiContext);
@@ -45,6 +46,8 @@ const ContactCard = () => {
   };
 
   const FormContent = () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return (
       <div className={classes.formContent}>
         <div className={classes.title}>
@@ -82,11 +85,19 @@ const ContactCard = () => {
           />
         </div>
         <div className={classes.checkboxCell}>
-          <Checkbox
+          <CheckboxBase
+            accentColor="#F4486D"
             checked={agreementChecked}
-            onChange={(e) => setAgreementChecked(e.target.checked)}
-          />
-          <Text className={classes.checkbox}>{AgreementText}</Text>
+            onClick={(e) => setAgreementChecked(e.target.checked)}
+          >
+            <Text className={classes.checkbox}>{AgreementText}</Text>
+          </CheckboxBase>
+
+          {/* <Checkbox */}
+          {/*  checked={agreementChecked} */}
+          {/*  onChange={(e) => setAgreementChecked(e.target.checked)} */}
+          {/* /> */}
+          {/* <Text className={classes.checkbox}>{AgreementText}</Text> */}
         </div>
         <div className={classes.buttonCell}>
           <AccentColorButton

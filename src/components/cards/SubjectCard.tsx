@@ -140,6 +140,7 @@ const SubjectCard: React.FC<{
                   label="Speichern"
                   onClick={handleSave}
                   accentColor="#4db534"
+                  small
                 />
               </IconButtonWrapper>
               <IconButtonWrapper>
@@ -147,6 +148,7 @@ const SubjectCard: React.FC<{
                   label="Löschen"
                   onClick={handleDelete}
                   accentColor="#dd0000"
+                  small
                 />
               </IconButtonWrapper>
             </SelectWrapper>
@@ -166,6 +168,7 @@ const SubjectCard: React.FC<{
                 label={isStudent ? 'Bearbeiten' : 'Entfernen'}
                 onClick={isStudent ? () => setEdit(true) : handleDelete}
                 accentColor="#4db534"
+                small
               />
             </IconButtonWrapper>
           </>
@@ -310,6 +313,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
                 accentColor="#0199cb"
                 label="Speichern"
                 onClick={handleSave}
+                small
               />
             </IconButtonWrapper>
             <CloseButtonStyle onClick={() => setEditing(false)}>
@@ -326,6 +330,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
                 label="Hinzufügen"
                 onClick={() => setEditing(true)}
                 accentColor="#0199cb"
+                small
               />
             </IconButtonWrapper>
           </>

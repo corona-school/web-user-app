@@ -1,7 +1,6 @@
 import React from 'react';
 import { User, ScreeningStatus } from '../types';
 import Images from '../assets/images';
-import { LinkButton } from '../components/button';
 import AccentColorLinkButton from '../components/button/AccentColorLinkButton';
 
 const StatusTexts = new Map([
@@ -96,7 +95,15 @@ const CheckInformationStep: Step = {
     'Achte darauf, dass deine Fächer korrekt im System hinterlegt sind. ',
     'Sollte es dir nicht möglich sein ein bestimmtes Feld zu ändern, melde dich bei support@corona-school.de.',
   ],
-  action: <LinkButton href="/settings">Überprüfen</LinkButton>,
+  action: (
+    <AccentColorLinkButton
+      link="/settings"
+      local
+      accentColor="#F4486D"
+      label="Überprüfen"
+      small
+    />
+  ),
 };
 
 const MeetUsStep: Step = {
@@ -108,13 +115,12 @@ const MeetUsStep: Step = {
     'Für einen reibungslosen Ablauf benutze bitte Google Chrome.',
   ],
   action: (
-    <LinkButton
-      rel="noopener noreferrer"
-      href="https://authentication.corona-school.de/"
-      target="_blank"
-    >
-      Kennenlernen
-    </LinkButton>
+    <AccentColorLinkButton
+      link="https://authentication.corona-school.de/"
+      accentColor="#F4486D"
+      label="Kennenlernen"
+      small
+    />
   ),
 };
 
@@ -127,9 +133,13 @@ const MatchedStep: Step = {
     'Solltest du innerhalb einer Woche nichts von uns hören, melde dich bitte bei support@corona-school.de.',
   ],
   action: (
-    <LinkButton href="/matches" local>
-      Abwarten
-    </LinkButton>
+    <AccentColorLinkButton
+      link="/matches"
+      local
+      accentColor="#F4486D"
+      label="Abwarten"
+      small
+    />
   ),
 };
 
