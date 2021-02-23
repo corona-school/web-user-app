@@ -2,6 +2,7 @@ import { Button, Select, Space, Tag } from 'antd';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import Text from 'antd/lib/typography/Text';
+import moment from 'moment';
 import {
   IExposedCertificate,
   ISupportedLanguage,
@@ -107,7 +108,7 @@ function CertificateCard({
 
           {userContext.user.isTutor &&
             certificate.state === 'awaiting-approval' && (
-              <Tag color="yellow">noch nicht bestätigt</Tag>
+              <Tag color="orange">noch nicht bestätigt</Tag>
             )}
 
           {/* <Button danger>Löschen</Button> */}
@@ -128,6 +129,10 @@ function CertificateCard({
           {userContext.user.isPupil && certificate.state === 'approved' && (
             <Tag color="green">schon bestätigt</Tag>
           )}
+          <sub>
+            erstellt am{' '}
+            {moment(certificate.certificateDate).format('DD.MM.YYYY')}
+          </sub>
         </Space>
       </StyledCard>
     </CardContainer>

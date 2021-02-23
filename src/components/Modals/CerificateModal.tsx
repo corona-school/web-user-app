@@ -346,8 +346,8 @@ function InformationStep({
               updateData({
                 pupil,
                 subjects: [],
-                /* reset as otherwise an invalid value for the end date may occur 
-                    if the current endDate value from a previously selected is before the 
+                /* reset as otherwise an invalid value for the end date may occur
+                    if the current endDate value from a previously selected is before the
                     startdate that was currently set */
                 endDate: moment().unix(),
               });
@@ -464,7 +464,6 @@ function InformationStep({
         <WorkloadInput
           hoursPerWeek={hoursPerWeek}
           hoursTotal={hoursTotal}
-          isWorkloadAllowed={isWorkloadAllowed}
           updateData={updateData}
           weekCount={weekCount}
         />
@@ -478,12 +477,10 @@ function WorkloadInput({
   hoursTotal,
   weekCount,
   updateData,
-  isWorkloadAllowed,
 }: {
   weekCount: number;
   hoursPerWeek: number;
   hoursTotal: number;
-  isWorkloadAllowed: boolean;
   updateData(data: Partial<CertificateData>);
 }) {
   const toQuarters = (it: number) => Math.round(it * 4) / 4;
@@ -513,11 +510,8 @@ function WorkloadInput({
           value={hoursPerWeek}
           onChange={setHoursPerWeek}
           disabled={!weekCount}
-          className={
-            !isWorkloadAllowed ? classes.workloadInputFieldError : null
-          }
         />{' '}
-        h/Woche
+        h/Woche durchschnittlich
       </div>
       <div className={classes.inputField}>
         <InputNumber
@@ -527,9 +521,6 @@ function WorkloadInput({
           value={hoursTotal}
           onChange={setHoursTotal}
           disabled={!weekCount}
-          className={
-            !isWorkloadAllowed ? classes.workloadInputFieldError : null
-          }
         />{' '}
         h insgesamt
       </div>
