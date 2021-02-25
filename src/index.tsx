@@ -15,23 +15,29 @@ import App from './App';
 
 document.documentElement.lang = 'de';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <ApiProvider>
-          <UserProvider>
-            <ModalProvider>
-              <HttpsRedirect disabled={process.env.REACT_APP_MODE === 'LOCAL'}>
-                <BrowserRouter>
-                  <App />
-                </BrowserRouter>
-              </HttpsRedirect>
-            </ModalProvider>
-          </UserProvider>
-        </ApiProvider>
-      </AuthProvider>
-    </ThemeProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+if (window.top.location !== window.self.location) {
+  ReactDOM.render(<></>, document.getElementById('root'));
+} else {
+  ReactDOM.render(
+    <React.StrictMode>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <ApiProvider>
+            <UserProvider>
+              <ModalProvider>
+                <HttpsRedirect
+                  disabled={process.env.REACT_APP_MODE === 'LOCAL'}
+                >
+                  <BrowserRouter>
+                    <App />
+                  </BrowserRouter>
+                </HttpsRedirect>
+              </ModalProvider>
+            </UserProvider>
+          </ApiProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </React.StrictMode>,
+    document.getElementById('root')
+  );
+}
