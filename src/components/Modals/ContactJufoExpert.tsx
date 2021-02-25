@@ -134,6 +134,7 @@ export const ContactJufoExpert: React.FC = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Hier dein Betreff"
+          maxLength={255}
         />
         <Text className={classes.text}>Nachricht</Text>
         <Input.TextArea
