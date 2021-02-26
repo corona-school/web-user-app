@@ -51,6 +51,7 @@
     "universities-info-germany": "^1.0.0"
   },
   "devDependencies": {
+    "@types/react-signature-canvas": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "@typescript-eslint/parser": "^3.9.0",
     "eslint": "6.6.0",
