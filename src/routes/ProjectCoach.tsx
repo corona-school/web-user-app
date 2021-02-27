@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from 'styled-components';
 import { Empty } from 'antd';
-import Button from '../components/button';
 import { Text, Title } from '../components/Typography';
 import context from '../context';
 import classes from './ProjectCoach.module.scss';
@@ -21,6 +20,7 @@ import { ExpertRequestCard } from '../components/cards/ExpertRequestCard';
 import { ApiContext } from '../context/ApiContext';
 import { Expert } from '../types/Expert';
 import { JufoExpertDetailCard } from '../components/cards/JufoExpertDetailCard';
+import AccentColorButton from '../components/button/AccentColorButton';
 
 const ProjectCoach: React.FC = () => {
   const { user } = useContext(context.User);
@@ -69,12 +69,13 @@ const ProjectCoach: React.FC = () => {
           Schüler*innen bei außerschulischen Projekten unterstützen
         </Title>
         <Text>{BecomeCoachText}</Text>
-        <Button
+        <AccentColorButton
+          accentColor="#e78b00"
           className={classes.buttonParticipate}
           onClick={() => modalContext.setOpenedModal('becomeProjectCoach')}
-        >
-          Jetzt 1:1-Projektcoach werden
-        </Button>
+          label="Jetzt 1:1-Projektcoach werden"
+          small
+        />
       </LeftHighlightCard>
     );
   };
@@ -84,12 +85,13 @@ const ProjectCoach: React.FC = () => {
       <LeftHighlightCard highlightColor={theme.color.cardHighlightYellow}>
         <Title size="h3">Unterstützung bei Projekten bekommen</Title>
         <Text>{BecomeCoacheeText}</Text>
-        <Button
+        <AccentColorButton
+          accentColor="#e78b00"
           className={classes.buttonParticipate}
           onClick={() => modalContext.setOpenedModal('becomeProjectCoachee')}
-        >
-          Jetzt anmelden
-        </Button>
+          label="Jetzt anmelden"
+          small
+        />
       </LeftHighlightCard>
     );
   };

@@ -1,27 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Context from '../context';
-
 import SubjectCard, { AddSubjectCard } from '../components/cards/SubjectCard';
 import { ScreeningStatus } from '../types';
 import SettingsCard from '../components/cards/SettingsCard';
 import { Title } from '../components/Typography';
-
 import classes from './Settings.module.scss';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
 import ProjectFieldCard, {
   AddProjectFieldCard,
 } from '../components/cards/ProjectFieldCard';
-
 import { JufoExpertCard } from '../components/cards/JufoExpertCard';
-
 import { useAPI, useAPIResult } from '../context/ApiContext';
 import {
   ICertificateSignature,
   IExposedCertificate,
   ISupportedLanguage,
 } from '../types/Certificate';
-
 import SignCertificateModal from '../components/Modals/SignCertificateModal';
 import CertificateCard from '../components/cards/CertificateCard';
 

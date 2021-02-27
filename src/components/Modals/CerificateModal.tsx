@@ -16,6 +16,7 @@ import {
   supportedLanguages,
 } from '../../types/Certificate';
 import { useAPICallable } from '../../context/ApiContext';
+import AccentColorButton from '../button/AccentColorButton';
 
 const { Option } = Select;
 
@@ -658,14 +659,13 @@ function DownloadCertificate({
             <Option value={code}>{value}</Option>
           ))}
         </Select>
-        <Button
+        <AccentColorButton
           className={classes.downloadButton}
-          backgroundColor="#4E6AE6"
-          color="#ffffff"
+          accentColor="#4E6AE6"
           onClick={() => loadCertificate(uuid, language)}
-        >
-          Download
-        </Button>
+          Icon={Icons.DownloadWeb}
+          label="Download"
+        />
       </div>
     </StepContainer>
   );

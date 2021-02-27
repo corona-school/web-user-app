@@ -3,13 +3,12 @@ import StyledReactModal from 'styled-react-modal';
 
 import { message } from 'antd';
 import { User } from '../../types';
-import Button from '../button';
 import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import CertificateModal from '../Modals/CerificateModal';
 import { isProjectCoachButNotTutor, getUserTags } from '../../utils/UserUtils';
-
+import { ReactComponent as Trashcan } from '../../assets/icons/trashcan.svg';
 import { Tag } from '../Tag';
 import context from '../../context';
 
@@ -20,6 +19,7 @@ import EditableUserSettingsCard, {
   EditableUserSettings,
 } from './EditableUserSettingsCard';
 import SaveEditButton from '../button/SaveEditButton';
+import AccentColorButton from '../button/AccentColorButton';
 
 interface Props {
   user: User;
@@ -75,23 +75,18 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
 
     return (
       <>
-        <Button
+        <AccentColorButton
           onClick={() => modalContext.setOpenedModal('startInternship')}
-          color="#ffffff"
-          backgroundColor="#4E6AE6"
-          style={{ margin: '4px' }}
-        >
-          Praktikum anmelden
-        </Button>
-
-        <Button
+          accentColor="#4E6AE6"
+          label="Praktikum anmelden"
+          small
+        />
+        <AccentColorButton
           onClick={() => modalContext.setOpenedModal('becomeInstructor')}
-          color="#ffffff"
-          backgroundColor="#4E6AE6"
-          style={{ margin: '4px' }}
-        >
-          Kursleiter*in werden
-        </Button>
+          accentColor="#4E6AE6"
+          label="Kursleiter*in werden"
+          small
+        />
       </>
     );
   };
@@ -152,26 +147,23 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
             {renderCourseButton()}
 
             {user.isTutor && (
-              <Button
+              <AccentColorButton
                 disabled={
                   user.matches.length + user.dissolvedMatches.length === 0
                 }
                 onClick={() => modalContext.setOpenedModal('certificateModal')}
-                color="#ffffff"
-                backgroundColor="#4E6AE6"
-                style={{ margin: '4px' }}
-              >
-                Bescheinigung anfordern
-              </Button>
+                accentColor="#4E6AE6"
+                label="Bescheinigung anfordern"
+                small
+              />
             )}
-            <Button
+            <AccentColorButton
               onClick={() => modalContext.setOpenedModal('deactivateAccount')}
-              style={{ margin: '4px' }}
-              backgroundColor="#EDEDED"
-              color="#6E6E6E"
-            >
-              <Icons.Delete /> Deaktivieren
-            </Button>
+              accentColor="#6E6E6E"
+              Icon={Trashcan}
+              label="Deaktivieren"
+              small
+            />
             <SaveEditButton
               isEditing={isEditing}
               isLoading={isSaving}
@@ -202,24 +194,21 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
             möchtest, kannst du dich jederzeit wieder bei uns melden.
           </Text>
           <div className={classes.buttonContainer}>
-            <Button
-              backgroundColor="#EDEDED"
-              color="#6E6E6E"
+            <AccentColorButton
+              accentColor="#6E6E6E"
               onClick={() => modalContext.setOpenedModal(null)}
-            >
-              <Icons.Close /> Abbrechen
-            </Button>
-            <Button
-              backgroundColor="#D03D53"
-              color="#ffffff"
+              label="Abbrechen"
+              Icon={Icons.Close}
+            />
+            <AccentColorButton
+              accentColor="#D03D53"
               onClick={() =>
                 ApiContext.putUserActiveFalse().then(() =>
                   window.location.assign('https://corona-school.de/')
                 )
               }
-            >
-              Deaktivieren
-            </Button>
+              label="Deaktivieren"
+            />
           </div>
         </div>
       </StyledReactModal>
