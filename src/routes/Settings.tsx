@@ -21,6 +21,7 @@ import {
   IExposedCertificate,
   ISupportedLanguage,
 } from '../types/Certificate';
+import { isProjectCoachButNotTutor } from '../utils/UserUtils';
 
 import SignCertificateModal from '../components/Modals/SignCertificateModal';
 import CertificateCard from '../components/cards/CertificateCard';
