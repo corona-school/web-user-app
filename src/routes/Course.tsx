@@ -1,8 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import moment from 'moment';
 import Context from '../context';
-import { LinkButton } from '../components/button';
-import Icons from '../assets/icons';
 import { ParsedCourseOverview } from '../types/Course';
 
 import classes from './Course.module.scss';
@@ -10,6 +8,8 @@ import { parseCourse } from '../utils/CourseUtil';
 import { UserContext } from '../context/UserContext';
 import { CourseBanner } from '../components/course/CourseBanner';
 import { CourseList } from '../components/course/CourseList';
+import AccentColorLinkButton from '../components/button/AccentColorLinkButton';
+import { ReactComponent as Plus } from '../assets/icons/plus-solid.svg';
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
@@ -68,16 +68,15 @@ const Course = () => {
       <div className={classes.containerRequests}>
         <div className={classes.header}>
           {userContext.user.type === 'student' && (
-            <LinkButton
-              href="/courses/create"
+            <AccentColorLinkButton
+              link="/courses/create"
               local
-              backgroundColor="#F4486D"
-              color="white"
-              className={classes.courseButton}
-            >
-              <Icons.Add height="16px" />
-              Erstelle einen Kurs
-            </LinkButton>
+              accentColor="#F4486D"
+              label="
+              Erstelle einen Kurs"
+              small
+              Icon={Plus}
+            />
           )}
         </div>
         {myCourses.filter((x) => !getPreviousCourses().some((y) => y === x))

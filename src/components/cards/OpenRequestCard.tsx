@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { message } from 'antd';
 
-import Button from '../button';
 import Icons from '../../assets/icons';
 import Context from '../../context';
 import { putUser } from '../../api/api';
@@ -11,6 +10,8 @@ import CardBase from '../base/CardBase';
 import classes from './OpenRequestCard.module.scss';
 import { Text, Title } from '../Typography';
 import CardNewBase from '../base/CardNewBase';
+import AccentColorButton from '../button/AccentColorButton';
+import { ReactComponent as Trashcan } from '../../assets/icons/trashcan.svg';
 import NewMatchConfirmationModal from '../Modals/NewMatchConfirmationModal';
 import { ModalContext } from '../../context/ModalContext';
 import theme from '../../theme';
@@ -62,7 +63,7 @@ const OpenRequestCard: React.FC<Props> = ({
 
   if (type === 'pending') {
     return (
-      <CardBase highlightColor="#FCD95C" className={classes.pendingContainer}>
+      <CardBase highlightColor="#e78b00" className={classes.pendingContainer}>
         <Title size="h4">Offene Anfrage</Title>
         <Text>
           {projectCoaching &&
@@ -74,13 +75,13 @@ const OpenRequestCard: React.FC<Props> = ({
             'Wir sind auf der Suche nach einem bzw. einer Lernpartner*in für dich und werden uns schnellstmöglich bei dir melden.'}
         </Text>
         <div className={classes.buttonContainer}>
-          <Button
-            color="#F0CE52"
-            backgroundColor="#FFF7DB"
+          <AccentColorButton
+            accentColor="#e78b00"
             onClick={() => modifyMatchesRequested((x) => x - 1)}
-          >
-            <Icons.Delete /> Zurücknehmen
-          </Button>
+            Icon={Trashcan}
+            label="Zurücknehmen"
+            small
+          />
         </div>
       </CardBase>
     );

@@ -4,8 +4,8 @@ import { Option } from 'antd/es/mentions';
 import { ProjectField, ProjectInformation } from '../../types';
 
 import classes from './SelectProjectField.module.scss';
-import Button from '../button';
 import Icons from '../../assets/icons';
+import AccentColorButton from '../button/AccentColorButton';
 
 interface SelectProjectFieldProps {
   projectField: ProjectInformation;
@@ -92,15 +92,18 @@ const SelectProjectField: React.FC<SelectProjectFieldProps> = ({
             <option value="13">13. Klasse</option>
           </Select>
         </div>
-        <Button
+        <AccentColorButton
           onClick={(e) => {
             e.stopPropagation();
             remove(projectField);
           }}
+          label=""
           className={classes.deleteButton}
+          accentColor="#e78b00"
+          small
         >
           <Icons.Delete className={classes.deleteIcon} />
-        </Button>
+        </AccentColorButton>
       </div>
     </div>
   );
@@ -188,15 +191,19 @@ const SelectProjectList: React.FC<SelectProjectListProps> = ({
           remove={removeProjectField}
         />
       ))}
-      <Button
+
+      <AccentColorButton
         onClick={(e) => {
           e.preventDefault();
           addProjectField();
         }}
+        label=""
         className={classes.addButton}
+        accentColor="#e78b00"
+        small
       >
         <Icons.Add className={classes.addIcon} />
-      </Button>
+      </AccentColorButton>
     </div>
   );
 };

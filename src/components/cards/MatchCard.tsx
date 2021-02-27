@@ -1,16 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Match, ProjectMatch } from '../../types';
-import Button, { LinkButton } from '../button';
-import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import classes from './MatchCard.module.scss';
 import { Tag } from '../Tag';
+import { ReactComponent as Trashcan } from '../../assets/icons/trashcan.svg';
+import { ReactComponent as Envelope } from '../../assets/icons/envelope-solid.svg';
+import { ReactComponent as VideoCamera } from '../../assets/icons/video-solid.svg';
 import {
   TuteeJufoParticipationIndication,
   TutorJufoParticipationIndication,
 } from '../../types/ProjectCoach';
+import AccentColorButton from '../button/AccentColorButton';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -19,6 +21,9 @@ const ButtonContainer = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+  > button {
+    margin-right: 10px;
+  }
 `;
 
 interface Props {
@@ -39,7 +44,7 @@ const setHighlightColor = (isDissolvedMatch: boolean) => {
   if (isDissolvedMatch) {
     color = '#DE2C18';
   } else {
-    color = '#71DE5A';
+    color = '#26b306';
   }
   return color;
 };
@@ -81,32 +86,27 @@ const MatchCard: React.FC<Props> = ({
         </div>
         {!dissolved && (
           <ButtonContainer>
-            <LinkButton
-              color="#71DE5A"
-              backgroundColor="#F4FFF2"
-              href={match.jitsilink}
-              target="_blank"
-              style={{ margin: '4px' }}
-            >
-              <Icons.VideoChat />
-              Video-Chat
-            </LinkButton>
-            <LinkButton
-              href={`mailto: ${match.email}`}
-              style={{ margin: '4px' }}
-              color="#71DE5A"
-              backgroundColor="#F4FFF2"
-            >
-              <Icons.Contact />
-            </LinkButton>
-            <Button
+            <AccentColorButton
+              label="Video-Chat"
+              onClick={() => window.open(match.jitsilink, '_blank')}
+              accentColor="#26b306"
+              Icon={VideoCamera}
+              small
+            />
+
+            <AccentColorButton
+              onClick={() => window.open(`mailto: ${match.email}`)}
+              accentColor="#26b306"
+              small
+              Icon={Envelope}
+            />
+
+            <AccentColorButton
               onClick={handleDissolveMatch}
-              style={{ margin: '4px' }}
-              color="#71DE5A"
-              backgroundColor="#F4FFF2"
-            >
-              <Icons.Delete />
-            </Button>
+              accentColor="#26b306"
+              small
+              Icon={Trashcan}
+            />
           </ButtonContainer>
         )}
       </div>
@@ -150,7 +150,7 @@ export const ProjectMatchCard: React.FC<ProjectProps> = ({
           <div className={classes.projectInfoContainer}>
             {match.jufoParticipation ===
               TuteeJufoParticipationIndication.YES && (
-              <Tag color="#FFFFFF" background="#71DE5A">
+              <Tag color="#FFFFFF" background="#26b306">
                 Nimmt an Jugend forscht teil
               </Tag>
             )}
@@ -167,32 +167,27 @@ export const ProjectMatchCard: React.FC<ProjectProps> = ({
           )}
         {!match.dissolved && (
           <ButtonContainer>
-            <LinkButton
-              color="#71DE5A"
-              backgroundColor="#F4FFF2"
-              href={match.jitsilink}
-              target="_blank"
-              style={{ margin: '4px' }}
-            >
-              <Icons.VideoChat />
-              Video-Chat
-            </LinkButton>
-            <LinkButton
-              href={`mailto: ${match.email}`}
-              style={{ margin: '4px' }}
-              color="#71DE5A"
-              backgroundColor="#F4FFF2"
-            >
-              <Icons.Contact />
-            </LinkButton>
-            <Button
+            <AccentColorButton
+              label="Video-Chat"
+              onClick={() => window.open(match.jitsilink, '_blank')}
+              accentColor="#26b306"
+              Icon={VideoCamera}
+              small
+            />
+
+            <AccentColorButton
+              onClick={() => window.open(`mailto: ${match.email}`)}
+              accentColor="#26b306"
+              small
+              Icon={Envelope}
+            />
+
+            <AccentColorButton
               onClick={handleDissolveMatch}
-              style={{ margin: '4px' }}
-              color="#71DE5A"
-              backgroundColor="#F4FFF2"
-            >
-              <Icons.Delete />
-            </Button>
+              accentColor="#26b306"
+              small
+              Icon={Trashcan}
+            />
           </ButtonContainer>
         )}
       </div>
