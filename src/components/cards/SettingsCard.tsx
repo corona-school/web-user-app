@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
 
 import { message } from 'antd';
+import { useHistory } from 'react-router-dom';
 import { User } from '../../types';
 import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
@@ -20,6 +21,7 @@ import EditableUserSettingsCard, {
 } from './EditableUserSettingsCard';
 import SaveEditButton from '../button/SaveEditButton';
 import AccentColorButton from '../button/AccentColorButton';
+import { AuthContext } from '../../context/AuthContext';
 
 interface Props {
   user: User;
@@ -29,6 +31,16 @@ interface Props {
 const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
   const modalContext = useContext(context.Modal);
   const ApiContext = useContext(context.Api);
+  const authContext = useContext(AuthContext);
+
+  const history = useHistory();
+
+  const handleLogoutClick = () => {
+    authContext.setCredentials({ id: '', token: '' });
+    authContext.setStatus('missing');
+    authContext.deleteStoredCredentials();
+    history.push('/login');
+  };
 
   const [editableUserSettings, setEditableUserSettings] = useState<
     EditableUserSettings
@@ -175,6 +187,12 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
                 }
               }}
             />
+            <AccentColorButton
+              onClick={handleLogoutClick}
+              accentColor="#f5aa0f"
+              label="Ausloggen"
+              small
+            />
           </div>
         </div>
       </CardBase>
@@ -199,6 +217,7 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
               onClick={() => modalContext.setOpenedModal(null)}
               label="Abbrechen"
               Icon={Icons.Close}
+              small
             />
             <AccentColorButton
               accentColor="#D03D53"
@@ -208,6 +227,7 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
                 )
               }
               label="Deaktivieren"
+              small
             />
           </div>
         </div>
