@@ -28,7 +28,6 @@ import {
   Popconfirm,
   Row,
   Col,
-  Space
 } from 'antd';
 import AddInstructorModal from '../components/Modals/AddInstructorModal';
 import { ApiContext } from '../context/ApiContext';
@@ -38,6 +37,7 @@ import {
   CourseState,
   Course,
   SubCourse,
+  CourseParticipant,
   Tag as CourseTag,
 } from '../types/Course';
 import { Title, Text } from '../components/Typography';
@@ -59,6 +59,7 @@ import CourseConfirmationModal from '../components/Modals/CourseConfirmationModa
 import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
 import SearchParticipant from '../components/course/SearchParticipant';
 import SortParticipant from '../components/course/SortParticipant';
+
 moment.locale('de');
 
 const CourseDetail = (params: {
@@ -75,7 +76,9 @@ const CourseDetail = (params: {
     false
   );
   const [tags, setTags] = useState<CourseTag[]>([]);
-  const [participantList, setParticipantList] = useState([]);
+  const [participantList, setParticipantList] = useState<CourseParticipant[]>(
+    []
+  );
   const [enteredFilter, setEnteredFilter] = useState('');
 
   const [loadingCerts, setLoadingCerts] = useState<Set<string>>(new Set());
@@ -131,16 +134,15 @@ const CourseDetail = (params: {
     }
   }, [api, id, setTags]);
 
-  //search Participants
+  // search Participants
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!loading && course) {
         const loadedParticipantList = [...course.subcourse.participantList];
-        // console.log('loadedParticipantList', participantList);
 
         const filteredParticipants = loadedParticipantList.filter((data) => {
           if (enteredFilter.length === 0) return data;
-          else if (
+          if (
             data.firstname
               .toUpperCase()
               .includes(enteredFilter.toUpperCase()) ||
@@ -150,6 +152,7 @@ const CourseDetail = (params: {
           ) {
             return data;
           }
+          return null;
         });
         setParticipantList(filteredParticipants);
       }
@@ -368,14 +371,10 @@ const CourseDetail = (params: {
     }
 
     // fitting grades?
-    if (
+    return (
       userContext.user.grade >= course.subcourse.minGrade &&
       userContext.user.grade <= course.subcourse.maxGrade
-    ) {
-      return true;
-    }
-
-    return false;
+    );
   };
 
   const canJoinWaitingList = () => {
@@ -548,21 +547,19 @@ const CourseDetail = (params: {
     return (
       <div>
         <div style={{ maxWidth: '800px', marginTop: '10px' }}>
-        <Row>
-          <Col md={12} sm={12} xs={24} offset={6}>
-           
-            <SearchParticipant
-              inputValue={(value) => setEnteredFilter(value)}
-            />
-           
-          </Col>
-          <Col md={6} sm={12} xs={24}>
-          <SortParticipant
-              setParticipantList={(value) => setParticipantList(value)}
-              getParticipantList={participantList}
-            /></Col>
-         
-        </Row>
+          <Row>
+            <Col md={12} sm={12} xs={24} offset={6}>
+              <SearchParticipant
+                inputValue={(value) => setEnteredFilter(value)}
+              />
+            </Col>
+            <Col md={6} sm={12} xs={24}>
+              <SortParticipant
+                setParticipantList={(value) => setParticipantList(value)}
+                getParticipantList={participantList}
+              />
+            </Col>
+          </Row>
         </div>
         <List
           style={{
