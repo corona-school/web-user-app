@@ -65,8 +65,10 @@
 
 .signPage {
   margin: 0px 5%;
+  max-width: 330px;
   & canvas {
     width: 100%;
+    max-width: 330px;
     border: 1px dotted gray;
   }
   & span>span>input {
