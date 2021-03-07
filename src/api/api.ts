@@ -262,7 +262,7 @@ export const axiosSignCertificate = postAPI<
   'signCertificate',
   (uuid) => `/certificate/${uuid}/sign`,
   (uuid, signature) => signature,
-  (res) => res.status === 200
+  (res) => res.status >= 200 && res.status <= 300
 );
 
 export const axiosGetCourses = async (): Promise<CourseOverview[]> => {
