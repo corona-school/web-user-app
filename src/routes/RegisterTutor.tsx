@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
   Form,
   Input,
@@ -11,8 +11,7 @@ import {
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Icons from '../assets/icons';
-import SignupContainer from '../components/container/SignupContainer';
-import { Title, Text, LinkText } from '../components/Typography';
+import { Title, LinkText } from '../components/Typography';
 import Button from '../components/button';
 import { Subject } from '../types';
 import Context from '../context';
@@ -848,19 +847,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
   }
 
   return (
-    <SignupContainer>
+    <div>
       <div className={classes.signupContainer}>
-        <a
-          rel="noopener noreferrer"
-          href="https://www.corona-school.de/"
-          target="_blank"
-        >
-          <Icons.Logo className={classes.logo} />
-          <Title size="h2" bold>
-            Corona School
-          </Title>
-        </a>
-        {/* <Title>
+        <Title>
           {formState === 'done' ? (
             <span>Du wurdest erfolgreich als Tutor*in registriert</span>
           ) : (
@@ -868,7 +857,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
               Ich möchte mich registrieren als <b>Tutor*in</b>
             </span>
           )}
-        </Title> */}
+        </Title>
       </div>
 
       <Form
@@ -909,14 +898,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           </Button>
         </div>
       </Form>
-      <Text className={classes.helpText}>
-        Du hast schon ein Account? Hier{' '}
-        <Link style={{ color: '#4e6ae6' }} to="/login">
-          anmelden
-        </Link>
-        .
-      </Text>
-    </SignupContainer>
+    </div>
   );
 };
 

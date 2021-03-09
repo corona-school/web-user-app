@@ -10,9 +10,8 @@ import {
   Tooltip,
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Icons from '../assets/icons';
-import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text, LinkText } from '../components/Typography';
 import Button from '../components/button';
 
@@ -728,23 +727,8 @@ const RegisterTutee: React.FC<Props> = ({
   }
 
   return (
-    <SignupContainer shouldShowBackButton={!cooperationMode}>
+    <div>
       <div className={classes.signupContainer}>
-        <a
-          rel="noopener noreferrer"
-          href="https://www.corona-school.de/"
-          target="_blank"
-        >
-          <Icons.Logo className={classes.logo} />
-          {cooperationMode?.kind === 'SpecificStateCooperation' &&
-            cooperationMode.stateInfo.coatOfArms &&
-            React.createElement(cooperationMode.stateInfo.coatOfArms, {
-              className: classes.stateLogo,
-            })}
-          <Title size="h2" bold>
-            Corona School
-          </Title>
-        </a>
         <Title className={classes.tuteeTitle}>
           {formState === 'done' ? (
             <span>Du wurdest erfolgreich als Schüler*in registriert</span>
@@ -795,14 +779,7 @@ const RegisterTutee: React.FC<Props> = ({
           </Button>
         </div>
       </Form>
-      <Text className={classes.helpText}>
-        Du hast schon ein Account? Hier{' '}
-        <Link style={{ color: '#4e6ae6' }} to="/login">
-          anmelden
-        </Link>
-        .
-      </Text>
-    </SignupContainer>
+    </div>
   );
 };
 
