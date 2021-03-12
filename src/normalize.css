@@ -349,3 +349,14 @@ template {
 [hidden] {
   display: none;
 }
+
+/* //antd style overwrite */
+.ant-list-item-action li:nth-last-child(1) {
+  padding-right: 0;
+}
+
+@media screen and (max-width: 576px) {
+  .ant-list-item-action {
+    margin-left: 0px;
+  }
+}

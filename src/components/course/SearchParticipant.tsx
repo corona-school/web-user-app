@@ -14,7 +14,7 @@ const SearchParticipant: React.FC<SearchParticipantProps> = React.memo(({ inputV
     setEnteredFilter(e.target.value);
   };
   return (
-    <div style={{padding: '0 10px'}} >
+    <div>
 
           <Form>
             <Form.Item label="Suche:">
