@@ -849,7 +849,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   return (
     <div>
       <div className={classes.signupContainer}>
-        <Title>
+        <Title className={classes.tutorTitle}>
           {formState === 'done' && (
             <span>Du wurdest erfolgreich als Tutor*in registriert</span>
           )}
