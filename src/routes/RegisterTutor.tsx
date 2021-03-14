@@ -84,7 +84,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [isUniversityStudent, setIsUniversityStudent] = useState(true);
   const [hasJufoCertificate, setHasJufoCertificate] = useState(false);
   const [formState, setFormState] = useState<
-    'start' | 'detail' | 'finnish' | 'done'
+    'start' | 'detail' | 'finish' | 'done'
   >('start');
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
@@ -635,7 +635,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       </>
     );
   };
-  const renderFinnish = () => {
+  const renderFinish = () => {
     return (
       <>
         <NewsletterField
@@ -716,8 +716,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
     if (formState === 'detail') {
       return renderDetail();
     }
-    if (formState === 'finnish') {
-      return renderFinnish();
+    if (formState === 'finish') {
+      return renderFinish();
     }
     if (formState === 'done') {
       return renderDone();
@@ -729,7 +729,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
     if (formState === 'detail') {
       setFormState('start');
     }
-    if (formState === 'finnish') {
+    if (formState === 'finish') {
       setFormState('detail');
     }
 
@@ -827,9 +827,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
               : undefined,
           jufoPastParticipationInfo: formValues.jufoPastParticipationInfo,
         });
-        setFormState('finnish');
+        setFormState('finish');
       }
-      if (formState === 'finnish') {
+      if (formState === 'finish') {
         const data = {
           ...formData,
           newsletter: formValues.newsletter?.includes('newsletter'),
@@ -850,13 +850,12 @@ const RegisterTutor: React.FC<Props> = (props) => {
     <div>
       <div className={classes.signupContainer}>
         <Title>
-          {formState === 'done' ? (
+          {formState === 'done' && (
             <span>Du wurdest erfolgreich als Tutor*in registriert</span>
-          ) : (
-            <span>
-              Ich möchte mich registrieren als <b>Tutor*in</b>
-            </span>
           )}
+          {formState === 'start' && <span>Schritt 1/3</span>}
+          {formState === 'detail' && <span>Schritt 2/3</span>}
+          {formState === 'finish' && <span>Schritt 3/3</span>}
         </Title>
       </div>
 
@@ -892,7 +891,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             color="white"
             backgroundColor="#4E6AE6"
           >
-            {formState === 'finnish' && 'Registrieren'}
+            {formState === 'finish' && 'Registrieren'}
             {(formState === 'start' || formState === 'detail') && 'Weiter'}
             {formState === 'done' && 'Anmelden'}
           </Button>

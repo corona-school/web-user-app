@@ -37,6 +37,7 @@ const Login: React.FC<{
     'idle' | 'loading' | 'error' | 'success' | 'rateLimit'
   >('idle');
   const [email, setEmail] = useState('');
+  const [errorHasOccurred, setErrorHasOccurred] = useState(false);
   const [pageIndex, setPageIndex] = useState(mode === 'login' ? 0 : 1);
   const query = useQuery();
   const token = query.get('token');
@@ -116,11 +117,15 @@ const Login: React.FC<{
         if (error.code === 403) {
           setLoginState('rateLimit');
           message.error(
-            'Das hat leider nicht geklappt. Bitte versuche es später noch einmal.'
+            'Du hast zu oft versucht, dich anzumelden. Bitte versuche es später erneut.'
           );
+          setErrorHasOccurred(true);
         } else {
           setLoginState('error');
-          message.error('Das hat leider nicht geklappt.');
+          message.error(
+            'Das hat leider nicht geklappt. Bitte versuche es später erneut.'
+          );
+          setErrorHasOccurred(true);
         }
       });
   };
@@ -226,6 +231,15 @@ const Login: React.FC<{
           </div>
           {pageIndex === 0 ? (
             <div className={classes.form}>
+              {errorHasOccurred && (
+                <div className={classes.tuteeNote}>
+                  Du kannst dich bei Problemen gerne an{' '}
+                  <a href="mailto:support@corona-school.de">
+                    support@corona-school.de
+                  </a>{' '}
+                  wenden.
+                </div>
+              )}
               <Textbox
                 label="Deine Email-Adresse"
                 value={email}

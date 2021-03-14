@@ -51,7 +51,7 @@ interface FormData {
   projectMemberCount?: number;
   // isTutee
   subjects?: Subject[];
-  // finnish
+  // finish
   state?: string;
   school?: string;
   msg?: string;
@@ -76,7 +76,7 @@ const RegisterTutee: React.FC<Props> = ({
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState<
-    'start' | 'detail' | 'finnish' | 'done'
+    'start' | 'detail' | 'finish' | 'done'
   >('start');
   const [isTutee, setTutee] = useState(false);
   const [isGroups, setGroups] = useState(false);
@@ -536,7 +536,7 @@ const RegisterTutee: React.FC<Props> = ({
     );
   };
 
-  const renderFinnish = () => {
+  const renderFinish = () => {
     return (
       <>
         <NewsletterField
@@ -567,8 +567,8 @@ const RegisterTutee: React.FC<Props> = ({
       return renderDetail();
     }
 
-    if (formState === 'finnish') {
-      return renderFinnish();
+    if (formState === 'finish') {
+      return renderFinish();
     }
     if (formState === 'done') {
       return renderDone();
@@ -578,7 +578,7 @@ const RegisterTutee: React.FC<Props> = ({
   };
 
   const back = () => {
-    if (formState === 'finnish') {
+    if (formState === 'finish') {
       setFormState('detail');
     }
     if (formState === 'detail') {
@@ -704,10 +704,10 @@ const RegisterTutee: React.FC<Props> = ({
           isJufoParticipant: formValues.isJufoParticipant,
           projectMemberCount: formValues.projectMemberCount,
         });
-        setFormState('finnish');
+        setFormState('finish');
       }
 
-      if (formState === 'finnish') {
+      if (formState === 'finish') {
         const data = {
           ...formData,
           newsletter: formValues.newsletter?.includes('newsletter') || false,
@@ -730,13 +730,12 @@ const RegisterTutee: React.FC<Props> = ({
     <div>
       <div className={classes.signupContainer}>
         <Title className={classes.tuteeTitle}>
-          {formState === 'done' ? (
+          {formState === 'done' && (
             <span>Du wurdest erfolgreich als Schüler*in registriert</span>
-          ) : (
-            <span>
-              Ich möchte mich registrieren als <b>Schüler*in</b>
-            </span>
           )}
+          {formState === 'start' && <span>Schritt 1/3</span>}
+          {formState === 'detail' && <span>Schritt 2/3</span>}
+          {formState === 'finish' && <span>Schritt 3/3</span>}
         </Title>
       </div>
 
@@ -772,7 +771,7 @@ const RegisterTutee: React.FC<Props> = ({
             color="white"
             backgroundColor="#4E6AE6"
           >
-            {formState === 'finnish' && 'Registrieren'}
+            {formState === 'finish' && 'Registrieren'}
             {formState === 'start' && 'Weiter'}
             {formState === 'detail' && 'Weiter'}
             {formState === 'done' && 'Anmelden'}
