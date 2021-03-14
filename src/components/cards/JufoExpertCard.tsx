@@ -3,11 +3,10 @@ import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import context from '../../context';
 import classes from './JufoExpertCard.module.scss';
-import Button from '../button';
-
 import EditExpertProfileModal from '../Modals/EditExpertProfileModal';
 import { ExpertStatus } from '../../types/Expert';
 import { Tag } from '../Tag';
+import AccentColorButton from '../button/AccentColorButton';
 
 export const JufoExpertCard: React.FC = () => {
   const modalContext = useContext(context.Modal);
@@ -132,26 +131,24 @@ export const JufoExpertCard: React.FC = () => {
               renderExpertDenied()}
           </div>
           <div className={classes.mainButtonContainer}>
-            <Button
+            <AccentColorButton
               onClick={() => modalContext.setOpenedModal('expertOverviewModal')}
-              color="#ffffff"
-              backgroundColor="#4E6AE6"
-              style={{ margin: '4px' }}
-            >
-              andere Expert*innen ansehen
-            </Button>
-            <Button
+              accentColor="#4E6AE6"
+              label="andere Expert*innen ansehen"
+              small
+            />
+            <AccentColorButton
               onClick={() =>
                 modalContext.setOpenedModal('editExpertProfileModal')
               }
-              color="#ffffff"
-              backgroundColor="#4E6AE6"
-              style={{ margin: '4px' }}
-            >
-              {userContext.user.expertData == null
-                ? 'Profil erstellen'
-                : 'Profil bearbeiten'}
-            </Button>
+              accentColor="#4E6AE6"
+              label={
+                userContext.user.expertData == null
+                  ? 'Profil erstellen'
+                  : 'Profil bearbeiten'
+              }
+              small
+            />
           </div>
         </div>
       </CardBase>

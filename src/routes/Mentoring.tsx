@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { LinkButton } from '../components/button';
 import ContactCard from '../components/cards/ContactCard';
 import FeedbackCallCard from '../components/cards/FeedbackCallCard';
 import { Text, Title } from '../components/Typography';
@@ -13,6 +12,7 @@ import {
 } from '../assets/mentoringPageAssets';
 import StudentCheck from '../components/StudentCheck';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
+import AccentColorButton from '../components/button/AccentColorButton';
 
 const Mentoring: React.FC = () => {
   StudentCheck();
@@ -22,13 +22,13 @@ const Mentoring: React.FC = () => {
       <div className={classes.header}>
         <Title>Mentoring</Title>
         <Text>{headerText}</Text>
-        <LinkButton
+        <AccentColorButton
+          onClick={() => window.open(moreInformationButtonLink, '_blank')}
+          accentColor="#e78b00"
+          label="Weitere Informationen"
           className={classes.buttonMoreInfo}
-          href={moreInformationButtonLink}
-          target="_blank"
-        >
-          Weitere Informationen
-        </LinkButton>
+          small
+        />
       </div>
       <div className={classes.cards}>
         <div className={classes.contactCard}>

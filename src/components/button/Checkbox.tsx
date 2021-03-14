@@ -1,7 +1,12 @@
 import React from 'react';
 import styles from './Checkbox.module.scss';
 
-export function Checkbox({ text, accentColor, checked, onClick }) {
+const CheckboxBase: React.FC<{
+  text?: string;
+  accentColor: string;
+  checked: boolean;
+  onClick: (e) => void;
+}> = ({ text, accentColor, checked, onClick, children }) => {
   return (
     // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label
@@ -11,6 +16,8 @@ export function Checkbox({ text, accentColor, checked, onClick }) {
       {text}
       <input type="checkbox" checked={checked} onChange={onClick} />
       <span className={styles.checkmark} />
+      {children}
     </label>
   );
-}
+};
+export default CheckboxBase;

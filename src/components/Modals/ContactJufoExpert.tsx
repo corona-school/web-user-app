@@ -69,7 +69,7 @@ export const ContactJufoExpert: React.FC = () => {
     }
     setLoading(true);
     api
-      .contactJufoExpert(expert.id, title, body)
+      .contactJufoExpert(expert.id, body, title)
       .then(() => {
         message.success('Nachricht wurde versendet.');
         modalContext.setOpenedModal(null);
@@ -134,6 +134,7 @@ export const ContactJufoExpert: React.FC = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Hier dein Betreff"
+          maxLength={255}
         />
         <Text className={classes.text}>Nachricht</Text>
         <Input.TextArea

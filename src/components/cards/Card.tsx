@@ -5,8 +5,7 @@ const OuterWrapper = styled.div`
   display: flex;
   flex-direction: column;
   background: #ffffff;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
+  box-shadow: 0 0 20px 20px rgba(0, 0, 0, 0.04);
   overflow: hidden;
 `;
 
@@ -25,7 +24,7 @@ const Content = styled.div`
 `;
 
 const CardWrapper: React.FC<{
-  highlightColor?: 'red' | 'yellow' | 'green' | 'blue';
+  highlightColor?: 'red' | 'yellow' | 'green' | 'blue' | 'grey';
   className?: string;
 }> = ({
   children,
@@ -44,6 +43,8 @@ const CardWrapper: React.FC<{
         return theme.color.cardHighlightGreen;
       case 'blue':
         return theme.color.cardHighlightBlue;
+      case 'grey':
+        return theme.color.gray1;
       default:
         return theme.color.cardHighlightRed;
     }

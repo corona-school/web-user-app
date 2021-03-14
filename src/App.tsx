@@ -32,7 +32,6 @@ import ProjectCoach from './routes/ProjectCoach';
 import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
 import { CourseOverview } from './routes/CourseOverview';
 import { Modals } from './Modals';
-import { apiURL } from './api/config';
 import GuestJoinCourseMeeting from './routes/GuestJoinCourseMeeting';
 
 const GlobalStyle = createGlobalStyle`

@@ -95,14 +95,14 @@
 .bottomContainer {
   height: fit-content;
   margin-top: 40px;
-  padding: 0px 32px;
+  padding: 0 32px;
   display: flex;
   flex-direction: column;
   width: 100%;
   background-color: #fffafc;
 
   @media only screen and (max-width: 768px) {
-    padding: 0px;
+    padding: 0;
     h3 {
       margin-left: 32px;
     }
@@ -110,24 +110,12 @@
 
   .bottomGrid {
     padding: 8px 16px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    overflow: scroll;
-
-    @media only screen and (max-width: 1200px) {
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 1fr;
-    }
-    @media only screen and (max-width: 992px) {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-    }
-    @media only screen and (max-width: 768px) {
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr 1fr;
+    display: flex;
+    width: 100%;
+    @media (max-width:960px) {
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      justify-items: center;
-      padding: 8px 0px;
     }
   }
 }

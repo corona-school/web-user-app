@@ -4,13 +4,12 @@ import { Tooltip } from 'antd';
 import { ThemeContext } from 'styled-components';
 import { Text, Title } from '../Typography';
 
-import { LinkButton } from '../button';
-
-import classes from './FeedbackCallCard.module.scss';
+import styles from './FeedbackCallCard.module.scss';
 import { FeedbackCall } from '../../types/FeedbackCall';
 import { ApiContext } from '../../context/ApiContext';
 import { feedbackCallText } from '../../assets/mentoringPageAssets';
 import { LeftHighlightCard } from './FlexibleHighlightCard';
+import AccentColorButton from '../button/AccentColorButton';
 
 const FeedbackCallCard = () => {
   const [feedbackCall, setFeedbackCall] = useState<FeedbackCall>({});
@@ -36,7 +35,9 @@ const FeedbackCallCard = () => {
         }
       })
       .catch((err) =>
-        console.warn(`Error when loading Peer-to-Peer Call data: ${err.message}`)
+        console.warn(
+          `Error when loading Peer-to-Peer Call data: ${err.message}`
+        )
       );
   }, [apiContext]);
 
@@ -50,14 +51,13 @@ const FeedbackCallCard = () => {
       </Text>
       <Text>{feedbackCallText}</Text>
       {linkActive && (
-        <LinkButton
-          className={classes.buttonParticipate}
-          href={feedbackCall.link}
-          target="_blank"
-          style={{ margin: '4px' }}
-        >
-          Teilnehmen
-        </LinkButton>
+        <AccentColorButton
+          onClick={() => window.open(feedbackCall.link, '_blank')}
+          accentColor="#F4486D"
+          label="Teilnehmen"
+          className={styles.buttonParticipate}
+          small
+        />
       )}
       {!linkActive && (
         <Tooltip
@@ -67,13 +67,20 @@ const FeedbackCallCard = () => {
               : 'Aktuell gibt es keinen Link.'
           }
           placement="topRight"
+          // TODO doesn't work
         >
-          <LinkButton
-            className={classes.inactiveButtonParticipate}
-            style={{ margin: '4px' }}
-          >
-            Teilnehmen
-          </LinkButton>
+          <AccentColorButton
+            accentColor="#F4486D"
+            label="Teilnehmen"
+            className={styles.buttonParticipate}
+            disabled
+            title={
+              feedbackCall.link
+                ? 'Der Link wird 30 Minuten vor dem Call freigeschaltet.'
+                : 'Aktuell gibt es keinen Link.'
+            }
+            small
+          />
         </Tooltip>
       )}
     </LeftHighlightCard>

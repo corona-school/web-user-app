@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { AxiosResponse } from 'axios';
 import { AuthContext } from './AuthContext';
 import { User, Subject } from '../types';
 import * as api from '../api/api';
@@ -37,12 +36,20 @@ interface IApiContext {
   putUserActiveFalse: () => Promise<void>;
   createCertificate: (
     cerfiticateData: CertificateData
-  ) => Promise<AxiosResponse<string>>;
+  ) => Promise<{ uuid: string; automatic: boolean }>;
   getCertificate: (
     uuid: IExposedCertificate['uuid'],
     lang: ISupportedLanguage
   ) => Promise<string>;
   getCertificates: () => Promise<IExposedCertificate[]>;
+  signCertificate: (
+    uuid: string,
+    body: {
+      signaturePupil?: string;
+      signatureParent?: string;
+      signatureLocation: string;
+    }
+  ) => Promise<boolean>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourseTags: () => Promise<Tag[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
@@ -172,6 +179,7 @@ export const ApiContext = React.createContext<IApiContext>({
   createCertificate: reject,
   getCertificate: reject,
   getCertificates: reject,
+  signCertificate: reject,
   getCourses: reject,
   getCourseTags: reject,
   getCourse: reject,
@@ -236,6 +244,30 @@ export function useAPIResult<N extends keyof IApiContext>(name: N) {
   return [value, reload] as const;
 }
 
+export function useAPICallable<N extends keyof IApiContext>(name: N) {
+  const [value, setValue] = useState<{
+    pending?: boolean;
+    loading?: boolean;
+    error?: Error;
+    value?: ReturnType<IApiContext[N]> extends Promise<infer T> ? T : never;
+  }>({ pending: true });
+  const api = useAPI(name);
+
+  function doCall(...params: Parameters<IApiContext[N]>) {
+    setValue({ loading: true });
+    // eslint-disable-next-line
+    (api as any)(...params)
+      .then((value) => setValue({ value }))
+      .catch((error) => setValue({ error }));
+  }
+
+  function reset() {
+    setValue({ pending: true });
+  }
+
+  return [value, doCall, reset] as const;
+}
+
 export const ApiProvider: React.FC = ({ children }) => {
   const authContext = useContext(AuthContext);
 
@@ -274,13 +306,7 @@ export const ApiProvider: React.FC = ({ children }) => {
   const putUserActiveFalse = (): Promise<void> =>
     api.axiosPutUserActive(id, token, false);
 
-  const createCertificate = (
-    certificateDate: CertificateData
-  ): Promise<AxiosResponse<string>> =>
-    api.axiosCreateCertificate(id, token, certificateDate);
-
-  const getCourses = (): Promise<CourseOverview[]> =>
-    api.axiosGetCourses(token);
+  const getCourses = (): Promise<CourseOverview[]> => api.axiosGetCourses();
 
   const getCourseTags = (): Promise<Tag[]> => api.axiosGetCourseTags(token);
 
@@ -483,9 +509,10 @@ export const ApiProvider: React.FC = ({ children }) => {
         putUserProjectFields,
         becomeInstructor,
         putUserActiveFalse,
-        createCertificate,
+        createCertificate: withToken(api.axiosCreateCertificate),
         getCertificate: withToken(api.axiosGetCertificate),
         getCertificates: withToken(api.axiosGetCertificates),
+        signCertificate: withToken(api.axiosSignCertificate),
         getCourses,
         getCourseTags,
         getCourse,

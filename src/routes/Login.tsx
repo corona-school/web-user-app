@@ -35,7 +35,8 @@ const Login: React.FC = () => {
   const query = useQuery();
   const token = query.get('token');
 
-  const redirectPath = query.get('path');
+  // through URI encoding, the path can also have query parameters inside
+  const redirectPath = decodeURIComponent(query.get('path') ?? '');
 
   const authContext = useContext(Context.Auth);
   const userContext = useContext(Context.User);

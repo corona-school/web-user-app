@@ -1,0 +1,39 @@
+// For format details, see https://aka.ms/devcontainer.json.
+{
+  "name": "Corona School – Userbereich",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+
+  // Set *default* container specific settings.json values on container create.
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/zsh",
+    "remote.restoreForwardedPorts": false,
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      // For ESLint
+      "source.fixAll.eslint": true,
+      // For TSLint
+      "source.fixAll.tslint": true,
+      // For Stylelint
+      "source.fixAll.stylelint": true
+    },
+    "typescript.preferences.importModuleSpecifier": "relative"
+  },
+
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode"
+  ],
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [3000],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "sudo chown node node_modules && yarn install", //change owner such that the user node can use the mounted volumes
+
+  // Comment out the next line to run as root instead.
+  "remoteUser": "node"
+}
