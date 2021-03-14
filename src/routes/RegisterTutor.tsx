@@ -584,11 +584,15 @@ const RegisterTutor: React.FC<Props> = (props) => {
               <Option value="Russisch">Russisch</Option>
               <Option value="Altgriechisch">Altgriechisch</Option>
               <Option value="Niederländisch">Niederländisch</Option>
+              <Option value="Deutsch als Zweitsprache">
+                Deutsch als Zweitsprache
+              </Option>
               <Option value="Mathematik">Mathematik</Option>
               <Option value="Biologie">Biologie</Option>
               <Option value="Physik">Physik</Option>
               <Option value="Chemie">Chemie</Option>
               <Option value="Informatik">Informatik</Option>
+              <Option value="Sachkunde">Sachkunde</Option>
               <Option value="Geschichte">Geschichte</Option>
               <Option value="Politik">Politik</Option>
               <Option value="Wirtschaft">Wirtschaft</Option>
