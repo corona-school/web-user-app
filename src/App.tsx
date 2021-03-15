@@ -21,9 +21,7 @@ import { ScreeningStatus } from './types';
 import NotFound from './routes/NotFound';
 import PageComponent from './components/PageComponent';
 import Course from './routes/Course';
-import Register from './routes/Register';
 import RegisterTutee from './routes/RegisterTutee';
-import RegisterTutor from './routes/RegisterTutor';
 import { CourseForm } from './routes/CourseForm';
 import CourseDetail from './routes/CourseDetail';
 import PublicCourseDetail from './routes/PublicCourseDetail';
@@ -76,9 +74,6 @@ const App: React.FC = () => {
       </>
     );
   }
-  // jufo cooperation
-  const isJufoSubdomain = subdomain === 'jufo';
-  const isDrehtuerSubdomain = subdomain === 'drehtuer';
 
   return (
     <>
@@ -86,34 +81,13 @@ const App: React.FC = () => {
       <Modals />
       <Switch>
         <Route path="/login">
-          <Login />
+          <Login mode="login" />
         </Route>
         <Route path="/logout">
           <Logout />
         </Route>
-        <Route path="/register/tutee">
-          <RegisterTutee
-            isJufoSubdomain={isJufoSubdomain}
-            isDrehtuerSubdomain={isDrehtuerSubdomain}
-          />
-        </Route>
-        <Route path="/register/internship">
-          <RegisterTutor isInternship />
-        </Route>
-        <Route path="/register/club">
-          <RegisterTutor isClub isJufoSubdomain={isJufoSubdomain} />
-        </Route>
-        <Route path="/register/student">
-          <RegisterTutor isStudent isJufoSubdomain={isJufoSubdomain} />
-        </Route>
-        <Route path="/register/tutor">
-          <RegisterTutor
-            isJufoSubdomain={isJufoSubdomain}
-            isDrehtuerSubdomain={isDrehtuerSubdomain}
-          />
-        </Route>
         <Route path="/register">
-          <Register />
+          <Login mode="register" />
         </Route>
         <Route exact path="/public/courses">
           <PublicCourse />

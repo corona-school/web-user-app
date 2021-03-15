@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
   Form,
   Input,
@@ -11,8 +11,7 @@ import {
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Icons from '../assets/icons';
-import SignupContainer from '../components/container/SignupContainer';
-import { Title, Text, LinkText } from '../components/Typography';
+import { Title, LinkText } from '../components/Typography';
 import Button from '../components/button';
 import { Subject } from '../types';
 import Context from '../context';
@@ -85,7 +84,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [isUniversityStudent, setIsUniversityStudent] = useState(true);
   const [hasJufoCertificate, setHasJufoCertificate] = useState(false);
   const [formState, setFormState] = useState<
-    'start' | 'detail' | 'finnish' | 'done'
+    'start' | 'detail' | 'finish' | 'done'
   >('start');
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
@@ -636,7 +635,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       </>
     );
   };
-  const renderFinnish = () => {
+  const renderFinish = () => {
     return (
       <>
         <NewsletterField
@@ -717,8 +716,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
     if (formState === 'detail') {
       return renderDetail();
     }
-    if (formState === 'finnish') {
-      return renderFinnish();
+    if (formState === 'finish') {
+      return renderFinish();
     }
     if (formState === 'done') {
       return renderDone();
@@ -730,7 +729,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
     if (formState === 'detail') {
       setFormState('start');
     }
-    if (formState === 'finnish') {
+    if (formState === 'finish') {
       setFormState('detail');
     }
 
@@ -828,9 +827,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
               : undefined,
           jufoPastParticipationInfo: formValues.jufoPastParticipationInfo,
         });
-        setFormState('finnish');
+        setFormState('finish');
       }
-      if (formState === 'finnish') {
+      if (formState === 'finish') {
         const data = {
           ...formData,
           newsletter: formValues.newsletter?.includes('newsletter'),
@@ -848,27 +847,16 @@ const RegisterTutor: React.FC<Props> = (props) => {
   }
 
   return (
-    <SignupContainer>
+    <div>
       <div className={classes.signupContainer}>
-        <a
-          rel="noopener noreferrer"
-          href="https://www.corona-school.de/"
-          target="_blank"
-        >
-          <Icons.Logo className={classes.logo} />
-          <Title size="h2" bold>
-            Corona School
-          </Title>
-        </a>
-        {/* <Title>
-          {formState === 'done' ? (
+        <Title className={classes.tutorTitle}>
+          {formState === 'done' && (
             <span>Du wurdest erfolgreich als Tutor*in registriert</span>
-          ) : (
-            <span>
-              Ich möchte mich registrieren als <b>Tutor*in</b>
-            </span>
           )}
-        </Title> */}
+          {formState === 'start' && <span>Schritt 1/3</span>}
+          {formState === 'detail' && <span>Schritt 2/3</span>}
+          {formState === 'finish' && <span>Schritt 3/3</span>}
+        </Title>
       </div>
 
       <Form
@@ -903,20 +891,13 @@ const RegisterTutor: React.FC<Props> = (props) => {
             color="white"
             backgroundColor="#4E6AE6"
           >
-            {formState === 'finnish' && 'Registrieren'}
+            {formState === 'finish' && 'Registrieren'}
             {(formState === 'start' || formState === 'detail') && 'Weiter'}
             {formState === 'done' && 'Anmelden'}
           </Button>
         </div>
       </Form>
-      <Text className={classes.helpText}>
-        Du hast schon ein Account? Hier{' '}
-        <Link style={{ color: '#4e6ae6' }} to="/login">
-          anmelden
-        </Link>
-        .
-      </Text>
-    </SignupContainer>
+    </div>
   );
 };
 
