@@ -1,4 +1,6 @@
 export const languages = [
+  'Deutsch',
+  'Englisch',
   'Albanisch',
   'Arabisch',
   'Armenisch',
@@ -6,8 +8,6 @@ export const languages = [
   'Bosnisch',
   'Bulgarisch',
   'Chinesisch',
-  'Deutsch',
-  'Englisch',
   'Französisch',
   'Italienisch',
   'Kasachisch',

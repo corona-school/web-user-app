@@ -28,6 +28,7 @@ import {
 } from '../components/forms/registration';
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
+import { languages } from '../assets/languages';
 
 const { Option } = Select;
 
@@ -53,6 +54,8 @@ interface FormData {
   hours?: number;
   // isTutor
   subjects?: Subject[];
+  supportsInDaz?: string;
+  languages?: typeof languages[number][];
   // finnish
   msg?: string;
   newsletter?: boolean;
@@ -77,6 +80,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [isTutor, setTutor] = useState(
     props.isStudent || props.isInternship || false
   );
+  const [supportsInDaz, setSupportsInDaz] = useState<boolean>(false);
   const [isGroups, setGroups] = useState(
     props.isInternship || props.isClub || false
   );
@@ -84,6 +88,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [wasJufoParticipant, setWasJufoParticipant] = useState(true);
   const [isUniversityStudent, setIsUniversityStudent] = useState(true);
   const [hasJufoCertificate, setHasJufoCertificate] = useState(false);
+  const [subjects, setSubjects] = useState([]);
+
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'finnish' | 'done'
   >('start');
@@ -574,6 +580,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
                   : undefined
               }
               placeholder="Bitte, wähle deine Fächer aus."
+              onChange={(value) => setSubjects(value)}
             >
               <Option value="Deutsch">Deutsch</Option>
               <Option value="Englisch">Englisch</Option>
@@ -604,7 +611,60 @@ const RegisterTutor: React.FC<Props> = (props) => {
             </Select>
           </Form.Item>
         )}
-
+        {isTutor && (
+          <Form.Item
+            className={classes.formItem}
+            label="Kannst du dir vorstellen Schüler:innen zu unterstützen, die noch über wenige Deutschkenntnisse verfügen?"
+            name="supportsInDaz"
+            rules={[
+              {
+                required: true,
+                message: 'Bitte wähle eine Option aus.',
+              },
+            ]}
+            initialValue={supportsInDaz ? 'yes' : 'no'}
+          >
+            <Radio.Group
+              onChange={(e) => {
+                if (subjects.includes('Deutsch als Zweitsprache')) return;
+                if (e.target.value === 'yes') {
+                  setSubjects([...subjects, 'Deutsch als Zweitsprache']);
+                  form.setFieldsValue({
+                    subjects: [...subjects, 'Deutsch als Zweitsprache'],
+                  });
+                }
+                setSupportsInDaz(e.target.value === 'yes');
+              }}
+            >
+              <Radio.Button value="yes">Ja</Radio.Button>
+              <Radio.Button value="no">Nein</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        )}
+        {isTutor && supportsInDaz && (
+          <Form.Item
+            className={classes.formItem}
+            label="Auf welchen Sprachen kannst du Schüler:innen prinzipiell unterstützen?"
+            name="languages"
+            rules={[
+              {
+                required: true,
+                message:
+                  'Bitte trage die Sprachen ein, auf denen du Unterstützung anbieten kannst.',
+              },
+            ]}
+            initialValue={formData.languages}
+          >
+            <Select
+              mode="multiple"
+              placeholder="Bitte wähle deine Sprachen aus"
+            >
+              {languages.map((l) => (
+                <Option value={l}>{l}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
         {(isUniversityStudent || !isJufo) && (
           <UniversityField
             className={classes.formItem}
@@ -710,6 +770,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
       newsletter: !!data.newsletter,
       msg: data.msg || '',
       state: data.state?.toLowerCase(),
+      supportsInDaz: data.supportsInDaz === 'yes',
+      languages: data.languages,
       redirectTo,
     };
   };
@@ -817,6 +879,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
                 maxGrade: 13,
               }))
             : undefined,
+          supportsInDaz: formValues.supportsInDaz,
+          languages: formValues.languages || [],
           msg: formValues.msg,
           state: formValues.state,
           university: formValues.university,
