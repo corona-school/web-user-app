@@ -35,6 +35,8 @@ import {
 } from '../components/forms/registration';
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
+import { languages } from '../assets/languages';
+import { learningGermanSinceOptions } from '../assets/learningGermanSinceOptions';
 
 const { Option } = Select;
 
@@ -58,6 +60,8 @@ interface FormData {
   msg?: string;
   newsletter?: boolean;
   teacherEmail?: string;
+  languages?: typeof languages[number][];
+  learningGermanSince?: string;
 }
 
 const useQuery = () => {
@@ -82,6 +86,9 @@ const RegisterTutee: React.FC<Props> = ({
   const [isTutee, setTutee] = useState(false);
   const [isGroups, setGroups] = useState(false);
   const [isJufo, setJufo] = useState(isJufoSubdomain ?? false);
+
+  const [isGermanNative, setIsGermanNative] = useState<boolean>(true);
+  const [dazOnly, setDazOnly] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
@@ -123,6 +130,23 @@ const RegisterTutee: React.FC<Props> = ({
         <Icons.Help fill="grey" />
       </Tooltip>
     );
+  };
+
+  const SetDaZStatus = (learningGermanSince) => {
+    form.setFieldsValue({ subjects: ['Deutsch als Zweitsprache'] });
+
+    switch (learningGermanSince) {
+      case 'greaterThanFour':
+      case 'twoToFour':
+        setDazOnly(false);
+        break;
+      case 'oneToTwo':
+      case 'lessThanOne':
+        setDazOnly(true);
+        break;
+      default:
+        break;
+    }
   };
 
   const renderIsTuteeCheckbox = () => {
@@ -440,6 +464,69 @@ const RegisterTutee: React.FC<Props> = ({
         {isTutee && (
           <Form.Item
             className={classes.formItem}
+            label="Welche Sprachen sprichst du fließend?"
+            name="languages"
+            rules={[
+              {
+                required: true,
+                message:
+                  'Bitte trage die Sprachen ein, die du fließend sprichst.',
+              },
+            ]}
+            initialValue={formData.languages}
+          >
+            <Select
+              mode="multiple"
+              placeholder="Bitte wähle deine Sprachen aus"
+              onChange={(value) =>
+                setIsGermanNative(Object.values(value).includes('Deutsch'))
+              }
+            >
+              {languages.map((l) => (
+                <Option value={l}>{l}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
+        {isTutee && !isGermanNative && (
+          <Form.Item
+            className={classes.formItem}
+            label="Seit wann lernst du Deutsch?"
+            name="learningGermanSince"
+            rules={[
+              {
+                required: true,
+                message: 'Bitte gebe an, seit wann du Deutsch lernst.',
+              },
+            ]}
+            initialValue={formData.learningGermanSince}
+          >
+            <Select
+              placeholder="Bitte gebe an, seit wann du Deutsch lernst."
+              onChange={SetDaZStatus}
+            >
+              {Object.entries(learningGermanSinceOptions).map(
+                ([key, value]) => (
+                  <Option value={key}>{value}</Option>
+                )
+              )}
+            </Select>
+          </Form.Item>
+        )}
+        {dazOnly && !isGermanNative && (
+          <Text style={{ paddingLeft: '8px' }}>
+            Es sieht so aus, als ob du noch Unterstützung bei der deutschen
+            Sprache benötigst. Deswegen wirst du von uns mit einem/einer
+            Helfer:in verbunden, der/die dir gezielt dabei hilft, deine
+            Deutschnkentnisse zu verbessern. Aus diesem Grund kannst du zum
+            jetzigen Zeitpunkt nur “Deutsch als Zweitsprache” als Fach
+            auswählen. In anderen Fächern können wir dich leider nicht
+            unterstützen.
+          </Text>
+        )}
+        {isTutee && (
+          <Form.Item
+            className={classes.formItem}
             label="In welchen Fächern benötigst du Unterstützung?"
             name="subjects"
             rules={[
@@ -464,10 +551,13 @@ const RegisterTutee: React.FC<Props> = ({
                 ? formData.subjects.map((s) => s.name)
                 : undefined
             }
+            dependencies={['learningGermanSince']}
+            shouldUpdate
           >
             <Select
               mode="multiple"
               placeholder="Bitte, wähle deine Fächer aus."
+              disabled={dazOnly && !isGermanNative}
             >
               <Option value="Deutsch">Deutsch</Option>
               <Option value="Englisch">Englisch</Option>
@@ -606,12 +696,19 @@ const RegisterTutee: React.FC<Props> = ({
     ) {
       return null;
     }
+
+    const subjects =
+      data.learningGermanSince === learningGermanSinceOptions.lessThanOne ||
+      data.learningGermanSince === learningGermanSinceOptions.oneToTwo
+        ? [{ name: 'Deutsch als Zweitsprache' }]
+        : data.subjects;
+
     return {
       firstname: data.firstname,
       lastname: data.lastname,
       email: data.email.toLowerCase(),
       isTutee: data.isTutee,
-      subjects: data.subjects || [],
+      subjects: subjects || [],
       grade: data.grade,
       school: data.school?.toLowerCase(),
       state: data.state?.toLowerCase(),
@@ -622,6 +719,8 @@ const RegisterTutee: React.FC<Props> = ({
       newsletter: !!data.newsletter,
       msg: data.msg || '',
       teacherEmail: data.teacherEmail,
+      languages: data.languages || [],
+      learningGermanSince: data.learningGermanSince,
       redirectTo,
     };
   };
@@ -708,6 +807,8 @@ const RegisterTutee: React.FC<Props> = ({
           teacherEmail: formValues.teacherEmail,
           isJufoParticipant: formValues.isJufoParticipant,
           projectMemberCount: formValues.projectMemberCount,
+          languages: formValues.languages,
+          learningGermanSince: formValues.learningGermanSince,
         });
         setFormState('finnish');
       }
