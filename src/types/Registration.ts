@@ -55,4 +55,6 @@ export interface Tutor {
   newsletter: boolean;
   redirectTo?: string;
   registrationSource?: string;
+  languages?: string[];
+  supportsInDaz?: boolean;
 }
