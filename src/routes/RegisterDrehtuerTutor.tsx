@@ -47,6 +47,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         isOfficial: false,
         isInstructor: true,
         isProjectCoach: false,
+        languages: [],
         newsletter: false,
         registrationSource: 'DREHTUER',
       };
