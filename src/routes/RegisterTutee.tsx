@@ -10,7 +10,7 @@ import {
   Tooltip,
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import Icons from '../assets/icons';
 import { Title, Text, LinkText } from '../components/Typography';
 import Button from '../components/button';
@@ -36,6 +36,7 @@ import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
 import { languages } from '../assets/languages';
 import { learningGermanSinceOptions } from '../assets/learningGermanSinceOptions';
+import SignupContainer from '../components/container/SignupContainer';
 
 const { Option } = Select;
 
@@ -833,56 +834,139 @@ const RegisterTutee: React.FC<Props> = ({
 
   return (
     <div>
-      <div className={classes.signupContainer}>
-        <Title className={classes.tuteeTitle}>
-          {formState === 'done' && (
-            <span>Du wurdest erfolgreich als Schüler*in registriert</span>
-          )}
-          {formState === 'start' && <span>Schritt 1/3</span>}
-          {formState === 'detail' && <span>Schritt 2/3</span>}
-          {formState === 'finish' && <span>Schritt 3/3</span>}
-        </Title>
-      </div>
-
-      <Form
-        form={form}
-        className={classes.formContainer}
-        layout="vertical"
-        name="basic"
-        initialValues={{ remember: true }}
-      >
-        {!loading ? (
-          renderFormItems()
-        ) : (
-          <div className={classes.loadingContainer}>
-            <ClipLoader size={100} color="#123abc" loading />
+      {!cooperationMode && (
+        <>
+          <div className={classes.signupContainer}>
+            <Title className={classes.tuteeTitle}>
+              {formState === 'done' && (
+                <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+              )}
+              {formState === 'start' && <span>Schritt 1/3</span>}
+              {formState === 'detail' && <span>Schritt 2/3</span>}
+              {formState === 'finish' && <span>Schritt 3/3</span>}
+            </Title>
           </div>
-        )}
 
-        <div className={classes.buttonContainer}>
-          {formState !== 'start' && (
-            <Button
-              onClick={back}
-              className={classes.backButton}
-              color="#4E6AE6"
-              backgroundColor="white"
-            >
-              Zurück
-            </Button>
-          )}
-          <Button
-            onClick={nextStep}
-            className={classes.signupButton}
-            color="white"
-            backgroundColor="#4E6AE6"
+          <Form
+            form={form}
+            className={classes.formContainer}
+            layout="vertical"
+            name="basic"
+            initialValues={{ remember: true }}
           >
-            {formState === 'finish' && 'Registrieren'}
-            {formState === 'start' && 'Weiter'}
-            {formState === 'detail' && 'Weiter'}
-            {formState === 'done' && 'Anmelden'}
-          </Button>
-        </div>
-      </Form>
+            {!loading ? (
+              renderFormItems()
+            ) : (
+              <div className={classes.loadingContainer}>
+                <ClipLoader size={100} color="#123abc" loading />
+              </div>
+            )}
+
+            <div className={classes.buttonContainer}>
+              {formState !== 'start' && (
+                <Button
+                  onClick={back}
+                  className={classes.backButton}
+                  color="#4E6AE6"
+                  backgroundColor="white"
+                >
+                  Zurück
+                </Button>
+              )}
+              <Button
+                onClick={nextStep}
+                className={classes.signupButton}
+                color="white"
+                backgroundColor="#4E6AE6"
+              >
+                {formState === 'finish' && 'Registrieren'}
+                {formState === 'start' && 'Weiter'}
+                {formState === 'detail' && 'Weiter'}
+                {formState === 'done' && 'Anmelden'}
+              </Button>
+            </div>
+          </Form>
+        </>
+      )}
+      {!!cooperationMode && (
+        <>
+          <SignupContainer shouldShowBackButton={!cooperationMode}>
+            <div className={classes.signupContainer}>
+              <a
+                rel="noopener noreferrer"
+                href="https://www.corona-school.de/"
+                target="_blank"
+              >
+                <Icons.Logo className={classes.logo} />
+                {cooperationMode?.kind === 'SpecificStateCooperation' &&
+                  cooperationMode.stateInfo.coatOfArms &&
+                  React.createElement(cooperationMode.stateInfo.coatOfArms, {
+                    className: classes.stateLogo,
+                  })}
+                <Title size="h2" bold>
+                  Corona School
+                </Title>
+              </a>
+              <Title className={classes.tuteeTitle}>
+                {formState === 'done' ? (
+                  <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+                ) : (
+                  <span>
+                    Ich möchte mich registrieren als <b>Schüler*in</b>
+                  </span>
+                )}
+              </Title>
+            </div>
+
+            <Form
+              form={form}
+              className={classes.formContainer}
+              layout="vertical"
+              name="basic"
+              initialValues={{ remember: true }}
+            >
+              {!loading ? (
+                renderFormItems()
+              ) : (
+                <div className={classes.loadingContainer}>
+                  <ClipLoader size={100} color="#123abc" loading />
+                </div>
+              )}
+
+              <div className={classes.buttonContainer}>
+                {formState !== 'start' && (
+                  <Button
+                    onClick={back}
+                    className={classes.backButton}
+                    color="#4E6AE6"
+                    backgroundColor="white"
+                  >
+                    Zurück
+                  </Button>
+                )}
+                <Button
+                  onClick={nextStep}
+                  className={classes.signupButton}
+                  color="white"
+                  backgroundColor="#4E6AE6"
+                >
+                  {formState === 'finish' && 'Registrieren'}
+                  {formState === 'start' && 'Weiter'}
+                  {formState === 'detail' && 'Weiter'}
+                  {formState === 'done' && 'Anmelden'}
+                </Button>
+              </div>
+            </Form>
+            <Text className={classes.helpText}>
+              Du hast schon ein Account? Hier{' '}
+              <Link style={{ color: '#4e6ae6' }} to="/login">
+                anmelden
+              </Link>
+              .
+            </Text>
+          </SignupContainer>
+        </>
+      )}
     </div>
   );
 };
