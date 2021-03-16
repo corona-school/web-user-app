@@ -12,14 +12,19 @@ import Images from '../../assets/images';
 interface Props {
   course: ParsedCourseOverview;
   customCourseLink?: string;
+  currentAnchor: string;
 }
 
-const CourseCard: React.FC<Props> = ({ course, customCourseLink }) => {
+const CourseCard: React.FC<Props> = ({
+  course,
+  customCourseLink,
+  currentAnchor,
+}) => {
   return (
     <div className={classes.marginContainer}>
       <Link
         className={classes.baseContainer}
-        to={customCourseLink ?? `/courses/${course.id}`}
+        to={customCourseLink ?? `/courses/${course.id}#${currentAnchor}`}
       >
         <div className={classes.coverImageContainer}>
           <img

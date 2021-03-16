@@ -633,7 +633,7 @@ const CourseDetail = (params: {
           <button
             className={classes.backButton}
             onClick={() => {
-              history.push('/courses');
+              history.push(`/courses${history.location.hash}`);
             }}
           >
             <Icons.ChevronLeft />

@@ -46,11 +46,12 @@ export const CourseList: React.FC<Props> = (props) => {
         </div>
       </div>
       <div className={classes.courseContainer} ref={courseContainer}>
-        {props.courses.map((course) => (
+        {props.courses.map((course, index) => (
           <CourseCard
             course={course}
             key={course.id}
             customCourseLink={props.customCourseLink?.(course)}
+            currentAnchor={`${props.name}:${index}`}
           />
         ))}
       </div>
