@@ -1,26 +1,20 @@
 import React, { useState } from 'react';
-import { Dropdown, Button as AntdButton, Menu, Row, Col } from 'antd';
-import {
-  SortAscendingOutlined,
-  SortDescendingOutlined,
-} from '@ant-design/icons';
+import { Button as AntdButton } from 'antd';
 import Icons from '../../assets/icons';
 import classes from './SortParticipant.module.scss';
+import { CourseParticipant } from '../../types/Course';
 
 interface SortParticipantProps {
-  setParticipantList: (val: object[]) => void;
-  getParticipantList: object[];
+  setParticipantList: (val: CourseParticipant[]) => void;
+  getParticipantList: CourseParticipant[];
 }
 
 const SortParticipant: React.FC<SortParticipantProps> = React.memo(
   ({ setParticipantList, getParticipantList }) => {
     const [orderBool, setOrderBool] = useState(true);
-    const [icon, setIcon] = useState(<SortAscendingOutlined />);
-
     const compareValues = (key, order = 'asc') =>
       function innerSort(a, b) {
-        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-          // property doesn't exist on either object
+        if (!a[key] || !b[key]) {
           return 0;
         }
 
@@ -37,35 +31,12 @@ const SortParticipant: React.FC<SortParticipantProps> = React.memo(
 
     const sort = (key) => {
       setOrderBool(!orderBool);
-      let sortParticipants = [...getParticipantList];
+      const sortParticipants = [...getParticipantList];
       sortParticipants.sort(compareValues(key, orderBool ? 'asc' : 'desc'));
       setParticipantList(sortParticipants);
     };
 
-    const menu = (
-      <Menu>
-        <Menu.Item>
-          <a target="_blank" onClick={() => sort('firstname')}>
-            Vorname
-          </a>
-        </Menu.Item>
-        <Menu.Item>
-          <a target="_blank" onClick={() => sort('lastname')}>
-            Nachname
-          </a>
-        </Menu.Item>
-        <Menu.Item>
-          <a target="_blank" onClick={() => sort('grade')}>
-            Note
-          </a>
-        </Menu.Item>
-      </Menu>
-    );
-
     return (
-      //   <Dropdown overlay={menu} placement="bottomLeft" arrow>
-      //   <Button style={{width: '100%'}}>Teilnehmer sortieren <SortAscendingOutlined /></Button>
-      // </Dropdown>
       <>
         <div className={classes.sortParticipant}>
           <ul>

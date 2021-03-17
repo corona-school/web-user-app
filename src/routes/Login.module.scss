@@ -2,8 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: fit-content;
-
+  justify-content: center;
+  margin-bottom: 40px;
+  width: 100%;
+  padding: 0 15px;
+  max-width: 600px;
   > a {
     display: flex;
     flex-direction: column;
@@ -74,17 +77,19 @@
 }
 
 .helpText {
+  margin-top: 40px;
   text-align: center;
   max-width: 400px;
   color: #6c6c6c !important;
-  margin: 4px 4px !important;
   a {
     color: #4e6ae6 !important;
   }
 }
 
 .loginTitle {
-  color: #6c6c6c !important;
+  color: #0366e0 !important;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .textError {
@@ -99,11 +104,6 @@
   align-items: center;
   text-align: center;
 
-  svg {
-    margin: 32px;
-    height: 120px;
-    width: 120px;
-  }
 }
 
 .successButton {
@@ -113,21 +113,122 @@
 
 .loginButtonContainer {
   display: flex;
-
-  .signinButton {
-    height: 42px;
-    font-size: 16px;
-    font-weight: 300;
-    width: 160px;
-    margin: 16px 8px 16px 16px;
+  margin-bottom: 40px;
+  >button {
+    margin-right: 20px;
   }
+}
 
-  .registerButton {
-    height: 42px;
-    font-size: 16px;
-    font-weight: 300;
-    width: 160px;
-    margin: 16px 16px 16px 8px;
-    border: 1px solid #4e6ae6;
+.formHeader {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .formHeaderButton {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+
+    >p {
+      margin: 0;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    transition: 0.1s background-color ease-in-out, 0.2s color ease-in-out, 0.2s border-color ease-in-out;
+    &:hover {
+      background-color: #ececec;
+    }
+    &.activePage {
+      color: #0366e0;
+      border-bottom: 3px solid #0366e0;
+    }
+    &:not(.activePage) {
+      color: #4c4c4c;
+      border-bottom: 3px solid #c4c4c4;
+    }
   }
+}
+
+.form {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  justify-content: center;
+}
+
+.submitButton {
+  margin-top: 20px;
+}
+
+.buttonBox {
+  display: flex;
+  justify-content: center;
+
+}
+
+.registerAs {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  > button {
+    &:first-child {
+      margin-right: 20px;
+    }
+  }
+}
+
+.formLabel {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.registerAsLabel {
+  text-align: center;
+  width: 100%;
+}
+.spacer {
+  height: 20px;
+}
+
+.formError {
+  font-weight: 500;
+  color: #ef2020;
+}
+
+.backButtonBox {
+  margin-bottom: 10px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.innerForm {
+  overflow-y: auto;
+}
+
+.horizontalAlign {
+  display: flex;
+  >div {
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+.tuteeNote {
+  padding: 20px;
+  background-color: #ffe294;
+  border-radius: 5px;
+
+}
+
+
+.paperPlane {
+  fill: #0366e0;
+  width: 50px;
+  height: 50px;
+  margin: 40px 0;
 }

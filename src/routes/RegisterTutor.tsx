@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
   Form,
   Input,
@@ -11,8 +11,7 @@ import {
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Icons from '../assets/icons';
-import SignupContainer from '../components/container/SignupContainer';
-import { Title, Text, LinkText } from '../components/Typography';
+import { Title, LinkText } from '../components/Typography';
 import Button from '../components/button';
 import { Subject } from '../types';
 import Context from '../context';
@@ -28,6 +27,7 @@ import {
 } from '../components/forms/registration';
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
+import { languages } from '../assets/languages';
 
 const { Option } = Select;
 
@@ -53,6 +53,8 @@ interface FormData {
   hours?: number;
   // isTutor
   subjects?: Subject[];
+  supportsInDaz?: string;
+  languages?: typeof languages[number][];
   // finnish
   msg?: string;
   newsletter?: boolean;
@@ -77,6 +79,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [isTutor, setTutor] = useState(
     props.isStudent || props.isInternship || false
   );
+  const [supportsInDaz, setSupportsInDaz] = useState<boolean>(false);
   const [isGroups, setGroups] = useState(
     props.isInternship || props.isClub || false
   );
@@ -84,8 +87,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [wasJufoParticipant, setWasJufoParticipant] = useState(true);
   const [isUniversityStudent, setIsUniversityStudent] = useState(true);
   const [hasJufoCertificate, setHasJufoCertificate] = useState(false);
+  const [subjects, setSubjects] = useState([]);
+
   const [formState, setFormState] = useState<
-    'start' | 'detail' | 'finnish' | 'done'
+    'start' | 'detail' | 'finish' | 'done'
   >('start');
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
@@ -574,6 +579,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
                   : undefined
               }
               placeholder="Bitte, wähle deine Fächer aus."
+              onChange={(value) => setSubjects(value)}
             >
               <Option value="Deutsch">Deutsch</Option>
               <Option value="Englisch">Englisch</Option>
@@ -584,11 +590,15 @@ const RegisterTutor: React.FC<Props> = (props) => {
               <Option value="Russisch">Russisch</Option>
               <Option value="Altgriechisch">Altgriechisch</Option>
               <Option value="Niederländisch">Niederländisch</Option>
+              <Option value="Deutsch als Zweitsprache">
+                Deutsch als Zweitsprache
+              </Option>
               <Option value="Mathematik">Mathematik</Option>
               <Option value="Biologie">Biologie</Option>
               <Option value="Physik">Physik</Option>
               <Option value="Chemie">Chemie</Option>
               <Option value="Informatik">Informatik</Option>
+              <Option value="Sachkunde">Sachkunde</Option>
               <Option value="Geschichte">Geschichte</Option>
               <Option value="Politik">Politik</Option>
               <Option value="Wirtschaft">Wirtschaft</Option>
@@ -600,7 +610,60 @@ const RegisterTutor: React.FC<Props> = (props) => {
             </Select>
           </Form.Item>
         )}
-
+        {isTutor && (
+          <Form.Item
+            className={classes.formItem}
+            label="Kannst du dir vorstellen Schüler:innen zu unterstützen, die noch über wenige Deutschkenntnisse verfügen?"
+            name="supportsInDaz"
+            rules={[
+              {
+                required: true,
+                message: 'Bitte wähle eine Option aus.',
+              },
+            ]}
+            initialValue={supportsInDaz ? 'yes' : 'no'}
+          >
+            <Radio.Group
+              onChange={(e) => {
+                if (subjects.includes('Deutsch als Zweitsprache')) return;
+                if (e.target.value === 'yes') {
+                  setSubjects([...subjects, 'Deutsch als Zweitsprache']);
+                  form.setFieldsValue({
+                    subjects: [...subjects, 'Deutsch als Zweitsprache'],
+                  });
+                }
+                setSupportsInDaz(e.target.value === 'yes');
+              }}
+            >
+              <Radio.Button value="yes">Ja</Radio.Button>
+              <Radio.Button value="no">Nein</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        )}
+        {isTutor && supportsInDaz && (
+          <Form.Item
+            className={classes.formItem}
+            label="Auf welchen Sprachen kannst du Schüler:innen prinzipiell unterstützen?"
+            name="languages"
+            rules={[
+              {
+                required: true,
+                message:
+                  'Bitte trage die Sprachen ein, auf denen du Unterstützung anbieten kannst.',
+              },
+            ]}
+            initialValue={formData.languages}
+          >
+            <Select
+              mode="multiple"
+              placeholder="Bitte wähle deine Sprachen aus"
+            >
+              {languages.map((l) => (
+                <Option value={l}>{l}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
         {(isUniversityStudent || !isJufo) && (
           <UniversityField
             className={classes.formItem}
@@ -636,7 +699,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       </>
     );
   };
-  const renderFinnish = () => {
+  const renderFinish = () => {
     return (
       <>
         <NewsletterField
@@ -706,6 +769,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
       newsletter: !!data.newsletter,
       msg: data.msg || '',
       state: data.state?.toLowerCase(),
+      supportsInDaz: data.supportsInDaz === 'yes',
+      languages: data.languages,
       redirectTo,
     };
   };
@@ -717,8 +782,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
     if (formState === 'detail') {
       return renderDetail();
     }
-    if (formState === 'finnish') {
-      return renderFinnish();
+    if (formState === 'finish') {
+      return renderFinish();
     }
     if (formState === 'done') {
       return renderDone();
@@ -730,7 +795,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
     if (formState === 'detail') {
       setFormState('start');
     }
-    if (formState === 'finnish') {
+    if (formState === 'finish') {
       setFormState('detail');
     }
 
@@ -813,6 +878,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
                 maxGrade: 13,
               }))
             : undefined,
+          supportsInDaz: formValues.supportsInDaz,
+          languages: formValues.languages || [],
           msg: formValues.msg,
           state: formValues.state,
           university: formValues.university,
@@ -828,9 +895,9 @@ const RegisterTutor: React.FC<Props> = (props) => {
               : undefined,
           jufoPastParticipationInfo: formValues.jufoPastParticipationInfo,
         });
-        setFormState('finnish');
+        setFormState('finish');
       }
-      if (formState === 'finnish') {
+      if (formState === 'finish') {
         const data = {
           ...formData,
           newsletter: formValues.newsletter?.includes('newsletter'),
@@ -848,27 +915,16 @@ const RegisterTutor: React.FC<Props> = (props) => {
   }
 
   return (
-    <SignupContainer>
+    <div>
       <div className={classes.signupContainer}>
-        <a
-          rel="noopener noreferrer"
-          href="https://www.corona-school.de/"
-          target="_blank"
-        >
-          <Icons.Logo className={classes.logo} />
-          <Title size="h2" bold>
-            Corona School
-          </Title>
-        </a>
-        {/* <Title>
-          {formState === 'done' ? (
+        <Title className={classes.tutorTitle}>
+          {formState === 'done' && (
             <span>Du wurdest erfolgreich als Tutor*in registriert</span>
-          ) : (
-            <span>
-              Ich möchte mich registrieren als <b>Tutor*in</b>
-            </span>
           )}
-        </Title> */}
+          {formState === 'start' && <span>Schritt 1/3</span>}
+          {formState === 'detail' && <span>Schritt 2/3</span>}
+          {formState === 'finish' && <span>Schritt 3/3</span>}
+        </Title>
       </div>
 
       <Form
@@ -903,20 +959,13 @@ const RegisterTutor: React.FC<Props> = (props) => {
             color="white"
             backgroundColor="#4E6AE6"
           >
-            {formState === 'finnish' && 'Registrieren'}
+            {formState === 'finish' && 'Registrieren'}
             {(formState === 'start' || formState === 'detail') && 'Weiter'}
             {formState === 'done' && 'Anmelden'}
           </Button>
         </div>
       </Form>
-      <Text className={classes.helpText}>
-        Du hast schon ein Account? Hier{' '}
-        <Link style={{ color: '#4e6ae6' }} to="/login">
-          anmelden
-        </Link>
-        .
-      </Text>
-    </SignupContainer>
+    </div>
   );
 };
 

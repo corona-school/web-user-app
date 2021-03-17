@@ -12,6 +12,7 @@ const AccentColorButton: React.FC<{
   small?: boolean;
   className?: string;
   title?: string;
+  noBg?: boolean;
 }> = ({
   label,
   onClick,
@@ -22,6 +23,7 @@ const AccentColorButton: React.FC<{
   small,
   className,
   title,
+  noBg,
 }) => {
   return (
     <button
@@ -33,10 +35,10 @@ const AccentColorButton: React.FC<{
         (label == null ? ` ${styles.onlyIcon}` : '')
       }
       style={{
-        backgroundColor: hexToRGB(
-          disabled || false ? '#000000' : accentColor,
-          0.18
-        ),
+        backgroundColor:
+          noBg || false
+            ? 'transparent'
+            : hexToRGB(disabled || false ? '#000000' : accentColor, 0.18),
         color: disabled || false ? '#000000' : accentColor,
       }}
       disabled={disabled || false}

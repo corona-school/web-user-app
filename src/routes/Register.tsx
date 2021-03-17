@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import SignupContainer from '../components/container/SignupContainer';
-import { Title, Text } from '../components/Typography';
+import { Title } from '../components/Typography';
 import Icons from '../assets/icons';
 
 import classes from './Register.module.scss';
@@ -15,19 +14,9 @@ const Register = () => {
   const redirectTo = params.get('redirectTo');
 
   return (
-    <SignupContainer>
+    <div>
       <div className={classes.signupContainer}>
-        <a
-          rel="noopener noreferrer"
-          href="https://www.corona-school.de/"
-          target="_blank"
-        >
-          <Icons.Logo className={classes.logo} />
-          <Title size="h2" bold>
-            Corona School
-          </Title>
-        </a>
-        <Title>Ich möchte mich registrieren als...</Title>
+        <Title>Registrieren als...</Title>
       </div>
 
       <div className={classes.userTypeContainer}>
@@ -50,11 +39,7 @@ const Register = () => {
           </Title>
         </Link>
       </div>
-
-      <Text className={classes.helpText}>
-        Du hast schon ein Account? Hier <Link to="/login">anmelden</Link>.
-      </Text>
-    </SignupContainer>
+    </div>
   );
 };
 
