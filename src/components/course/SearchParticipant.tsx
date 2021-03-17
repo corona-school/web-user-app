@@ -20,7 +20,7 @@ const SearchParticipant: React.FC<SearchParticipantProps> = React.memo(
           <Form.Item label="Suche:">
             <Input
               size="middle"
-              placeholder="Vorname, Nachname, Note"
+              placeholder="Vorname, Nachname, Klasse"
               prefix={<SearchOutlined />}
               defaultValue={enteredFilter}
               onChange={(event) => inputHandler(event)}

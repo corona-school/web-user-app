@@ -18,11 +18,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
-.gitignore
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-yarn.lock
 # macos
 *.icloud

@@ -138,21 +138,24 @@ const CourseDetail = (params: {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!loading && course) {
-        const loadedParticipantList = [...course.subcourse.participantList];
-        const filteredParticipants = loadedParticipantList.filter((data) => {
-          if (enteredFilter.length === 0) return data;
-          if (
-            data.firstname
-              .toUpperCase()
-              .includes(enteredFilter.toUpperCase()) ||
-            data.lastname.toUpperCase().includes(enteredFilter.toUpperCase()) ||
-            data.email.toUpperCase().includes(enteredFilter.toUpperCase()) ||
-            data.grade.toFixed().includes(enteredFilter)
-          ) {
-            return data;
+        const filteredParticipants = course.subcourse.participantList.filter(
+          (data) => {
+            if (enteredFilter.length === 0) return data;
+            if (
+              data.firstname
+                .toUpperCase()
+                .includes(enteredFilter.toUpperCase()) ||
+              data.lastname
+                .toUpperCase()
+                .includes(enteredFilter.toUpperCase()) ||
+              data.email.toUpperCase().includes(enteredFilter.toUpperCase()) ||
+              data.grade.toFixed().includes(enteredFilter)
+            ) {
+              return data;
+            }
+            return null;
           }
-          return null;
-        });
+        );
         setParticipantList(filteredParticipants);
       }
     }, 500);

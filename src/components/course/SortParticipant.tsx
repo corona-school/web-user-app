@@ -69,7 +69,7 @@ const SortParticipant: React.FC<SortParticipantProps> = React.memo(
             </li>
             <li>
               <AntdButton onClick={() => sort('grade')}>
-                Note
+                Klasse
                 <Icons.SortSolid
                   style={{ marginLeft: '5px', height: '12px' }}
                 />
