@@ -550,7 +550,12 @@ const CourseDetail = (params: {
       <div>
         <div>
           <Row gutter={16}>
-            <Col md={{ span: 12, offset: 12 }} sm={24} xs={24}>
+            <Col
+              xxl={{ span: 12, offset: 12 }}
+              md={{ span: 18, offset: 6 }}
+              sm={24}
+              xs={24}
+            >
               <SearchParticipant
                 inputValue={(value) => setEnteredFilter(value)}
               />
@@ -678,13 +683,13 @@ const CourseDetail = (params: {
       <div className={classes.statusContainer}>
         <div className={classes.headerContainer}>
           <Row>
-            <Col xxl={20} md={19} sm={24}>
+            <Col xxl={20} lg={18} md={17} sm={24}>
               <Title size="h1" style={{ marginBottom: '0px' }}>
                 {course.name}
               </Title>
               <Title size="h5">{course.outline}</Title>
             </Col>
-            <Col xxl={4} md={5} sm={24}>
+            <Col xxl={4} lg={6} md={7} sm={24}>
               <div className={classes.actionContainer}>
                 <Row gutter={[6, 6]}>
                   {isMyCourse && (
@@ -852,11 +857,11 @@ const CourseDetail = (params: {
           </Row>
         </div>
         <Row>
-          <Col md={18} sm={24}>
+          <Col xxl={20} xl={22} lg={24}>
             <Row>
               <Col>
                 <Descriptions
-                  column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+                  column={{ xxl: 3, xl: 2, lg: 2, md: 2, sm: 1, xs: 1 }}
                   size="small"
                   style={{
                     margin: '10px',
