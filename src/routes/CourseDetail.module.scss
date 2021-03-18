@@ -10,6 +10,29 @@
 }
 
 .headerContainer {
+  h1,
+  h5 {
+    line-height: 1.2;
+  }
+
+  @media only screen and (max-width: 1440px) {
+    h1 {
+      font-size: 32px;
+    }
+  }
+
+  @media only screen and (max-width: 1024px) {
+    h1 {
+      font-size: 30px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    h1 {
+      font-size: 28px;
+    }
+  }
+
   @media only screen and (max-width: 600px) {
     h1 {
       font-size: 24px;
