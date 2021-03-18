@@ -506,7 +506,7 @@ const CourseDetail = (params: {
       .sort((a, b) => a.start - b.start)
       .map((l, i) => {
         return (
-          <div className={classes.newsContent} key={l.id}>
+          <Col lg={24} md={12} sm={24} key={l.id}>
             <div className={classes.newsHeadline}>
               <Tag>{moment.unix(l.start).format('DD.MM')}</Tag>
               <Tag>
@@ -533,7 +533,7 @@ const CourseDetail = (params: {
               <br />
               Tutor: {l.instructor.firstname} {l.instructor.lastname}
             </Text>
-          </div>
+          </Col>
         );
       });
   };
@@ -548,14 +548,7 @@ const CourseDetail = (params: {
 
     return (
       <div>
-        <div
-          style={
-            {
-              // maxWidth: '800px',
-              //  marginTop: '10px'
-            }
-          }
-        >
+        <div>
           <Row gutter={16}>
             <Col md={{ span: 12, offset: 12 }} sm={24} xs={24}>
               <SearchParticipant
@@ -748,7 +741,6 @@ const CourseDetail = (params: {
                               ? 'white'
                               : '#373E47',
                           width: '100%',
-                          // margin: '0px 10px',
                           height: 'auto',
                           overflow: 'hidden',
                           whiteSpace: 'normal',
@@ -771,7 +763,6 @@ const CourseDetail = (params: {
                               borderColor: '#FCD95C',
                               color: '#373E47',
                               width: '100%',
-                              // margin: '5px 10px',
                             }}
                             onClick={joinBBBmeeting}
                             disabled={!shouldEnableVideoChat()}
@@ -800,7 +791,6 @@ const CourseDetail = (params: {
                                 borderColor: '#FCD95C',
                                 color: '#373E47',
                                 width: '100%',
-                                // margin: '5px 10px',
                               }}
                               onClick={joinTestMeeting}
                             >
@@ -820,7 +810,6 @@ const CourseDetail = (params: {
                             borderColor: '#FCD95C',
                             color: '#373E47',
                             width: '100%',
-                            // margin: '5px 10px',
                           }}
                           onClick={openWriteMessageModal}
                           icon={<MailOutlined />}
@@ -847,7 +836,6 @@ const CourseDetail = (params: {
                             borderColor: '#FCD95C',
                             color: '#373E47',
                             width: '100%',
-                            // margin: '5px 10px',
                           }}
                           onClick={shareCourse}
                           icon={<ShareAltOutlined />}
@@ -872,7 +860,6 @@ const CourseDetail = (params: {
                   size="small"
                   style={{
                     margin: '10px',
-                    // maxWidth: '720px'
                   }}
                   labelStyle={{ color: '#5a5a5a', fontWeight: 'bold' }}
                 >
@@ -942,17 +929,7 @@ const CourseDetail = (params: {
 
             <Row>
               <Col>
-                <Descriptions
-                  size="small"
-                  layout="vertical"
-                  column={1}
-                  style={
-                    {
-                      // margin: '10px',
-                      // maxWidth: '700px'
-                    }
-                  }
-                >
+                <Descriptions size="small" layout="vertical" column={1}>
                   <Descriptions.Item label="Beschreibung">
                     <Text large>
                       <i style={{ whiteSpace: 'pre-wrap' }}>
@@ -995,7 +972,9 @@ const CourseDetail = (params: {
             </Title>
 
             <div className={classes.newsContentContainer}>
-              {renderLectures()}
+              <div className={classes.newsContent}>
+                <Row gutter={[14, 14]}>{renderLectures()}</Row>
+              </div>
             </div>
           </div>
         </div>

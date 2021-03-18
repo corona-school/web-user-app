@@ -74,14 +74,14 @@ const SortParticipant: React.FC<SortParticipantProps> = React.memo(
                   style={{ marginLeft: '5px', height: '12px' }}
                 />
               </AntdButton>
-              <li>
-                <AntdButton onClick={() => sort('schooltype')}>
-                  Schultyp
-                  <Icons.SortSolid
-                    style={{ marginLeft: '5px', height: '12px' }}
-                  />
-                </AntdButton>
-              </li>
+            </li>
+            <li>
+              <AntdButton onClick={() => sort('schooltype')}>
+                Schultyp
+                <Icons.SortSolid
+                  style={{ marginLeft: '5px', height: '12px' }}
+                />
+              </AntdButton>
             </li>
           </ul>
         </div>
