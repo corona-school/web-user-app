@@ -104,7 +104,7 @@ const SignPage: React.FC<SignPageProps> = ({
   React.useEffect(() => {
     window.addEventListener('resize', updateSigned);
     return () => window.removeEventListener('resize', updateSigned);
-  }, []);
+  }, [updateSigned]);
 
   return (
     <div className={classes.signPage}>
