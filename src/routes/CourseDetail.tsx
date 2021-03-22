@@ -572,7 +572,7 @@ const CourseDetail = (params: {
         </div>
         <List
           className={classes.participantList}
-          itemLayout="horizontal"
+          // itemLayout="horizontal"
           dataSource={participantList}
           renderItem={(item) => (
             <List.Item
