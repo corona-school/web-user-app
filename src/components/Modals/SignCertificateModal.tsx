@@ -262,6 +262,7 @@ const SignCertificateModal: React.FC<Props> = ({
               <Button
                 backgroundColor="#F4F6FF"
                 color="#4E6AE6"
+                disabled={!signatureLocation}
                 onClick={() => setCurrentStep('sign')}
               >
                 Weiter
