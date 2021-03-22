@@ -94,6 +94,18 @@ const SignPage: React.FC<SignPageProps> = ({
   setIsSigned,
   isMinor,
 }) => {
+  const updateSigned = React.useCallback(
+    () => setIsSigned(!signCanvas.current.isEmpty()),
+    [setIsSigned, signCanvas]
+  );
+  // NOTE: Resizing the canvas causes it to be cleared.
+  // This is still the better option than https://github.com/agilgur5/react-signature-canvas/issues/57
+  // We need our own hook to detect when the canvas gets cleared, as the library does not provide one:
+  React.useEffect(() => {
+    window.addEventListener('resize', updateSigned);
+    return () => window.removeEventListener('resize', updateSigned);
+  }, []);
+
   return (
     <div className={classes.signPage}>
       <div>Unterschrift {isMinor ? 'Erziehungsberechtigter' : 'Schüler'}</div>
@@ -102,7 +114,7 @@ const SignPage: React.FC<SignPageProps> = ({
           // eslint-disable-next-line
           signCanvas.current = ref;
         }}
-        onEnd={() => setIsSigned(!signCanvas.current.isEmpty())}
+        onEnd={updateSigned}
       />
       <Input
         value={signatureLocation}
@@ -126,10 +138,14 @@ const SignCertificateModal: React.FC<Props> = ({
   // eslint-disable-next-line
   const signCanvas = useRef<any>(); // https://www.npmjs.com/package/react-signature-canvas
   const [signatureLocation, setSignatureLocation] = useState('');
+  // NOTE: In some obscure cases (e.g. scaling the canvas) the canvas gets emptied and this state is invalid
+  //       Always additionally check signCanvas.current.isEmpty()
   const [isSigned, setIsSigned] = useState(false);
   const [isMinor, setIsMinor] = useState(true);
 
   function prepareSignature() {
+    if (!isSigned || signCanvas.current.isEmpty()) return;
+
     const signatureBase64 = signCanvas.current.toDataURL('image/png', 1.0);
 
     const signature = {
