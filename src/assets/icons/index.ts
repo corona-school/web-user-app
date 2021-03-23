@@ -59,6 +59,7 @@ import { ReactComponent as School } from './school.svg';
 import { ReactComponent as ChevronLeft } from './chevron-left.svg';
 import { ReactComponent as ChevronRight } from './chevron-right.svg';
 import { ReactComponent as Search } from './search.svg';
+import { ReactComponent as SortSolid } from './sort-solid.svg';
 
 const IconsList = {
   Edit,
@@ -118,6 +119,7 @@ const IconsList = {
   EmailFilled,
   BookmarkFilled,
   BookmarkSlashFilled,
+  SortSolid
 };
 
 const Icons: {

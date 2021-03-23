@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Dropdown, Button, Menu } from 'antd';
-import { SortAscendingOutlined } from '@ant-design/icons';
+import { Button as AntdButton } from 'antd';
+import Icons from '../../assets/icons';
+import classes from './SortParticipant.module.scss';
 import { CourseParticipant } from '../../types/Course';
 
 interface SortParticipantProps {
@@ -35,20 +36,56 @@ const SortParticipant: React.FC<SortParticipantProps> = React.memo(
       setParticipantList(sortParticipants);
     };
 
-    const menu = (
-      <Menu onClick={(e) => sort(e.key)}>
-        <Menu.Item key="firstname">Vorname</Menu.Item>
-        <Menu.Item key="lastname">Nachname</Menu.Item>
-        <Menu.Item key="grade">Klasse</Menu.Item>
-      </Menu>
-    );
-
     return (
-      <Dropdown overlay={menu} placement="bottomLeft" arrow>
-        <Button style={{ width: '100%' }}>
-          Teilnehmer sortieren <SortAscendingOutlined />
-        </Button>
-      </Dropdown>
+      <>
+        <div className={classes.sortParticipant}>
+          <ul>
+            <li>
+              <p style={{ paddingTop: '5px' }}>Sortieren:</p>
+            </li>
+            <li>
+              <AntdButton onClick={() => sort('firstname')}>
+                Vorname
+                <Icons.SortSolid
+                  style={{ marginLeft: '5px', height: '12px' }}
+                />
+              </AntdButton>
+            </li>
+            <li>
+              <AntdButton onClick={() => sort('lastname')}>
+                Nachname
+                <Icons.SortSolid
+                  style={{ marginLeft: '5px', height: '12px' }}
+                />
+              </AntdButton>
+            </li>
+            <li>
+              <AntdButton onClick={() => sort('email')}>
+                E-Mail-Addresse
+                <Icons.SortSolid
+                  style={{ marginLeft: '5px', height: '12px' }}
+                />
+              </AntdButton>
+            </li>
+            <li>
+              <AntdButton onClick={() => sort('grade')}>
+                Klasse
+                <Icons.SortSolid
+                  style={{ marginLeft: '5px', height: '12px' }}
+                />
+              </AntdButton>
+            </li>
+            <li>
+              <AntdButton onClick={() => sort('schooltype')}>
+                Schultyp
+                <Icons.SortSolid
+                  style={{ marginLeft: '5px', height: '12px' }}
+                />
+              </AntdButton>
+            </li>
+          </ul>
+        </div>
+      </>
     );
   }
 );
