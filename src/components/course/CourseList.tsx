@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import React, { useRef } from 'react';
 import useSmoothScroll from 'react-smooth-scroll-hook';
 import Icons from '../../assets/icons';
@@ -25,35 +26,39 @@ export const CourseList: React.FC<Props> = (props) => {
   }
 
   return (
-    <div className={classes.listContainer}>
-      <div className={classes.headerContainer}>
-        <div className={classes.titleWrapper}>
-          <Title size="h3">{props.name}</Title>
+    <Row justify="space-around" align="middle">
+      <Col span={23}>
+        <div className={classes.listContainer}>
+          <div className={classes.headerContainer}>
+            <div className={classes.titleWrapper}>
+              <Title size="h3">{props.name}</Title>
+            </div>
+            <div className={classes.scrollControls}>
+              <button
+                className={classes.chevronButton}
+                onClick={() => scrollTo(-(360 + 16 + 6))}
+              >
+                <Icons.ChevronLeft />
+              </button>
+              <button
+                className={classes.chevronButton}
+                onClick={() => scrollTo(360 + 16 + 6)}
+              >
+                <Icons.ChevronRight />
+              </button>
+            </div>
+          </div>
+          <div className={classes.courseContainer} ref={courseContainer}>
+            {props.courses.map((course) => (
+              <CourseCard
+                course={course}
+                key={course.id}
+                customCourseLink={props.customCourseLink?.(course)}
+              />
+            ))}
+          </div>
         </div>
-        <div className={classes.scrollControls}>
-          <button
-            className={classes.chevronButton}
-            onClick={() => scrollTo(-(360 + 16 + 6))}
-          >
-            <Icons.ChevronLeft />
-          </button>
-          <button
-            className={classes.chevronButton}
-            onClick={() => scrollTo(360 + 16 + 6)}
-          >
-            <Icons.ChevronRight />
-          </button>
-        </div>
-      </div>
-      <div className={classes.courseContainer} ref={courseContainer}>
-        {props.courses.map((course) => (
-          <CourseCard
-            course={course}
-            key={course.id}
-            customCourseLink={props.customCourseLink?.(course)}
-          />
-        ))}
-      </div>
-    </div>
+      </Col>
+    </Row>
   );
 };

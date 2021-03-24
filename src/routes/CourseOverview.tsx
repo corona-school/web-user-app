@@ -108,7 +108,20 @@ export const CourseOverview: React.FC<Props> = ({
       'priorknowledge-required',
     ];
 
-    const priorityClubTagIDs = ['mint', 'language', 'environment']; // descending
+    // const priorityClubTagIDs = ['mint', 'language', 'environment']; // descending
+    const priorityClubTagIDs = [
+      'mint',
+      'repetition',
+      'learningcoaching',
+      'play&fun',
+      'music',
+      'environment',
+      'personaldevelopment',
+      'orientation',
+      'language',
+      'liberalarts',
+      'socialsciences',
+    ]; // descending
     const clubTags = [
       ...tags
         .filter((t) => priorityClubTagIDs.includes(t.id))
@@ -123,7 +136,7 @@ export const CourseOverview: React.FC<Props> = ({
         (t) => t.category === 'club' && !invisibleClubTagIds.includes(t.id)
       )
       .map<TagAndCategory>((t) => ({ ids: [t.id], name: t.name }));
-
+    console.log(tags, 'sssds');
     const noTags = { ids: [], name: 'Sonstiges' };
 
     const courseLists = [...clubTags, revisionTag, coachingTag, noTags]
