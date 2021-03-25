@@ -4,32 +4,31 @@
   justify-content: space-between;
 
   padding: 0px;
-  margin: 0px;;
+  margin: 0px;
   width: 100%;
   min-height: 100vh;
-  
+
   .header {
     position: sticky;
     top: 0;
-    left: 0; 
-    right: 0; 
+    left: 0;
+    right: 0;
     z-index: 3000;
-    
+
     background-color: white;
-    
+
     width: 100vw;
     height: 60px;
-    padding: 30px;
-    margin-top: 30px;
-  
+    padding: 40px 30px;
+
     display: flex;
     flex-direction: row;
     align-items: center;
     align-content: center;
     justify-items: stretch;
-  
+
     box-shadow: 0 4px 9px -10px black;
-    
+
     .logo {
       display: flex;
       flex-direction: row;
@@ -37,7 +36,7 @@
       align-items: center;
       margin-left: 16px;
       height: 36px;
-  
+
       > svg {
         path {
           fill: #7183e0;
@@ -63,7 +62,7 @@
     width: 1060px;
     padding-left: 30px;
     padding-right: 30px;
-    
+
     @media only screen and (max-width: 1060px) {
       flex-direction: column;
       width: 100%;

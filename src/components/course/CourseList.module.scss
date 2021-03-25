@@ -10,6 +10,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    background-color: #f1f1f1;
 
     .scrollControls {
       margin: 8px;
@@ -39,4 +40,7 @@
 
 .titleWrapper {
   padding-left: 20px;
+  h3 {
+    margin: 15px 8px 15px 8px;
+  }
 }

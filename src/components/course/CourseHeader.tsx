@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Checkbox, Divider, Input } from 'antd';
+import { Checkbox, Divider, Input, Row, Col, Button } from 'antd';
 import moment from 'moment';
 import classNames from 'classnames';
 import { useHistory } from 'react-router-dom';
@@ -114,102 +114,122 @@ export const CourseHeader: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className={classes.headerContainer}>
+    <>
       {props.backButtonRoute && (
-        <div className={classes.backButtonContainer}>
-          <button
-            className={classes.backButton}
-            onClick={() => {
-              history.push(props.backButtonRoute);
-            }}
-          >
-            <Icons.ChevronLeft />
-            Zurück
-          </button>
-        </div>
+        <Row>
+          <Col>
+            <div className={classes.backButtonContainer}>
+              <button
+                className={classes.backButton}
+                onClick={() => {
+                  history.push(props.backButtonRoute);
+                }}
+              >
+                <Icons.ChevronLeft />
+                Zurück
+              </button>
+            </div>
+          </Col>
+        </Row>
       )}
-      <div className={classes.headerCenterContainer}>
-        <div className={classes.advancedFilterContainer}>
-          <div className={classes.filterContainer}>
-            <Title size="h2" className={classes.title}>
-              Jahrgangsstufe
-            </Title>
-            <Checkbox.Group
-              className={classes.gradeGrid}
-              onChange={filterGrade}
-              value={allowedGrades}
-            >
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((n) => (
-                <Checkbox
-                  className={classes.checkbox}
-                  value={n.toString()}
-                  key={n}
+
+      <Row justify="space-around" align="middle">
+        <Col md={18}>
+          <div className={classes.filterContainerWrapper}>
+            <Row justify="space-between">
+              <Col>
+                <Title size="h2" bold className={classes.title}>
+                  Kurse filtern
+                </Title>
+              </Col>
+              <Col>
+                <Button
+                  onClick={() => {
+                    setAllowedGrades(grades);
+                    setSearch('');
+                    setAllowedTime(['vormittags', 'nachmittags']);
+                  }}
+                  className={classNames(classes.resetButton, {
+                    [classes.hideResetButton]: isReset(),
+                  })}
                 >
-                  {n}. Klasse
+                  Filter zurücksetzen
+                </Button>
+              </Col>
+            </Row>
+            <div className={classes.filterContainer}>
+              <div className={classes.divider}>
+                <span>Uhrzeit</span>
+              </div>
+              <Checkbox.Group
+                className={classes.smallGrid}
+                onChange={filterTime}
+                value={allowedTime}
+              >
+                <Checkbox className={classes.checkbox} value="vormittags">
+                  Vormittags
                 </Checkbox>
-              ))}
-            </Checkbox.Group>
-            <Divider style={{ margin: '8px 0px' }} />
-            <Checkbox
-              indeterminate={
-                allowedGrades.length !== 0 &&
-                allowedGrades.length !== grades.length
-              }
-              onChange={(e) => {
-                if (!e.target.checked) {
-                  setAllowedGrades([]);
-                  return;
+                <Checkbox className={classes.checkbox} value="nachmittags">
+                  Nachmittags
+                </Checkbox>
+              </Checkbox.Group>
+            </div>
+            <div className={classes.filterContainer}>
+              <div className={classes.divider}>
+                <span>Jahrgangsstufe</span>
+              </div>
+              <Checkbox.Group
+                className={classes.gradeGrid}
+                onChange={filterGrade}
+                value={allowedGrades}
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((n) => (
+                  <Checkbox
+                    className={classes.checkbox}
+                    value={n.toString()}
+                    key={n}
+                  >
+                    {n}. Klasse
+                  </Checkbox>
+                ))}
+              </Checkbox.Group>
+            </div>
+            <div className={classes.filterContainer}>
+              <Divider style={{ margin: '8px 0px' }} />
+              <Checkbox
+                indeterminate={
+                  allowedGrades.length !== 0 &&
+                  allowedGrades.length !== grades.length
                 }
+                onChange={(e) => {
+                  if (!e.target.checked) {
+                    setAllowedGrades([]);
+                    return;
+                  }
 
-                setAllowedGrades(grades);
-              }}
-              checked={allowedGrades.length === grades.length}
-            >
-              Alle Klassen auswählen
-            </Checkbox>
-          </div>
-          <div className={classes.filterContainer}>
-            <Title size="h2" className={classes.title}>
-              Uhrzeit
-            </Title>
-            <Checkbox.Group
-              className={classes.smallGrid}
-              onChange={filterTime}
-              value={allowedTime}
-            >
-              <Checkbox className={classes.checkbox} value="vormittags">
-                Vormittags
+                  setAllowedGrades(grades);
+                }}
+                checked={allowedGrades.length === grades.length}
+              >
+                Alle Klassen auswählen
               </Checkbox>
-              <Checkbox className={classes.checkbox} value="nachmittags">
-                Nachmittags
-              </Checkbox>
-            </Checkbox.Group>
+            </div>
+            <div className={classes.filterContainer}>
+              <div className={classes.advancedFilterContainer} />
+              <div className={classes.searchContainer}>
+                <Search
+                  size="large"
+                  placeholder="Suche nach einem Kurs..."
+                  allowClear
+                  value={search}
+                  onChange={(e) => onSearch(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        <div className={classes.searchContainer}>
-          <Search
-            size="large"
-            placeholder="Suche nach einem Kurs..."
-            allowClear
-            value={search}
-            onChange={(e) => onSearch(e.target.value)}
-            style={{ width: '100%', margin: '0 10px' }}
-          />
-
-          <button
-            onClick={() => {
-              setAllowedGrades(grades);
-              setSearch('');
-              setAllowedTime(['vormittags', 'nachmittags']);
-            }}
-            className={classNames(classes.resetButton, {
-              [classes.hideResetButton]: isReset(),
-            })}
-          >
-            Filter zurücksetzen
-          </button>
-        </div>
-      </div>
-    </div>
+        </Col>
+      </Row>
+      <div className={classes.headerContainer} />
+    </>
   );
 };
