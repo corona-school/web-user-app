@@ -82,15 +82,34 @@ interface SignPageProps {
   // eslint-disable-next-line
   signCanvas: React.MutableRefObject<any>;
   signatureLocation: string;
-  setSignatureLocation: (string) => void;
   setIsSigned: (boolean) => void;
   isMinor: boolean;
 }
 
+interface LocationPageProps {
+  signatureLocation: string;
+  setSignatureLocation(location: string);
+}
+
+const LocationPage: React.FC<LocationPageProps> = ({
+  signatureLocation,
+  setSignatureLocation,
+}) => {
+  return (
+    <>
+      An welchem Ort unterschreibst du?
+      <Input
+        value={signatureLocation}
+        onChange={(e) => setSignatureLocation(e.target.value)}
+        placeholder="Stadt"
+      />
+    </>
+  );
+};
+
 const SignPage: React.FC<SignPageProps> = ({
   signCanvas,
   signatureLocation,
-  setSignatureLocation,
   setIsSigned,
   isMinor,
 }) => {
@@ -116,13 +135,9 @@ const SignPage: React.FC<SignPageProps> = ({
         }}
         onEnd={updateSigned}
       />
-      <Input
-        value={signatureLocation}
-        onChange={(e) => setSignatureLocation(e.target.value)}
-        placeholder="Stadt"
-        addonAfter={`, den ${moment().format('DD.MM.YY')}`}
-        bordered={false}
-      />
+      <div>
+        {signatureLocation}, den {moment().format('DD.MM.YY')}
+      </div>
     </div>
   );
 };
@@ -132,9 +147,9 @@ const SignCertificateModal: React.FC<Props> = ({
   signCertificate,
   close,
 }) => {
-  const [currentStep, setCurrentStep] = useState<'info' | 'warning' | 'sign'>(
-    'info'
-  );
+  const [currentStep, setCurrentStepShadowed] = useState<
+    'info' | 'warning' | 'location' | 'sign'
+  >('info');
   // eslint-disable-next-line
   const signCanvas = useRef<any>(); // https://www.npmjs.com/package/react-signature-canvas
   const [signatureLocation, setSignatureLocation] = useState('');
@@ -142,6 +157,12 @@ const SignCertificateModal: React.FC<Props> = ({
   //       Always additionally check signCanvas.current.isEmpty()
   const [isSigned, setIsSigned] = useState(false);
   const [isMinor, setIsMinor] = useState(true);
+
+  // Going back also resets the canvas
+  function setCurrentStep(step: typeof currentStep) {
+    setCurrentStepShadowed(step);
+    setIsSigned(false);
+  }
 
   function prepareSignature() {
     if (!isSigned || signCanvas.current.isEmpty()) return;
@@ -186,11 +207,16 @@ const SignCertificateModal: React.FC<Props> = ({
           {currentStep === 'warning' && (
             <WarningPage isMinor={isMinor} setIsMinor={setIsMinor} />
           )}
+          {currentStep === 'location' && (
+            <LocationPage
+              signatureLocation={signatureLocation}
+              setSignatureLocation={setSignatureLocation}
+            />
+          )}
           {currentStep === 'sign' && (
             <SignPage
               signCanvas={signCanvas}
               signatureLocation={signatureLocation}
-              setSignatureLocation={setSignatureLocation}
               setIsSigned={setIsSigned}
               isMinor={isMinor}
             />
@@ -218,6 +244,25 @@ const SignCertificateModal: React.FC<Props> = ({
               <Button
                 backgroundColor="#F4F6FF"
                 color="#4E6AE6"
+                onClick={() => setCurrentStep('location')}
+              >
+                Weiter
+              </Button>
+            </>
+          )}
+          {currentStep === 'location' && (
+            <>
+              <Button
+                backgroundColor="#F4F6FF"
+                color="#4E6AE6"
+                onClick={() => setCurrentStep('warning')}
+              >
+                Zurück
+              </Button>
+              <Button
+                backgroundColor="#F4F6FF"
+                color="#4E6AE6"
+                disabled={!signatureLocation}
                 onClick={() => setCurrentStep('sign')}
               >
                 Weiter
@@ -229,7 +274,7 @@ const SignCertificateModal: React.FC<Props> = ({
               <Button
                 backgroundColor="#F4F6FF"
                 color="#4E6AE6"
-                onClick={() => setCurrentStep('warning')}
+                onClick={() => setCurrentStep('location')}
               >
                 Zurück
               </Button>
