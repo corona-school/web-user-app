@@ -175,6 +175,17 @@ export const axiosRequestNewToken = async (
     });
 };
 
+export const axiosPostUserRoleTutor = async (
+  id: string,
+  token: string,
+  subjects: Subject[]
+) => {
+  const url = `${apiURL}/user/${id}/role/tutor`;
+  await axios
+    .post(url, subjects, { headers: { token } })
+    .catch(logError('postUserRoleTutor'));
+};
+
 export const axiosPutUserSubjects = async (
   id: string,
   token: string,

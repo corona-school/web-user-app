@@ -30,6 +30,7 @@ interface IApiContext {
   dissolveProjectMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string, redirectTo: string) => Promise<void>;
   putUser: (user: User) => Promise<void>;
+  postUserRoleTutor: (subjects: Subject[]) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
   putUserProjectFields: (projectFields: ApiProjectFieldInfo[]) => Promise<void>;
   becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
@@ -172,6 +173,7 @@ export const ApiContext = React.createContext<IApiContext>({
   contactJufoExpert: reject,
   updateJufoExpert: reject,
   putUser: reject,
+  postUserRoleTutor: reject,
   putUserSubjects: reject,
   putUserProjectFields: reject,
   becomeInstructor: reject,
@@ -291,6 +293,9 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const putUser = (user: User): Promise<void> =>
     api.putUser({ id, token }, user);
+
+  const postUserRoleTutor = (subjects: Subject[]): Promise<void> =>
+    api.axiosPostUserRoleTutor(id, token, subjects);
 
   const putUserSubjects = (subjects: Subject[]): Promise<void> =>
     api.axiosPutUserSubjects(id, token, subjects);
@@ -505,6 +510,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         dissolveProjectMatch,
         requestNewToken: api.axiosRequestNewToken,
         putUser,
+        postUserRoleTutor,
         putUserSubjects,
         putUserProjectFields,
         becomeInstructor,
