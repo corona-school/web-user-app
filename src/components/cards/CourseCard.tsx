@@ -24,7 +24,7 @@ const CourseCard: React.FC<Props> = ({
     <div className={classes.marginContainer}>
       <Link
         className={classes.baseContainer}
-        to={customCourseLink ?? `/courses/${course.id}#${currentAnchor}`}
+        to={customCourseLink ?? `/courses/${course.id}#${currentAnchor ?? ''}`}
       >
         <div className={classes.coverImageContainer}>
           <img
