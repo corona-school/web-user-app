@@ -9,11 +9,17 @@ import { CourseList } from '../components/course/CourseList';
 import { ApiContext } from '../context/ApiContext';
 import { UserContext } from '../context/UserContext';
 import { ParsedCourseOverview, Tag, TagAndCategory } from '../types/Course';
-import { defaultPublicCourseSort, parseCourse } from '../utils/CourseUtil';
+import {
+  defaultPublicCourseSort,
+  parseCourse,
+  scrollToTargetAdjustedRight,
+  scrollToTargetAdjustedTop,
+} from '../utils/CourseUtil';
 import classes from './CourseOverview.module.scss';
 import { Text } from '../components/Typography';
 import { env } from '../api/config';
 import { NoCourses } from '../components/NoService';
+import CourseCard from '../components/cards/CourseCard';
 
 interface Props {
   customCourseLink?: (course: ParsedCourseOverview) => string;
@@ -38,6 +44,35 @@ export const CourseOverview: React.FC<Props> = ({
 
   const courseOverviewDisabled = env.REACT_APP_COURSE_OVERVIEW === 'disabled';
 
+  const scrollToItemInSection = (hash, courseList, container) => {
+    const courseId = Number(decodeURIComponent(hash.slice(1).split(':')[1]));
+    if (courseId != null) {
+      setTimeout(() => {
+        console.log(courseId, courseList);
+        const course = courseList.find((c) => c.id === courseId);
+        if (course != null) {
+          // eslint-disable-next-line no-param-reassign
+          container.scrollLeft = course.el.getBoundingClientRect().x;
+          // scrollToTargetAdjustedRight(container, course.el, 0);
+          // scrollToTargetAdjustedRight()
+          scrollToTargetAdjustedRight(
+            course.el.parentElement.parentElement,
+            course.el,
+            50
+          );
+          course.el.style.transition = '0.1s outline ease-in-out';
+          course.el.style.outline = '0px solid #4E6AE6';
+          setTimeout(() => {
+            course.el.style.outline = '3px solid #4E6AE6';
+          }, 150);
+          setTimeout(() => {
+            course.el.style.outline = '0px solid #4E6AE6';
+          }, 750);
+        }
+      }, 1000);
+    }
+  };
+
   const scrollToPreviousSection = (hash) => {
     if (hash.length > 1) {
       const sectionTitle = decodeURIComponent(hash.slice(1).split(':')[0]);
@@ -50,7 +85,8 @@ export const CourseOverview: React.FC<Props> = ({
             }
             return false;
           });
-        index.el.scrollIntoView({ behavior: 'smooth' });
+        scrollToTargetAdjustedTop(index.el, 80);
+        scrollToItemInSection(hash, index.courseItemRefs, index.el);
       }, 500);
     }
   };
@@ -177,6 +213,22 @@ export const CourseOverview: React.FC<Props> = ({
           return null;
         }
 
+        const courseItemRefs = [].slice(0, t.courseList.length);
+
+        const courseItems = t.courseList.map((course, index) => (
+          <CourseCard
+            course={course}
+            key={course.id}
+            customCourseLink={customCourseLink?.(course)}
+            currentAnchor={`${t.tag.name}:${course.id}`}
+            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+            // @ts-ignore
+            ref={(el) => {
+              courseItemRefs[index] = { id: course.id, el };
+            }}
+          />
+        ));
+
         return (
           <CourseList
             name={t.tag.name}
@@ -185,10 +237,16 @@ export const CourseOverview: React.FC<Props> = ({
             courses={t.courseList}
             customCourseLink={customCourseLink}
             richLink
+            elements={courseItems}
             /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
             // @ts-ignore
             ref={(el) => {
-              itemsRef.current[i] = { name: t.tag.name, el };
+              itemsRef.current[i] = {
+                name: t.tag.name,
+                courseItems,
+                courseItemRefs,
+                el,
+              };
             }}
           />
         );

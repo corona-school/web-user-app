@@ -11,6 +11,7 @@ interface Props {
   courses: ParsedCourseOverview[];
   customCourseLink?: (course: ParsedCourseOverview) => string;
   richLink: boolean;
+  elements?: JSX.Element[];
 }
 
 export const CourseList: React.FC<Props> = forwardRef((props, ref) => {
@@ -51,14 +52,20 @@ export const CourseList: React.FC<Props> = forwardRef((props, ref) => {
         </div>
       </div>
       <div className={classes.courseContainer} ref={courseContainer}>
-        {props.courses.map((course, index) => (
-          <CourseCard
-            course={course}
-            key={course.id}
-            customCourseLink={props.customCourseLink?.(course)}
-            currentAnchor={props.richLink ? `${props.name}:${index}` : null}
-          />
-        ))}
+        {props.elements != null ? (
+          props.elements
+        ) : (
+          <>
+            {props.courses.map((course, index) => (
+              <CourseCard
+                course={course}
+                key={course.id}
+                customCourseLink={props.customCourseLink?.(course)}
+                currentAnchor={props.richLink ? `${props.name}:${index}` : null}
+              />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
