@@ -99,72 +99,83 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
   };
 
   return (
-    <button onClick={openExpertDetails} className={classes.containerButton}>
-      <div className={classes.container}>
-        <div className={classes.infoContainer}>
-          <div className={classes.header}>
-            <Title size="h4" bold>
-              {props.expert.firstName} {props.expert.lastName}
-            </Title>
+    <>
+      <span
+        onClick={openExpertDetails}
+        className={classes.containerButton}
+        aria-hidden="true"
+      >
+        <div className={classes.container}>
+          <div className={classes.infoContainer}>
+            <div className={classes.header}>
+              <Title size="h4" bold>
+                {props.expert.firstName} {props.expert.lastName}
+              </Title>
 
-            <div className={classes.rightHeader}>
-              {props.expert.projectFields.map((field) => (
-                <Tag
-                  key={`${field}-${props.expert.id}`}
-                  fontSize="12px"
-                  background="#F4F6FF"
-                  color="#4E6AE6"
-                >
-                  {field}
-                </Tag>
-              ))}
-              {user.isProjectCoachee && (
-                <Button
-                  backgroundColor="#4E6AE6"
-                  color="#ffffff"
-                  className={classes.emailButton}
-                  image={
-                    pinned ? (
-                      <Icons.BookmarkSlashFilled />
-                    ) : (
-                      <Icons.BookmarkFilled />
-                    )
-                  }
-                  onClick={pinned ? unpinExpert : pinExpert}
-                />
-              )}
-              <Button
-                backgroundColor="#4E6AE6"
-                color="#ffffff"
-                image={<Icons.EmailFilled />}
-                onClick={openEmailDialog}
-                className={classes.emailButton}
-              />
+              <div className={classes.rightHeader}>
+                {props.expert.projectFields.map((field) => (
+                  <Tag
+                    key={`${field}-${props.expert.id}`}
+                    fontSize="12px"
+                    background="#F4F6FF"
+                    color="#4E6AE6"
+                  >
+                    {field}
+                  </Tag>
+                ))}
+                {user.isProjectCoachee && (
+                  // <Tooltip placement="topLeft" title="anpinnen">
+                  <span data-tooltip="anpinnen">
+                    <Button
+                      backgroundColor="#4E6AE6"
+                      color="#ffffff"
+                      className={classes.emailButton}
+                      image={
+                        pinned ? (
+                          <Icons.BookmarkSlashFilled />
+                        ) : (
+                          <Icons.BookmarkFilled />
+                        )
+                      }
+                      onClick={pinned ? unpinExpert : pinExpert}
+                    />
+                  </span>
+                )}
+                <span data-tooltip="Expert*in kontaktieren">
+                  <Button
+                    backgroundColor="#4E6AE6"
+                    color="#ffffff"
+                    image={<Icons.EmailFilled />}
+                    onClick={openEmailDialog}
+                    className={classes.emailButton}
+                  />
+                </span>
+              </div>
             </div>
+
+            <Text
+              className={props.type === 'card' ? classes.cardDescription : ''}
+            >
+              {props.expert.description}
+            </Text>
+
+            {props.type === 'card' ? null : (
+              <div className={classes.expertTags}>
+                {props.expert.expertiseTags.map((tag, i) => (
+                  <Tag
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={`${props.expert.id}-${i}`}
+                    background="#4E555C"
+                    color="#ffffff"
+                  >
+                    {tag}
+                  </Tag>
+                ))}
+              </div>
+            )}
           </div>
-
-          <Text
-            className={props.type === 'card' ? classes.cardDescription : ''}
-          >
-            {props.expert.description}
-          </Text>
-
-          {props.type === 'card' ? null : (
-            <div className={classes.expertTags}>
-              {props.expert.expertiseTags.map((tag, i) => (
-                <Tag
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={`${props.expert.id}-${i}`}
-                  background="#4E555C"
-                  color="#ffffff"
-                >
-                  {tag}
-                </Tag>
-              ))}
-            </div>
-          )}
         </div>
-      </div>
-    </button>
+      </span>
+    </>
   );
 };

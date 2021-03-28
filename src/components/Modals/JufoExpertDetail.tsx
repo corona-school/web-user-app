@@ -58,6 +58,7 @@ export const JufoExpertDetail: React.FC = () => {
     }
   }, [isOpen]);
 
+  console.log(isOpen, isOpen);
   useEffect(() => {
     if (!expert) {
       return;
@@ -157,6 +158,11 @@ export const JufoExpertDetail: React.FC = () => {
       onBackgroundClick={() => modalContext.setOpenedModal(null)}
     >
       <div className={classes.modal}>
+        <Button
+          onClick={() => modalContext.setOpenedModal('expertOverviewModal')}
+        >
+          back
+        </Button>
         <div className={classes.title}>
           <Title size="h2">
             {expert.firstName} {expert.lastName}
@@ -187,29 +193,33 @@ export const JufoExpertDetail: React.FC = () => {
           </div>
           <div className={classes.rightSide}>
             {userContext.user.isProjectCoachee && (
+              <span data-tooltip="anpinnen">
+                <Button
+                  autoFocus
+                  backgroundColor="#4E6AE6"
+                  color="#ffffff"
+                  className={classes.emailButton}
+                  image={
+                    pinned ? (
+                      <Icons.BookmarkSlashFilled />
+                    ) : (
+                      <Icons.BookmarkFilled />
+                    )
+                  }
+                  onClick={pinned ? unpinExpert : pinExpert}
+                />
+              </span>
+            )}
+            <span data-tooltip="Expert*in kontaktieren">
               <Button
                 autoFocus
                 backgroundColor="#4E6AE6"
                 color="#ffffff"
+                image={<Icons.EmailFilled />}
+                onClick={openEmailDialog}
                 className={classes.emailButton}
-                image={
-                  pinned ? (
-                    <Icons.BookmarkSlashFilled />
-                  ) : (
-                    <Icons.BookmarkFilled />
-                  )
-                }
-                onClick={pinned ? unpinExpert : pinExpert}
               />
-            )}
-            <Button
-              autoFocus
-              backgroundColor="#4E6AE6"
-              color="#ffffff"
-              image={<Icons.EmailFilled />}
-              onClick={openEmailDialog}
-              className={classes.emailButton}
-            />
+            </span>
           </div>
         </div>
         <Text large className={classes.label}>

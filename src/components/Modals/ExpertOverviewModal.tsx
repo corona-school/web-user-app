@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import { ClipLoader } from 'react-spinners';
-import Search from 'antd/lib/input/Search';
+import { Select } from 'antd';
 import { Title } from '../Typography';
 import { ModalContext } from '../../context/ModalContext';
 import { ApiContext } from '../../context/ApiContext';
-
 import classes from './ExpertOverviewModal.module.scss';
 import { Expert } from '../../types/Expert';
 import { JufoExpertDetailCard } from '../cards/JufoExpertDetailCard';
@@ -13,6 +12,7 @@ import { UserContext } from '../../context/UserContext';
 
 export const MODAL_IDENTIFIER = 'expertOverviewModal';
 const MODAL_TITLE = 'Liste von Expert*innen';
+const { Option } = Select;
 
 export const ExpertOverviewModal: React.FC = () => {
   const userContext = useContext(UserContext);
@@ -86,12 +86,27 @@ export const ExpertOverviewModal: React.FC = () => {
     >
       <div className={classes.modal}>
         <Title size="h2">{MODAL_TITLE}</Title>
-        <Search
-          placeholder="Suche nach Expert*innen für.."
-          allowClear
-          onSearch={onSearch}
-          className={classes.search}
-        />
+        {experts && (
+          <Select
+            showSearch
+            style={{ width: '100%', marginBottom: '1rem' }}
+            placeholder="Suche nach Expert*innen für.."
+            optionFilterProp="children"
+            onChange={onSearch}
+            filterOption={(input, option) =>
+              option.children
+                .toString()
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {experts.map((val) => (
+              <Option value={`${val.firstName}`} key={`key-${val.firstName}`}>
+                {`${val.firstName} ${val.lastName}`}
+              </Option>
+            ))}
+          </Select>
+        )}
 
         {filteredExperts.map((expert) => (
           <JufoExpertDetailCard key={expert.id} expert={expert} />
