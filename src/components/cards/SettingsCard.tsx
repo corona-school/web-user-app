@@ -22,6 +22,7 @@ import EditableUserSettingsCard, {
 import SaveEditButton from '../button/SaveEditButton';
 import AccentColorButton from '../button/AccentColorButton';
 import { AuthContext } from '../../context/AuthContext';
+import BecomeTutorModal from '../Modals/BecomeTutorModal';
 
 interface Props {
   user: User;
@@ -34,6 +35,9 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
   const authContext = useContext(AuthContext);
 
   const history = useHistory();
+
+  // Debug
+  modalContext.setOpenedModal('becomeTutor');
 
   const handleLogoutClick = () => {
     authContext.setCredentials({ id: '', token: '' });
@@ -199,6 +203,7 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
       <CertificateModal user={user} reloadCertificates={reloadCertificates} />
       <BecomeInstructorModal user={user} />
       <BecomeInternModal user={user} />
+      <BecomeTutorModal user={user} />
       <StyledReactModal
         isOpen={modalContext.openedModal === 'deactivateAccount'}
       >
