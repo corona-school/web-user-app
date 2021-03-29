@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Tooltip } from 'antd';
 import Icons from '../../assets/icons';
 import { ModalContext } from '../../context/ModalContext';
 import { UserContext } from '../../context/UserContext';
 import { Expert } from '../../types/Expert';
+
 import Button from '../button';
 
 import { Tag } from '../Tag';
@@ -124,8 +126,8 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
                   </Tag>
                 ))}
                 {user.isProjectCoachee && (
-                  // <Tooltip placement="topLeft" title="anpinnen">
-                  <span data-tooltip="anpinnen">
+                  <Tooltip placement="topLeft" title="Anpinnen">
+                    {/* <span data-tooltip="Anpinnen"> */}
                     <Button
                       backgroundColor="#4E6AE6"
                       color="#ffffff"
@@ -139,7 +141,8 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
                       }
                       onClick={pinned ? unpinExpert : pinExpert}
                     />
-                  </span>
+                    {/* </span> */}
+                  </Tooltip>
                 )}
                 <span data-tooltip="Expert*in kontaktieren">
                   <Button

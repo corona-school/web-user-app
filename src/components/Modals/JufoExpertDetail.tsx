@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import { ClipLoader } from 'react-spinners';
+import { Tooltip } from 'antd';
+
 import { Text, Title } from '../Typography';
 import { ModalContext } from '../../context/ModalContext';
 import { ApiContext } from '../../context/ApiContext';
@@ -57,8 +59,6 @@ export const JufoExpertDetail: React.FC = () => {
       setExpert(e);
     }
   }, [isOpen]);
-
-  console.log(isOpen, isOpen);
   useEffect(() => {
     if (!expert) {
       return;
@@ -161,7 +161,7 @@ export const JufoExpertDetail: React.FC = () => {
         <Button
           onClick={() => modalContext.setOpenedModal('expertOverviewModal')}
         >
-          back
+          Zurück
         </Button>
         <div className={classes.title}>
           <Title size="h2">
@@ -193,7 +193,7 @@ export const JufoExpertDetail: React.FC = () => {
           </div>
           <div className={classes.rightSide}>
             {userContext.user.isProjectCoachee && (
-              <span data-tooltip="anpinnen">
+              <Tooltip placement="topLeft" title="Anpinnen">
                 <Button
                   autoFocus
                   backgroundColor="#4E6AE6"
@@ -208,7 +208,7 @@ export const JufoExpertDetail: React.FC = () => {
                   }
                   onClick={pinned ? unpinExpert : pinExpert}
                 />
-              </span>
+              </Tooltip>
             )}
             <span data-tooltip="Expert*in kontaktieren">
               <Button

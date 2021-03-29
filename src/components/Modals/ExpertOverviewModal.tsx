@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import { ClipLoader } from 'react-spinners';
-import { Select } from 'antd';
+import { Input, AutoComplete, Empty, Tag } from 'antd';
+import { SelectProps } from 'antd/es/select';
 import { Title } from '../Typography';
 import { ModalContext } from '../../context/ModalContext';
 import { ApiContext } from '../../context/ApiContext';
@@ -12,12 +13,19 @@ import { UserContext } from '../../context/UserContext';
 
 export const MODAL_IDENTIFIER = 'expertOverviewModal';
 const MODAL_TITLE = 'Liste von Expert*innen';
-const { Option } = Select;
+
+interface SearchOption {
+  [index: number]: { value: string; label: JSX.Element };
+}
 
 export const ExpertOverviewModal: React.FC = () => {
   const userContext = useContext(UserContext);
   const modalContext = useContext(ModalContext);
   const api = useContext(ApiContext);
+  const [options, setOptions] = useState<SelectProps<SearchOption>['options']>(
+    []
+  );
+  const inputSearchRef = useRef(null);
 
   const [experts, setExperts] = useState<Expert[]>([]);
   const [filteredExperts, setFileredExperts] = useState<Expert[]>([]);
@@ -48,10 +56,6 @@ export const ExpertOverviewModal: React.FC = () => {
   }, [modalContext.openedModal, userContext.user]);
 
   const onSearch = (value: string) => {
-    if (value.trim().length === 0) {
-      setFileredExperts(experts);
-      return;
-    }
     const searchString = value.toLowerCase();
     const filter = experts.filter(
       (e) =>
@@ -61,7 +65,46 @@ export const ExpertOverviewModal: React.FC = () => {
         e.firstName.toLowerCase().includes(searchString) ||
         e.lastName.toLowerCase().includes(searchString)
     );
-    setFileredExperts(filter);
+    return filter;
+  };
+
+  const searchSuggestions = (query: string) =>
+    onSearch(query).map((_) => {
+      const val = `${_.id}`;
+      return {
+        value: val,
+        label: (
+          <div style={{ paddingBottom: '1rem' }}>
+            <div>
+              <b>{`${_.firstName} ${_.lastName}`}</b>
+            </div>
+            <div>
+              {_.expertiseTags.map((tag, i) => (
+                <Tag
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={`${_.id}-${i}`}
+                  style={{ background: '#4E555C', fontSize: '12px' }}
+                  color="#ffffff"
+                >
+                  {tag}
+                </Tag>
+              ))}
+            </div>
+            <div>{_.description}</div>
+          </div>
+        ),
+      };
+    });
+
+  const handleSearch = (value: string) =>
+    setOptions(value ? searchSuggestions(value) : []);
+
+  const handleSelect = (value: string) => {
+    if (value.trim().length === 0) {
+      setFileredExperts(experts);
+      return;
+    }
+    setFileredExperts(onSearch(value));
   };
 
   if (!userContext.user.isProjectCoachee && !userContext.user.isProjectCoach) {
@@ -86,31 +129,38 @@ export const ExpertOverviewModal: React.FC = () => {
     >
       <div className={classes.modal}>
         <Title size="h2">{MODAL_TITLE}</Title>
-        {experts && (
-          <Select
-            showSearch
-            style={{ width: '100%', marginBottom: '1rem' }}
-            placeholder="Suche nach Expert*innen für.."
-            optionFilterProp="children"
-            onChange={onSearch}
-            filterOption={(input, option) =>
-              option.children
-                .toString()
-                .toLowerCase()
-                .indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            {experts.map((val) => (
-              <Option value={`${val.firstName}`} key={`key-${val.firstName}`}>
-                {`${val.firstName} ${val.lastName}`}
-              </Option>
-            ))}
-          </Select>
-        )}
 
-        {filteredExperts.map((expert) => (
-          <JufoExpertDetailCard key={expert.id} expert={expert} />
-        ))}
+        <AutoComplete
+          dropdownMatchSelectWidth={252}
+          className={classes.AutoComplete}
+          style={{ width: '100%', marginBottom: '2rem' }}
+          options={options}
+          onSelect={handleSelect}
+          onSearch={handleSearch}
+          onChange={(e) => e.trim().length === 0 && setFileredExperts(experts)}
+        >
+          <Input.Search
+            size="large"
+            placeholder="Suche nach Expert*innen für.."
+            ref={inputSearchRef}
+            enterButton
+            onPressEnter={() =>
+              handleSelect(inputSearchRef.current.props.value)
+            }
+          />
+        </AutoComplete>
+
+        {filteredExperts.length !== 0 ? (
+          filteredExperts.map((expert) => (
+            <JufoExpertDetailCard key={expert.id} expert={expert} />
+          ))
+        ) : (
+          <Empty
+            description="
+          keine Ergebnisse gefunden"
+            style={{ padding: '2rem' }}
+          />
+        )}
       </div>
     </StyledReactModal>
   );
