@@ -53,8 +53,6 @@ export const CourseOverview: React.FC<Props> = ({
         if (course != null) {
           // eslint-disable-next-line no-param-reassign
           container.scrollLeft = course.el.getBoundingClientRect().x;
-          // scrollToTargetAdjustedRight(container, course.el, 0);
-          // scrollToTargetAdjustedRight()
           scrollToTargetAdjustedRight(
             course.el.parentElement.parentElement,
             course.el,
