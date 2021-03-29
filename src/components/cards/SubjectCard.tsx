@@ -2,16 +2,15 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import { Subject, SubjectName } from '../../types';
-import IconButtonComponent, { IconButtonWrapper } from '../button/IconButton';
+import { IconButtonWrapper } from '../button';
 import Context from '../../context';
 import { subjectOptions } from '../../assets/subjects';
 import Icons from '../../assets/icons';
-
-const IconButton = styled(IconButtonComponent)`
-  width: unset;
-  max-width: 179px;
-  flex-grow: 1;
-`;
+import AccentColorButton from '../button/AccentColorButton';
+import Select from '../misc/Select';
+import { ReactComponent as AddIcon } from '../../assets/icons/plus-solid.svg';
+import { ReactComponent as Trashcan } from '../../assets/icons/trashcan.svg';
+import { ReactComponent as EditIcon } from '../../assets/icons/pen-solid.svg';
 
 const CardWrapper = styled.div`
   padding: 15px;
@@ -29,12 +28,10 @@ const StyledCard = styled(Card)`
   letter-spacing: -0.333333px;
   line-height: 36px;
   /* text-align: center; */
-  width: 300px;
   width: 290px;
   position: relative;
 
   small {
-    font-style: italic;
     font-size: 14px;
     line-height: 21px;
     /* text-align: center; */
@@ -44,22 +41,10 @@ const StyledCard = styled(Card)`
 `;
 
 const SelectWrapper = styled.div`
-  /* align-items: center; */
+  align-items: center;
   align-self: stretch;
   display: flex;
   justify-content: space-evenly;
-`;
-
-const SelectStyle = styled.select`
-  width: 110px;
-  height: 28px;
-  padding: 2px 5px;
-  border: 1px solid ${(props) => props.theme.colorScheme.gray1};
-  box-sizing: border-box;
-  font-size: 15px;
-  line-height: 22px;
-  letter-spacing: -0.333333px;
-  color: ${(props) => props.theme.colorScheme.gray1};
 `;
 
 const SubjectCard: React.FC<{
@@ -111,7 +96,7 @@ const SubjectCard: React.FC<{
           <>
             {subject.name}
             <SelectWrapper>
-              <SelectStyle
+              <Select
                 value={editMinGrade}
                 onChange={(e) => handleOnChangeMinGrade(Number(e.target.value))}
               >
@@ -128,9 +113,9 @@ const SubjectCard: React.FC<{
                 <option value="11">11. Klasse</option>
                 <option value="12">12. Klasse</option>
                 <option value="13">13. Klasse</option>
-              </SelectStyle>
+              </Select>
               -
-              <SelectStyle
+              <Select
                 value={editMaxGrade}
                 onChange={(e) => handleOnChangeMaxGrade(Number(e.target.value))}
               >
@@ -147,21 +132,23 @@ const SubjectCard: React.FC<{
                 <option value="11">11. Klasse</option>
                 <option value="12">12. Klasse</option>
                 <option value="13">13. Klasse</option>
-              </SelectStyle>
+              </Select>
             </SelectWrapper>
             <SelectWrapper>
               <IconButtonWrapper>
-                <IconButton
-                  icon="Save"
+                <AccentColorButton
                   label="Speichern"
                   onClick={handleSave}
+                  accentColor="#4db534"
+                  small
                 />
               </IconButtonWrapper>
               <IconButtonWrapper>
-                <IconButton
-                  icon="Delete"
+                <AccentColorButton
                   label="Löschen"
                   onClick={handleDelete}
+                  accentColor="#dd0000"
+                  small
                 />
               </IconButtonWrapper>
             </SelectWrapper>
@@ -176,10 +163,12 @@ const SubjectCard: React.FC<{
               </small>
             )}
             <IconButtonWrapper>
-              <IconButton
-                icon={isStudent ? 'Edit' : 'Delete'}
+              <AccentColorButton
+                Icon={isStudent ? EditIcon : Trashcan}
                 label={isStudent ? 'Bearbeiten' : 'Entfernen'}
                 onClick={isStudent ? () => setEdit(true) : handleDelete}
+                accentColor="#4db534"
+                small
               />
             </IconButtonWrapper>
           </>
@@ -261,7 +250,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
         {isEditing ? (
           <>
             <div style={{ display: 'center' }}>
-              <SelectStyle
+              <Select
                 value={subjectName}
                 onChange={(e) => setSubjectName(e.target.value as SubjectName)}
               >
@@ -272,11 +261,11 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
                       {s}
                     </option>
                   ))}
-              </SelectStyle>
+              </Select>
             </div>
             {isStudent && (
               <SelectWrapper>
-                <SelectStyle
+                <Select
                   value={minGrade}
                   onChange={(e) =>
                     handleOnChangeMinGrade(Number(e.target.value))
@@ -295,9 +284,9 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
                   <option value="11">11. Klasse</option>
                   <option value="12">12. Klasse</option>
                   <option value="13">13. Klasse</option>
-                </SelectStyle>
+                </Select>
                 -
-                <SelectStyle
+                <Select
                   value={maxGrade}
                   onChange={(e) =>
                     handleOnChangeMaxGrade(Number(e.target.value))
@@ -316,11 +305,16 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
                   <option value="11">11. Klasse</option>
                   <option value="12">12. Klasse</option>
                   <option value="13">13. Klasse</option>
-                </SelectStyle>
+                </Select>
               </SelectWrapper>
             )}
             <IconButtonWrapper>
-              <IconButton icon="Save" label="Speichern" onClick={handleSave} />
+              <AccentColorButton
+                accentColor="#0199cb"
+                label="Speichern"
+                onClick={handleSave}
+                small
+              />
             </IconButtonWrapper>
             <CloseButtonStyle onClick={() => setEditing(false)}>
               <Icons.Close />
@@ -331,10 +325,12 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
             Neues Fach
             {isStudent && <small>Jahrgangsstufen</small>}
             <IconButtonWrapper>
-              <IconButton
-                icon="Add"
+              <AccentColorButton
+                Icon={AddIcon}
                 label="Hinzufügen"
                 onClick={() => setEditing(true)}
+                accentColor="#0199cb"
+                small
               />
             </IconButtonWrapper>
           </>

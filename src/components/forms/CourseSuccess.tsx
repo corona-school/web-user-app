@@ -7,6 +7,7 @@ import classes from './CourseSuccess.module.scss';
 import Button from '../button';
 
 import Images from '../../assets/images';
+import AccentColorButton from '../button/AccentColorButton';
 
 interface Props {
   course: CompletedCourse;
@@ -14,22 +15,17 @@ interface Props {
   lectures: CompletedLecture[];
 }
 
-const CourseSuccess: React.FC<Props> = () => {
+const CourseSuccess: React.FC<Props> = (Props) => {
   const history = useHistory();
 
   return (
     <div className={classes.container}>
       <Images.Celebration width="400" height="400" />
-      <Button
-        onClick={() => {
-          history.push('/courses');
-        }}
-        className={classes.button}
-        color="white"
-        backgroundColor="#4E6AE6"
-      >
-        Schließen
-      </Button>
+      <AccentColorButton
+        onClick={() => history.push(`/courses/${Props.course.id}`)}
+        accentColor="#4E6AE6"
+        label="Schließen"
+      />
       <Button
         onClick={() => {
           window.location.reload();

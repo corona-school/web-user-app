@@ -19,8 +19,14 @@ import {
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
 import { RequestCode, VerifyCode } from '../types/Phone';
+
+import {
+  ICertificateSignature,
+  IExposedCertificate,
+  ISupportedLanguage,
+} from '../types/Certificate';
+
 import { Expert, ExpertTag, ExpertUpdate } from '../types/Expert';
-import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
 
 const logError = (apiName: string) => (error: Error) => {
   if (dev) console.error(`${apiName} failed:`, error);
@@ -40,6 +46,26 @@ const getAPI = <R = void, P extends Array<any> = Array<void>>(
       headers: { token },
       ...options,
     })
+    .then(returns ?? ((() => {}) as () => R))
+    .catch(logError(name));
+
+// eslint-disable-next-line
+const postAPI = <R = void, P extends Array<any> = Array<void>>(
+  name: string,
+  url: string | ((...params: P) => string),
+  body: (...params: P) => unknown,
+  returns?: (res: AxiosResponse) => R,
+  options: AxiosRequestConfig = {}
+) => (token: string, ...args: P): Promise<R> =>
+  axios
+    .post(
+      apiURL + (typeof url === 'string' ? url : url(...args)),
+      body(...args),
+      {
+        headers: { token },
+        ...options,
+      }
+    )
     .then(returns ?? ((() => {}) as () => R))
     .catch(logError(name));
 
@@ -185,11 +211,19 @@ export const axiosPutUserActive = async (
     .catch(logError('putUserActive'));
 };
 
-export const axiosCreateCertificate = async (
+export const axiosCreateCertificate = postAPI(
+  'createCertificate',
+  `/certificate/create`,
+  (data: CertificateData) => data,
+  (res) => res.data as { uuid: string; automatic: boolean }
+);
+
+// TODO: Adapt backend accordingly
+/* async (
   id: string,
   token: string,
   certificateData: CertificateData
-): Promise<AxiosResponse<string>> => {
+): Promise<{ uuid: string; automatic: boolean }> => {
   const url = `${apiURL}/certificate/create/${id}/${certificateData.student}`;
 
   const params = new URLSearchParams();
@@ -204,8 +238,9 @@ export const axiosCreateCertificate = async (
 
   return axios
     .get(url, { headers: { token }, responseType: 'blob', params })
-    .catch(logError('createCertificate'));
-};
+    .catch(logError('createCertificate'))
+    .then((res) => res);
+}; */
 
 export const axiosGetCertificate = getAPI(
   'getCertificate',
@@ -221,9 +256,17 @@ export const axiosGetCertificates = getAPI(
   (res) => res.data.certificates as IExposedCertificate[]
 );
 
-export const axiosGetCourses = async (
-  token: string
-): Promise<CourseOverview[]> => {
+export const axiosSignCertificate = postAPI<
+  boolean,
+  [string, ICertificateSignature]
+>(
+  'signCertificate',
+  (uuid) => `/certificate/${uuid}/sign`,
+  (uuid, signature) => signature,
+  (res) => res.status >= 200 && res.status <= 300
+);
+
+export const axiosGetCourses = async (): Promise<CourseOverview[]> => {
   const url = `${apiURL}/courses`;
 
   const params = new URLSearchParams();
@@ -312,7 +355,7 @@ export const axiosGetMyCourses = (
   const params = new URLSearchParams();
   params.append(
     'fields',
-    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart'
+    'name,description,tags,outline,state,category,instructors,subcourses,cancelled,joined,joinAfterStart,image'
   );
   if (instructor) {
     params.append('instructor', instructor);

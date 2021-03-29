@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   min-height: fit-content;
-
+  text-align: center;
   > a {
     display: flex;
     flex-direction: column;
@@ -119,5 +119,19 @@
   //change color of tick if disabled
   :global(.ant-checkbox-disabled.ant-checkbox-checked .ant-checkbox-inner::after) {
     border-color: #1890ff;
+  }
+}
+
+.tutorTitle {
+  font-size: 20px !important;
+  font-weight: 600;
+
+  @media only screen and (max-width: 600px) {
+    font-size: 18px !important;
+    font-weight: 600;
+    line-height: 30px !important;
+    width: 100%;
+    text-align: center;
+    margin: 0px 0px !important;
   }
 }

@@ -8,9 +8,10 @@ import Button from '../button';
 import Context from '../../context';
 import { Lecture } from '../../types/Course';
 import { CompletedCourse, CompletedLecture } from '../../routes/CourseForm';
-
+import { ReactComponent as Plus } from '../../assets/icons/plus-solid.svg';
 import classes from './CreateLecture.module.scss';
 import { CompletedSubCourse } from './CreateCourse';
+import AccentColorButton from '../button/AccentColorButton';
 
 interface Props {
   lectures: CompletedLecture[];
@@ -160,14 +161,13 @@ export const CreateLecture: React.FC<Props> = (props) => {
             </div>
             <div className={classes.footerForm}>
               {renderFormItems()}
-              <Button
+              <AccentColorButton
+                accentColor="#4E6AE6"
+                label="Erstellen"
                 onClick={handleCourseCreation}
-                className={classes.button}
-                color="white"
-                backgroundColor="#4E6AE6"
-              >
-                Erstellen
-              </Button>
+                small
+                Icon={Plus}
+              />
             </div>
           </div>
         }

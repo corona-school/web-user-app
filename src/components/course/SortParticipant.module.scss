@@ -1,0 +1,24 @@
+.sortParticipant {
+  ul {
+    padding: 0;
+    margin: 0;
+    text-align: end;
+    li {
+      list-style: none;
+      display: inline-block;
+      padding-left: 0.5rem;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    ul {
+      text-align: start;
+      li {
+        margin-bottom: 0.5rem;
+        &:first-child {
+          display: block;
+        }
+      }
+    }
+  }
+}

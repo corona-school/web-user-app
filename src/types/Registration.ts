@@ -21,6 +21,8 @@ export interface Tutee {
   redirectTo?: string;
   teacherEmail?: string;
   registrationSource?: string;
+  languages: string[];
+  learningGermanSince?: string;
 }
 
 export interface SchoolInfo {
@@ -55,4 +57,6 @@ export interface Tutor {
   newsletter: boolean;
   redirectTo?: string;
   registrationSource?: string;
+  languages?: string[];
+  supportsInDaz?: boolean;
 }

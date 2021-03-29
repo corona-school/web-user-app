@@ -6,6 +6,7 @@ export const subjectOptions = [
   'Chemie',
   'Physik',
   'Informatik',
+  'Sachkunde',
   'Geschichte',
   'Erdkunde',
   'Wirtschaft',
@@ -21,4 +22,5 @@ export const subjectOptions = [
   'Italienisch',
   'Russisch',
   'Niederländisch',
+  'Deutsch als Zweitsprache',
 ];

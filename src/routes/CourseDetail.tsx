@@ -26,6 +26,8 @@ import {
   List,
   Tooltip,
   Popconfirm,
+  Row,
+  Col,
 } from 'antd';
 import AddInstructorModal from '../components/Modals/AddInstructorModal';
 import { ApiContext } from '../context/ApiContext';
@@ -35,6 +37,7 @@ import {
   CourseState,
   Course,
   SubCourse,
+  CourseParticipant,
   Tag as CourseTag,
 } from '../types/Course';
 import { Title, Text } from '../components/Typography';
@@ -54,6 +57,8 @@ import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
+import SearchParticipant from '../components/course/SearchParticipant';
+import SortParticipant from '../components/course/SortParticipant';
 
 moment.locale('de');
 
@@ -71,6 +76,10 @@ const CourseDetail = (params: {
     false
   );
   const [tags, setTags] = useState<CourseTag[]>([]);
+  const [participantList, setParticipantList] = useState<CourseParticipant[]>(
+    []
+  );
+  const [enteredFilter, setEnteredFilter] = useState('');
 
   const [loadingCerts, setLoadingCerts] = useState<Set<string>>(new Set());
   const loadingCertsRef = useRef(loadingCerts);
@@ -95,6 +104,7 @@ const CourseDetail = (params: {
       .then((course) => {
         const parsedCourse = parseCourse(course);
         setCourse(parsedCourse);
+        setParticipantList(parsedCourse.subcourse.participantList);
         params?.setIsWaitingList(
           parsedCourse.subcourse
             ? parsedCourse.subcourse.participants ===
@@ -123,6 +133,36 @@ const CourseDetail = (params: {
       updateCourseDetails();
     }
   }, [api, id, setTags]);
+
+  // search Participants
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!loading && course) {
+        const filteredParticipants = course.subcourse.participantList.filter(
+          (data) => {
+            if (enteredFilter.length === 0) return data;
+            if (
+              data.firstname
+                .toUpperCase()
+                .includes(enteredFilter.toUpperCase()) ||
+              data.lastname
+                .toUpperCase()
+                .includes(enteredFilter.toUpperCase()) ||
+              data.email.toUpperCase().includes(enteredFilter.toUpperCase()) ||
+              data.grade.toFixed().includes(enteredFilter)
+            ) {
+              return data;
+            }
+            return null;
+          }
+        );
+        setParticipantList(filteredParticipants);
+      }
+    }, 500);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [loading, enteredFilter]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -333,14 +373,10 @@ const CourseDetail = (params: {
     }
 
     // fitting grades?
-    if (
+    return (
       userContext.user.grade >= course.subcourse.minGrade &&
       userContext.user.grade <= course.subcourse.maxGrade
-    ) {
-      return true;
-    }
-
-    return false;
+    );
   };
 
   const canJoinWaitingList = () => {
@@ -470,7 +506,7 @@ const CourseDetail = (params: {
       .sort((a, b) => a.start - b.start)
       .map((l, i) => {
         return (
-          <div className={classes.newsContent} key={l.id}>
+          <Col lg={24} md={12} sm={24} key={l.id}>
             <div className={classes.newsHeadline}>
               <Tag>{moment.unix(l.start).format('DD.MM')}</Tag>
               <Tag>
@@ -497,7 +533,7 @@ const CourseDetail = (params: {
               <br />
               Tutor: {l.instructor.firstname} {l.instructor.lastname}
             </Text>
-          </div>
+          </Col>
         );
       });
   };
@@ -512,15 +548,32 @@ const CourseDetail = (params: {
 
     return (
       <div>
+        <div>
+          <Row gutter={16}>
+            <Col
+              xxl={{ span: 12, offset: 12 }}
+              md={{ span: 18, offset: 6 }}
+              sm={24}
+              xs={24}
+            >
+              <SearchParticipant
+                inputValue={(value) => setEnteredFilter(value)}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <SortParticipant
+                setParticipantList={(value) => setParticipantList(value)}
+                getParticipantList={participantList}
+              />
+            </Col>
+          </Row>
+        </div>
         <List
-          style={{
-            margin: '10px',
-            maxWidth: '800px',
-            background: 'white',
-            padding: '4px',
-          }}
-          itemLayout="horizontal"
-          dataSource={course.subcourse.participantList}
+          className={classes.participantList}
+          // itemLayout="horizontal"
+          dataSource={participantList}
           renderItem={(item) => (
             <List.Item
               actions={[
@@ -629,249 +682,285 @@ const CourseDetail = (params: {
     return (
       <div className={classes.statusContainer}>
         <div className={classes.headerContainer}>
-          <div>
-            <Title size="h1" style={{ margin: '0px 20px 10px 8px' }}>
-              {course.name}
-            </Title>
-            <Title size="h5" style={{ margin: '-4px 10px 0px 10px' }}>
-              {course.outline}
-            </Title>
-          </div>
-          <div className={classes.actionContainer}>
-            {isMyCourse && (
-              <Dropdown overlay={getMenu()}>
-                {course.state === CourseState.CREATED ? (
-                  <AntdButton
-                    type="primary"
-                    style={{
-                      backgroundColor: '#FCD95C',
-                      borderColor: '#FCD95C',
-                      color: '#373E47',
-                    }}
-                    onClick={() => {
-                      submitCourse();
-                    }}
-                  >
-                    <CheckCircleOutlined /> Zur Prüfung freigeben
-                  </AntdButton>
-                ) : (
-                  <AntdButton>
-                    Einstellungen <DownOutlined />
-                  </AntdButton>
-                )}
-              </Dropdown>
-            )}
-            {(canJoinCourse() ||
-              canJoinWaitingList() ||
-              canDisjoinCourse() ||
-              canDisjoinWaitingList()) && (
-              <AntdButton
-                type="primary"
-                style={{
-                  backgroundColor:
-                    course.subcourse.joined || course.subcourse.onWaitingList
-                      ? '#F4486D'
-                      : '#FCD95C',
-                  borderColor:
-                    course.subcourse.joined || course.subcourse.onWaitingList
-                      ? '#F4486D'
-                      : '#FCD95C',
-                  color:
-                    course.subcourse.joined || course.subcourse.onWaitingList
-                      ? 'white'
-                      : '#373E47',
-                  width: '140px',
-                  margin: '0px 10px',
-                  height: 'auto',
-                  overflow: 'hidden',
-                  whiteSpace: 'normal',
-                }}
-                onClick={joinButtonAction}
-              >
-                {joinButtonTitle()}
-              </AntdButton>
-            )}
-            <div className={classes.videochatAction}>
-              {((isMyCourse && course.state === CourseState.ALLOWED) ||
-                course.subcourse.joined) &&
-                !hasEnded() && (
-                  <AntdButton
-                    type="primary"
-                    style={{
-                      backgroundColor: '#FCD95C',
-                      borderColor: '#FCD95C',
-                      color: '#373E47',
-                      width: '140px',
-                      margin: '5px 10px',
-                    }}
-                    onClick={joinBBBmeeting}
-                    disabled={!shouldEnableVideoChat()}
-                  >
-                    Zum Videochat
-                  </AntdButton>
-                )}
-              <ClipLoader
-                size={15}
-                color="#123abc"
-                loading={isLoadingVideoChat}
-              />
-            </div>
-            {!shouldEnableVideoChat() && (
-              <div className={classes.videochatAction}>
-                {((isMyCourse && course.state === CourseState.ALLOWED) ||
-                  course.subcourse.joined) &&
-                  !hasEnded() && (
-                    <AntdButton
-                      type="primary"
-                      style={{
-                        backgroundColor: '#FCD95C',
-                        borderColor: '#FCD95C',
-                        color: '#373E47',
-                        width: '140px',
-                        margin: '5px 10px',
-                      }}
-                      onClick={joinTestMeeting}
-                    >
-                      Videochat testen
-                    </AntdButton>
+          <Row>
+            <Col xxl={20} lg={18} md={17} sm={24}>
+              <Title size="h1" style={{ marginBottom: '0px' }}>
+                {course.name}
+              </Title>
+              <Title size="h5">{course.outline}</Title>
+            </Col>
+            <Col xxl={4} lg={6} md={7} sm={24}>
+              <div className={classes.actionContainer}>
+                <Row gutter={[6, 6]}>
+                  {isMyCourse && (
+                    <Col span={24}>
+                      <Dropdown overlay={getMenu()}>
+                        {course.state === CourseState.CREATED ? (
+                          <AntdButton
+                            type="primary"
+                            style={{
+                              backgroundColor: '#FCD95C',
+                              borderColor: '#FCD95C',
+                              color: '#373E47',
+                              width: '100%',
+                            }}
+                            onClick={() => {
+                              submitCourse();
+                            }}
+                          >
+                            <CheckCircleOutlined /> Zur Prüfung freigeben
+                          </AntdButton>
+                        ) : (
+                          <AntdButton
+                            style={{
+                              width: '100%',
+                            }}
+                          >
+                            Einstellungen <DownOutlined />
+                          </AntdButton>
+                        )}
+                      </Dropdown>
+                    </Col>
                   )}
+                  {(canJoinCourse() ||
+                    canJoinWaitingList() ||
+                    canDisjoinCourse() ||
+                    canDisjoinWaitingList()) && (
+                    <Col md={24} sm={12} xs={12}>
+                      <AntdButton
+                        type="primary"
+                        style={{
+                          backgroundColor:
+                            course.subcourse.joined ||
+                            course.subcourse.onWaitingList
+                              ? '#F4486D'
+                              : '#FCD95C',
+                          borderColor:
+                            course.subcourse.joined ||
+                            course.subcourse.onWaitingList
+                              ? '#F4486D'
+                              : '#FCD95C',
+                          color:
+                            course.subcourse.joined ||
+                            course.subcourse.onWaitingList
+                              ? 'white'
+                              : '#373E47',
+                          width: '100%',
+                          height: 'auto',
+                          overflow: 'hidden',
+                          whiteSpace: 'normal',
+                        }}
+                        onClick={joinButtonAction}
+                      >
+                        {joinButtonTitle()}
+                      </AntdButton>
+                    </Col>
+                  )}
+                  <Col md={24} sm={12} xs={12}>
+                    <div className={classes.videochatAction}>
+                      {((isMyCourse && course.state === CourseState.ALLOWED) ||
+                        course.subcourse.joined) &&
+                        !hasEnded() && (
+                          <AntdButton
+                            type="primary"
+                            style={{
+                              backgroundColor: '#FCD95C',
+                              borderColor: '#FCD95C',
+                              color: '#373E47',
+                              width: '100%',
+                            }}
+                            onClick={joinBBBmeeting}
+                            disabled={!shouldEnableVideoChat()}
+                          >
+                            Zum Videochat
+                          </AntdButton>
+                        )}
+                      <ClipLoader
+                        size={15}
+                        color="#123abc"
+                        loading={isLoadingVideoChat}
+                      />
+                    </div>
+                  </Col>
+                  {!shouldEnableVideoChat() && (
+                    <Col md={24} sm={12} xs={12}>
+                      <div className={classes.videochatAction}>
+                        {((isMyCourse &&
+                          course.state === CourseState.ALLOWED) ||
+                          course.subcourse.joined) &&
+                          !hasEnded() && (
+                            <AntdButton
+                              type="primary"
+                              style={{
+                                backgroundColor: '#FCD95C',
+                                borderColor: '#FCD95C',
+                                color: '#373E47',
+                                width: '100%',
+                              }}
+                              onClick={joinTestMeeting}
+                            >
+                              Videochat testen
+                            </AntdButton>
+                          )}
+                      </div>
+                    </Col>
+                  )}
+                  {!isStudent && course.allowContact && (
+                    <Col md={24} sm={12} xs={12}>
+                      <div className={classes.contactInstructorsAction}>
+                        <AntdButton
+                          type="primary"
+                          style={{
+                            backgroundColor: '#FCD95C',
+                            borderColor: '#FCD95C',
+                            color: '#373E47',
+                            width: '100%',
+                          }}
+                          onClick={openWriteMessageModal}
+                          icon={<MailOutlined />}
+                        >
+                          Kontakt
+                        </AntdButton>
+                      </div>
+                    </Col>
+                  )}
+                  <Col md={24} sm={12} xs={12}>
+                    <div className={classes.shareAction}>
+                      <Dropdown
+                        overlay={antdShareMenu}
+                        trigger={['click']}
+                        visible={isCustomShareMenuVisible}
+                        onVisibleChange={(v) =>
+                          !v && setIsCustomShareMenuVisible(v)
+                        }
+                      >
+                        <AntdButton
+                          type="primary"
+                          style={{
+                            backgroundColor: '#FCD95C',
+                            borderColor: '#FCD95C',
+                            color: '#373E47',
+                            width: '100%',
+                          }}
+                          onClick={shareCourse}
+                          icon={<ShareAltOutlined />}
+                        >
+                          Kurs teilen
+                        </AntdButton>
+                      </Dropdown>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+              {/* actionContainer end */}
+            </Col>
+          </Row>
+        </div>
+        <Row>
+          <Col xxl={20} xl={22} lg={24}>
+            <Row>
+              <Col>
+                <Descriptions
+                  column={{ xxl: 3, xl: 2, lg: 2, md: 2, sm: 1, xs: 1 }}
+                  size="small"
+                  style={{
+                    margin: '10px',
+                  }}
+                  labelStyle={{ color: '#5a5a5a', fontWeight: 'bold' }}
+                >
+                  {isMyCourse && (
+                    <Descriptions.Item label="Status">
+                      <Tag
+                        background={
+                          course.state === CourseState.CANCELLED ||
+                          course.state === CourseState.DENIED
+                            ? '#F4486D'
+                            : '#FCD95C'
+                        }
+                        color={
+                          course.state === CourseState.CANCELLED ||
+                          course.state === CourseState.DENIED
+                            ? 'white'
+                            : '#373E47'
+                        }
+                        style={{ fontSize: '12px', margin: 0 }}
+                      >
+                        {CourseStateToLabel.get(course.state)}
+                      </Tag>
+                    </Descriptions.Item>
+                  )}
+                  {isMyCourse && (
+                    <Descriptions.Item label="Sichtbarkeit">
+                      {course.subcourse?.published ? (
+                        'Öffentlich'
+                      ) : (
+                        <Tooltip title="Der Kurs ist nur für dich sichtbar.">
+                          <span>Privat</span>
+                        </Tooltip>
+                      )}
+                    </Descriptions.Item>
+                  )}
+                  <Descriptions.Item label="Kategorie">
+                    {CategoryToLabel.get(course.category)}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Teilnehmende">
+                    {course.subcourse.participants}/
+                    {course.subcourse.maxParticipants}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Klasse">
+                    {course.subcourse.minGrade}-{course.subcourse.maxGrade}{' '}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Anzahl">
+                    {course.subcourse.lectures.length} Lektionen
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Dauer">
+                    {course.subcourse.lectures
+                      .map((l) => `${l.duration}min.`)
+                      .join(', ')}{' '}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Tutor*innen">
+                    {instructors
+                      .filter((item, pos) => instructors.indexOf(item) === pos)
+                      .join(', ')}
+                  </Descriptions.Item>
+                  {isMyCourse && (
+                    <Descriptions.Item label="Kontaktieren">
+                      {course.allowContact ? 'erlaubt' : 'deaktiviert'}
+                    </Descriptions.Item>
+                  )}
+                </Descriptions>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <Descriptions size="small" layout="vertical" column={1}>
+                  <Descriptions.Item label="Beschreibung">
+                    <Text large>
+                      <i style={{ whiteSpace: 'pre-wrap' }}>
+                        {course.description}
+                      </i>
+                    </Text>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Tags">
+                    {course.tags.map((t) => {
+                      return <Tag key={t.id}>{t.name}</Tag>;
+                    })}
+                  </Descriptions.Item>
+                </Descriptions>
+              </Col>
+            </Row>
+            {isMyCourse && (
+              <div>
+                <Title size="h3" style={{ margin: '10px 0px' }}>
+                  Teilnehmer*innen
+                </Title>
+
+                <div>{renderParticipants()}</div>
               </div>
             )}
-
-            <div className={classes.contactInstructorsAction}>
-              {!isStudent && course.allowContact && (
-                <AntdButton
-                  type="primary"
-                  style={{
-                    backgroundColor: '#FCD95C',
-                    borderColor: '#FCD95C',
-                    color: '#373E47',
-                    width: '140px',
-                    margin: '5px 10px',
-                  }}
-                  onClick={openWriteMessageModal}
-                  icon={<MailOutlined />}
-                >
-                  Kontakt
-                </AntdButton>
-              )}
-            </div>
-            <div className={classes.shareAction}>
-              <Dropdown
-                overlay={antdShareMenu}
-                trigger={['click']}
-                visible={isCustomShareMenuVisible}
-                onVisibleChange={(v) => !v && setIsCustomShareMenuVisible(v)}
-              >
-                <AntdButton
-                  type="primary"
-                  style={{
-                    backgroundColor: '#FCD95C',
-                    borderColor: '#FCD95C',
-                    color: '#373E47',
-                    width: '140px',
-                    margin: '5px 10px',
-                  }}
-                  onClick={shareCourse}
-                  icon={<ShareAltOutlined />}
-                >
-                  Kurs teilen
-                </AntdButton>
-              </Dropdown>
-            </div>
-          </div>
-        </div>
-
-        <Descriptions
-          column={3}
-          size="small"
-          style={{ margin: '10px', maxWidth: '700px' }}
-        >
-          {isMyCourse && (
-            <Descriptions.Item label="Status">
-              <Tag
-                background={
-                  course.state === CourseState.CANCELLED ||
-                  course.state === CourseState.DENIED
-                    ? '#F4486D'
-                    : '#FCD95C'
-                }
-                color={
-                  course.state === CourseState.CANCELLED ||
-                  course.state === CourseState.DENIED
-                    ? 'white'
-                    : '#373E47'
-                }
-                style={{ fontSize: '12px', margin: 0 }}
-              >
-                {CourseStateToLabel.get(course.state)}
-              </Tag>
-            </Descriptions.Item>
-          )}
-          {isMyCourse && (
-            <Descriptions.Item label="Sichtbarkeit">
-              {course.subcourse?.published ? (
-                'Öffentlich'
-              ) : (
-                <Tooltip title="Der Kurs ist nur für dich sichtbar.">
-                  <span>Privat</span>
-                </Tooltip>
-              )}
-            </Descriptions.Item>
-          )}
-          <Descriptions.Item label="Kategorie">
-            {CategoryToLabel.get(course.category)}
-          </Descriptions.Item>
-          <Descriptions.Item label="Teilnehmende">
-            {course.subcourse.participants}/{course.subcourse.maxParticipants}
-          </Descriptions.Item>
-          <Descriptions.Item label="Klasse">
-            {course.subcourse.minGrade}-{course.subcourse.maxGrade}{' '}
-          </Descriptions.Item>
-          <Descriptions.Item label="Anzahl">
-            {course.subcourse.lectures.length} Lektionen
-          </Descriptions.Item>
-          <Descriptions.Item label="Dauer">
-            {course.subcourse.lectures
-              .map((l) => `${l.duration}min.`)
-              .join(', ')}{' '}
-          </Descriptions.Item>
-          <Descriptions.Item label="Tutor*innen">
-            {instructors
-              .filter((item, pos) => instructors.indexOf(item) === pos)
-              .join(', ')}
-          </Descriptions.Item>
-          {isMyCourse && (
-            <Descriptions.Item label="Kontaktieren">
-              {course.allowContact ? 'erlaubt' : 'deaktiviert'}
-            </Descriptions.Item>
-          )}
-        </Descriptions>
-        <Descriptions
-          size="small"
-          layout="vertical"
-          column={1}
-          style={{ margin: '10px', maxWidth: '700px' }}
-        >
-          <Descriptions.Item label="Beschreibung">
-            <Text large>
-              <i style={{ whiteSpace: 'pre-wrap' }}>{course.description}</i>
-            </Text>
-          </Descriptions.Item>
-          <Descriptions.Item label="Tags">
-            {course.tags.map((t) => {
-              return <Tag key={t.id}>{t.name}</Tag>;
-            })}
-          </Descriptions.Item>
-        </Descriptions>
-        {isMyCourse && (
-          <div>
-            <Title size="h3" style={{ margin: '0px 10px' }}>
-              Teilnehmer*innen
-            </Title>
-            <div>{renderParticipants()}</div>
-          </div>
-        )}
+          </Col>
+        </Row>
       </div>
     );
   };
@@ -888,7 +977,9 @@ const CourseDetail = (params: {
             </Title>
 
             <div className={classes.newsContentContainer}>
-              {renderLectures()}
+              <div className={classes.newsContent}>
+                <Row gutter={[14, 14]}>{renderLectures()}</Row>
+              </div>
             </div>
           </div>
         </div>
