@@ -1,6 +1,7 @@
 import { Empty, message } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
+import { useHistory } from 'react-router-dom';
 import Images from '../assets/images';
 import Button from '../components/button';
 import { CourseHeader } from '../components/course/CourseHeader';
@@ -8,11 +9,17 @@ import { CourseList } from '../components/course/CourseList';
 import { ApiContext } from '../context/ApiContext';
 import { UserContext } from '../context/UserContext';
 import { ParsedCourseOverview, Tag, TagAndCategory } from '../types/Course';
-import { defaultPublicCourseSort, parseCourse } from '../utils/CourseUtil';
+import {
+  defaultPublicCourseSort,
+  parseCourse,
+  scrollToTargetAdjustedRight,
+  scrollToTargetAdjustedTop,
+} from '../utils/CourseUtil';
 import classes from './CourseOverview.module.scss';
 import { Text } from '../components/Typography';
 import { env } from '../api/config';
 import { NoCourses } from '../components/NoService';
+import CourseCard from '../components/cards/CourseCard';
 
 interface Props {
   customCourseLink?: (course: ParsedCourseOverview) => string;
@@ -32,7 +39,55 @@ export const CourseOverview: React.FC<Props> = ({
   const apiContext = useContext(ApiContext);
   const userContext = useContext(UserContext);
 
+  const history = useHistory();
+  const itemsRef = useRef([]);
+
   const courseOverviewDisabled = env.REACT_APP_COURSE_OVERVIEW === 'disabled';
+
+  const scrollToItemInSection = (hash, courseList, container) => {
+    const courseId = Number(decodeURIComponent(hash.slice(1).split(':')[1]));
+    if (courseId != null) {
+      setTimeout(() => {
+        console.log(courseId, courseList);
+        const course = courseList.find((c) => c.id === courseId);
+        if (course != null) {
+          // eslint-disable-next-line no-param-reassign
+          container.scrollLeft = course.el.getBoundingClientRect().x;
+          scrollToTargetAdjustedRight(
+            course.el.parentElement.parentElement,
+            course.el,
+            50
+          );
+          course.el.style.transition = '0.1s outline ease-in-out';
+          course.el.style.outline = '0px solid #4E6AE6';
+          setTimeout(() => {
+            course.el.style.outline = '3px solid #4E6AE6';
+          }, 150);
+          setTimeout(() => {
+            course.el.style.outline = '0px solid #4E6AE6';
+          }, 750);
+        }
+      }, 1000);
+    }
+  };
+
+  const scrollToPreviousSection = (hash) => {
+    if (hash.length > 1) {
+      const sectionTitle = decodeURIComponent(hash.slice(1).split(':')[0]);
+      setTimeout(() => {
+        const index = itemsRef.current
+          .filter((el) => el != null)
+          .find((i) => {
+            if (i != null) {
+              return i.name === sectionTitle;
+            }
+            return false;
+          });
+        scrollToTargetAdjustedTop(index.el, 80);
+        scrollToItemInSection(hash, index.courseItemRefs, index.el);
+      }, 500);
+    }
+  };
 
   const loadCourses = () => {
     if (courseOverviewDisabled) return;
@@ -54,6 +109,7 @@ export const CourseOverview: React.FC<Props> = ({
       })
       .finally(() => {
         setLoading(false);
+        scrollToPreviousSection(history.location.hash);
       });
   };
 
@@ -61,10 +117,76 @@ export const CourseOverview: React.FC<Props> = ({
     loadCourses();
   }, [userContext.user.type]);
 
+  const coachingTag = tags
+    .filter((t) => t.category === 'coaching')
+    .reduce<TagAndCategory>(
+      (acc, t) => {
+        acc.ids.push(t.id);
+        return acc;
+      },
+      { ids: [], name: 'Lerncoaching' }
+    );
+
+  const revisionTag = tags
+    .filter((t) => t.category === 'revision')
+    .reduce<TagAndCategory>(
+      (acc, t) => {
+        acc.ids.push(t.id);
+        return acc;
+      },
+      { ids: [], name: 'Repetitorium' }
+    );
+
+  const invisibleClubTagIds = [
+    'material-no',
+    'material-required',
+    'priorknowledge-no',
+    'priorknowledge-required',
+  ];
+
+  const priorityClubTagIDs = ['mint', 'language', 'environment']; // descending
+  const clubTags = [
+    ...tags
+      .filter((t) => priorityClubTagIDs.includes(t.id))
+      .sort(
+        (t1, t2) =>
+          priorityClubTagIDs.indexOf(t1.id) - priorityClubTagIDs.indexOf(t2.id)
+      ),
+    ...tags.filter((t) => !priorityClubTagIDs.includes(t.id)),
+  ]
+    .filter((t) => t.category === 'club' && !invisibleClubTagIds.includes(t.id))
+    .map<TagAndCategory>((t) => ({ ids: [t.id], name: t.name }));
+
+  const noTags = { ids: [], name: 'Sonstiges' };
+
+  const sortedTags = [...clubTags, revisionTag, coachingTag, noTags].map(
+    (item) => {
+      const isFiltering = filteredCourses !== null;
+      const list = isFiltering ? filteredCourses : courses;
+      const courseList = list.filter(
+        (c) =>
+          c.tags.filter((courseTag) => item.ids.includes(courseTag.id))
+            .length !== 0 ||
+          (c.tags.length === 0 && item.ids.length === 0)
+      );
+      if (courseList.length === 0 && isFiltering) {
+        return null;
+      }
+
+      return {
+        tag: item,
+        courseList: courseList.sort(defaultPublicCourseSort),
+      };
+    }
+  );
+
+  useEffect(() => {
+    itemsRef.current = itemsRef.current.slice(0, sortedTags.length);
+  }, [sortedTags]);
+
   if (courseOverviewDisabled) {
     return <NoCourses />;
   }
-
   const renderCourseLists = () => {
     if (tags.length === 0) {
       return (
@@ -81,76 +203,49 @@ export const CourseOverview: React.FC<Props> = ({
         </div>
       );
     }
-    const coachingTag = tags
-      .filter((t) => t.category === 'coaching')
-      .reduce<TagAndCategory>(
-        (acc, t) => {
-          acc.ids.push(t.id);
-          return acc;
-        },
-        { ids: [], name: 'Lerncoaching' }
-      );
 
-    const revisionTag = tags
-      .filter((t) => t.category === 'revision')
-      .reduce<TagAndCategory>(
-        (acc, t) => {
-          acc.ids.push(t.id);
-          return acc;
-        },
-        { ids: [], name: 'Repetitorium' }
-      );
-
-    const invisibleClubTagIds = [
-      'material-no',
-      'material-required',
-      'priorknowledge-no',
-      'priorknowledge-required',
-    ];
-
-    const priorityClubTagIDs = ['mint', 'language', 'environment']; // descending
-    const clubTags = [
-      ...tags
-        .filter((t) => priorityClubTagIDs.includes(t.id))
-        .sort(
-          (t1, t2) =>
-            priorityClubTagIDs.indexOf(t1.id) -
-            priorityClubTagIDs.indexOf(t2.id)
-        ),
-      ...tags.filter((t) => !priorityClubTagIDs.includes(t.id)),
-    ]
-      .filter(
-        (t) => t.category === 'club' && !invisibleClubTagIds.includes(t.id)
-      )
-      .map<TagAndCategory>((t) => ({ ids: [t.id], name: t.name }));
-
-    const noTags = { ids: [], name: 'Sonstiges' };
-
-    const courseLists = [...clubTags, revisionTag, coachingTag, noTags]
+    const courseLists = sortedTags
       .map((t, i) => {
         const isFiltering = filteredCourses !== null;
-        const list = isFiltering ? filteredCourses : courses;
-        const courseList = list.filter(
-          (c) =>
-            c.tags.filter((courseTag) => t.ids.includes(courseTag.id))
-              .length !== 0 ||
-            (c.tags.length === 0 && t.ids.length === 0)
-        );
-
-        if (courseList.length === 0 && isFiltering) {
+        if (t == null || (t.courseList.length === 0 && isFiltering)) {
           return null;
         }
 
-        // sort courses in every row
-        const sortedCourseList = courseList.sort(defaultPublicCourseSort);
+        const courseItemRefs = [].slice(0, t.courseList.length);
+
+        const courseItems = t.courseList.map((course, index) => (
+          <CourseCard
+            course={course}
+            key={course.id}
+            customCourseLink={customCourseLink?.(course)}
+            currentAnchor={`${t.tag.name}:${course.id}`}
+            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+            // @ts-ignore
+            ref={(el) => {
+              courseItemRefs[index] = { id: course.id, el };
+            }}
+          />
+        ));
 
         return (
           <CourseList
-            name={t.name}
+            name={t.tag.name}
             // eslint-disable-next-line react/no-array-index-key
-            key={`${t.name}-${i}`}
-            courses={sortedCourseList}
+            key={`${t.tag.name}-${i}`}
+            courses={t.courseList}
             customCourseLink={customCourseLink}
+            richLink
+            elements={courseItems}
+            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+            // @ts-ignore
+            ref={(el) => {
+              itemsRef.current[i] = {
+                name: t.tag.name,
+                courseItems,
+                courseItemRefs,
+                el,
+              };
+            }}
           />
         );
       })
@@ -177,14 +272,13 @@ export const CourseOverview: React.FC<Props> = ({
         }}
         backButtonRoute={backButtonRoute}
       />
-      {loading ? (
+      {loading && (
         <div className={classes.loadingContainer}>
           <ClipLoader size={100} color="#f4486d" loading />
           <p>Kurse werden geladen</p>
         </div>
-      ) : (
-        renderCourseLists()
       )}
+      {!loading && renderCourseLists()}
     </>
   );
 };

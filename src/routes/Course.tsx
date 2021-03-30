@@ -83,6 +83,7 @@ const Course = () => {
           .length > 0 && (
           <CourseList
             name="Deine aktuellen Kurse"
+            richLink={false}
             courses={myCourses.filter(
               (x) => !getPreviousCourses().some((y) => y === x)
             )}
@@ -91,6 +92,7 @@ const Course = () => {
 
         {getPreviousCourses().length > 0 && (
           <CourseList
+            richLink={false}
             name="Deine vergangenen Kurse"
             courses={getPreviousCourses()}
           />
