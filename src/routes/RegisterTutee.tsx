@@ -10,9 +10,8 @@ import {
   Tooltip,
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import Icons from '../assets/icons';
-import SignupContainer from '../components/container/SignupContainer';
 import { Title, Text, LinkText } from '../components/Typography';
 import Button from '../components/button';
 
@@ -35,6 +34,9 @@ import {
 } from '../components/forms/registration';
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
+import { languages } from '../assets/languages';
+import { learningGermanSinceOptions } from '../assets/learningGermanSinceOptions';
+import SignupContainer from '../components/container/SignupContainer';
 
 const { Option } = Select;
 
@@ -52,12 +54,14 @@ interface FormData {
   projectMemberCount?: number;
   // isTutee
   subjects?: Subject[];
-  // finnish
+  // finish
   state?: string;
   school?: string;
   msg?: string;
   newsletter?: boolean;
   teacherEmail?: string;
+  languages?: typeof languages[number][];
+  learningGermanSince?: string;
 }
 
 const useQuery = () => {
@@ -77,11 +81,14 @@ const RegisterTutee: React.FC<Props> = ({
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState<
-    'start' | 'detail' | 'finnish' | 'done'
+    'start' | 'detail' | 'finish' | 'done'
   >('start');
   const [isTutee, setTutee] = useState(false);
   const [isGroups, setGroups] = useState(false);
   const [isJufo, setJufo] = useState(isJufoSubdomain ?? false);
+
+  const [isGermanNative, setIsGermanNative] = useState<boolean>(true);
+  const [dazOnly, setDazOnly] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<FormData>({});
   const [form] = Form.useForm();
@@ -123,6 +130,23 @@ const RegisterTutee: React.FC<Props> = ({
         <Icons.Help fill="grey" />
       </Tooltip>
     );
+  };
+
+  const SetDaZStatus = (learningGermanSince) => {
+    form.setFieldsValue({ subjects: ['Deutsch als Zweitsprache'] });
+
+    switch (learningGermanSince) {
+      case 'greaterThanFour':
+      case 'twoToFour':
+        setDazOnly(false);
+        break;
+      case 'oneToTwo':
+      case 'lessThanOne':
+        setDazOnly(true);
+        break;
+      default:
+        break;
+    }
   };
 
   const renderIsTuteeCheckbox = () => {
@@ -440,6 +464,69 @@ const RegisterTutee: React.FC<Props> = ({
         {isTutee && (
           <Form.Item
             className={classes.formItem}
+            label="Welche Sprachen sprichst du fließend?"
+            name="languages"
+            rules={[
+              {
+                required: true,
+                message:
+                  'Bitte trage die Sprachen ein, die du fließend sprichst.',
+              },
+            ]}
+            initialValue={formData.languages}
+          >
+            <Select
+              mode="multiple"
+              placeholder="Bitte wähle deine Sprachen aus"
+              onChange={(value) =>
+                setIsGermanNative(Object.values(value).includes('Deutsch'))
+              }
+            >
+              {languages.map((l) => (
+                <Option value={l}>{l}</Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
+        {isTutee && !isGermanNative && (
+          <Form.Item
+            className={classes.formItem}
+            label="Seit wann lernst du Deutsch?"
+            name="learningGermanSince"
+            rules={[
+              {
+                required: true,
+                message: 'Bitte gebe an, seit wann du Deutsch lernst.',
+              },
+            ]}
+            initialValue={formData.learningGermanSince}
+          >
+            <Select
+              placeholder="Bitte gebe an, seit wann du Deutsch lernst."
+              onChange={SetDaZStatus}
+            >
+              {Object.entries(learningGermanSinceOptions).map(
+                ([key, value]) => (
+                  <Option value={key}>{value}</Option>
+                )
+              )}
+            </Select>
+          </Form.Item>
+        )}
+        {dazOnly && !isGermanNative && (
+          <Text style={{ paddingLeft: '8px' }}>
+            Es sieht so aus, als ob du noch Unterstützung bei der deutschen
+            Sprache benötigst. Deswegen wirst du von uns mit einem/einer
+            Helfer:in verbunden, der/die dir gezielt dabei hilft, deine
+            Deutschnkentnisse zu verbessern. Aus diesem Grund kannst du zum
+            jetzigen Zeitpunkt nur “Deutsch als Zweitsprache” als Fach
+            auswählen. In anderen Fächern können wir dich leider nicht
+            unterstützen.
+          </Text>
+        )}
+        {isTutee && (
+          <Form.Item
+            className={classes.formItem}
             label="In welchen Fächern benötigst du Unterstützung?"
             name="subjects"
             rules={[
@@ -464,10 +551,13 @@ const RegisterTutee: React.FC<Props> = ({
                 ? formData.subjects.map((s) => s.name)
                 : undefined
             }
+            dependencies={['learningGermanSince']}
+            shouldUpdate
           >
             <Select
               mode="multiple"
               placeholder="Bitte, wähle deine Fächer aus."
+              disabled={dazOnly && !isGermanNative}
             >
               <Option value="Deutsch">Deutsch</Option>
               <Option value="Englisch">Englisch</Option>
@@ -478,11 +568,15 @@ const RegisterTutee: React.FC<Props> = ({
               <Option value="Russisch">Russisch</Option>
               <Option value="Altgriechisch">Altgriechisch</Option>
               <Option value="Niederländisch">Niederländisch</Option>
+              <Option value="Deutsch als Zweitsprache">
+                Deutsch als Zweitsprache
+              </Option>
               <Option value="Mathematik">Mathematik</Option>
               <Option value="Biologie">Biologie</Option>
               <Option value="Physik">Physik</Option>
               <Option value="Chemie">Chemie</Option>
               <Option value="Informatik">Informatik</Option>
+              <Option value="Sachkunde">Sachkunde</Option>
               <Option value="Geschichte">Geschichte</Option>
               <Option value="Politik">Politik</Option>
               <Option value="Wirtschaft">Wirtschaft</Option>
@@ -537,7 +631,7 @@ const RegisterTutee: React.FC<Props> = ({
     );
   };
 
-  const renderFinnish = () => {
+  const renderFinish = () => {
     return (
       <>
         <NewsletterField
@@ -568,8 +662,8 @@ const RegisterTutee: React.FC<Props> = ({
       return renderDetail();
     }
 
-    if (formState === 'finnish') {
-      return renderFinnish();
+    if (formState === 'finish') {
+      return renderFinish();
     }
     if (formState === 'done') {
       return renderDone();
@@ -579,7 +673,7 @@ const RegisterTutee: React.FC<Props> = ({
   };
 
   const back = () => {
-    if (formState === 'finnish') {
+    if (formState === 'finish') {
       setFormState('detail');
     }
     if (formState === 'detail') {
@@ -602,12 +696,19 @@ const RegisterTutee: React.FC<Props> = ({
     ) {
       return null;
     }
+
+    const subjects =
+      data.learningGermanSince === learningGermanSinceOptions.lessThanOne ||
+      data.learningGermanSince === learningGermanSinceOptions.oneToTwo
+        ? [{ name: 'Deutsch als Zweitsprache' }]
+        : data.subjects;
+
     return {
       firstname: data.firstname,
       lastname: data.lastname,
       email: data.email.toLowerCase(),
       isTutee: data.isTutee,
-      subjects: data.subjects || [],
+      subjects: subjects || [],
       grade: data.grade,
       school: data.school?.toLowerCase(),
       state: data.state?.toLowerCase(),
@@ -618,6 +719,8 @@ const RegisterTutee: React.FC<Props> = ({
       newsletter: !!data.newsletter,
       msg: data.msg || '',
       teacherEmail: data.teacherEmail,
+      languages: data.languages || [],
+      learningGermanSince: data.learningGermanSince,
       redirectTo,
     };
   };
@@ -704,11 +807,13 @@ const RegisterTutee: React.FC<Props> = ({
           teacherEmail: formValues.teacherEmail,
           isJufoParticipant: formValues.isJufoParticipant,
           projectMemberCount: formValues.projectMemberCount,
+          languages: formValues.languages,
+          learningGermanSince: formValues.learningGermanSince,
         });
-        setFormState('finnish');
+        setFormState('finish');
       }
 
-      if (formState === 'finnish') {
+      if (formState === 'finish') {
         const data = {
           ...formData,
           newsletter: formValues.newsletter?.includes('newsletter') || false,
@@ -728,81 +833,141 @@ const RegisterTutee: React.FC<Props> = ({
   }
 
   return (
-    <SignupContainer shouldShowBackButton={!cooperationMode}>
-      <div className={classes.signupContainer}>
-        <a
-          rel="noopener noreferrer"
-          href="https://www.corona-school.de/"
-          target="_blank"
-        >
-          <Icons.Logo className={classes.logo} />
-          {cooperationMode?.kind === 'SpecificStateCooperation' &&
-            cooperationMode.stateInfo.coatOfArms &&
-            React.createElement(cooperationMode.stateInfo.coatOfArms, {
-              className: classes.stateLogo,
-            })}
-          <Title size="h2" bold>
-            Corona School
-          </Title>
-        </a>
-        <Title className={classes.tuteeTitle}>
-          {formState === 'done' ? (
-            <span>Du wurdest erfolgreich als Schüler*in registriert</span>
-          ) : (
-            <span>
-              Ich möchte mich registrieren als <b>Schüler*in</b>
-            </span>
-          )}
-        </Title>
-      </div>
-
-      <Form
-        form={form}
-        className={classes.formContainer}
-        layout="vertical"
-        name="basic"
-        initialValues={{ remember: true }}
-      >
-        {!loading ? (
-          renderFormItems()
-        ) : (
-          <div className={classes.loadingContainer}>
-            <ClipLoader size={100} color="#123abc" loading />
+    <div>
+      {!cooperationMode && (
+        <>
+          <div className={classes.signupContainer}>
+            <Title className={classes.tuteeTitle}>
+              {formState === 'done' && (
+                <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+              )}
+              {formState === 'start' && <span>Schritt 1/3</span>}
+              {formState === 'detail' && <span>Schritt 2/3</span>}
+              {formState === 'finish' && <span>Schritt 3/3</span>}
+            </Title>
           </div>
-        )}
 
-        <div className={classes.buttonContainer}>
-          {formState !== 'start' && (
-            <Button
-              onClick={back}
-              className={classes.backButton}
-              color="#4E6AE6"
-              backgroundColor="white"
-            >
-              Zurück
-            </Button>
-          )}
-          <Button
-            onClick={nextStep}
-            className={classes.signupButton}
-            color="white"
-            backgroundColor="#4E6AE6"
+          <Form
+            form={form}
+            className={classes.formContainer}
+            layout="vertical"
+            name="basic"
+            initialValues={{ remember: true }}
           >
-            {formState === 'finnish' && 'Registrieren'}
-            {formState === 'start' && 'Weiter'}
-            {formState === 'detail' && 'Weiter'}
-            {formState === 'done' && 'Anmelden'}
-          </Button>
-        </div>
-      </Form>
-      <Text className={classes.helpText}>
-        Du hast schon ein Account? Hier{' '}
-        <Link style={{ color: '#4e6ae6' }} to="/login">
-          anmelden
-        </Link>
-        .
-      </Text>
-    </SignupContainer>
+            {!loading ? (
+              renderFormItems()
+            ) : (
+              <div className={classes.loadingContainer}>
+                <ClipLoader size={100} color="#123abc" loading />
+              </div>
+            )}
+
+            <div className={classes.buttonContainer}>
+              {formState !== 'start' && (
+                <Button
+                  onClick={back}
+                  className={classes.backButton}
+                  color="#4E6AE6"
+                  backgroundColor="white"
+                >
+                  Zurück
+                </Button>
+              )}
+              <Button
+                onClick={nextStep}
+                className={classes.signupButton}
+                color="white"
+                backgroundColor="#4E6AE6"
+              >
+                {formState === 'finish' && 'Registrieren'}
+                {formState === 'start' && 'Weiter'}
+                {formState === 'detail' && 'Weiter'}
+                {formState === 'done' && 'Anmelden'}
+              </Button>
+            </div>
+          </Form>
+        </>
+      )}
+      {!!cooperationMode && (
+        <>
+          <SignupContainer shouldShowBackButton={!cooperationMode}>
+            <div className={classes.signupContainer}>
+              <a
+                rel="noopener noreferrer"
+                href="https://www.corona-school.de/"
+                target="_blank"
+              >
+                <Icons.Logo className={classes.logo} />
+                {cooperationMode?.kind === 'SpecificStateCooperation' &&
+                  cooperationMode.stateInfo.coatOfArms &&
+                  React.createElement(cooperationMode.stateInfo.coatOfArms, {
+                    className: classes.stateLogo,
+                  })}
+                <Title size="h2" bold>
+                  Corona School
+                </Title>
+              </a>
+              <Title className={classes.tuteeTitle}>
+                {formState === 'done' ? (
+                  <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+                ) : (
+                  <span>
+                    Ich möchte mich registrieren als <b>Schüler*in</b>
+                  </span>
+                )}
+              </Title>
+            </div>
+
+            <Form
+              form={form}
+              className={classes.formContainer}
+              layout="vertical"
+              name="basic"
+              initialValues={{ remember: true }}
+            >
+              {!loading ? (
+                renderFormItems()
+              ) : (
+                <div className={classes.loadingContainer}>
+                  <ClipLoader size={100} color="#123abc" loading />
+                </div>
+              )}
+
+              <div className={classes.buttonContainer}>
+                {formState !== 'start' && (
+                  <Button
+                    onClick={back}
+                    className={classes.backButton}
+                    color="#4E6AE6"
+                    backgroundColor="white"
+                  >
+                    Zurück
+                  </Button>
+                )}
+                <Button
+                  onClick={nextStep}
+                  className={classes.signupButton}
+                  color="white"
+                  backgroundColor="#4E6AE6"
+                >
+                  {formState === 'finish' && 'Registrieren'}
+                  {formState === 'start' && 'Weiter'}
+                  {formState === 'detail' && 'Weiter'}
+                  {formState === 'done' && 'Anmelden'}
+                </Button>
+              </div>
+            </Form>
+            <Text className={classes.helpText}>
+              Du hast schon ein Account? Hier{' '}
+              <Link style={{ color: '#4e6ae6' }} to="/login">
+                anmelden
+              </Link>
+              .
+            </Text>
+          </SignupContainer>
+        </>
+      )}
+    </div>
   );
 };
 

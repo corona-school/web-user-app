@@ -14,6 +14,11 @@
   -ms-user-select: none;
   line-height: 25px;
   max-width: 500px;
+  &.disabled {
+    color: #6c6c6c;
+    text-decoration:line-through;
+    cursor: not-allowed;
+  }
 }
 
 /* Hide the browser's default checkbox */

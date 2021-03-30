@@ -6,15 +6,23 @@ const CheckboxBase: React.FC<{
   accentColor: string;
   checked: boolean;
   onClick: (e) => void;
-}> = ({ text, accentColor, checked, onClick, children }) => {
+  disabled?: boolean;
+}> = ({ text, accentColor, checked, onClick, disabled, children }) => {
   return (
     // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label
-      className={styles.checkboxContainer}
+      className={
+        styles.checkboxContainer + (disabled ? ` ${styles.disabled}` : '')
+      }
       style={{ '--accent-color': accentColor } as React.CSSProperties}
     >
       {text}
-      <input type="checkbox" checked={checked} onChange={onClick} />
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onClick}
+        disabled={disabled}
+      />
       <span className={styles.checkmark} />
       {children}
     </label>

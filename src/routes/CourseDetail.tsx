@@ -26,6 +26,8 @@ import {
   List,
   Tooltip,
   Popconfirm,
+  Row,
+  Col,
 } from 'antd';
 import AddInstructorModal from '../components/Modals/AddInstructorModal';
 import { ApiContext } from '../context/ApiContext';
@@ -35,6 +37,7 @@ import {
   CourseState,
   Course,
   SubCourse,
+  CourseParticipant,
   Tag as CourseTag,
 } from '../types/Course';
 import { Title, Text } from '../components/Typography';
@@ -55,6 +58,8 @@ import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletion
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
 import Icons from '../assets/icons';
+import SearchParticipant from '../components/course/SearchParticipant';
+import SortParticipant from '../components/course/SortParticipant';
 
 moment.locale('de');
 
@@ -72,6 +77,10 @@ const CourseDetail = (params: {
     false
   );
   const [tags, setTags] = useState<CourseTag[]>([]);
+  const [participantList, setParticipantList] = useState<CourseParticipant[]>(
+    []
+  );
+  const [enteredFilter, setEnteredFilter] = useState('');
 
   const [loadingCerts, setLoadingCerts] = useState<Set<string>>(new Set());
   const loadingCertsRef = useRef(loadingCerts);
@@ -96,6 +105,7 @@ const CourseDetail = (params: {
       .then((course) => {
         const parsedCourse = parseCourse(course);
         setCourse(parsedCourse);
+        setParticipantList(parsedCourse.subcourse.participantList);
         params?.setIsWaitingList(
           parsedCourse.subcourse
             ? parsedCourse.subcourse.participants ===
@@ -124,6 +134,34 @@ const CourseDetail = (params: {
       updateCourseDetails();
     }
   }, [api, id, setTags]);
+
+  // search Participants
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!loading && course) {
+        const loadedParticipantList = [...course.subcourse.participantList];
+
+        const filteredParticipants = loadedParticipantList.filter((data) => {
+          if (enteredFilter.length === 0) return data;
+          if (
+            data.firstname
+              .toUpperCase()
+              .includes(enteredFilter.toUpperCase()) ||
+            data.lastname.toUpperCase().includes(enteredFilter.toUpperCase()) ||
+            data.email.toUpperCase().includes(enteredFilter.toUpperCase()) ||
+            data.grade.toFixed().includes(enteredFilter)
+          ) {
+            return data;
+          }
+          return null;
+        });
+        setParticipantList(filteredParticipants);
+      }
+    }, 500);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [loading, enteredFilter]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -334,14 +372,10 @@ const CourseDetail = (params: {
     }
 
     // fitting grades?
-    if (
+    return (
       userContext.user.grade >= course.subcourse.minGrade &&
       userContext.user.grade <= course.subcourse.maxGrade
-    ) {
-      return true;
-    }
-
-    return false;
+    );
   };
 
   const canJoinWaitingList = () => {
@@ -513,6 +547,21 @@ const CourseDetail = (params: {
 
     return (
       <div>
+        <div style={{ maxWidth: '800px', marginTop: '10px' }}>
+          <Row>
+            <Col md={12} sm={12} xs={24} offset={6}>
+              <SearchParticipant
+                inputValue={(value) => setEnteredFilter(value)}
+              />
+            </Col>
+            <Col md={6} sm={12} xs={24}>
+              <SortParticipant
+                setParticipantList={(value) => setParticipantList(value)}
+                getParticipantList={participantList}
+              />
+            </Col>
+          </Row>
+        </div>
         <List
           style={{
             margin: '10px',
@@ -521,7 +570,7 @@ const CourseDetail = (params: {
             padding: '4px',
           }}
           itemLayout="horizontal"
-          dataSource={course.subcourse.participantList}
+          dataSource={participantList}
           renderItem={(item) => (
             <List.Item
               actions={[
@@ -881,6 +930,7 @@ const CourseDetail = (params: {
             <Title size="h3" style={{ margin: '0px 10px' }}>
               Teilnehmer*innen
             </Title>
+
             <div>{renderParticipants()}</div>
           </div>
         )}
