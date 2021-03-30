@@ -349,3 +349,31 @@ template {
 [hidden] {
   display: none;
 }
+
+/* //antd style overwrite */
+.ant-list-item-action li:nth-last-child(1) {
+  padding-right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .ant-list-item {
+    padding: 20px 0;
+  }
+  .ant-list-item-action li:nth-last-child(1) {
+    padding-left: 0;
+    padding-top: 8px;
+  }
+  .ant-list-item-action {
+    margin-left: 0px;
+  }
+  .ant-list-item {
+    display: block;
+  }
+  .ant-list-item-meta-title {
+    margin-bottom: 0;
+    line-height: 1;
+  }
+  .ant-list-item-action > li {
+    line-height: 1;
+  }
+}

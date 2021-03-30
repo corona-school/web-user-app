@@ -14,6 +14,35 @@
   display: flex;
   justify-content: space-between;
   padding-top: 20px;
+  h1,
+  h5 {
+    line-height: 1.2;
+  }
+
+  @media only screen and (max-width: 1440px) {
+    h1 {
+      font-size: 32px;
+    }
+  }
+
+  @media only screen and (max-width: 1024px) {
+    h1 {
+      font-size: 30px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    h1 {
+      font-size: 28px;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    h1 {
+      font-size: 24px;
+      text-align: left;
+    }
+  }
 }
 
 .topGrid {
@@ -21,7 +50,7 @@
   grid-template-columns: 2fr 400px;
   width: 100%;
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1025px) {
     display: flex;
     flex-direction: column;
   }
@@ -49,59 +78,24 @@
     }
 
     .actionContainer {
-      display: flex;
-      flex-direction: column;
-      .videochatAction {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-      }
-      .shareAction {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-      }
-      .contactInstructorsAction {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
+      @media only screen and (max-width: 600px) {
+        margin: 1rem 0;
       }
     }
   }
 
   .newsContainer {
-    display: flex;
-    position: relative;
-    flex-direction: column;
     background: #f4f6ff;
     width: 100%;
-
     padding: 40px 16px 16px 16px;
     border-radius: 0px 0px 0px 40px;
 
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: 1025px) {
       border-radius: 0px 0px 0px 0px;
-      margin-top: 16px;
-
-      .newsContentContainer {
-        display: flex;
-        flex-direction: row;
-      }
-    }
-
-    @media only screen and (max-width: 600px) {
-      border-radius: 0px 0px 0px 0px;
-      justify-content: center;
-      align-items: center;
-
-      .newsContentContainer {
-        display: flex;
-        flex-direction: column;
-      }
+      margin-top: 10px;
     }
 
     .newsContent {
-      max-width: 320px;
       margin-bottom: 8px;
 
       .newsHeadline {
@@ -166,3 +160,14 @@
   }
 }
 
+.participantList {
+  margin-top: 2rem;
+  background: white;
+  padding: 4px;
+
+  @media screen and (max-width: 576px) {
+    .ant-list-item-action {
+      margin-left: 0px;
+    }
+  }
+}

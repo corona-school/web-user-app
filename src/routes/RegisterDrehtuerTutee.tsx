@@ -1,10 +1,8 @@
 import { Form, message } from 'antd';
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import Icons from '../assets/icons';
 import Button, { LinkButton } from '../components/button';
-import SignupContainer from '../components/container/SignupContainer';
 import {
   DataProtectionField,
   EmailField,
@@ -13,7 +11,7 @@ import {
   SchoolKindField,
   StateField,
 } from '../components/forms/registration';
-import { Title, Text } from '../components/Typography';
+import { Title } from '../components/Typography';
 import { ApiContext } from '../context/ApiContext';
 import { Tutee } from '../types/Registration';
 import classes from './RegisterDrehtuerTutee.module.scss';
@@ -98,26 +96,13 @@ export const RegisterDrehtuerTutee: React.FC = () => {
   };
 
   return (
-    <SignupContainer shouldShowBackButton>
+    <div>
       <div className={classes.signupContainer}>
-        <a
-          rel="noopener noreferrer"
-          href="https://www.corona-school.de/"
-          target="_blank"
-        >
-          <Icons.Logo className={classes.logo} />
-          <Title size="h2" bold>
-            Corona School
-          </Title>
-        </a>
         <Title className={classes.tuteeTitle}>
-          {formState === 'done' ? (
+          {formState === 'done' && (
             <span>Du wurdest erfolgreich als Schüler*in registriert</span>
-          ) : (
-            <span>
-              Ich möchte mich registrieren als <b>Schüler*in</b>
-            </span>
           )}
+          <span>Registrieren</span>
         </Title>
       </div>
 
@@ -160,13 +145,6 @@ export const RegisterDrehtuerTutee: React.FC = () => {
           )}
         </div>
       </Form>
-      <Text className={classes.helpText}>
-        Du hast schon ein Account? Hier{' '}
-        <Link style={{ color: '#4e6ae6' }} to="/login">
-          anmelden
-        </Link>
-        .
-      </Text>
-    </SignupContainer>
+    </div>
   );
 };
