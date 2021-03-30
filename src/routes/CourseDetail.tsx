@@ -686,7 +686,11 @@ const CourseDetail = (params: {
           <button
             className={classes.backButton}
             onClick={() => {
-              history.push(`/courses/overview/${history.location.hash}`);
+              history.push(
+                history.location.hash.length > 0
+                  ? `/courses/overview/${history.location.hash}`
+                  : '/courses'
+              );
             }}
           >
             <Icons.ChevronLeft />
