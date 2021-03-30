@@ -19,7 +19,9 @@ const Header = (props: Props) => {
         >
           <Icons.MenuIcon />
         </button>
-        <ExpertSearch />
+        <div className={classes.expertSearch}>
+          <ExpertSearch placeHolder="Hier nach Expert*innen für dein Thema suchen..." />
+        </div>
       </div>
     </div>
   );

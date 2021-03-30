@@ -25,6 +25,14 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
+
+    .expertSearch {
+      width: 100%;
+      max-width: 500px;
+      @media only screen and (min-width: 1200px) {
+        margin-left: 48px;
+      }
+    }
   }
 }
 

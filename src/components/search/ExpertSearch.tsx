@@ -9,7 +9,11 @@ import { JufoExpertDetailCard } from '../cards/JufoExpertDetailCard';
 
 import classes from './ExpertSearch.module.scss';
 
-export const ExpertSearch: React.FC = () => {
+interface Props {
+  placeHolder: string;
+}
+
+export const ExpertSearch: React.FC<Props> = (props) => {
   const location = useLocation();
   const userContext = useContext(UserContext);
 
@@ -37,7 +41,7 @@ export const ExpertSearch: React.FC = () => {
         setExperts(result);
         setOptions(
           experts.map((item) => ({
-            value: item.id,
+            value: item.firstName,
             label: <JufoExpertDetailCard expert={item} />,
           }))
         );
@@ -70,7 +74,7 @@ export const ExpertSearch: React.FC = () => {
           e.lastName.toLowerCase().includes(searchString)
       )
       .map((item) => ({
-        value: item.id,
+        value: item.firstName,
         label: <JufoExpertDetailCard expert={item} />,
       }));
   };
@@ -79,7 +83,7 @@ export const ExpertSearch: React.FC = () => {
     if (value.trim().length === 0) {
       setOptions(
         experts.map((item) => ({
-          value: item.id,
+          value: item.firstName,
           label: <JufoExpertDetailCard expert={item} />,
         }))
       );
@@ -96,7 +100,7 @@ export const ExpertSearch: React.FC = () => {
   return (
     <div className={classes.input}>
       <AutoComplete
-        style={{ width: '100%', maxWidth: '500px' }}
+        style={{ width: '100%' }}
         dropdownMatchSelectWidth={340}
         onSearch={handleSearch}
         value={query}
@@ -105,7 +109,7 @@ export const ExpertSearch: React.FC = () => {
         options={options}
       >
         <Input.Search
-          placeholder="Hier nach Expert*innen für dein Thema suchen..."
+          placeholder={props.placeHolder}
           enterButton
           loading={loading}
           allowClear

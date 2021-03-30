@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Tooltip } from 'antd';
 import Icons from '../../assets/icons';
 import { ModalContext } from '../../context/ModalContext';
 import { UserContext } from '../../context/UserContext';
 import { Expert } from '../../types/Expert';
 
 import Button from '../button';
+import Tooltip from '../misc/Tooltip';
 
 import { Tag } from '../Tag';
 import { Text, Title } from '../Typography';
@@ -113,7 +113,6 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
               <Title size="h4" bold>
                 {props.expert.firstName} {props.expert.lastName}
               </Title>
-
               <div className={classes.rightHeader}>
                 {props.expert.projectFields.map((field) => (
                   <Tag
@@ -125,34 +124,40 @@ export const JufoExpertDetailCard: React.FC<Props> = (props) => {
                     {field}
                   </Tag>
                 ))}
-                {user.isProjectCoachee && (
-                  <Tooltip placement="topLeft" title="Anpinnen">
-                    {/* <span data-tooltip="Anpinnen"> */}
+                {user.isProjectCoachee && pinned ? (
+                  <Tooltip label="Nicht mehr anpinnen">
                     <Button
+                      autoFocus
                       backgroundColor="#4E6AE6"
                       color="#ffffff"
                       className={classes.emailButton}
-                      image={
-                        pinned ? (
-                          <Icons.BookmarkSlashFilled />
-                        ) : (
-                          <Icons.BookmarkFilled />
-                        )
-                      }
-                      onClick={pinned ? unpinExpert : pinExpert}
+                      image={<Icons.BookmarkSlashFilled />}
+                      onClick={unpinExpert}
                     />
-                    {/* </span> */}
+                  </Tooltip>
+                ) : (
+                  <Tooltip label="Anpinnen">
+                    <Button
+                      autoFocus
+                      backgroundColor="#4E6AE6"
+                      color="#ffffff"
+                      className={classes.emailButton}
+                      image={<Icons.BookmarkFilled />}
+                      onClick={pinExpert}
+                    />
                   </Tooltip>
                 )}
-                <span data-tooltip="Expert*in kontaktieren">
+
+                <Tooltip label="Expert*in kontaktieren">
                   <Button
+                    autoFocus
                     backgroundColor="#4E6AE6"
                     color="#ffffff"
                     image={<Icons.EmailFilled />}
                     onClick={openEmailDialog}
                     className={classes.emailButton}
                   />
-                </span>
+                </Tooltip>
               </div>
             </div>
 
