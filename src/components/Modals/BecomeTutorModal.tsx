@@ -3,7 +3,7 @@ import StyledReactModal from 'styled-react-modal';
 import { Radio, Select } from 'antd';
 import { Subject, User } from '../../types';
 import { ModalContext } from '../../context/ModalContext';
-import { languages as Languages } from '../../assets/languages';
+import { languageOptions as Languages } from '../../assets/languages';
 import classes from './BecomeTutorModal.module.scss';
 import { Text, Title } from '../Typography';
 import SelectSubjectList from '../forms/SelectSubjectList';
