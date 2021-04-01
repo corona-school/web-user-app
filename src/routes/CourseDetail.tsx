@@ -66,6 +66,7 @@ moment.locale('de');
 const CourseDetail = (params: {
   id?: string;
   setIsWaitingList?: (boolean) => void;
+  publicView?: boolean;
 }) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
@@ -686,11 +687,15 @@ const CourseDetail = (params: {
           <button
             className={classes.backButton}
             onClick={() => {
-              history.push(
-                history.location.hash.length > 0
-                  ? `/courses/overview/${history.location.hash}`
-                  : '/courses'
-              );
+              if (params.publicView) {
+                history.push('/public/courses');
+              } else {
+                history.push(
+                  history.location.hash.length > 0
+                    ? `/courses/overview/${history.location.hash}`
+                    : '/courses'
+                );
+              }
             }}
           >
             <Icons.ChevronLeft />
