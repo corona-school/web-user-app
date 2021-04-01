@@ -1,12 +1,17 @@
 import React, { useContext, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
-import { Radio, Select } from 'antd';
+import { message, Radio, Select } from 'antd';
+import ClipLoader from 'react-spinners/ClipLoader';
 import { Subject, User } from '../../types';
 import { ModalContext } from '../../context/ModalContext';
 import { languageOptions as Languages } from '../../assets/languages';
 import classes from './BecomeTutorModal.module.scss';
 import { Text, Title } from '../Typography';
 import SelectSubjectList from '../forms/SelectSubjectList';
+import { ApiContext } from '../../context/ApiContext';
+import { UserContext } from '../../context/UserContext';
+import { dev } from '../../api/config';
+import AccentColorButton from '../button/AccentColorButton';
 
 const { Option } = Select;
 
@@ -15,14 +20,35 @@ interface Props {
 }
 
 const BecomeTutorModal: React.FC<Props> = () => {
-  const modalContex = useContext(ModalContext);
+  const modalContext = useContext(ModalContext);
+  const userContext = useContext(UserContext);
+  const api = useContext(ApiContext);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [dazSupport, setDazSupport] = useState<boolean>(false);
+  const [supportsInDaz, setSupportsInDaz] = useState<boolean>(false);
   const [languages, setLanguages] = useState<typeof Languages[number][]>([]);
 
+  const onFinish = () => {
+    setLoading(true);
+
+    api
+      .postUserRoleTutor({ subjects, supportsInDaz, languages })
+      .then(() => {
+        message.success('Du wurdest erfolgreich als Tutor:in registriert.');
+        modalContext.setOpenedModal(null);
+        userContext.fetchUserData();
+      })
+      .catch((err) => {
+        if (dev) console.error(err);
+        message.error('Etwas ist schief gegangen.');
+      })
+      .finally(() => setLoading(false));
+  };
+
   function handleOnChangeDazSupport(value: string) {
-    setDazSupport(value === 'yes');
+    setSupportsInDaz(value === 'yes');
     if (subjects.find((s) => s.name === 'Deutsch als Zweitsprache')) {
       return;
     }
@@ -34,13 +60,31 @@ const BecomeTutorModal: React.FC<Props> = () => {
     }
   }
 
+  if (loading) {
+    return (
+      <StyledReactModal isOpen={modalContext.openedModal === 'becomeTutor'}>
+        <div className={classes.modal}>
+          <Title size="h2">Tutor:in werden</Title>
+          <ClipLoader size={100} color="#123abc" loading />
+          <div className={classes.buttonContainer}>
+            <AccentColorButton
+              label="Anmelden"
+              onClick={() => {}}
+              accentColor="#e78b00"
+            />
+          </div>
+        </div>
+      </StyledReactModal>
+    );
+  }
+
   return (
     <StyledReactModal
-      isOpen={modalContex.openedModal === 'becomeTutor'}
-      onBackgroundClick={() => modalContex.setOpenedModal(null)}
+      isOpen={modalContext.openedModal === 'becomeTutor'}
+      onBackgroundClick={() => modalContext.setOpenedModal(null)}
     >
       <div className={classes.modal}>
-        <Title size="h2">Tutor*in werden</Title>
+        <Title size="h2">Tutor:in werden</Title>
         <Text large>
           In welchen Fächern kannst du Schüler:innen unterstützen?
         </Text>
@@ -51,12 +95,12 @@ const BecomeTutorModal: React.FC<Props> = () => {
         </Text>
         <Radio.Group
           onChange={(e) => handleOnChangeDazSupport(e.target.value)}
-          value={dazSupport ? 'yes' : 'no'}
+          value={supportsInDaz ? 'yes' : 'no'}
         >
           <Radio.Button value="yes">Ja</Radio.Button>
           <Radio.Button value="no">Nein</Radio.Button>
         </Radio.Group>
-        {dazSupport && (
+        {supportsInDaz && (
           <>
             <Text large>
               Auf welchen Sprachen kannst du Schüler:innen prinzipiell
@@ -75,6 +119,13 @@ const BecomeTutorModal: React.FC<Props> = () => {
             </Select>
           </>
         )}
+      </div>
+      <div className={classes.buttonContainer}>
+        <AccentColorButton
+          label="Anmelden"
+          onClick={onFinish}
+          accentColor="#e78b00"
+        />
       </div>
     </StyledReactModal>
   );

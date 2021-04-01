@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Credentials, User, Subject } from '../types';
+import { Credentials, User, Subject, BecomeTutor } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
 import {
@@ -178,11 +178,11 @@ export const axiosRequestNewToken = async (
 export const axiosPostUserRoleTutor = async (
   id: string,
   token: string,
-  subjects: Subject[]
+  data: BecomeTutor
 ) => {
   const url = `${apiURL}/user/${id}/role/tutor`;
   await axios
-    .post(url, subjects, { headers: { token } })
+    .post(url, data, { headers: { token } })
     .catch(logError('postUserRoleTutor'));
 };
 

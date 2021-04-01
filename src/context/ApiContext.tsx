@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './AuthContext';
-import { User, Subject } from '../types';
+import { User, Subject, BecomeTutor } from '../types';
 import * as api from '../api/api';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
@@ -30,7 +30,7 @@ interface IApiContext {
   dissolveProjectMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string, redirectTo: string) => Promise<void>;
   putUser: (user: User) => Promise<void>;
-  postUserRoleTutor: (subjects: Subject[]) => Promise<void>;
+  postUserRoleTutor: (tutorData: BecomeTutor) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
   putUserProjectFields: (projectFields: ApiProjectFieldInfo[]) => Promise<void>;
   becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
@@ -294,8 +294,8 @@ export const ApiProvider: React.FC = ({ children }) => {
   const putUser = (user: User): Promise<void> =>
     api.putUser({ id, token }, user);
 
-  const postUserRoleTutor = (subjects: Subject[]): Promise<void> =>
-    api.axiosPostUserRoleTutor(id, token, subjects);
+  const postUserRoleTutor = (tutorData: BecomeTutor): Promise<void> =>
+    api.axiosPostUserRoleTutor(id, token, tutorData);
 
   const putUserSubjects = (subjects: Subject[]): Promise<void> =>
     api.axiosPutUserSubjects(id, token, subjects);

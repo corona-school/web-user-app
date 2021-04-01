@@ -104,3 +104,9 @@ export type AuthStatusOptions =
   | 'missing'
   | 'authorized'
   | 'invalid';
+
+export interface BecomeTutor {
+  subjects: Subject[];
+  supportsInDaz: boolean;
+  languages?: string[];
+}
