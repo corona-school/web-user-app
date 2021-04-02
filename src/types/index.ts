@@ -34,6 +34,7 @@ export interface User {
   isInstructor?: boolean;
   isTutor?: boolean;
   isProjectCoachee?: boolean;
+  isUniversityStudent?: boolean;
   isPupil?: boolean;
   isParticipant?: boolean;
   isProjectCoach?: boolean;
