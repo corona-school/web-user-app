@@ -64,8 +64,12 @@ const BecomeTutorModal: React.FC<Props> = () => {
     return (
       <StyledReactModal isOpen={modalContext.openedModal === 'becomeTutor'}>
         <div className={classes.modal}>
-          <Title size="h2">Tutor:in werden</Title>
-          <ClipLoader size={100} color="#123abc" loading />
+          <div className={classes.title}>
+            <Title size="h2">Tutor:in werden</Title>
+          </div>
+          <div className={classes.clipLoader}>
+            <ClipLoader size={100} color="#123abc" loading />
+          </div>
           <div className={classes.buttonContainer}>
             <AccentColorButton
               label="Anmelden"
@@ -84,7 +88,9 @@ const BecomeTutorModal: React.FC<Props> = () => {
       onBackgroundClick={() => modalContext.setOpenedModal(null)}
     >
       <div className={classes.modal}>
-        <Title size="h2">Tutor:in werden</Title>
+        <div className={classes.title}>
+          <Title size="h2">Tutor:in werden</Title>
+        </div>
         <Text large>
           In welchen Fächern kannst du Schüler:innen unterstützen?
         </Text>
@@ -96,6 +102,7 @@ const BecomeTutorModal: React.FC<Props> = () => {
         <Radio.Group
           onChange={(e) => handleOnChangeDazSupport(e.target.value)}
           value={supportsInDaz ? 'yes' : 'no'}
+          style={{ margin: '8px' }}
         >
           <Radio.Button value="yes">Ja</Radio.Button>
           <Radio.Button value="no">Nein</Radio.Button>
@@ -106,26 +113,28 @@ const BecomeTutorModal: React.FC<Props> = () => {
               Auf welchen Sprachen kannst du Schüler:innen prinzipiell
               unterstützen?
             </Text>
-            <Select
-              mode="multiple"
-              value={languages}
-              onChange={(value) => setLanguages(value)}
-              placeholder="Bitte wähle deine Sprachen aus"
-              style={{ width: '300px' }}
-            >
-              {Languages.map((l) => (
-                <Option value={l}>{l}</Option>
-              ))}
-            </Select>
+            <div style={{ margin: '8px' }}>
+              <Select
+                mode="multiple"
+                value={languages}
+                onChange={(value) => setLanguages(value)}
+                placeholder="Bitte wähle deine Sprachen aus"
+                style={{ width: '100%' }}
+              >
+                {Languages.map((l) => (
+                  <Option value={l}>{l}</Option>
+                ))}
+              </Select>
+            </div>
           </>
         )}
-      </div>
-      <div className={classes.buttonContainer}>
-        <AccentColorButton
-          label="Anmelden"
-          onClick={onFinish}
-          accentColor="#e78b00"
-        />
+        <div className={classes.buttonContainer}>
+          <AccentColorButton
+            label="Anmelden"
+            onClick={onFinish}
+            accentColor="#e78b00"
+          />
+        </div>
       </div>
     </StyledReactModal>
   );

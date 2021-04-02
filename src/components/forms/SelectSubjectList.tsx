@@ -1,13 +1,13 @@
 import React from 'react';
 import { Subject, SubjectName } from '../../types';
 import Select from '../misc/Select';
-import classes from './SelectProjectField.module.scss';
+import classes from './SelectSubjectField.module.scss';
 import Icons from '../../assets/icons';
 import AccentColorButton from '../button/AccentColorButton';
 import { subjectOptions as SubjectOptions } from '../../assets/subjects';
 
 interface SelectSubjectProps {
-  subject: Subject;
+  subject?: Subject;
   changeSubject: (subject: Subject, newName: SubjectName) => void;
   changeRange: (subject: Subject, minGrade: number, maxGrade: number) => void;
   remove: (subject: Subject) => void;
@@ -21,9 +21,9 @@ const SelectSubject: React.FC<SelectSubjectProps> = ({
   remove,
   validSubjectOptions,
 }) => {
-  console.log(subject);
-
   const handleOnChangeMinGrade = (minGrade: number) => {
+    if (!subject) return;
+
     if (subject.maxGrade < minGrade) {
       changeRange(subject, minGrade, minGrade);
     } else {
@@ -42,69 +42,78 @@ const SelectSubject: React.FC<SelectSubjectProps> = ({
   }
 
   return (
-    <div>
+    <div className={classes.fieldContainer}>
       <Select
+        className={classes.subjectSelect}
         onChange={(e) => changeSubject(subject, e.target.value)}
-        value={subject.name}
-        placeholder="Wähle ein Fach aus."
+        value={subject?.name ?? ''}
       >
+        <option value="" disabled selected>
+          Wähle ein Fach aus.
+        </option>
         {SubjectOptions.map((o) => (
           <option value={o} disabled={!validSubjectOptions.includes(o)}>
             {o}
           </option>
         ))}
       </Select>
-      <Select
-        value={subject.minGrade}
-        onChange={(e) => handleOnChangeMinGrade(Number(e.target.value))}
-      >
-        <option value="1">1. Klasse</option>
-        <option value="2">2. Klasse</option>
-        <option value="3">3. Klasse</option>
-        <option value="4">4. Klasse</option>
-        <option value="5">5. Klasse</option>
-        <option value="6">6. Klasse</option>
-        <option value="7">7. Klasse</option>
-        <option value="8">8. Klasse</option>
-        <option value="9">9. Klasse</option>
-        <option value="10">10. Klasse</option>
-        <option value="11">11. Klasse</option>
-        <option value="12">12. Klasse</option>
-        <option value="13">13. Klasse</option>
-      </Select>
-      -
-      <Select
-        value={subject.maxGrade}
-        onChange={(e) => handleOnChangeMaxGrade(Number(e.target.value))}
-      >
-        <option value="1">1. Klasse</option>
-        <option value="2">2. Klasse</option>
-        <option value="3">3. Klasse</option>
-        <option value="4">4. Klasse</option>
-        <option value="5">5. Klasse</option>
-        <option value="6">6. Klasse</option>
-        <option value="7">7. Klasse</option>
-        <option value="8">8. Klasse</option>
-        <option value="9">9. Klasse</option>
-        <option value="10">10. Klasse</option>
-        <option value="11">11. Klasse</option>
-        <option value="12">12. Klasse</option>
-        <option value="13">13. Klasse</option>
-      </Select>
-      {subject && (
-        <AccentColorButton
-          onClick={(e) => {
-            e.stopPropagation();
-            remove(subject);
-          }}
-          label=""
-          className={classes.deleteButton}
-          accentColor="#e78b00"
-          small
-        >
-          <Icons.Delete className={classes.deleteIcon} />
-        </AccentColorButton>
-      )}
+      <div className={classes.gradeContainer}>
+        <div className={classes.selectContainer}>
+          <Select
+            value={subject?.minGrade ?? '1'}
+            onChange={(e) => handleOnChangeMinGrade(Number(e.target.value))}
+            disabled={!subject}
+          >
+            <option value="1">1. Klasse</option>
+            <option value="2">2. Klasse</option>
+            <option value="3">3. Klasse</option>
+            <option value="4">4. Klasse</option>
+            <option value="5">5. Klasse</option>
+            <option value="6">6. Klasse</option>
+            <option value="7">7. Klasse</option>
+            <option value="8">8. Klasse</option>
+            <option value="9">9. Klasse</option>
+            <option value="10">10. Klasse</option>
+            <option value="11">11. Klasse</option>
+            <option value="12">12. Klasse</option>
+            <option value="13">13. Klasse</option>
+          </Select>
+          <div style={{ margin: '0px 8px' }}>-</div>
+          <Select
+            value={subject?.maxGrade ?? '13'}
+            onChange={(e) => handleOnChangeMaxGrade(Number(e.target.value))}
+            disabled={!subject}
+          >
+            <option value="1">1. Klasse</option>
+            <option value="2">2. Klasse</option>
+            <option value="3">3. Klasse</option>
+            <option value="4">4. Klasse</option>
+            <option value="5">5. Klasse</option>
+            <option value="6">6. Klasse</option>
+            <option value="7">7. Klasse</option>
+            <option value="8">8. Klasse</option>
+            <option value="9">9. Klasse</option>
+            <option value="10">10. Klasse</option>
+            <option value="11">11. Klasse</option>
+            <option value="12">12. Klasse</option>
+            <option value="13">13. Klasse</option>
+          </Select>
+        </div>
+        {subject && (
+          <AccentColorButton
+            onClick={(e) => {
+              e.stopPropagation();
+              remove(subject);
+            }}
+            label=""
+            className={classes.deleteButton}
+            accentColor="#e78b00"
+            small
+          >
+            <Icons.Delete className={classes.deleteIcon} />
+          </AccentColorButton>
+        )}
+      </div>
     </div>
   );
 };
@@ -122,13 +131,17 @@ const SelectSubjectList: React.FC<SelectSubjectsProps> = ({
     subject: Subject | undefined,
     newName: SubjectName
   ) {
-    const subjectList = subjects.map((s) => {
-      if (s.name === subject.name) {
-        return { ...subject, name: newName };
-      }
-      return s;
-    });
-    onChange(subjectList);
+    if (!subject) {
+      onChange([...subjects, { name: newName, minGrade: 1, maxGrade: 13 }]);
+    } else {
+      const subjectList = subjects.map((s) => {
+        if (s.name === subject.name) {
+          return { ...subject, name: newName };
+        }
+        return s;
+      });
+      onChange(subjectList);
+    }
   }
 
   function handleChangeRange(
@@ -154,15 +167,8 @@ const SelectSubjectList: React.FC<SelectSubjectsProps> = ({
     (n) => !subjects.find((s) => s.name === n)
   );
 
-  function addSubject() {
-    onChange([
-      ...subjects,
-      { name: validSubjectOptions[0], minGrade: 1, maxGrade: 13 },
-    ]);
-  }
-
   return (
-    <div>
+    <div style={{ margin: '8px' }}>
       {subjects.map((s) => (
         <SelectSubject
           subject={s}
@@ -172,20 +178,12 @@ const SelectSubjectList: React.FC<SelectSubjectsProps> = ({
           validSubjectOptions={validSubjectOptions}
         />
       ))}
-      {validSubjectOptions.length > 0 && (
-        <AccentColorButton
-          onClick={(e) => {
-            e.preventDefault();
-            addSubject();
-          }}
-          label=""
-          className={classes.addButton}
-          accentColor="#e78b00"
-          small
-        >
-          <Icons.Add className={classes.addIcon} />
-        </AccentColorButton>
-      )}
+      <SelectSubject
+        changeSubject={handleChangeSubject}
+        changeRange={() => {}}
+        remove={() => {}}
+        validSubjectOptions={validSubjectOptions}
+      />
     </div>
   );
 };

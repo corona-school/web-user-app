@@ -5,12 +5,26 @@
   background: white;
   max-width: 600px;
   width: 100%;
+  max-height: 90%;
+  overflow-y: scroll;
 
-  align-items: center;
+  .title {
+    display: flex;
+    justify-content: center;
+  }
+
+  .clipLoader {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0px;
+  }
 
   .buttonContainer {
     margin-top: 12px;
     display: flex;
+
+    justify-content: center;
+
     button {
       margin: 8px;
     }
