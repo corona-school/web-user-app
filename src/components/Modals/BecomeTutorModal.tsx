@@ -33,6 +33,22 @@ const BecomeTutorModal: React.FC<Props> = () => {
   const onFinish = () => {
     setLoading(true);
 
+    if (subjects.length === 0) {
+      message.error(
+        'Bitte wähle die Fächer aus, in denen du unterstützen möchtest.'
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (supportsInDaz && languages.length === 0) {
+      message.error(
+        'Bitte wähle die Sprachen aus, in denen du unterstützen kannst.'
+      );
+      setLoading(false);
+      return;
+    }
+
     api
       .postUserRoleTutor({ subjects, supportsInDaz, languages })
       .then(() => {
@@ -47,7 +63,7 @@ const BecomeTutorModal: React.FC<Props> = () => {
       .finally(() => setLoading(false));
   };
 
-  function handleOnChangeDazSupport(value: string) {
+  const handleOnChangeDazSupport = (value: string) => {
     setSupportsInDaz(value === 'yes');
     if (subjects.find((s) => s.name === 'Deutsch als Zweitsprache')) {
       return;
@@ -58,7 +74,7 @@ const BecomeTutorModal: React.FC<Props> = () => {
         { name: 'Deutsch als Zweitsprache', minGrade: 1, maxGrade: 13 },
       ]);
     }
-  }
+  };
 
   if (loading) {
     return (

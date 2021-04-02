@@ -9,16 +9,16 @@ import { subjectOptions as SubjectOptions } from '../../assets/subjects';
 interface SelectSubjectProps {
   subject?: Subject;
   changeSubject: (subject: Subject, newName: SubjectName) => void;
-  changeRange: (subject: Subject, minGrade: number, maxGrade: number) => void;
-  remove: (subject: Subject) => void;
+  changeRange?: (subject: Subject, minGrade: number, maxGrade: number) => void;
+  remove?: (subject: Subject) => void;
   validSubjectOptions: SubjectName[];
 }
 
 const SelectSubject: React.FC<SelectSubjectProps> = ({
   subject,
   changeSubject,
-  changeRange,
-  remove,
+  changeRange = () => {},
+  remove = () => {},
   validSubjectOptions,
 }) => {
   const handleOnChangeMinGrade = (minGrade: number) => {
@@ -127,10 +127,10 @@ const SelectSubjectList: React.FC<SelectSubjectsProps> = ({
   subjects,
   onChange,
 }) => {
-  function handleChangeSubject(
+  const handleChangeSubject = (
     subject: Subject | undefined,
     newName: SubjectName
-  ) {
+  ) => {
     if (!subject) {
       onChange([...subjects, { name: newName, minGrade: 1, maxGrade: 13 }]);
     } else {
@@ -142,13 +142,13 @@ const SelectSubjectList: React.FC<SelectSubjectsProps> = ({
       });
       onChange(subjectList);
     }
-  }
+  };
 
-  function handleChangeRange(
+  const handleChangeRange = (
     subject: Subject,
     minGrade: number,
     maxGrade: number
-  ) {
+  ) => {
     const subjectList = subjects.map((s) => {
       if (s.name === subject.name) {
         return { ...subject, minGrade, maxGrade };
@@ -156,12 +156,12 @@ const SelectSubjectList: React.FC<SelectSubjectsProps> = ({
       return s;
     });
     onChange(subjectList);
-  }
+  };
 
-  function handleRemove(subject: Subject) {
+  const handleRemove = (subject: Subject) => {
     const subjectList = subjects.filter((s) => subject.name !== s.name);
     onChange(subjectList);
-  }
+  };
 
   const validSubjectOptions = SubjectOptions.filter(
     (n) => !subjects.find((s) => s.name === n)
@@ -180,8 +180,6 @@ const SelectSubjectList: React.FC<SelectSubjectsProps> = ({
       ))}
       <SelectSubject
         changeSubject={handleChangeSubject}
-        changeRange={() => {}}
-        remove={() => {}}
         validSubjectOptions={validSubjectOptions}
       />
     </div>
