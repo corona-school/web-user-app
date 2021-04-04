@@ -25,7 +25,9 @@ const CourseCard: React.FC<Props> = forwardRef(
           // @ts-ignore
           ref={ref}
           to={
-            customCourseLink ?? `/courses/${course.id}#${currentAnchor ?? ''}`
+            customCourseLink != null
+              ? `${customCourseLink}#${currentAnchor ?? ''}`
+              : `/courses/${course.id}#${currentAnchor ?? ''}`
           }
         >
           <div className={classes.coverImageContainer}>
