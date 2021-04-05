@@ -26,7 +26,7 @@ import {
 } from '../components/forms/registration';
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
-import { languages } from '../assets/languages';
+import { languageOptions } from '../assets/languages';
 import YouTubeVideo from '../components/misc/YouTubeVideo';
 
 const { Option } = Select;
@@ -54,7 +54,7 @@ interface FormData {
   // isTutor
   subjects?: Subject[];
   supportsInDaz?: string;
-  languages?: typeof languages[number][];
+  languages?: typeof languageOptions[number][];
   // finnish
   msg?: string;
   newsletter?: boolean;
@@ -658,7 +658,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
               mode="multiple"
               placeholder="Bitte wähle deine Sprachen aus"
             >
-              {languages.map((l) => (
+              {languageOptions.map((l) => (
                 <Option value={l}>{l}</Option>
               ))}
             </Select>

@@ -1,4 +1,4 @@
-export const languages = [
+export const languageOptions = [
   'Deutsch',
   'Englisch',
   'Albanisch',

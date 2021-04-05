@@ -34,6 +34,7 @@ export interface User {
   isInstructor?: boolean;
   isTutor?: boolean;
   isProjectCoachee?: boolean;
+  isUniversityStudent?: boolean;
   isPupil?: boolean;
   isParticipant?: boolean;
   isProjectCoach?: boolean;
@@ -104,3 +105,9 @@ export type AuthStatusOptions =
   | 'missing'
   | 'authorized'
   | 'invalid';
+
+export interface BecomeTutor {
+  subjects: Subject[];
+  supportsInDaz: boolean;
+  languages?: string[];
+}

@@ -34,7 +34,7 @@ import {
 } from '../components/forms/registration';
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
-import { languages } from '../assets/languages';
+import { languageOptions } from '../assets/languages';
 import { learningGermanSinceOptions } from '../assets/learningGermanSinceOptions';
 import SignupContainer from '../components/container/SignupContainer';
 
@@ -60,7 +60,7 @@ interface FormData {
   msg?: string;
   newsletter?: boolean;
   teacherEmail?: string;
-  languages?: typeof languages[number][];
+  languages?: typeof languageOptions[number][];
   learningGermanSince?: string;
 }
 
@@ -482,7 +482,7 @@ const RegisterTutee: React.FC<Props> = ({
                 setIsGermanNative(Object.values(value).includes('Deutsch'))
               }
             >
-              {languages.map((l) => (
+              {languageOptions.map((l) => (
                 <Option value={l}>{l}</Option>
               ))}
             </Select>
