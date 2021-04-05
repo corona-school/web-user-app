@@ -10,8 +10,7 @@ import {
   Radio,
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
-import Icons from '../assets/icons';
-import { Title, LinkText } from '../components/Typography';
+import { Title, LinkText, Text } from '../components/Typography';
 import Button from '../components/button';
 import { Subject } from '../types';
 import Context from '../context';
@@ -28,6 +27,7 @@ import {
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
 import { languageOptions } from '../assets/languages';
+import YouTubeVideo from '../components/misc/YouTubeVideo';
 
 const { Option } = Select;
 
@@ -738,10 +738,12 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const renderDone = () => {
     return (
       <div className={classes.successContainer}>
-        <Title className={classes.loginTitle} size="h4">
-          Wir haben dir eine E-Mail geschickt.
-        </Title>
-        <Icons.SignupEmailSent />
+        <Text large>Wir haben dir eine E-Mail geschickt</Text>
+        <YouTubeVideo
+          id={process.env.REACT_APP_REGISTRATION_VIDEO}
+          playOnReady
+          className={classes.video}
+        />
       </div>
     );
   };
@@ -943,7 +945,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         )}
 
         <div className={classes.buttonContainer}>
-          {formState !== 'start' && (
+          {formState !== 'start' && formState !== 'done' && (
             <Button
               onClick={back}
               className={classes.backButton}
@@ -953,16 +955,17 @@ const RegisterTutor: React.FC<Props> = (props) => {
               Zurück
             </Button>
           )}
-          <Button
-            onClick={nextStep}
-            className={classes.signupButton}
-            color="white"
-            backgroundColor="#4E6AE6"
-          >
-            {formState === 'finish' && 'Registrieren'}
-            {(formState === 'start' || formState === 'detail') && 'Weiter'}
-            {formState === 'done' && 'Anmelden'}
-          </Button>
+          {formState !== 'done' && (
+            <Button
+              onClick={nextStep}
+              className={classes.signupButton}
+              color="white"
+              backgroundColor="#4E6AE6"
+            >
+              {formState === 'finish' && 'Registrieren'}
+              {(formState === 'start' || formState === 'detail') && 'Weiter'}
+            </Button>
+          )}
         </div>
       </Form>
     </div>
