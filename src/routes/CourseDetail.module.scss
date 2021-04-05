@@ -10,6 +10,10 @@
 }
 
 .headerContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
   h1,
   h5 {
     line-height: 1.2;
@@ -139,6 +143,20 @@
       justify-items: center;
       padding: 8px 0px;
     }
+  }
+}
+
+.backButtonContainer {
+  width: 100%;
+  padding-right: 20px;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  .backButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 }
 

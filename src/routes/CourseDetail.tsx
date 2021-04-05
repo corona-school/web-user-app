@@ -57,6 +57,7 @@ import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
+import Icons from '../assets/icons';
 import SearchParticipant from '../components/course/SearchParticipant';
 import SortParticipant from '../components/course/SortParticipant';
 
@@ -65,6 +66,7 @@ moment.locale('de');
 const CourseDetail = (params: {
   id?: string;
   setIsWaitingList?: (boolean) => void;
+  publicView?: boolean;
 }) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
@@ -681,6 +683,25 @@ const CourseDetail = (params: {
 
     return (
       <div className={classes.statusContainer}>
+        <div className={classes.backButtonContainer}>
+          <button
+            className={classes.backButton}
+            onClick={() => {
+              if (params.publicView) {
+                history.push('/public/courses');
+              } else {
+                history.push(
+                  history.location.hash.length > 0
+                    ? `/courses/overview/${history.location.hash}`
+                    : '/courses'
+                );
+              }
+            }}
+          >
+            <Icons.ChevronLeft />
+            Zurück
+          </button>
+        </div>
         <div className={classes.headerContainer}>
           <Row>
             <Col xxl={20} lg={18} md={17} sm={24}>

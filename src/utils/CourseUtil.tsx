@@ -23,6 +23,28 @@ export const parseCourse = (course: CourseOverview): ParsedCourseOverview => {
   };
 };
 
+export function scrollToTargetAdjustedTop(element, offset) {
+  const headerOffset = offset;
+  const elementPosition = element.getBoundingClientRect().top;
+  const offsetPosition = elementPosition - headerOffset;
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: 'smooth',
+  });
+}
+
+export function scrollToTargetAdjustedRight(container, element, offset) {
+  const headerOffset = offset;
+  const elementPosition = element.getBoundingClientRect().x;
+  const offsetPosition = elementPosition - headerOffset;
+
+  container.scrollTo({
+    left: offsetPosition - container.getBoundingClientRect().x,
+    behavior: 'smooth',
+  });
+}
+
 export const firstLectureOfSubcourse = (
   subcourse?: CourseSubCourse
 ): CourseLecture => {

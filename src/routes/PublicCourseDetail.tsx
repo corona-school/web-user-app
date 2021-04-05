@@ -69,7 +69,7 @@ const PublicCourseDetail = () => {
       </div>
       <div>
         {/* content */}
-        <CourseDetail id={id} setIsWaitingList={setIsWaitingList} />
+        <CourseDetail id={id} setIsWaitingList={setIsWaitingList} publicView />
       </div>
     </div>
   );
