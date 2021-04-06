@@ -688,7 +688,11 @@ const CourseDetail = (params: {
             className={classes.backButton}
             onClick={() => {
               if (params.publicView) {
-                history.push('/public/courses');
+                history.push(
+                  history.location.hash.length > 0
+                    ? `/public/courses/${history.location.hash}`
+                    : '/public/courses'
+                );
               } else {
                 history.push(
                   history.location.hash.length > 0
