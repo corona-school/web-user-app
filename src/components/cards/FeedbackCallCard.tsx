@@ -41,15 +41,28 @@ const FeedbackCallCard = () => {
       );
   }, [apiContext]);
 
+  const getLimitedString = (s: string, maxLength: number): string => {
+    if (s.length < maxLength) return s;
+    return s.substring(0, maxLength - 1);
+  };
+
   return (
     <LeftHighlightCard highlightColor={theme.color.cardHighlightRed}>
-      <Title size="h3">Peer-to-Peer Call</Title>
+      <Title size="h3">
+        {feedbackCall.title
+          ? getLimitedString(feedbackCall.title, 30)
+          : 'Peer-to-Peer Call'}
+      </Title>
       <Text style={{ color: 'rgb(244, 72, 109)' }}>
         {feedbackCall.time
           ? moment(feedbackCall.time).format('DD.MM.YYYY HH:mm')
-          : 'Momentan ist leider kein Peer-to-Peer Call geplant.'}
+          : 'Momentan ist leider kein Call geplant.'}
       </Text>
-      <Text>{feedbackCallText}</Text>
+      <Text>
+        {feedbackCall.description
+          ? getLimitedString(feedbackCall.description, 300)
+          : feedbackCallText}
+      </Text>
       {linkActive && (
         <AccentColorButton
           onClick={() => window.open(feedbackCall.link, '_blank')}
