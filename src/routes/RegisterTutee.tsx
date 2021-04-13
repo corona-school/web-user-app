@@ -178,14 +178,18 @@ const RegisterTutee: React.FC<Props> = ({
         </Checkbox>
         {isTutee && (
           <div className={classes.registrationHint}>
-            <Title size="h5" bold>
-              Hinweis bei der Registrierung
-            </Title>
             <Text>
-              Bitte melde dich nur an, wenn du individuelle Unterstützung beim
-              Lernen aus persönlichen, sozialen, kulturellen oder finanziellen
-              Gründen nicht oder nur schwer wahrnehmen kannst. Unsere anderen
-              Angebote stehen weiterhin für alle Schüler*innen offen.
+              Die 1:1-Lernunterstützung richtet sich ausschließlich an{' '}
+              Schüler:innen, die keine oder nur sehr eingeschränkt Möglichkeiten{' '}
+              haben, herkömmliche Bildungsangebote (wie z.B. bezahlte Nachhilfe){' '}
+              wahrzunehmen. Dies kann finanzielle, soziale, persönliche oder{' '}
+              kulturelle Gründe haben.{' '}
+              <b>
+                Bitte melde dich für die 1:1-Lernunterstützung nur an, wenn das
+                bei dir zutrifft.
+              </b>{' '}
+              Unsere anderen Angebote stehen weiterhin für alle Schüler:innen{' '}
+              offen.
             </Text>
           </div>
         )}
