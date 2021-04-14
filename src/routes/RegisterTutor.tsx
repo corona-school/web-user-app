@@ -12,6 +12,7 @@ import {
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Title, LinkText, Text } from '../components/Typography';
 import Button from '../components/button';
+import Icons from '../assets/icons';
 import { Subject } from '../types';
 import Context from '../context';
 import { Tutor } from '../types/Registration';
@@ -738,12 +739,23 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const renderDone = () => {
     return (
       <div className={classes.successContainer}>
-        <Text large>Wir haben dir eine E-Mail geschickt</Text>
-        <YouTubeVideo
-          id={process.env.REACT_APP_REGISTRATION_VIDEO}
-          playOnReady
-          className={classes.video}
-        />
+        {isTutor ? (
+          <>
+            <Text large>Wir haben dir eine E-Mail geschickt</Text>
+            <YouTubeVideo
+              id={process.env.REACT_APP_REGISTRATION_VIDEO}
+              playOnReady
+              className={classes.video}
+            />
+          </>
+        ) : (
+          <>
+            <Title className={classes.loginTitle} size="h4">
+              Wir haben dir eine E-Mail geschickt.
+            </Title>
+            <Icons.SignupEmailSent />
+          </>
+        )}
       </div>
     );
   };
@@ -819,20 +831,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
       .then(() => {
         setLoading(false);
         setFormState('done');
-        setFormData({
-          firstname: undefined,
-          lastname: undefined,
-          email: undefined,
-          subjects: undefined,
-          msg: undefined,
-          newsletter: undefined,
-          state: undefined,
-          hours: undefined,
-          module: undefined,
-        });
-        setOfficial(false);
-        setTutor(false);
-        form.resetFields();
       })
       .catch((err) => {
         if (err?.response?.status === 401) {
