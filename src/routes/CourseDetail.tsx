@@ -60,14 +60,19 @@ import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
 import Icons from '../assets/icons';
 import SearchParticipant from '../components/course/SearchParticipant';
 import SortParticipant from '../components/course/SortParticipant';
+import Button from '../components/button';
+import Images from '../assets/images';
+import { Spinner } from '../components/loading/Spinner';
 
 moment.locale('de');
 
-const CourseDetail = (params: {
+interface Props {
   id?: string;
   setIsWaitingList?: (boolean) => void;
   publicView?: boolean;
-}) => {
+}
+
+const CourseDetail = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
   const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
@@ -86,8 +91,8 @@ const CourseDetail = (params: {
   const [loadingCerts, setLoadingCerts] = useState<Set<string>>(new Set());
   const loadingCertsRef = useRef(loadingCerts);
 
-  const { id: urlParamID } = useParams() as { id: string };
-  const id = params.id ?? urlParamID;
+  const { id: urlParamID } = useParams<{ id: string }>();
+  const id = props.id ?? urlParamID;
 
   const api = useContext(ApiContext);
   const userContext = useContext(UserContext);
@@ -107,39 +112,40 @@ const CourseDetail = (params: {
         const parsedCourse = parseCourse(course);
         setCourse(parsedCourse);
         setParticipantList(parsedCourse.subcourse.participantList);
-        params?.setIsWaitingList(
-          parsedCourse.subcourse
-            ? parsedCourse.subcourse.participants ===
-                parsedCourse.subcourse.maxParticipants
-            : false
-        );
+
+        if (props.setIsWaitingList) {
+          props.setIsWaitingList(
+            parsedCourse.subcourse
+              ? parsedCourse.subcourse.participants ===
+                  parsedCourse.subcourse.maxParticipants
+              : false
+          );
+        }
+        return api.getCourseTags();
       })
-      .catch((err) => {
-        console.log(err);
+      .then((response) => {
+        setTags(response);
       })
       .finally(() => {
         setLoading(false);
       });
-    setLoading(true);
-    api
-      .getCourseTags()
-      .then((response) => {
-        setTags(response);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
     if (id) {
       updateCourseDetails();
     }
-  }, [api, id, setTags]);
+  }, [id]);
 
   // search Participants
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (!loading && course) {
+      if (
+        !loading &&
+        course &&
+        course.subcourse &&
+        course.subcourse.participantList
+      ) {
         const filteredParticipants = course.subcourse.participantList.filter(
           (data) => {
             if (enteredFilter.length === 0) return data;
@@ -167,11 +173,32 @@ const CourseDetail = (params: {
   }, [loading, enteredFilter]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner message="Der Kurs wird geladen..." />;
   }
 
   if (!course || !course.subcourse) {
-    return <div>Wir konnten den Kurs leider nicht finden.</div>;
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '90vh',
+        }}
+      >
+        <Images.NotFound />
+        <Title size="h3">Kurse konnte nicht gefunden werden.</Title>
+        <Button
+          className={classes.retryButton}
+          backgroundColor="#4E6AE6"
+          color="#ffffff"
+          onClick={() => history.go(0)}
+        >
+          Erneut versuchen
+        </Button>
+      </div>
+    );
   }
 
   const isMyCourse = course.instructors.some((i) => i.id === userId);
@@ -406,10 +433,9 @@ const CourseDetail = (params: {
         .unix(lastLecture.start)
         .add(lastLecture.duration, 'minutes');
 
-      console.log('is after', moment().isAfter(lectureEnd));
       return moment().isAfter(lectureEnd);
     }
-    console.log('last lecture is null');
+
     return false;
   };
 
@@ -687,7 +713,7 @@ const CourseDetail = (params: {
           <button
             className={classes.backButton}
             onClick={() => {
-              if (params.publicView) {
+              if (props.publicView) {
                 history.push(
                   history.location.hash.length > 0
                     ? `/public/courses/${history.location.hash}`

@@ -1,6 +1,6 @@
 import { Empty, message } from 'antd';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { ClipLoader } from 'react-spinners';
+
 import { useHistory } from 'react-router-dom';
 import Images from '../assets/images';
 import Button from '../components/button';
@@ -20,6 +20,7 @@ import { Text } from '../components/Typography';
 import { env } from '../api/config';
 import { NoCourses } from '../components/NoService';
 import CourseCard from '../components/cards/CourseCard';
+import { Spinner } from '../components/loading/Spinner';
 
 interface Props {
   customCourseLink?: (course: ParsedCourseOverview) => string;
@@ -273,10 +274,7 @@ export const CourseOverview: React.FC<Props> = ({
         backButtonRoute={backButtonRoute}
       />
       {loading && (
-        <div className={classes.loadingContainer}>
-          <ClipLoader size={100} color="#f4486d" loading />
-          <p>Kurse werden geladen</p>
-        </div>
+        <Spinner message="Kursübersicht wird geladen..." color="#f4486d" />
       )}
       {!loading && renderCourseLists()}
     </>
