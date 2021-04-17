@@ -178,3 +178,18 @@
   font-weight: 400;
   width: 160px;
 }
+
+.popover {
+  width: 100% !important;
+}
+
+.courseButton {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 2px;
+  width: 100%;
+  &.disabled {
+    pointer-events: none;
+  }
+}

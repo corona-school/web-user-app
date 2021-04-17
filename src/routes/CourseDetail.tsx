@@ -28,7 +28,9 @@ import {
   Popconfirm,
   Row,
   Col,
+  Popover,
 } from 'antd';
+import classnames from 'classnames';
 import AddInstructorModal from '../components/Modals/AddInstructorModal';
 import { ApiContext } from '../context/ApiContext';
 import { AuthContext } from '../context/AuthContext';
@@ -71,6 +73,10 @@ interface Props {
   setIsWaitingList?: (boolean) => void;
   publicView?: boolean;
 }
+
+// activate 60 minutes before start and 60 minutes after end of a lecture
+const INSTRUCTOR_JOIN_TIME = 60;
+const STUDENTT_JOIN_TIME = 10;
 
 const CourseDetail = (props: Props) => {
   const [loading, setLoading] = useState(false);
@@ -502,11 +508,13 @@ const CourseDetail = (props: Props) => {
     );
   };
 
-  const shouldEnableVideoChat = () => {
-    // activate 60 minutes before start and 60 minutes after end of a lecture
-    const INSTRUCTOR_JOIN_TIME = 60;
-    const STUDENTT_JOIN_TIME = 10;
+  const videoChatHint = () => {
+    const preJoinTime = isStudent ? INSTRUCTOR_JOIN_TIME : STUDENTT_JOIN_TIME;
 
+    return `Der Link zum Video-Chat wird erst ${preJoinTime} Minuten vor dem Start deines Kurses aktiv.`;
+  };
+
+  const shouldEnableVideoChat = () => {
     const lecturesToday = getTodaysLectures()?.sort(
       (a, b) => a.start - b.start
     );
@@ -836,29 +844,35 @@ const CourseDetail = (props: Props) => {
                       />
                     </div>
                   </Col>
-                  {!shouldEnableVideoChat() && (
-                    <Col md={24} sm={12} xs={12}>
-                      <div className={classes.videochatAction}>
-                        {((isMyCourse &&
-                          course.state === CourseState.ALLOWED) ||
-                          course.subcourse.joined) &&
-                          !hasEnded() && (
-                            <AntdButton
-                              type="primary"
-                              style={{
-                                backgroundColor: '#FCD95C',
-                                borderColor: '#FCD95C',
-                                color: '#373E47',
-                                width: '100%',
-                              }}
-                              onClick={joinTestMeeting}
-                            >
-                              Videochat testen
-                            </AntdButton>
-                          )}
-                      </div>
-                    </Col>
-                  )}
+
+                  <Col md={24} sm={12} xs={12}>
+                    <div className={classes.videochatAction}>
+                      {((isMyCourse && course.state === CourseState.ALLOWED) ||
+                        course.subcourse.joined) &&
+                        !hasEnded() && (
+                          <Popover
+                            className={classes.popover}
+                            content={videoChatHint()}
+                            trigger="hover"
+                          >
+                            <div style={{ width: '100%' }}>
+                              <Button
+                                disabled={!shouldEnableVideoChat()}
+                                color="#373E47"
+                                className={classnames(classes.courseButton, {
+                                  [classes.disabled]: !shouldEnableVideoChat(),
+                                })}
+                                backgroundColor="#FCD95C"
+                                onClick={joinTestMeeting}
+                              >
+                                Videochat testen
+                              </Button>
+                            </div>
+                          </Popover>
+                        )}
+                    </div>
+                  </Col>
+
                   {!isStudent && course.allowContact && (
                     <Col md={24} sm={12} xs={12}>
                       <div className={classes.contactInstructorsAction}>
