@@ -503,7 +503,10 @@ const CourseDetail = (props: Props) => {
   };
 
   const shouldEnableVideoChat = () => {
-    // activate 30 minutes before start and 30 minutes after end of a lecture
+    // activate 60 minutes before start and 60 minutes after end of a lecture
+    const INSTRUCTOR_JOIN_TIME = 60;
+    const STUDENTT_JOIN_TIME = 10;
+
     const lecturesToday = getTodaysLectures()?.sort(
       (a, b) => a.start - b.start
     );
@@ -513,14 +516,14 @@ const CourseDetail = (props: Props) => {
     if (!firstLecture || !lastLecture) {
       return false;
     }
-    const preJoinTime = isStudent ? 30 : 10; // minutes
+    const preJoinTime = isStudent ? INSTRUCTOR_JOIN_TIME : STUDENTT_JOIN_TIME; // minutes
     const start = moment
       .unix(firstLecture.start)
       .subtract(preJoinTime, 'minutes');
     const end = moment
       .unix(lastLecture.start)
       .add(lastLecture.duration, 'minutes')
-      .add(30, 'minutes');
+      .add(INSTRUCTOR_JOIN_TIME, 'minutes');
 
     return moment().isBetween(start, end);
   };
