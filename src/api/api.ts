@@ -444,8 +444,13 @@ export const axiosRegisterTutor = (tutor: Tutor) => {
 };
 
 export const axiosCheckEmail = async (email: string) => {
-  const res = await axios.post(`${apiURL}/register/checkEmail`, { email });
-  return res.status === 200;
+  try {
+    await axios.post(`${apiURL}/register/checkEmail`, { email });
+    return Promise.resolve();
+  } catch (e) {
+    console.log(e.response.status);
+    return e.response.status === 429 ? Promise.resolve() : Promise.reject(); // If we're being rate limited, accept the email address. If it's already taken nevertheless, the user will be notified when trying to register. This is only supposed to be an assistance.
+  }
 };
 
 export const axiosCreateCourse = (token: string, course: Course) => {

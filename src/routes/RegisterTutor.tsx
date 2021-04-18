@@ -331,6 +331,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           className={classes.formItem}
           label={isJufo && !isTutor ? 'E-Mail-Adresse' : 'Uni E-Mail-Adresse'}
           name="email"
+          validateFirst
           rules={[
             {
               required: true,

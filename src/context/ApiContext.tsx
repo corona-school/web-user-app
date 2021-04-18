@@ -107,7 +107,7 @@ interface IApiContext {
   ) => Promise<void>;
   registerTutee: (tutee: Tutee) => Promise<void>;
   registerStateTutee: (tutee: Tutee) => Promise<void>;
-  checkEmail: (email: string) => Promise<boolean>;
+  checkEmail: (email: string) => Promise<void>;
   registerTutor: (tutor: Tutor) => Promise<void>;
   sendCourseGroupMail: (
     courseId: number,
@@ -391,7 +391,7 @@ export const ApiProvider: React.FC = ({ children }) => {
   const registerTutor = (tutor: Tutor): Promise<void> =>
     api.axiosRegisterTutor(tutor);
 
-  const checkEmail = (email: string): Promise<boolean> =>
+  const checkEmail = (email: string): Promise<void> =>
     api.axiosCheckEmail(email);
 
   const editCourse = (id: number, course: Course) =>
