@@ -443,6 +443,11 @@ export const axiosRegisterTutor = (tutor: Tutor) => {
     .catch(logError('registerTutor'));
 };
 
+export const axiosCheckEmail = async (email: string) => {
+  const res = await axios.post(`${apiURL}/register/checkEmail`, { email });
+  return res.status === 200;
+};
+
 export const axiosCreateCourse = (token: string, course: Course) => {
   return axios
     .post(`${apiURL}/course`, course, { headers: { token } })

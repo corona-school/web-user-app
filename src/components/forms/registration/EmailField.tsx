@@ -1,5 +1,6 @@
 import { Form, Input } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
+import Context from '../../../context';
 
 interface Props {
   className: string;
@@ -7,6 +8,8 @@ interface Props {
 }
 
 export const EmailField: React.FC<Props> = (props) => {
+  const apiContext = useContext(Context.Api);
+
   return (
     <Form.Item
       className={props.className}
@@ -21,6 +24,17 @@ export const EmailField: React.FC<Props> = (props) => {
         {
           type: 'email',
           message: 'Bitte trage eine gültige E-Mail-Adresse ein!',
+          validateTrigger: 'onSubmit',
+        },
+        {
+          message: 'E-Mail ist ungültig oder existiert bereits!',
+          validator: async (_, value) => {
+            const res = await apiContext.checkEmail(value);
+            if (res) {
+              return Promise.resolve();
+            }
+            return Promise.reject();
+          },
           validateTrigger: 'onSubmit',
         },
       ]}
