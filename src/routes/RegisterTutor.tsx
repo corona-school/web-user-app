@@ -344,13 +344,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             },
             {
               message: 'E-Mail ist ungültig oder existiert bereits!',
-              validator: async (_, value) => {
-                const res = await apiContext.checkEmail(value);
-                if (res) {
-                  return Promise.resolve();
-                }
-                return Promise.reject();
-              },
+              validator: async (_, value) => apiContext.checkEmail(value),
               validateTrigger: 'onSubmit',
             },
           ]}
