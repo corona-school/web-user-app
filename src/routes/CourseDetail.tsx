@@ -871,10 +871,6 @@ const CourseDetail = (props: Props) => {
                       </Dropdown>
                     </Col>
                   )}
-                  {/* {(canJoinCourse() || */}
-                  {/*  canJoinWaitingList() || */}
-                  {/*  canDisjoinCourse() || */}
-                  {/*  canDisjoinWaitingList()) && ( */}
                   <Col md={24} sm={12} xs={12}>
                     {!(
                       canJoinCourse() ||
@@ -889,7 +885,6 @@ const CourseDetail = (props: Props) => {
                       renderJoinButton()
                     )}
                   </Col>
-                  {/* )} */}
                   <Col md={24} sm={12} xs={12}>
                     <div className={classes.videochatAction}>
                       {((isMyCourse && course.state === CourseState.ALLOWED) ||
