@@ -331,7 +331,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
           className={classes.formItem}
           label={isJufo && !isTutor ? 'E-Mail-Adresse' : 'Uni E-Mail-Adresse'}
           name="email"
-          validateFirst
           rules={[
             {
               required: true,
@@ -340,11 +339,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
             {
               type: 'email',
               message: 'Bitte trage eine gültige E-Mail-Adresse ein!',
-              validateTrigger: 'onSubmit',
-            },
-            {
-              message: 'E-Mail ist ungültig oder existiert bereits!',
-              validator: async (_, value) => apiContext.checkEmail(value),
               validateTrigger: 'onSubmit',
             },
           ]}
