@@ -1,0 +1,23 @@
+.Container {
+  min-height: 100vh;
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.LoaderWrapper {
+  height: 100%;
+  margin-right: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.LoaderWrapper > * {
+  margin: 10px;
+}
+.RequestSuccessImage {
+  width: 250px;
+  height: 295px;
+}

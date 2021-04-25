@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { Empty } from 'antd';
+import { Empty, Result } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
 import OpenRequestCard from '../components/cards/OpenRequestCard';
 import { UserContext } from '../context/UserContext';
 import Context from '../context';
@@ -18,6 +19,64 @@ const Matches: React.FC = () => {
         return (
           <Empty description="Du hast im Moment keine offenen Anfragen." />
         );
+      if (
+        userContext.user.pupilTutoringInterestConfirmationStatus === 'pending'
+      ) {
+        return (
+          <Result
+            status="info"
+            title="Wir warten auf deine Bestätigung!"
+            subTitle={
+              <>
+                <span>
+                  In den nächsten Tagen werden wir dir einen/eine Student*in
+                  zuteilen, wenn du dein Interesse bestätigt hast. Dazu haben
+                  wir dir eine E-Mail geschickt, mit der du dein Interesse
+                  bestätigen kannst. Schau einfach in dein E-Mail-Postfach und
+                  folge den Anweisungen in unserer E-Mail. Danke! <br />
+                  <br />
+                  Du hast diese E-Mail von uns nie erhalten? Bei Problemen
+                  kannst du dich an uns unter
+                </span>{' '}
+                <a href="mailto:support@corona-school.de">
+                  support@corona-school.de
+                </a>
+                <span> wenden.</span>
+              </>
+            }
+          />
+        );
+      }
+      if (
+        userContext.user.pupilTutoringInterestConfirmationStatus === 'refused'
+      ) {
+        return (
+          <Result
+            status="info"
+            icon={<SmileOutlined />}
+            title="Danke, dass du deinen Platz abgetreten hast!"
+            subTitle={
+              <>
+                <span>
+                  In der Vergangenheit haben wir dir eine E-Mail geschickt und
+                  darin dein weiteres Interesse an diesem Angebot erfragt. Du
+                  hast uns damals mitgeteilt, dass du unser Angebot nicht mehr
+                  benötigst. Da aktuell der Andrang auf dieses kostenlose
+                  Angebot sehr groß ist, sind die Plätze begrenzt. Wir haben
+                  deinen Platz daher wieder freigegeben. Deshalb kannst du hier
+                  keine neue Hilfe anfordern.
+                  <br /> <br />
+                  Brauchst du nun wieder Hilfe? Wende dich dafür bitte an
+                </span>{' '}
+                <a href="mailto:support@corona-school.de">
+                  support@corona-school.de
+                </a>
+                <span>.</span>
+              </>
+            }
+          />
+        );
+      }
       if (userContext.user.matchesRequested === 0) {
         return (
           <OpenRequestCard
