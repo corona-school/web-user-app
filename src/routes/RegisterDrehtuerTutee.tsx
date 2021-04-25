@@ -32,7 +32,7 @@ export const RegisterDrehtuerTutee: React.FC = () => {
   const registerTutee = async () => {
     try {
       const formValues = await form.validateFields();
-
+      console.log(formValues);
       const data: Tutee = {
         firstname: formValues.firstname,
         lastname: formValues.lastname,
@@ -112,6 +112,7 @@ export const RegisterDrehtuerTutee: React.FC = () => {
         layout="vertical"
         name="basic"
         initialValues={{ remember: true }}
+        onFinish={registerTutee}
       >
         {!loading ? (
           renderForm()
@@ -124,7 +125,7 @@ export const RegisterDrehtuerTutee: React.FC = () => {
         <div className={classes.buttonContainer}>
           {formState === 'start' && (
             <Button
-              onClick={registerTutee}
+              onClick={form.submit}
               className={classes.signupButton}
               color="white"
               backgroundColor="#4E6AE6"
