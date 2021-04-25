@@ -52,21 +52,23 @@ export const CourseOverview: React.FC<Props> = ({
         console.log(courseId, courseList);
         const course = courseList.find((c) => c.id === courseId);
         if (course != null) {
-          // eslint-disable-next-line no-param-reassign
-          container.scrollLeft = course.el.getBoundingClientRect().x;
-          scrollToTargetAdjustedRight(
-            course.el.parentElement.parentElement,
-            course.el,
-            50
-          );
-          course.el.style.transition = '0.1s outline ease-in-out';
-          course.el.style.outline = '0px solid #4E6AE6';
-          setTimeout(() => {
-            course.el.style.outline = '3px solid #4E6AE6';
-          }, 150);
-          setTimeout(() => {
+          if (course.el != null) {
+            // eslint-disable-next-line no-param-reassign
+            container.scrollLeft = course.el.getBoundingClientRect().x;
+            scrollToTargetAdjustedRight(
+              course.el.parentElement.parentElement,
+              course.el,
+              50
+            );
+            course.el.style.transition = '0.1s outline ease-in-out';
             course.el.style.outline = '0px solid #4E6AE6';
-          }, 750);
+            setTimeout(() => {
+              course.el.style.outline = '3px solid #4E6AE6';
+            }, 150);
+            setTimeout(() => {
+              course.el.style.outline = '0px solid #4E6AE6';
+            }, 750);
+          }
         }
       }, 1000);
     }
