@@ -203,7 +203,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           () => ({
             required: props.isInternship,
             validator() {
-              if ((!isGroups || !isTutor) && isOfficial) {
+              if (!isGroups && !isTutor && !isJufo && isOfficial) {
                 return Promise.reject(
                   'Um am Praktikum teilzunehmen, musst du sowohl Schüler*innen im 1:1-Format beim Lernen als auch in Gruppenkursen helfen.'
                 );
