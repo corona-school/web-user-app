@@ -24,19 +24,21 @@ const Matches: React.FC = () => {
       ) {
         return (
           <Result
+            className={classes.resultBox}
             status="info"
             title="Wir warten auf deine Bestätigung!"
             subTitle={
               <>
                 <span>
-                  In den nächsten Tagen werden wir dir einen/eine Student*in
-                  zuteilen, wenn du dein Interesse bestätigt hast. Dazu haben
-                  wir dir eine E-Mail geschickt, mit der du dein Interesse
-                  bestätigen kannst. Schau einfach in dein E-Mail-Postfach und
-                  folge den Anweisungen in unserer E-Mail. Danke! <br />
+                  Dazu haben wir dir eine E-Mail geschickt. Schau einfach in
+                  dein E-Mail-Postfach und folge den Anweisungen in unserer
+                  E-Mail, um dein Interesse zu bestätigen. Sobald du dein
+                  Interesse bestätigt hast, werden wir dich schnellstmöglich mit
+                  einem/einer Student*in verbinden.
+                  <br />
                   <br />
                   Du hast diese E-Mail von uns nie erhalten? Bei Problemen
-                  kannst du dich an uns unter
+                  kannst du dich an unser Team unter
                 </span>{' '}
                 <a href="mailto:support@corona-school.de">
                   support@corona-school.de
@@ -52,6 +54,7 @@ const Matches: React.FC = () => {
       ) {
         return (
           <Result
+            className={classes.resultBox}
             status="info"
             icon={<SmileOutlined />}
             title="Danke, dass du deinen Platz abgetreten hast!"
@@ -63,8 +66,9 @@ const Matches: React.FC = () => {
                   hast uns damals mitgeteilt, dass du unser Angebot nicht mehr
                   benötigst. Da aktuell der Andrang auf dieses kostenlose
                   Angebot sehr groß ist, sind die Plätze begrenzt. Wir haben
-                  deinen Platz daher wieder freigegeben. Deshalb kannst du hier
-                  keine neue Hilfe anfordern.
+                  deinen Platz daher wieder freigegeben.
+                  <br />
+                  Hier kannst du deshalb keine neue Hilfe anfordern.
                   <br /> <br />
                   Brauchst du nun wieder Hilfe? Wende dich dafür bitte an
                 </span>{' '}
