@@ -111,7 +111,7 @@ const InterestConfirmation: React.FC = () => {
           <Result
             status="500"
             title="Ungültige Anfrage"
-            subTitle="Es ist ein Fehler aufgetreten. Ist dieser Link korrekt? Versuche eventuell, den Link aus der Email zu kopieren."
+            subTitle="Es ist ein Fehler aufgetreten. Ist dieser Link korrekt? Versuche eventuell, den Link aus der E-Mail zu kopieren."
           />
         );
     }
