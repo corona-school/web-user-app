@@ -1,9 +1,23 @@
-.Container {
+.Main {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+  justify-content: center;
+}
+.Container {
   display: flex; 
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.Footer{
+  text-align: center;
+  color: grey;
+  font-size: 15px;
+  height: 20px;
+  margin-bottom: 30px;
+  margin-top: 70px;
+  font-weight: bold;
 }
 .LoaderWrapper {
   height: 100%;

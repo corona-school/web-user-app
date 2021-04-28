@@ -128,9 +128,16 @@ const InterestConfirmation: React.FC = () => {
   };
 
   return (
-    <div className={classes.Container}>
-      {renderStatusIndication()}
-      {renderHomeButton()}
+    <div className={classes.Main}>
+      <div className={classes.Container}>
+        {renderStatusIndication()}
+        {renderHomeButton()}
+      </div>
+      {state === 'success' && (
+        <div className={classes.Footer}>
+          Du kannst diese Seite nun schließen.
+        </div>
+      )}
     </div>
   );
 };
