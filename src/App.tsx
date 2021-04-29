@@ -31,6 +31,7 @@ import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationU
 import { CourseOverview } from './routes/CourseOverview';
 import { Modals } from './Modals';
 import GuestJoinCourseMeeting from './routes/GuestJoinCourseMeeting';
+import InterestConfirmation from './routes/InterestConfirmation';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -97,6 +98,9 @@ const App: React.FC = () => {
         </Route>
         <Route path="/verify">
           <Verify />
+        </Route>
+        <Route path="/confirm">
+          <InterestConfirmation />
         </Route>
         <Route path="/video/:token">
           <GuestJoinCourseMeeting />
