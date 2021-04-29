@@ -52,12 +52,19 @@ export interface User {
   lastUpdatedSettingsViaBlocker: number;
   registrationDate: number;
   expertData?: ExpertData;
+  pupilTutoringInterestConfirmationStatus?: InterestConfirmationStatus;
 }
 
 export enum ScreeningStatus {
   Unscreened = 'UNSCREENED',
   Accepted = 'ACCEPTED',
   Rejected = 'REJECTED',
+}
+
+export enum InterestConfirmationStatus {
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  REFUSED = 'refused',
 }
 
 export type SubjectName = typeof subjectOptions[number];

@@ -130,6 +130,19 @@ export const axiosGetUser = (id: string, token: string): Promise<User> => {
     .catch(logError('getUser'));
 };
 
+export const axiosEditInterestConfirmationStatus = (
+  token: string,
+  status: string
+): Promise<void> => {
+  return axios
+    .post(`${apiURL}/interest-confirmation/status`, {
+      token,
+      status,
+    })
+    .then((res) => res.data)
+    .catch(logError('editInterestConfirmationStatus'));
+};
+
 export const axiosDissolveMatch = async (
   id: string,
   token: string,
