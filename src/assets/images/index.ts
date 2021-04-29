@@ -20,6 +20,9 @@ import { ReactComponent as NotFound } from './not-found.svg';
 
 import { ReactComponent as Celebration } from './celebration_blue.svg';
 
+import { ReactComponent as Cancel } from './cancel.svg';
+import { ReactComponent as Completed } from './completed.svg';
+
 import DrehtuerImage from './drehtuer.png';
 import DefaultCourseCover from './course_default_cover.jpg';
 import { ReactComponent as Empty } from './empty.svg';
@@ -41,6 +44,8 @@ const ImageList = {
   SignupBackgroundCircle2,
   SignupBackgroundZickZack,
   Celebration,
+  Cancel,
+  Completed,
   MentoringPic,
   TrashIllustration,
   DrehtuerImage,
