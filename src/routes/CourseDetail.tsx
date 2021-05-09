@@ -361,6 +361,69 @@ const CourseDetail = (props: Props) => {
 
   const whatsAppShareURL = `whatsapp://send?text=${shareData.text} ${shareData.url}`;
 
+  const hasJoiningRights = () => {
+    return !(!course.subcourse || isStudent);
+  };
+
+  const hasEnded = () => {
+    const lectures = course.subcourse.lectures.sort(
+      (a, b) => a.start - b.start
+    );
+    const lastLecture = lectures[lectures.length - 1];
+    if (lastLecture != null) {
+      const lectureEnd = moment
+        .unix(lastLecture.start)
+        .add(lastLecture.duration, 'minutes');
+
+      return moment().isAfter(lectureEnd);
+    }
+
+    return false;
+  };
+
+  const canDisjoinCourse = () => {
+    return hasJoiningRights() && course.subcourse.joined && !hasEnded();
+  };
+
+  const canDisjoinWaitingList = () => {
+    return hasJoiningRights && course.subcourse.onWaitingList;
+  };
+
+  const getJoinBtnDisabledReason = () => {
+    if (
+      !(
+        userContext.user.grade >= course.subcourse.minGrade &&
+        userContext.user.grade <= course.subcourse.maxGrade
+      )
+    ) {
+      return 'Du kannst diesem Kurs nicht beitreten, da du nicht in der Zielgruppe bist.';
+    }
+    if (
+      !course.subcourse.joinAfterStart &&
+      course.subcourse.lectures.some((l) =>
+        moment.unix(l.start).isBefore(moment())
+      )
+    ) {
+      return 'Du kannst diesem Kurs nicht beitreten, da er bereits begonnen hat und es nicht möglich ist, im Nachhinein beizutreten.';
+    }
+    if (course.subcourse.participants >= course.subcourse.maxParticipants) {
+      return 'Du kannst diesem Kurs nicht beitreten, da er voll ist.';
+    }
+    if (course.subcourse.joined) {
+      if (!hasJoiningRights()) {
+        return 'Du hast keine Berechtigung, um diesen Kurs zu verlassen.';
+      }
+      if (hasEnded()) {
+        return 'Dieser Kurs hat bereits geendet. Aus statistischen Gründen kannst du ihn nun nicht mehr verlassen.';
+      }
+    }
+    if (course.subcourse.onWaitingList) {
+      return 'Du hast keine Berechtigung, um die Warteliste zu verlassen.';
+    }
+
+    return null;
+  };
+
   const antdShareMenu = (
     <Menu>
       <Menu.Item icon={<CopyOutlined />} key="copyLink">
@@ -387,10 +450,6 @@ const CourseDetail = (props: Props) => {
     } else {
       setIsCustomShareMenuVisible(true);
     }
-  };
-
-  const hasJoiningRights = () => {
-    return !(!course.subcourse || isStudent);
   };
 
   const isEligibleForJoining = () => {
@@ -427,30 +486,6 @@ const CourseDetail = (props: Props) => {
       !course.subcourse.joined &&
       course.subcourse.participants < course.subcourse.maxParticipants
     );
-  };
-
-  const hasEnded = () => {
-    const lectures = course.subcourse.lectures.sort(
-      (a, b) => a.start - b.start
-    );
-    const lastLecture = lectures[lectures.length - 1];
-    if (lastLecture != null) {
-      const lectureEnd = moment
-        .unix(lastLecture.start)
-        .add(lastLecture.duration, 'minutes');
-
-      return moment().isAfter(lectureEnd);
-    }
-
-    return false;
-  };
-
-  const canDisjoinCourse = () => {
-    return hasJoiningRights() && course.subcourse.joined && !hasEnded();
-  };
-
-  const canDisjoinWaitingList = () => {
-    return hasJoiningRights && course.subcourse.onWaitingList;
   };
 
   const joinButtonTitle = () => {
@@ -652,7 +687,59 @@ const CourseDetail = (props: Props) => {
       </div>
     );
   };
-
+  const renderJoinButton = () => {
+    return (
+      <AntdButton
+        type="primary"
+        style={
+          !(
+            canJoinCourse() ||
+            canJoinWaitingList() ||
+            canDisjoinCourse() ||
+            canDisjoinWaitingList()
+          )
+            ? {
+                backgroundColor: '#727272',
+                borderColor: '#727272',
+                color: '#ffffff',
+                width: '100%',
+                height: 'auto',
+                overflow: 'hidden',
+                whiteSpace: 'normal',
+              }
+            : {
+                backgroundColor:
+                  course.subcourse.joined || course.subcourse.onWaitingList
+                    ? '#F4486D'
+                    : '#FCD95C',
+                borderColor:
+                  course.subcourse.joined || course.subcourse.onWaitingList
+                    ? '#F4486D'
+                    : '#FCD95C',
+                color:
+                  course.subcourse.joined || course.subcourse.onWaitingList
+                    ? 'white'
+                    : '#373E47',
+                width: '100%',
+                height: 'auto',
+                overflow: 'hidden',
+                whiteSpace: 'normal',
+              }
+        }
+        onClick={joinButtonAction}
+        disabled={
+          !(
+            canJoinCourse() ||
+            canJoinWaitingList() ||
+            canDisjoinCourse() ||
+            canDisjoinWaitingList()
+          )
+        }
+      >
+        {joinButtonTitle()}
+      </AntdButton>
+    );
+  };
   const renderCourseInformation = () => {
     const getMenu = () => (
       <Menu
@@ -784,40 +871,20 @@ const CourseDetail = (props: Props) => {
                       </Dropdown>
                     </Col>
                   )}
-                  {(canJoinCourse() ||
-                    canJoinWaitingList() ||
-                    canDisjoinCourse() ||
-                    canDisjoinWaitingList()) && (
-                    <Col md={24} sm={12} xs={12}>
-                      <AntdButton
-                        type="primary"
-                        style={{
-                          backgroundColor:
-                            course.subcourse.joined ||
-                            course.subcourse.onWaitingList
-                              ? '#F4486D'
-                              : '#FCD95C',
-                          borderColor:
-                            course.subcourse.joined ||
-                            course.subcourse.onWaitingList
-                              ? '#F4486D'
-                              : '#FCD95C',
-                          color:
-                            course.subcourse.joined ||
-                            course.subcourse.onWaitingList
-                              ? 'white'
-                              : '#373E47',
-                          width: '100%',
-                          height: 'auto',
-                          overflow: 'hidden',
-                          whiteSpace: 'normal',
-                        }}
-                        onClick={joinButtonAction}
-                      >
-                        {joinButtonTitle()}
-                      </AntdButton>
-                    </Col>
-                  )}
+                  <Col md={24} sm={12} xs={12}>
+                    {!(
+                      canJoinCourse() ||
+                      canJoinWaitingList() ||
+                      canDisjoinCourse() ||
+                      canDisjoinWaitingList()
+                    ) ? (
+                      <Tooltip title={getJoinBtnDisabledReason}>
+                        {renderJoinButton()}
+                      </Tooltip>
+                    ) : (
+                      renderJoinButton()
+                    )}
+                  </Col>
                   <Col md={24} sm={12} xs={12}>
                     <div className={classes.videochatAction}>
                       {((isMyCourse && course.state === CourseState.ALLOWED) ||
