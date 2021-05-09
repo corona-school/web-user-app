@@ -1,12 +1,5 @@
 import { User } from '../types';
 
-export const getUserType = (user: User) => {
-  if (user.type === 'pupil') {
-    return `Schüler*in`;
-  }
-  return `Student*in`;
-};
-
 export const getUserTags = (user: User) => {
   const studentTags = [];
 
