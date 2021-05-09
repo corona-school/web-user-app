@@ -57,9 +57,11 @@ const GlobalStyle = createGlobalStyle`
 
 const App: React.FC = () => {
   const userContext = useContext(UserContext);
-
   const domainComponents = getDomainComponents();
   const subdomain = domainComponents?.length > 0 && domainComponents[0];
+  if (subdomain === 'nrw') {
+    window.open('https://partnerschule.corona-school.de', '_self');
+  }
   const cooperationMode = getCooperationModeForSubdomain(subdomain);
   if (subdomain && cooperationMode) {
     // render the special page for cooperations with states of Germany
