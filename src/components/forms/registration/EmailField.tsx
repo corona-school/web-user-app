@@ -13,7 +13,7 @@ export const EmailField: React.FC<Props> = (props) => {
   return (
     <Form.Item
       className={props.className}
-      label="E-Mail-Adresse"
+      label="Deine persönliche E-Mail-Adresse"
       name="email"
       initialValue={props.initialValue}
       validateFirst
@@ -33,6 +33,7 @@ export const EmailField: React.FC<Props> = (props) => {
           validateTrigger: 'onSubmit',
         },
       ]}
+      extra="Trage hier deine persönliche E-Mail-Adresse ein. Stelle dabei sicher, dass du Zugriff auf diese E-Mail-Adresse hast. Nach der Registrierung erhältst du eine Verifizierungsmail von uns, in der du deine Anmeldung bestätigen musst."
     >
       <Input type="email" placeholder="max.musterman@email.com" />
     </Form.Item>

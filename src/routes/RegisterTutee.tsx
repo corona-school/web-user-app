@@ -627,6 +627,7 @@ const RegisterTutee: React.FC<Props> = ({
               },
             ]}
             initialValue={formData.teacherEmail}
+            extra="Beachte bitte, dass du hier nicht deine eigene, sondern die E-Mail-Adresse deiner Lehrkraft angeben musst. Mit dieser Angabe können wir dich deiner Schule zuordnen."
           >
             <Input
               placeholder="Hier die E-Mail-Adresse deines/deiner Lehrer*in"
@@ -1040,7 +1041,7 @@ const RegisterTutee: React.FC<Props> = ({
               </div>
             </Form>
             <Text className={classes.helpText}>
-              Du hast schon ein Account? Hier{' '}
+              Du hast schon einen Account? Hier{' '}
               <Link style={{ color: '#4e6ae6' }} to="/login">
                 anmelden
               </Link>
