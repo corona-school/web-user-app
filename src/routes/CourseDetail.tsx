@@ -28,7 +28,9 @@ import {
   Popconfirm,
   Row,
   Col,
+  Popover,
 } from 'antd';
+import classnames from 'classnames';
 import AddInstructorModal from '../components/Modals/AddInstructorModal';
 import { ApiContext } from '../context/ApiContext';
 import { AuthContext } from '../context/AuthContext';
@@ -57,15 +59,26 @@ import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
+import Icons from '../assets/icons';
 import SearchParticipant from '../components/course/SearchParticipant';
 import SortParticipant from '../components/course/SortParticipant';
+import Button from '../components/button';
+import Images from '../assets/images';
+import { Spinner } from '../components/loading/Spinner';
 
 moment.locale('de');
 
-const CourseDetail = (params: {
+interface Props {
   id?: string;
   setIsWaitingList?: (boolean) => void;
-}) => {
+  publicView?: boolean;
+}
+
+// activate 60 minutes before start and 60 minutes after end of a lecture
+const INSTRUCTOR_JOIN_TIME = 60;
+const STUDENTT_JOIN_TIME = 10;
+
+const CourseDetail = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState<ParsedCourseOverview | null>(null);
   const [isLoadingVideoChat, setIsLoadingVideoChat] = useState(false);
@@ -84,8 +97,8 @@ const CourseDetail = (params: {
   const [loadingCerts, setLoadingCerts] = useState<Set<string>>(new Set());
   const loadingCertsRef = useRef(loadingCerts);
 
-  const { id: urlParamID } = useParams() as { id: string };
-  const id = params.id ?? urlParamID;
+  const { id: urlParamID } = useParams<{ id: string }>();
+  const id = props.id ?? urlParamID;
 
   const api = useContext(ApiContext);
   const userContext = useContext(UserContext);
@@ -105,39 +118,40 @@ const CourseDetail = (params: {
         const parsedCourse = parseCourse(course);
         setCourse(parsedCourse);
         setParticipantList(parsedCourse.subcourse.participantList);
-        params?.setIsWaitingList(
-          parsedCourse.subcourse
-            ? parsedCourse.subcourse.participants ===
-                parsedCourse.subcourse.maxParticipants
-            : false
-        );
+
+        if (props.setIsWaitingList) {
+          props.setIsWaitingList(
+            parsedCourse.subcourse
+              ? parsedCourse.subcourse.participants ===
+                  parsedCourse.subcourse.maxParticipants
+              : false
+          );
+        }
+        return api.getCourseTags();
       })
-      .catch((err) => {
-        console.log(err);
+      .then((response) => {
+        setTags(response);
       })
       .finally(() => {
         setLoading(false);
       });
-    setLoading(true);
-    api
-      .getCourseTags()
-      .then((response) => {
-        setTags(response);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
     if (id) {
       updateCourseDetails();
     }
-  }, [api, id, setTags]);
+  }, [id]);
 
   // search Participants
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (!loading && course) {
+      if (
+        !loading &&
+        course &&
+        course.subcourse &&
+        course.subcourse.participantList
+      ) {
         const filteredParticipants = course.subcourse.participantList.filter(
           (data) => {
             if (enteredFilter.length === 0) return data;
@@ -165,11 +179,32 @@ const CourseDetail = (params: {
   }, [loading, enteredFilter]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner message="Der Kurs wird geladen..." />;
   }
 
   if (!course || !course.subcourse) {
-    return <div>Wir konnten den Kurs leider nicht finden.</div>;
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '90vh',
+        }}
+      >
+        <Images.NotFound />
+        <Title size="h3">Kurse konnte nicht gefunden werden.</Title>
+        <Button
+          className={classes.retryButton}
+          backgroundColor="#4E6AE6"
+          color="#ffffff"
+          onClick={() => history.go(0)}
+        >
+          Erneut versuchen
+        </Button>
+      </div>
+    );
   }
 
   const isMyCourse = course.instructors.some((i) => i.id === userId);
@@ -326,6 +361,69 @@ const CourseDetail = (params: {
 
   const whatsAppShareURL = `whatsapp://send?text=${shareData.text} ${shareData.url}`;
 
+  const hasJoiningRights = () => {
+    return !(!course.subcourse || isStudent);
+  };
+
+  const hasEnded = () => {
+    const lectures = course.subcourse.lectures.sort(
+      (a, b) => a.start - b.start
+    );
+    const lastLecture = lectures[lectures.length - 1];
+    if (lastLecture != null) {
+      const lectureEnd = moment
+        .unix(lastLecture.start)
+        .add(lastLecture.duration, 'minutes');
+
+      return moment().isAfter(lectureEnd);
+    }
+
+    return false;
+  };
+
+  const canDisjoinCourse = () => {
+    return hasJoiningRights() && course.subcourse.joined && !hasEnded();
+  };
+
+  const canDisjoinWaitingList = () => {
+    return hasJoiningRights && course.subcourse.onWaitingList;
+  };
+
+  const getJoinBtnDisabledReason = () => {
+    if (
+      !(
+        userContext.user.grade >= course.subcourse.minGrade &&
+        userContext.user.grade <= course.subcourse.maxGrade
+      )
+    ) {
+      return 'Du kannst diesem Kurs nicht beitreten, da du nicht in der Zielgruppe bist.';
+    }
+    if (
+      !course.subcourse.joinAfterStart &&
+      course.subcourse.lectures.some((l) =>
+        moment.unix(l.start).isBefore(moment())
+      )
+    ) {
+      return 'Du kannst diesem Kurs nicht beitreten, da er bereits begonnen hat und es nicht möglich ist, im Nachhinein beizutreten.';
+    }
+    if (course.subcourse.participants >= course.subcourse.maxParticipants) {
+      return 'Du kannst diesem Kurs nicht beitreten, da er voll ist.';
+    }
+    if (course.subcourse.joined) {
+      if (!hasJoiningRights()) {
+        return 'Du hast keine Berechtigung, um diesen Kurs zu verlassen.';
+      }
+      if (hasEnded()) {
+        return 'Dieser Kurs hat bereits geendet. Aus statistischen Gründen kannst du ihn nun nicht mehr verlassen.';
+      }
+    }
+    if (course.subcourse.onWaitingList) {
+      return 'Du hast keine Berechtigung, um die Warteliste zu verlassen.';
+    }
+
+    return null;
+  };
+
   const antdShareMenu = (
     <Menu>
       <Menu.Item icon={<CopyOutlined />} key="copyLink">
@@ -352,10 +450,6 @@ const CourseDetail = (params: {
     } else {
       setIsCustomShareMenuVisible(true);
     }
-  };
-
-  const hasJoiningRights = () => {
-    return !(!course.subcourse || isStudent);
   };
 
   const isEligibleForJoining = () => {
@@ -392,31 +486,6 @@ const CourseDetail = (params: {
       !course.subcourse.joined &&
       course.subcourse.participants < course.subcourse.maxParticipants
     );
-  };
-
-  const hasEnded = () => {
-    const lectures = course.subcourse.lectures.sort(
-      (a, b) => a.start - b.start
-    );
-    const lastLecture = lectures[lectures.length - 1];
-    if (lastLecture != null) {
-      const lectureEnd = moment
-        .unix(lastLecture.start)
-        .add(lastLecture.duration, 'minutes');
-
-      console.log('is after', moment().isAfter(lectureEnd));
-      return moment().isAfter(lectureEnd);
-    }
-    console.log('last lecture is null');
-    return false;
-  };
-
-  const canDisjoinCourse = () => {
-    return hasJoiningRights() && course.subcourse.joined && !hasEnded();
-  };
-
-  const canDisjoinWaitingList = () => {
-    return hasJoiningRights && course.subcourse.onWaitingList;
   };
 
   const joinButtonTitle = () => {
@@ -474,8 +543,13 @@ const CourseDetail = (params: {
     );
   };
 
+  const videoChatHint = () => {
+    const preJoinTime = isStudent ? INSTRUCTOR_JOIN_TIME : STUDENTT_JOIN_TIME;
+
+    return `Der Link zum Video-Chat wird erst ${preJoinTime} Minuten vor dem Start deines Kurses aktiv.`;
+  };
+
   const shouldEnableVideoChat = () => {
-    // activate 30 minutes before start and 30 minutes after end of a lecture
     const lecturesToday = getTodaysLectures()?.sort(
       (a, b) => a.start - b.start
     );
@@ -485,14 +559,14 @@ const CourseDetail = (params: {
     if (!firstLecture || !lastLecture) {
       return false;
     }
-    const preJoinTime = isStudent ? 30 : 10; // minutes
+    const preJoinTime = isStudent ? INSTRUCTOR_JOIN_TIME : STUDENTT_JOIN_TIME; // minutes
     const start = moment
       .unix(firstLecture.start)
       .subtract(preJoinTime, 'minutes');
     const end = moment
       .unix(lastLecture.start)
       .add(lastLecture.duration, 'minutes')
-      .add(30, 'minutes');
+      .add(INSTRUCTOR_JOIN_TIME, 'minutes');
 
     return moment().isBetween(start, end);
   };
@@ -613,7 +687,59 @@ const CourseDetail = (params: {
       </div>
     );
   };
-
+  const renderJoinButton = () => {
+    return (
+      <AntdButton
+        type="primary"
+        style={
+          !(
+            canJoinCourse() ||
+            canJoinWaitingList() ||
+            canDisjoinCourse() ||
+            canDisjoinWaitingList()
+          )
+            ? {
+                backgroundColor: '#727272',
+                borderColor: '#727272',
+                color: '#ffffff',
+                width: '100%',
+                height: 'auto',
+                overflow: 'hidden',
+                whiteSpace: 'normal',
+              }
+            : {
+                backgroundColor:
+                  course.subcourse.joined || course.subcourse.onWaitingList
+                    ? '#F4486D'
+                    : '#FCD95C',
+                borderColor:
+                  course.subcourse.joined || course.subcourse.onWaitingList
+                    ? '#F4486D'
+                    : '#FCD95C',
+                color:
+                  course.subcourse.joined || course.subcourse.onWaitingList
+                    ? 'white'
+                    : '#373E47',
+                width: '100%',
+                height: 'auto',
+                overflow: 'hidden',
+                whiteSpace: 'normal',
+              }
+        }
+        onClick={joinButtonAction}
+        disabled={
+          !(
+            canJoinCourse() ||
+            canJoinWaitingList() ||
+            canDisjoinCourse() ||
+            canDisjoinWaitingList()
+          )
+        }
+      >
+        {joinButtonTitle()}
+      </AntdButton>
+    );
+  };
   const renderCourseInformation = () => {
     const getMenu = () => (
       <Menu
@@ -681,6 +807,29 @@ const CourseDetail = (params: {
 
     return (
       <div className={classes.statusContainer}>
+        <div className={classes.backButtonContainer}>
+          <button
+            className={classes.backButton}
+            onClick={() => {
+              if (props.publicView) {
+                history.push(
+                  history.location.hash.length > 0
+                    ? `/public/courses/${history.location.hash}`
+                    : '/public/courses'
+                );
+              } else {
+                history.push(
+                  history.location.hash.length > 0
+                    ? `/courses/overview/${history.location.hash}`
+                    : '/courses'
+                );
+              }
+            }}
+          >
+            <Icons.ChevronLeft />
+            Zurück
+          </button>
+        </div>
         <div className={classes.headerContainer}>
           <Row>
             <Col xxl={20} lg={18} md={17} sm={24}>
@@ -722,40 +871,20 @@ const CourseDetail = (params: {
                       </Dropdown>
                     </Col>
                   )}
-                  {(canJoinCourse() ||
-                    canJoinWaitingList() ||
-                    canDisjoinCourse() ||
-                    canDisjoinWaitingList()) && (
-                    <Col md={24} sm={12} xs={12}>
-                      <AntdButton
-                        type="primary"
-                        style={{
-                          backgroundColor:
-                            course.subcourse.joined ||
-                            course.subcourse.onWaitingList
-                              ? '#F4486D'
-                              : '#FCD95C',
-                          borderColor:
-                            course.subcourse.joined ||
-                            course.subcourse.onWaitingList
-                              ? '#F4486D'
-                              : '#FCD95C',
-                          color:
-                            course.subcourse.joined ||
-                            course.subcourse.onWaitingList
-                              ? 'white'
-                              : '#373E47',
-                          width: '100%',
-                          height: 'auto',
-                          overflow: 'hidden',
-                          whiteSpace: 'normal',
-                        }}
-                        onClick={joinButtonAction}
-                      >
-                        {joinButtonTitle()}
-                      </AntdButton>
-                    </Col>
-                  )}
+                  <Col md={24} sm={12} xs={12}>
+                    {!(
+                      canJoinCourse() ||
+                      canJoinWaitingList() ||
+                      canDisjoinCourse() ||
+                      canDisjoinWaitingList()
+                    ) ? (
+                      <Tooltip title={getJoinBtnDisabledReason}>
+                        {renderJoinButton()}
+                      </Tooltip>
+                    ) : (
+                      renderJoinButton()
+                    )}
+                  </Col>
                   <Col md={24} sm={12} xs={12}>
                     <div className={classes.videochatAction}>
                       {((isMyCourse && course.state === CourseState.ALLOWED) ||
@@ -782,29 +911,35 @@ const CourseDetail = (params: {
                       />
                     </div>
                   </Col>
-                  {!shouldEnableVideoChat() && (
-                    <Col md={24} sm={12} xs={12}>
-                      <div className={classes.videochatAction}>
-                        {((isMyCourse &&
-                          course.state === CourseState.ALLOWED) ||
-                          course.subcourse.joined) &&
-                          !hasEnded() && (
-                            <AntdButton
-                              type="primary"
-                              style={{
-                                backgroundColor: '#FCD95C',
-                                borderColor: '#FCD95C',
-                                color: '#373E47',
-                                width: '100%',
-                              }}
-                              onClick={joinTestMeeting}
-                            >
-                              Videochat testen
-                            </AntdButton>
-                          )}
-                      </div>
-                    </Col>
-                  )}
+
+                  <Col md={24} sm={12} xs={12}>
+                    <div className={classes.videochatAction}>
+                      {((isMyCourse && course.state === CourseState.ALLOWED) ||
+                        course.subcourse.joined) &&
+                        !hasEnded() && (
+                          <Popover
+                            className={classes.popover}
+                            content={videoChatHint()}
+                            trigger="hover"
+                          >
+                            <div style={{ width: '100%' }}>
+                              <Button
+                                disabled={!shouldEnableVideoChat()}
+                                color="#373E47"
+                                className={classnames(classes.courseButton, {
+                                  [classes.disabled]: !shouldEnableVideoChat(),
+                                })}
+                                backgroundColor="#FCD95C"
+                                onClick={joinTestMeeting}
+                              >
+                                Videochat testen
+                              </Button>
+                            </div>
+                          </Popover>
+                        )}
+                    </div>
+                  </Col>
+
                   {!isStudent && course.allowContact && (
                     <Col md={24} sm={12} xs={12}>
                       <div className={classes.contactInstructorsAction}>

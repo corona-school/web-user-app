@@ -23,6 +23,7 @@ import EditableUserSettingsCard, {
 import SaveEditButton from '../button/SaveEditButton';
 import AccentColorButton from '../button/AccentColorButton';
 import { AuthContext } from '../../context/AuthContext';
+import BecomeTutorModal from '../Modals/BecomeTutorModal';
 
 interface Props {
   user: User;
@@ -79,31 +80,44 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
     }
   };
 
-  const renderCourseButton = () => {
+  const renderStudentChangeRoleButtons = () => {
     if (user.type !== 'student') {
       return null;
     }
 
-    if (user.isInstructor) {
-      return null;
-    }
+    const buttons = [];
 
-    return (
-      <>
+    if (!user.isInstructor) {
+      buttons.push(
         <AccentColorButton
           onClick={() => modalContext.setOpenedModal('startInternship')}
           accentColor="#4E6AE6"
           label="Praktikum anmelden"
           small
         />
+      );
+      buttons.push(
         <AccentColorButton
           onClick={() => modalContext.setOpenedModal('becomeInstructor')}
           accentColor="#4E6AE6"
-          label="Kursleiter*in werden"
+          label="Kursleiter:in werden"
           small
         />
-      </>
-    );
+      );
+    }
+
+    if (!user.isTutor && user.isProjectCoach && user.isUniversityStudent) {
+      buttons.push(
+        <AccentColorButton
+          onClick={() => modalContext.setOpenedModal('becomeTutor')}
+          accentColor="#4E6AE6"
+          label="Tutor:in werden"
+          small
+        />
+      );
+    }
+
+    return <div className={classes.mainButtonContainer}>{buttons}</div>;
   };
 
   const userTags = getUserTags(user);
@@ -152,60 +166,62 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
               </Text>
             </div>
           )}
-          {!isProjectCoachButNotTutor(user) && (
-            <EditableUserSettingsCard
-              editableUserSettings={editableUserSettings}
-              onSettingChanges={setEditableUserSettings}
-              user={user}
-              isEditing={isEditing}
-              personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
-            />
-          )}
-          <div className={classes.mainButtonContainer}>
-            {renderCourseButton()}
+          <EditableUserSettingsCard
+            editableUserSettings={editableUserSettings}
+            onSettingChanges={setEditableUserSettings}
+            user={user}
+            isEditing={isEditing}
+            personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
+          />
+          <div>
+            {renderStudentChangeRoleButtons()}
 
-            {user.isTutor && (
+            <div className={classes.mainButtonContainer}>
+              {user.isTutor && (
+                <AccentColorButton
+                  disabled={
+                    user.matches.length + user.dissolvedMatches.length === 0
+                  }
+                  onClick={() =>
+                    modalContext.setOpenedModal('certificateModal')
+                  }
+                  accentColor="#4E6AE6"
+                  label="Bescheinigung anfordern"
+                  small
+                />
+              )}
               <AccentColorButton
-                disabled={
-                  user.matches.length + user.dissolvedMatches.length === 0
-                }
-                onClick={() => modalContext.setOpenedModal('certificateModal')}
-                accentColor="#4E6AE6"
-                label="Bescheinigung anfordern"
+                onClick={() => modalContext.setOpenedModal('deactivateAccount')}
+                accentColor="#6E6E6E"
+                Icon={Trashcan}
+                label="Deaktivieren"
                 small
               />
-            )}
-            <AccentColorButton
-              onClick={() => modalContext.setOpenedModal('deactivateAccount')}
-              accentColor="#6E6E6E"
-              Icon={Trashcan}
-              label="Deaktivieren"
-              small
-            />
-            <SaveEditButton
-              isEditing={isEditing}
-              isLoading={isSaving}
-              onEditChange={(nowEditing) => {
-                if (!nowEditing) {
-                  saveUserChanges();
-                } else {
-                  setIsEditing(nowEditing);
-                }
-              }}
-            />
-            <AccentColorButton
-              onClick={handleLogoutClick}
-              accentColor="#f5aa0f"
-              label="Ausloggen"
-              small
-            />
+              <SaveEditButton
+                isEditing={isEditing}
+                isLoading={isSaving}
+                onEditChange={(nowEditing) => {
+                  if (!nowEditing) {
+                    saveUserChanges();
+                  } else {
+                    setIsEditing(nowEditing);
+                  }
+                }}
+              />
+              <AccentColorButton
+                onClick={handleLogoutClick}
+                accentColor="#f5aa0f"
+                label="Ausloggen"
+                small
+              />
+            </div>
           </div>
         </div>
       </CardBase>
       <CertificateModal user={user} reloadCertificates={reloadCertificates} />
       <BecomeInstructorModal user={user} />
       <BecomeInternModal user={user} />
-      <PhoneModal user={user} />
+      <BecomeTutorModal user={user} />
       <StyledReactModal
         isOpen={modalContext.openedModal === 'deactivateAccount'}
       >

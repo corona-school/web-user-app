@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from './AuthContext';
-import { User, Subject } from '../types';
+import { User, Subject, BecomeTutor } from '../types';
 import * as api from '../api/api';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
@@ -31,6 +31,7 @@ interface IApiContext {
   dissolveProjectMatch: (uuid: string, reason?: number) => Promise<void>;
   requestNewToken: (email: string, redirectTo: string) => Promise<void>;
   putUser: (user: User) => Promise<void>;
+  postUserRoleTutor: (tutorData: BecomeTutor) => Promise<void>;
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
   putUserProjectFields: (projectFields: ApiProjectFieldInfo[]) => Promise<void>;
   becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
@@ -107,7 +108,12 @@ interface IApiContext {
   ) => Promise<void>;
   registerTutee: (tutee: Tutee) => Promise<void>;
   registerStateTutee: (tutee: Tutee) => Promise<void>;
+  checkEmail: (email: string) => Promise<void>;
   registerTutor: (tutor: Tutor) => Promise<void>;
+  editInterestConfirmationStatus: (
+    token: string,
+    status: string
+  ) => Promise<void>;
   sendCourseGroupMail: (
     courseId: number,
     subCourseId: number,
@@ -166,6 +172,7 @@ interface IApiContext {
 const reject = () => Promise.reject();
 
 export const ApiContext = React.createContext<IApiContext>({
+  checkEmail: reject,
   getUserData: reject,
   dissolveMatch: reject,
   dissolveProjectMatch: reject,
@@ -175,6 +182,7 @@ export const ApiContext = React.createContext<IApiContext>({
   contactJufoExpert: reject,
   updateJufoExpert: reject,
   putUser: reject,
+  postUserRoleTutor: reject,
   putUserSubjects: reject,
   putUserProjectFields: reject,
   becomeInstructor: reject,
@@ -205,6 +213,7 @@ export const ApiContext = React.createContext<IApiContext>({
   registerTutee: reject,
   registerStateTutee: reject,
   registerTutor: reject,
+  editInterestConfirmationStatus: reject,
   sendCourseGroupMail: reject,
   issueCourseCertificates: reject,
   sendCourseInstructorMail: reject,
@@ -297,6 +306,9 @@ export const ApiProvider: React.FC = ({ children }) => {
   const putUser = (user: User): Promise<void> =>
     api.putUser({ id, token }, user);
 
+  const postUserRoleTutor = (tutorData: BecomeTutor): Promise<void> =>
+    api.axiosPostUserRoleTutor(id, token, tutorData);
+
   const putUserSubjects = (subjects: Subject[]): Promise<void> =>
     api.axiosPutUserSubjects(id, token, subjects);
 
@@ -388,6 +400,14 @@ export const ApiProvider: React.FC = ({ children }) => {
 
   const registerTutor = (tutor: Tutor): Promise<void> =>
     api.axiosRegisterTutor(tutor);
+
+  const checkEmail = (email: string): Promise<void> =>
+    api.axiosCheckEmail(email);
+
+  const editInterestConfirmationStatus = (
+    token: string,
+    status: string
+  ): Promise<void> => api.axiosEditInterestConfirmationStatus(token, status);
 
   const editCourse = (id: number, course: Course) =>
     api.axiosEditCourse(token, id, course);
@@ -516,6 +536,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         dissolveProjectMatch,
         requestNewToken: api.axiosRequestNewToken,
         putUser,
+        postUserRoleTutor,
         putUserSubjects,
         putUserProjectFields,
         becomeInstructor,
@@ -530,7 +551,9 @@ export const ApiProvider: React.FC = ({ children }) => {
         getMyCourses,
         registerTutee,
         registerStateTutee,
+        checkEmail,
         registerTutor,
+        editInterestConfirmationStatus,
         sendCourseGroupMail,
         issueCourseCertificates,
         sendCourseInstructorMail,

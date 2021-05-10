@@ -119,7 +119,7 @@ const IconsList = {
   EmailFilled,
   BookmarkFilled,
   BookmarkSlashFilled,
-  SortSolid
+  SortSolid,
 };
 
 const Icons: {

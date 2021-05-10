@@ -34,6 +34,7 @@ export interface User {
   isInstructor?: boolean;
   isTutor?: boolean;
   isProjectCoachee?: boolean;
+  isUniversityStudent?: boolean;
   isPupil?: boolean;
   isParticipant?: boolean;
   isProjectCoach?: boolean;
@@ -53,12 +54,19 @@ export interface User {
   phone?: string;
   phoneConfirmed?: string;
   expertData?: ExpertData;
+  pupilTutoringInterestConfirmationStatus?: InterestConfirmationStatus;
 }
 
 export enum ScreeningStatus {
   Unscreened = 'UNSCREENED',
   Accepted = 'ACCEPTED',
   Rejected = 'REJECTED',
+}
+
+export enum InterestConfirmationStatus {
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  REFUSED = 'refused',
 }
 
 export type SubjectName = typeof subjectOptions[number];
@@ -106,3 +114,9 @@ export type AuthStatusOptions =
   | 'missing'
   | 'authorized'
   | 'invalid';
+
+export interface BecomeTutor {
+  subjects: Subject[];
+  supportsInDaz: boolean;
+  languages?: string[];
+}

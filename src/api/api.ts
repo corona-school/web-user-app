@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Credentials, User, Subject } from '../types';
+import { Credentials, User, Subject, BecomeTutor } from '../types';
 import { CertificateData } from '../components/Modals/CerificateModal';
 import { SchoolInfo, Tutee, Tutor } from '../types/Registration';
 import {
@@ -131,6 +131,19 @@ export const axiosGetUser = (id: string, token: string): Promise<User> => {
     .catch(logError('getUser'));
 };
 
+export const axiosEditInterestConfirmationStatus = (
+  token: string,
+  status: string
+): Promise<void> => {
+  return axios
+    .post(`${apiURL}/interest-confirmation/status`, {
+      token,
+      status,
+    })
+    .then((res) => res.data)
+    .catch(logError('editInterestConfirmationStatus'));
+};
+
 export const axiosDissolveMatch = async (
   id: string,
   token: string,
@@ -174,6 +187,17 @@ export const axiosRequestNewToken = async (
       if (dev) console.error('requestNewToken failed:', error);
       throw new APIError(error?.response?.status, 'requestNewToken');
     });
+};
+
+export const axiosPostUserRoleTutor = async (
+  id: string,
+  token: string,
+  data: BecomeTutor
+) => {
+  const url = `${apiURL}/user/${id}/role/tutor`;
+  await axios
+    .post(url, data, { headers: { token } })
+    .catch(logError('postUserRoleTutor'));
 };
 
 export const axiosPutUserSubjects = async (
@@ -431,6 +455,16 @@ export const axiosRegisterTutor = (tutor: Tutor) => {
     .post(`${apiURL}/register/tutor`, tutor)
     .then((response) => response.data)
     .catch(logError('registerTutor'));
+};
+
+export const axiosCheckEmail = async (email: string) => {
+  try {
+    await axios.post(`${apiURL}/register/checkEmail`, { email });
+    return Promise.resolve();
+  } catch (e) {
+    console.log(e.response.status);
+    return e.response.status === 429 ? Promise.resolve() : Promise.reject(); // If we're being rate limited, accept the email address. If it's already taken nevertheless, the user will be notified when trying to register. This is only supposed to be an assistance.
+  }
 };
 
 export const axiosCreateCourse = (token: string, course: Course) => {

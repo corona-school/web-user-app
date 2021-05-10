@@ -14,7 +14,6 @@ import { useHistory, useLocation, Link } from 'react-router-dom';
 import Icons from '../assets/icons';
 import { Title, Text, LinkText } from '../components/Typography';
 import Button from '../components/button';
-
 import classes from './RegisterTutee.module.scss';
 import { Subject } from '../types';
 import Context from '../context';
@@ -34,9 +33,12 @@ import {
 } from '../components/forms/registration';
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
-import { languages } from '../assets/languages';
+import { languageOptions } from '../assets/languages';
 import { learningGermanSinceOptions } from '../assets/learningGermanSinceOptions';
 import SignupContainer from '../components/container/SignupContainer';
+import AccentColorButton from '../components/button/AccentColorButton';
+import { ReactComponent as ClockIcon } from '../assets/icons/clock-regular.svg';
+import { ReactComponent as MagicIcon } from '../assets/icons/magic-solid.svg';
 
 const { Option } = Select;
 
@@ -61,7 +63,7 @@ interface FormData {
   msg?: string;
   newsletter?: boolean;
   teacherEmail?: string;
-  languages?: typeof languages[number][];
+  languages?: typeof languageOptions[number][];
   learningGermanSince?: string;
 }
 
@@ -82,7 +84,7 @@ const RegisterTutee: React.FC<Props> = ({
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState<
-    'start' | 'detail' | 'finish' | 'done'
+    'start' | 'detail' | 'autoMatchChooser' | 'finish' | 'done'
   >('start');
   const [isTutee, setTutee] = useState(false);
   const [isGroups, setGroups] = useState(false);
@@ -100,6 +102,8 @@ const RegisterTutee: React.FC<Props> = ({
   const [schoolInfo, setSchoolInfo] = useState<SchoolInfo[]>(null);
 
   const isOnlyJufo = isJufo && !isTutee && !isGroups;
+
+  const [requestsAutoMatch, setRequestsAutoMatch] = useState(false);
 
   if (env.REACT_APP_TUTEE_REGISTRATION === 'disabled') {
     return <NoRegistration />;
@@ -175,14 +179,18 @@ const RegisterTutee: React.FC<Props> = ({
         </Checkbox>
         {isTutee && (
           <div className={classes.registrationHint}>
-            <Title size="h5" bold>
-              Hinweis bei der Registrierung
-            </Title>
             <Text>
-              Bitte melde dich nur an, wenn du individuelle Unterstützung beim
-              Lernen aus persönlichen, sozialen, kulturellen oder finanziellen
-              Gründen nicht oder nur schwer wahrnehmen kannst. Unsere anderen
-              Angebote stehen weiterhin für alle Schüler*innen offen.
+              Die 1:1-Lernunterstützung richtet sich ausschließlich an{' '}
+              Schüler:innen, die keine oder nur sehr eingeschränkt Möglichkeiten{' '}
+              haben, herkömmliche Bildungsangebote (wie z.B. bezahlte Nachhilfe){' '}
+              wahrzunehmen. Dies kann finanzielle, soziale, persönliche oder{' '}
+              kulturelle Gründe haben.{' '}
+              <b>
+                Bitte melde dich für die 1:1-Lernunterstützung nur an, wenn das
+                bei dir zutrifft.
+              </b>{' '}
+              Unsere anderen Angebote stehen weiterhin für alle Schüler:innen{' '}
+              offen.
             </Text>
           </div>
         )}
@@ -517,7 +525,7 @@ const RegisterTutee: React.FC<Props> = ({
                 setIsGermanNative(Object.values(value).includes('Deutsch'))
               }
             >
-              {languages.map((l) => (
+              {languageOptions.map((l) => (
                 <Option value={l}>{l}</Option>
               ))}
             </Select>
@@ -654,6 +662,7 @@ const RegisterTutee: React.FC<Props> = ({
               },
             ]}
             initialValue={formData.teacherEmail}
+            extra="Beachte bitte, dass du hier nicht deine eigene, sondern die E-Mail-Adresse deiner Lehrkraft angeben musst. Mit dieser Angabe können wir dich deiner Schule zuordnen."
           >
             <Input
               placeholder="Hier die E-Mail-Adresse deines/deiner Lehrer*in"
@@ -689,26 +698,16 @@ const RegisterTutee: React.FC<Props> = ({
     );
   };
 
-  const renderFormItems = () => {
-    if (formState === 'start') {
-      return renderStart();
-    }
-    if (formState === 'detail') {
-      return renderDetail();
-    }
-
-    if (formState === 'finish') {
-      return renderFinish();
-    }
-    if (formState === 'done') {
-      return renderDone();
-    }
-
-    return renderStart();
-  };
-
   const back = () => {
     if (formState === 'finish') {
+      if (isTutee) {
+        setFormState('autoMatchChooser');
+      } else {
+        // skip auto match view if user hasn't signed up for tutoring
+        setFormState('detail');
+      }
+    }
+    if (formState === 'autoMatchChooser') {
       setFormState('detail');
     }
     if (formState === 'detail') {
@@ -758,6 +757,7 @@ const RegisterTutee: React.FC<Props> = ({
       languages: data.languages || [],
       learningGermanSince: data.learningGermanSince,
       redirectTo,
+      requestsAutoMatch,
     };
   };
 
@@ -850,6 +850,15 @@ const RegisterTutee: React.FC<Props> = ({
           languages: formValues.languages,
           learningGermanSince: formValues.learningGermanSince,
         });
+        if (isTutee) {
+          setFormState('autoMatchChooser');
+        } else {
+          // skip auto match view if user hasn't signed up for tutoring
+          setFormState('finish');
+        }
+      }
+
+      if (formState === 'autoMatchChooser') {
         setFormState('finish');
       }
 
@@ -866,6 +875,76 @@ const RegisterTutee: React.FC<Props> = ({
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const renderAutoMatchChooser = () => {
+    return (
+      <>
+        <h1 className={classes.autoMatchHeadline}>
+          Wie möchtest du fortfahren?
+        </h1>
+        <AccentColorButton
+          accentColor="#0366e0"
+          onClick={(e) => {
+            setRequestsAutoMatch(true);
+            nextStep(e);
+          }}
+          className={classes.autoMatch}
+        >
+          <div className={classes.autoMatchIconWrapper}>
+            <MagicIcon />
+          </div>
+          <div className={classes.autoMatchTextWrapper}>
+            <h3>Ich benötige möglichst schnell Hilfe.</h3>
+            <p>
+              Mit dieser Option gehen wir direkt auf die Suche nach einem/einer
+              Lernpartner:in für dich und melden uns bei dir per E-Mail sobald
+              wir jemanden gefunden haben.
+            </p>
+          </div>
+        </AccentColorButton>
+
+        <AccentColorButton
+          accentColor="#0366e0"
+          onClick={(e) => {
+            setRequestsAutoMatch(false);
+            nextStep(e);
+          }}
+          className={classes.autoMatch}
+        >
+          <div className={classes.autoMatchIconWrapper}>
+            <ClockIcon />
+          </div>
+          <div className={classes.autoMatchTextWrapper}>
+            <h3>Ich möchte mich erstmal nur umsehen.</h3>
+            <p>
+              Mit dieser Option kannst du zu einem späteren Zeitpunkt selbst
+              eine:n Lernpartner:in anfordern.
+            </p>
+          </div>
+        </AccentColorButton>
+      </>
+    );
+  };
+
+  const renderFormItems = () => {
+    if (formState === 'start') {
+      return renderStart();
+    }
+    if (formState === 'detail') {
+      return renderDetail();
+    }
+    if (formState === 'autoMatchChooser') {
+      return renderAutoMatchChooser();
+    }
+    if (formState === 'finish') {
+      return renderFinish();
+    }
+    if (formState === 'done') {
+      return renderDone();
+    }
+
+    return renderStart();
   };
 
   if (isDrehtuerSubdomain) {
@@ -913,17 +992,19 @@ const RegisterTutee: React.FC<Props> = ({
                   Zurück
                 </Button>
               )}
-              <Button
-                onClick={nextStep}
-                className={classes.signupButton}
-                color="white"
-                backgroundColor="#4E6AE6"
-              >
-                {formState === 'finish' && 'Registrieren'}
-                {formState === 'start' && 'Weiter'}
-                {formState === 'detail' && 'Weiter'}
-                {formState === 'done' && 'Anmelden'}
-              </Button>
+              {formState !== 'autoMatchChooser' && (
+                <Button
+                  onClick={nextStep}
+                  className={classes.signupButton}
+                  color="white"
+                  backgroundColor="#4E6AE6"
+                >
+                  {formState === 'finish' && 'Registrieren'}
+                  {formState === 'start' && 'Weiter'}
+                  {formState === 'detail' && 'Weiter'}
+                  {formState === 'done' && 'Anmelden'}
+                </Button>
+              )}
             </div>
           </Form>
         </>
@@ -984,21 +1065,23 @@ const RegisterTutee: React.FC<Props> = ({
                     Zurück
                   </Button>
                 )}
-                <Button
-                  onClick={nextStep}
-                  className={classes.signupButton}
-                  color="white"
-                  backgroundColor="#4E6AE6"
-                >
-                  {formState === 'finish' && 'Registrieren'}
-                  {formState === 'start' && 'Weiter'}
-                  {formState === 'detail' && 'Weiter'}
-                  {formState === 'done' && 'Anmelden'}
-                </Button>
+                {formState !== 'autoMatchChooser' && (
+                  <Button
+                    onClick={nextStep}
+                    className={classes.signupButton}
+                    color="white"
+                    backgroundColor="#4E6AE6"
+                  >
+                    {formState === 'finish' && 'Registrieren'}
+                    {formState === 'start' && 'Weiter'}
+                    {formState === 'detail' && 'Weiter'}
+                    {formState === 'done' && 'Anmelden'}
+                  </Button>
+                )}
               </div>
             </Form>
             <Text className={classes.helpText}>
-              Du hast schon ein Account? Hier{' '}
+              Du hast schon einen Account? Hier{' '}
               <Link style={{ color: '#4e6ae6' }} to="/login">
                 anmelden
               </Link>

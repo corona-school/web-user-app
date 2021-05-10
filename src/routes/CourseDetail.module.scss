@@ -10,6 +10,10 @@
 }
 
 .headerContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
   h1,
   h5 {
     line-height: 1.2;
@@ -142,6 +146,20 @@
   }
 }
 
+.backButtonContainer {
+  width: 100%;
+  padding-right: 20px;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  .backButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
 .participantList {
   margin-top: 2rem;
   background: white;
@@ -151,5 +169,27 @@
     .ant-list-item-action {
       margin-left: 0px;
     }
+  }
+}
+
+.retryButton {
+  height: 42px;
+  font-size: 16px;
+  font-weight: 400;
+  width: 160px;
+}
+
+.popover {
+  width: 100% !important;
+}
+
+.courseButton {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 2px;
+  width: 100%;
+  &.disabled {
+    pointer-events: none;
   }
 }

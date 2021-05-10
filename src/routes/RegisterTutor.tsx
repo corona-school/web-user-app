@@ -10,9 +10,9 @@ import {
   Radio,
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
-import Icons from '../assets/icons';
-import { Title, LinkText } from '../components/Typography';
+import { Title, LinkText, Text } from '../components/Typography';
 import Button from '../components/button';
+import Icons from '../assets/icons';
 import { Subject } from '../types';
 import Context from '../context';
 import { Tutor } from '../types/Registration';
@@ -27,7 +27,8 @@ import {
 } from '../components/forms/registration';
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
-import { languages } from '../assets/languages';
+import { languageOptions } from '../assets/languages';
+import YouTubeVideo from '../components/misc/YouTubeVideo';
 
 const { Option } = Select;
 
@@ -55,7 +56,7 @@ interface FormData {
   // isTutor
   subjects?: Subject[];
   supportsInDaz?: string;
-  languages?: typeof languages[number][];
+  languages?: typeof languageOptions[number][];
   // finnish
   msg?: string;
   newsletter?: boolean;
@@ -345,6 +346,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           className={classes.formItem}
           label={isJufo && !isTutor ? 'E-Mail-Adresse' : 'Uni E-Mail-Adresse'}
           name="email"
+          validateFirst
           rules={[
             {
               required: true,
@@ -353,6 +355,11 @@ const RegisterTutor: React.FC<Props> = (props) => {
             {
               type: 'email',
               message: 'Bitte trage eine gültige E-Mail-Adresse ein!',
+              validateTrigger: 'onSubmit',
+            },
+            {
+              message: 'E-Mail ist ungültig oder existiert bereits!',
+              validator: async (_, value) => apiContext.checkEmail(value),
               validateTrigger: 'onSubmit',
             },
           ]}
@@ -694,7 +701,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
               mode="multiple"
               placeholder="Bitte wähle deine Sprachen aus"
             >
-              {languages.map((l) => (
+              {languageOptions.map((l) => (
                 <Option value={l}>{l}</Option>
               ))}
             </Select>
@@ -774,10 +781,23 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const renderDone = () => {
     return (
       <div className={classes.successContainer}>
-        <Title className={classes.loginTitle} size="h4">
-          Wir haben dir eine E-Mail geschickt.
-        </Title>
-        <Icons.SignupEmailSent />
+        {isTutor ? (
+          <>
+            <Text large>Wir haben dir eine E-Mail geschickt</Text>
+            <YouTubeVideo
+              id={process.env.REACT_APP_REGISTRATION_VIDEO}
+              playOnReady
+              className={classes.video}
+            />
+          </>
+        ) : (
+          <>
+            <Title className={classes.loginTitle} size="h4">
+              Wir haben dir eine E-Mail geschickt.
+            </Title>
+            <Icons.SignupEmailSent />
+          </>
+        )}
       </div>
     );
   };
@@ -854,21 +874,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
       .then(() => {
         setLoading(false);
         setFormState('done');
-        setFormData({
-          firstname: undefined,
-          lastname: undefined,
-          email: undefined,
-          phone: undefined,
-          subjects: undefined,
-          msg: undefined,
-          newsletter: undefined,
-          state: undefined,
-          hours: undefined,
-          module: undefined,
-        });
-        setOfficial(false);
-        setTutor(false);
-        form.resetFields();
       })
       .catch((err) => {
         if (err?.response?.status === 401) {
@@ -984,7 +989,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         )}
 
         <div className={classes.buttonContainer}>
-          {formState !== 'start' && (
+          {formState !== 'start' && formState !== 'done' && (
             <Button
               onClick={back}
               className={classes.backButton}
@@ -994,16 +999,17 @@ const RegisterTutor: React.FC<Props> = (props) => {
               Zurück
             </Button>
           )}
-          <Button
-            onClick={nextStep}
-            className={classes.signupButton}
-            color="white"
-            backgroundColor="#4E6AE6"
-          >
-            {formState === 'finish' && 'Registrieren'}
-            {(formState === 'start' || formState === 'detail') && 'Weiter'}
-            {formState === 'done' && 'Anmelden'}
-          </Button>
+          {formState !== 'done' && (
+            <Button
+              onClick={nextStep}
+              className={classes.signupButton}
+              color="white"
+              backgroundColor="#4E6AE6"
+            >
+              {formState === 'finish' && 'Registrieren'}
+              {(formState === 'start' || formState === 'detail') && 'Weiter'}
+            </Button>
+          )}
         </div>
       </Form>
     </div>

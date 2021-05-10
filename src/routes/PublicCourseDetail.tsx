@@ -13,7 +13,7 @@ import CourseDetail from './CourseDetail';
 moment.locale('de');
 
 const PublicCourseDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
   const history = useHistory();
   const auth = useContext(AuthContext);
@@ -69,7 +69,7 @@ const PublicCourseDetail = () => {
       </div>
       <div>
         {/* content */}
-        <CourseDetail id={id} setIsWaitingList={setIsWaitingList} />
+        <CourseDetail id={id} setIsWaitingList={setIsWaitingList} publicView />
       </div>
     </div>
   );

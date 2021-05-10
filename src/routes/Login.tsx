@@ -120,6 +120,12 @@ const Login: React.FC<{
             'Du hast zu oft versucht, dich anzumelden. Bitte versuche es später erneut.'
           );
           setErrorHasOccurred(true);
+        } else if (error.code === 409) {
+          setLoginState('error');
+          message.error(
+            'Du bist noch nicht verifiziert. Bitte checke deine E-Mails, wir haben dir soeben eine weitere Verifizierungsemail gesendet.'
+          );
+          setErrorHasOccurred(true);
         } else {
           setLoginState('error');
           message.error(

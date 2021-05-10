@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import moment from 'moment';
+
 import Context from '../context';
 import { ParsedCourseOverview } from '../types/Course';
 
@@ -10,6 +11,7 @@ import { CourseBanner } from '../components/course/CourseBanner';
 import { CourseList } from '../components/course/CourseList';
 import AccentColorLinkButton from '../components/button/AccentColorLinkButton';
 import { ReactComponent as Plus } from '../assets/icons/plus-solid.svg';
+import { Spinner } from '../components/loading/Spinner';
 
 const Course = () => {
   const [loading, setLoading] = useState(false);
@@ -34,7 +36,7 @@ const Course = () => {
   }, [apiContext, userContext.user.type]);
 
   if (loading) {
-    return <div>Kurse werden geladen...</div>;
+    return <Spinner message="Kurse werden geladen..." />;
   }
 
   const getPreviousCourses = () => {
@@ -83,6 +85,7 @@ const Course = () => {
           .length > 0 && (
           <CourseList
             name="Deine aktuellen Kurse"
+            richLink={false}
             courses={myCourses.filter(
               (x) => !getPreviousCourses().some((y) => y === x)
             )}
@@ -91,6 +94,7 @@ const Course = () => {
 
         {getPreviousCourses().length > 0 && (
           <CourseList
+            richLink={false}
             name="Deine vergangenen Kurse"
             courses={getPreviousCourses()}
           />
