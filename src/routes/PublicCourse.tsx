@@ -12,7 +12,7 @@ const PublicCourse = () => {
         <div className={classes.logo}>
           <Icons.Logo />
           <Title style={{ margin: '0px 0px 0px 8px' }} size="h3">
-            Corona School
+            Lern-Fair
           </Title>
         </div>
       </div>

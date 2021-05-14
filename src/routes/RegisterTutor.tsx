@@ -146,7 +146,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           href="https://www.corona-school.de/sommer-ags"
           enableLink={props.isJufoSubdomain}
         />{' '}
-        in der Corona School anbieten (z.{' '}B. Sommer-AG, Repetitorium,
+        bei Lern-Fair anbieten (z.{' '}B. Sommer-AG, Repetitorium,
         Lerncoaching).
       </Checkbox>
     );

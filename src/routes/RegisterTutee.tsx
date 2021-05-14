@@ -985,7 +985,7 @@ const RegisterTutee: React.FC<Props> = ({
                     className: classes.stateLogo,
                   })}
                 <Title size="h2" bold>
-                  Corona School
+                  Lern-Fair
                 </Title>
               </a>
               <Title className={classes.tuteeTitle}>

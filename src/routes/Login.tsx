@@ -240,9 +240,7 @@ const Login: React.FC<{
               {errorHasOccurred && (
                 <div className={classes.tuteeNote}>
                   Du kannst dich bei Problemen gerne an{' '}
-                  <a href="mailto:support@corona-school.de">
-                    support@corona-school.de
-                  </a>{' '}
+                  <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>{' '}
                   wenden.
                 </div>
               )}
