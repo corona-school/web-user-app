@@ -8,6 +8,12 @@ const liveDomains = [
   'jufo.corona-school.de',
   'partnerschule.corona-school.de',
   'drehtuer.corona-school.de',
+  'dashboard.lern-fair.de',
+  'my.lern-fair.de',
+  'nrw.lern-fair.de',
+  'jufo.lern-fair.de',
+  'partnerschule.lern-fair.de',
+  'drehtuer.lern-fair.de',
 ];
 
 export const env = runtimeEnv();
