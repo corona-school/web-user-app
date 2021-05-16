@@ -22,10 +22,8 @@ const PublicCourse = () => {
         />
       </div>
       <div className={classes.legal}>
-        <a href="https://www.corona-school.de/datenschutz-2">
-          Datenschutzerklärung
-        </a>
-        <a href="https://www.corona-school.de/impressum">Impressum</a>
+        <a href="https://www.lern-fair.de/datenschutz">Datenschutzerklärung</a>
+        <a href="https://www.lern-fair.de/impressum">Impressum</a>
       </div>
     </div>
   );
