@@ -43,7 +43,7 @@ export const messageLabels = new Map([
 export const AgreementText = (
   <>
     Ich habe die{' '}
-    <a href="https://www.corona-school.de/datenschutz">Datenschutzerklärung</a>{' '}
+    <a href="https://www.lern-fair.de/datenschutz">Datenschutzerklärung</a> zur
     zur Kenntnis genommen. Ich stimme einer elektronischen Speicherung und
     Verarbeitung meiner eingegebenen Daten zur Beantwortung meiner Anfrage zu.
   </>

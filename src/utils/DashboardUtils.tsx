@@ -172,7 +172,7 @@ const PrepareLessonStep: Step = {
   ],
   action: (
     <AccentColorLinkButton
-      link="https://www.corona-school.de/vorbereitung"
+      link="/support"
       accentColor="#F4486D"
       label="Vorbereiten"
       small
