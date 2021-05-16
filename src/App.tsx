@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { UserContext } from './context/UserContext';
 
@@ -32,9 +32,7 @@ import { CourseOverview } from './routes/CourseOverview';
 import { Modals } from './Modals';
 import GuestJoinCourseMeeting from './routes/GuestJoinCourseMeeting';
 import InterestConfirmation from './routes/InterestConfirmation';
-import { AuthContext } from './context/AuthContext';
-import { getUserId } from './api/api';
-import storedCredentials from './api/storedCredentials';
+import { LernFairRedirection } from './utils/LernFairRedirection';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -60,51 +58,13 @@ const GlobalStyle = createGlobalStyle`
 
 const App: React.FC = () => {
   const userContext = useContext(UserContext);
-  const authContext = useContext(AuthContext);
-
-  const location = useLocation();
-
-  const params = new URLSearchParams(location.search);
-  const path = location.pathname;
 
   const domainComponents = getDomainComponents();
+
   const subdomain = domainComponents?.length > 0 && domainComponents[0];
   const cooperationMode = getCooperationModeForSubdomain(subdomain);
 
-  function shouldRedirectToLernFairDomain() {
-    return (
-      authContext.status !== 'pending' &&
-      domainComponents.includes('corona-school')
-    );
-  }
-
-  if (shouldRedirectToLernFairDomain()) {
-    params.append(
-      'legacyToken',
-      authContext.status === 'authorized' && authContext.credentials.token
-    );
-
-    window.location.href = `https://${
-      subdomain ?? 'my'
-    }.lern-fair.de${path}?${params.toString()}`;
-  }
-
-  function shouldSetLegacyToken() {
-    return (
-      ['invalid', 'missing'].includes(authContext.status) &&
-      !(path.startsWith('/login') && params.has('token')) &&
-      params.has('legacyToken')
-    );
-  }
-
-  if (shouldSetLegacyToken()) {
-    const token = params.get('legacyToken');
-    getUserId(token).then((id) => {
-      storedCredentials.write({ id, token });
-      authContext.setCredentials({ id, token });
-      authContext.setStatus('pending');
-    });
-  }
+  LernFairRedirection();
 
   if (subdomain && cooperationMode) {
     // render the special page for cooperations with states of Germany
