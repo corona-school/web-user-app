@@ -205,9 +205,7 @@ export const axiosPutUserSubjects = async (
   subjects: Subject[]
 ) => {
   const url = `${apiURL}/user/${id}/subjects`;
-  await axios
-    .put(url, subjects, { headers: { token } })
-    .catch(logError('putUserSubjects'));
+  await axios.put(url, subjects, { headers: { token } });
 };
 
 export const axiosPutUserProjectFields = async (

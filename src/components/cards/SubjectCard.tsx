@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { message } from 'antd';
 import Card from './Card';
 import { Subject, SubjectName } from '../../types';
 import { IconButtonWrapper } from '../button';
@@ -52,6 +54,7 @@ const SubjectCard: React.FC<{
   type: 'pupil' | 'student';
 }> = ({ subject, type }) => {
   const [edit, setEdit] = useState(false);
+  const [loading, setLoading] = useState<'save' | 'delete'>(null);
   const [editMinGrade, setEditMinGrade] = useState(subject.minGrade || 1);
   const [editMaxGrade, setEditMaxGrade] = useState(subject.maxGrade || 13);
 
@@ -68,6 +71,7 @@ const SubjectCard: React.FC<{
     if (editMinGrade > value) setEditMinGrade(value);
   };
   const handleSave = () => {
+    setLoading('save');
     const modified: Subject = {
       name: subject.name,
       minGrade: editMinGrade,
@@ -79,14 +83,32 @@ const SubjectCard: React.FC<{
     apiContext
       .putUserSubjects(newSubjects)
       .then(userContext.fetchUserData)
-      .then(() => setEdit(false));
+      .then(() => {
+        setEdit(false);
+        setLoading(null);
+      });
   };
   const handleDelete = () => {
+    setLoading('delete');
     apiContext
       .putUserSubjects(
         userContext.user.subjects.filter((s) => s.name !== subject.name)
       )
-      .then(userContext.fetchUserData);
+      .then(userContext.fetchUserData)
+      .then(() => setLoading(null));
+  };
+
+  const Loader = ({ color }) => {
+    return (
+      <div style={{ marginRight: 5 }}>
+        <ClipLoader size={15} loading color={color} />
+      </div>
+    );
+  };
+
+  const getIcon = () => {
+    if (loading != null) return () => Loader({ color: '#4db534' });
+    return isStudent ? EditIcon : Trashcan;
   };
 
   return (
@@ -141,6 +163,9 @@ const SubjectCard: React.FC<{
                   onClick={handleSave}
                   accentColor="#4db534"
                   small
+                  Icon={
+                    loading === 'save' ? () => <Loader color="#4db534" /> : null
+                  }
                 />
               </IconButtonWrapper>
               <IconButtonWrapper>
@@ -149,6 +174,11 @@ const SubjectCard: React.FC<{
                   onClick={handleDelete}
                   accentColor="#dd0000"
                   small
+                  Icon={
+                    loading === 'delete'
+                      ? () => <Loader color="#dd0000" />
+                      : null
+                  }
                 />
               </IconButtonWrapper>
             </SelectWrapper>
@@ -164,7 +194,7 @@ const SubjectCard: React.FC<{
             )}
             <IconButtonWrapper>
               <AccentColorButton
-                Icon={isStudent ? EditIcon : Trashcan}
+                Icon={getIcon()}
                 label={isStudent ? 'Bearbeiten' : 'Entfernen'}
                 onClick={isStudent ? () => setEdit(true) : handleDelete}
                 accentColor="#4db534"
@@ -206,6 +236,7 @@ interface Props {
 export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
   const availableSubjects = subjectOptions.filter((s) => !subjects.includes(s));
   const [isEditing, setEditing] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [minGrade, setMinGrade] = useState(1);
   const [maxGrade, setMaxGrade] = useState(13);
   const [subjectName, setSubjectName] = useState<SubjectName>(
@@ -226,6 +257,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
   };
 
   const handleSave = () => {
+    setLoading(true);
     const newSubject: Subject = isStudent
       ? { name: subjectName, minGrade, maxGrade }
       : { name: subjectName };
@@ -234,6 +266,10 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
 
     apiContext
       .putUserSubjects(newSubjects)
+      .catch((err) => {
+        message.error('Etwas ist schief gelaufen 😬');
+        console.log(err);
+      })
       .then(() => {
         const availableSubjects = subjectOptions.filter(
           (s) => !newSubjects.map((s) => s.name).includes(s)
@@ -241,7 +277,18 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
         setSubjectName(availableSubjects[0]);
         return userContext.fetchUserData();
       })
-      .then(() => setEditing(false));
+      .then(() => {
+        setLoading(false);
+        setEditing(false);
+      });
+  };
+
+  const Loader = () => {
+    return (
+      <div style={{ marginRight: 5 }}>
+        <ClipLoader size={15} loading color="#0199cb" />
+      </div>
+    );
   };
 
   return (
@@ -313,6 +360,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
                 accentColor="#0199cb"
                 label="Speichern"
                 onClick={handleSave}
+                Icon={isLoading ? () => Loader() : null}
                 small
               />
             </IconButtonWrapper>
