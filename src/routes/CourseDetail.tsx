@@ -831,12 +831,14 @@ const CourseDetail = (props: Props) => {
           </button>
         </div>
         <div className={classes.headerContainer}>
-          <Row>
+          <Row style={{ width: '100%' }}>
             <Col xxl={20} lg={18} md={17} sm={24}>
-              <Title size="h1" style={{ marginBottom: '0px' }}>
+              <Title size="h1" style={{ marginBottom: '0px', maxWidth: '80%' }}>
                 {course.name}
               </Title>
-              <Title size="h5">{course.outline}</Title>
+              <Title size="h5" style={{ maxWidth: '80%', fontWeight: 500 }}>
+                {course.outline}
+              </Title>
             </Col>
             <Col xxl={4} lg={6} md={7} sm={24}>
               <div className={classes.actionContainer}>
@@ -992,7 +994,7 @@ const CourseDetail = (props: Props) => {
           </Row>
         </div>
         <Row>
-          <Col xxl={20} xl={22} lg={24}>
+          <Col>
             <Row>
               <Col>
                 <Descriptions
@@ -1068,7 +1070,7 @@ const CourseDetail = (props: Props) => {
             </Row>
 
             <Row>
-              <Col>
+              <Col style={{ width: '100%' }}>
                 <Descriptions size="small" layout="vertical" column={1}>
                   <Descriptions.Item label="Beschreibung">
                     <div className={classes.descriptionWrapper}>

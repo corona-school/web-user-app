@@ -64,7 +64,7 @@
     padding: 32px;
     display: flex;
     flex-direction: column;
-
+    max-width: 1000px;
     .statusText {
       font-weight: bold;
       background-image: url(/background_status_text.svg);
@@ -195,18 +195,22 @@
 }
 
 .description {
-  font-size: 17px;
+  font-size: 16px;
   max-width: 600px;
   white-space: pre-wrap;
   margin: 0;
   font-kerning: auto;
   font-weight: 400;
-  color: #012287;
+  color: #002072;
+  //letter-spacing: 0.1px;
 }
 
 .descriptionWrapper {
-  padding: 30px;
-  background-color: rgba(112, 131, 224, 0.25);
+  padding: 20px 30px;
+  background-color: rgba(112, 131, 224, 0.18);
   border-radius: 12px;
-  margin-left: 10px;
+  margin: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
