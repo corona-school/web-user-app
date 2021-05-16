@@ -12,8 +12,14 @@ import { AuthProvider } from './context/AuthContext';
 import { UserProvider } from './context/UserContext';
 import { ModalProvider } from './context/ModalContext';
 import App from './App';
+import { MatomoScript } from './components/misc/MatomoSupport';
+import { dev } from './api/config';
 
 document.documentElement.lang = 'de';
+
+if (!dev) {
+  MatomoScript();
+}
 
 if (window.top.location !== window.self.location) {
   ReactDOM.render(<></>, document.getElementById('root'));
