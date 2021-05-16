@@ -193,3 +193,20 @@
     pointer-events: none;
   }
 }
+
+.description {
+  font-size: 17px;
+  max-width: 600px;
+  white-space: pre-wrap;
+  margin: 0;
+  font-kerning: auto;
+  font-weight: 400;
+  color: #012287;
+}
+
+.descriptionWrapper {
+  padding: 30px;
+  background-color: rgba(112, 131, 224, 0.25);
+  border-radius: 12px;
+  margin-left: 10px;
+}

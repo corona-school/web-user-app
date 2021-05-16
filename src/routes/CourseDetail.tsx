@@ -1071,11 +1071,11 @@ const CourseDetail = (props: Props) => {
               <Col>
                 <Descriptions size="small" layout="vertical" column={1}>
                   <Descriptions.Item label="Beschreibung">
-                    <Text large>
-                      <i style={{ whiteSpace: 'pre-wrap' }}>
+                    <div className={classes.descriptionWrapper}>
+                      <p className={classes.description}>
                         {course.description}
-                      </i>
-                    </Text>
+                      </p>
+                    </div>
                   </Descriptions.Item>
                   <Descriptions.Item label="Tags">
                     {course.tags.map((t) => {
