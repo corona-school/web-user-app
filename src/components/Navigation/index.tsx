@@ -136,21 +136,21 @@ const Navigation: React.FC<Props> = (props) => {
           <SocialMediaButton
             icon="FacebookIcon"
             rel="noopener noreferrer"
-            href="https://www.facebook.com/coronaschoolgermany"
+            href="https://www.facebook.com/lernfair/"
             target="_blank"
             onClick={() => props.setMenuOpen(false)}
           />
           <SocialMediaButton
             icon="TwitterIcon"
             rel="noopener noreferrer"
-            href="https://twitter.com/_CoronaSchool"
+            href="https://twitter.com/LernFair"
             target="_blank"
             onClick={() => props.setMenuOpen(false)}
           />
           <SocialMediaButton
             icon="InstagramIcon"
             rel="noopener noreferrer"
-            href="https://www.instagram.com/coronaschoolgermany/"
+            href="https://www.instagram.com/lern.fair/"
             target="_blank"
             onClick={() => props.setMenuOpen(false)}
           />
