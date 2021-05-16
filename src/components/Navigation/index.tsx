@@ -46,7 +46,7 @@ const Navigation: React.FC<Props> = (props) => {
     >
       <div className={classes.header}>
         <Icons.Logo />
-        Corona School
+        Lern-Fair
       </div>
       <div className={classes.navigationGroup}>
         <Welcome user={user} />

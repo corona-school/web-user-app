@@ -169,7 +169,7 @@ const RegisterTutee: React.FC<Props> = ({
             Ich möchte{' '}
             <LinkText
               text="Lernunterstützung im 1:1-Format"
-              href="https://www.corona-school.de/1-zu-1-lernbetreuung"
+              href="www.lern-fair.de/schueler/lernunterstuetzung"
               enableLink={isJufoSubdomain}
             />{' '}
             von einem/einer Student*in erhalten.
@@ -210,10 +210,10 @@ const RegisterTutee: React.FC<Props> = ({
         Ich möchte an{' '}
         <LinkText
           text="Gruppenkursen"
-          href="https://www.corona-school.de/sommer-ags"
+          href="www.lern-fair.de/schueler/gruppenkurse"
           enableLink={isJufoSubdomain}
         />{' '}
-        der Corona School teilnehmen (z.{' '}B. Sommer-AG, Repetitorium,
+        von Lern-Fair teilnehmen (z.{' '}B. Sommer-AG, Repetitorium,
         Lerncoaching).
       </Checkbox>
     );
@@ -240,7 +240,7 @@ const RegisterTutee: React.FC<Props> = ({
           ) und möchte am{' '}
           <LinkText
             text="1:1-Projektcoaching"
-            href="https://www.corona-school.de/1-zu-1-projektcoaching"
+            href="https://www.lern-fair.de/schueler/projektcoaching"
             enableLink={isJufoSubdomain}
           />{' '}
           teilnehmen.
@@ -975,7 +975,7 @@ const RegisterTutee: React.FC<Props> = ({
             <div className={classes.signupContainer}>
               <a
                 rel="noopener noreferrer"
-                href="https://www.corona-school.de/"
+                href="https://www.lern-fair.de/"
                 target="_blank"
               >
                 <Icons.Logo className={classes.logo} />
@@ -985,7 +985,7 @@ const RegisterTutee: React.FC<Props> = ({
                     className: classes.stateLogo,
                   })}
                 <Title size="h2" bold>
-                  Corona School
+                  Lern-Fair
                 </Title>
               </a>
               <Title className={classes.tuteeTitle}>

@@ -119,7 +119,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         Ich möchte{' '}
         <LinkText
           text="1:1-Lernunterstützung"
-          href="https://www.corona-school.de/1-zu-1-lernbetreuung"
+          href="www.lern-fair.de/helfer/lernunterstuetzung"
           enableLink={props.isJufoSubdomain}
         />{' '}
         für Schülerinnen anbieten.
@@ -143,10 +143,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
         Ich möchte einen{' '}
         <LinkText
           text="Gruppenkurs"
-          href="https://www.corona-school.de/sommer-ags"
+          href="www.lern-fair.de/helfer/gruppenkurse"
           enableLink={props.isJufoSubdomain}
         />{' '}
-        in der Corona School anbieten (z.{' '}B. Sommer-AG, Repetitorium,
+        bei Lern-Fair anbieten (z.{' '}B. Sommer-AG, Repetitorium,
         Lerncoaching).
       </Checkbox>
     );
@@ -167,7 +167,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         Ich möchte Schüler*innen im{' '}
         <LinkText
           text="1:1-Projektcoaching"
-          href="https://www.corona-school.de/1-zu-1-projektcoaching"
+          href="www.lern-fair.de/helfer/projektcoaching"
           enableLink={props.isJufoSubdomain}
         />{' '}
         (z.{' '}B. im Rahmen von{' '}
@@ -190,7 +190,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           <span>
             Für Lehramtsstudierende: Möchtest du dich für unser{' '}
             <a
-              href="https://www.corona-school.de/digital-lehren-lernen"
+              href="https://www.lern-fair.de/helfer/digital-lehren-lernen"
               rel="noopener noreferrer"
               target="_blank"
             >

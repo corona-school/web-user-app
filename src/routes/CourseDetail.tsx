@@ -340,7 +340,7 @@ const CourseDetail = (props: Props) => {
 
   const shareData = {
     title: course.name,
-    text: 'Guck dir diesen kostenlosen Kurs der Corona School an!',
+    text: 'Guck dir diesen kostenlosen Kurs von Lern-Fair an!',
     url: `${window.location.protocol}//${window.location.hostname}/public/courses/${course.id}`,
   };
 

@@ -75,10 +75,8 @@ const CertificateModal: React.FC<Props> = ({ user, reloadCertificates }) => {
             <div className={classes.titleBar}>
               <Title size="h2">Ein Fehler ist aufgetreten!</Title>
             </div>
-            Bitte kontaktiere das CoronaSchool Team unter{' '}
-            <a href="mailto:support@corona-school.de">
-              support@corona-school.de
-            </a>
+            Bitte kontaktiere das Lern-Fair Team unter{' '}
+            <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>
           </div>
         )}
         {createdCertificate.value && !createdCertificate.value.automatic && (
@@ -225,10 +223,9 @@ function IntroductionStep({ setStep }: StepProps) {
   return (
     <StepContainer step="introduction" nextStep={() => setStep('information')}>
       <Text>
-        Wir möchten uns für dein Engagement in der Corona School bedanken! Für
-        deine Tätigkeit stellen wir dir gerne eine Bescheinigung aus, welche du
-        bei einer Bewerbung beilegen oder bei deiner Universität einreichen
-        kannst.
+        Wir möchten uns für dein Engagement bei Lern-Fair bedanken! Für deine
+        Tätigkeit stellen wir dir gerne eine Bescheinigung aus, welche du bei
+        einer Bewerbung beilegen oder bei deiner Universität einreichen kannst.
       </Text>
       <br />
       <Title size="h5" bold>
@@ -255,9 +252,7 @@ function IntroductionStep({ setStep }: StepProps) {
         <br />
         Wenn du innerhalb einer Woche nichts von uns hörst, kannst du bei
         deinem/deiner Schüler*in nochmal nachhaken oder uns unter{' '}
-        <a href="mailto:support@corona-school.de">
-          support@corona-school.de
-        </a>{' '}
+        <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>{' '}
         kontaktieren.
       </Text>
     </StepContainer>
