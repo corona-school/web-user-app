@@ -10,7 +10,10 @@ declare global {
 export const MatomoScript = () => {
   window._paq = window._paq ?? [];
   const paq = window._paq;
+
   /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  paq.push(['setDomains', ['*.my.lern-fair.de', '*.my.lern-fair.de']]);
+  paq.push(['enableCrossDomainLinking']);
   paq.push(['trackPageView']);
   paq.push(['enableLinkTracking']);
 
