@@ -262,7 +262,7 @@ const StudentNews = [
   {
     headline: 'Campus Representative',
     text:
-      'Du möchtest Lern-Fair an deiner Universität/Hochschule vertreten? Schreibe eine Mail an campus@lern-fair.de.',
+      'Du möchtest Lern-Fair an deiner Universität/Hochschule vertreten? Schreibe eine Mail an campusrep@lern-fair.de.',
   },
   {
     headline: 'Mentoring Programm',
