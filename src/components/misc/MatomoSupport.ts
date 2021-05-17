@@ -12,14 +12,14 @@ export const MatomoScript = () => {
   const paq = window._paq;
 
   /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  paq.push(['setDomains', ['*.my.lern-fair.de', '*.my.lern-fair.de']]);
+  paq.push(['setDomains', ['*.www.lern-fair.de', '*.www.my.lern-fair.de']]);
   paq.push(['enableCrossDomainLinking']);
   paq.push(['trackPageView']);
   paq.push(['enableLinkTracking']);
 
   const u = 'https://lernfair.matomo.cloud/';
   paq.push(['setTrackerUrl', `${u}matomo.php`]);
-  paq.push(['setSiteId', '2']);
+  paq.push(['setSiteId', '1']);
 
   const d = document;
   const g = d.createElement('script');
