@@ -5,6 +5,11 @@ import { getDomainComponents } from './DomainUtils';
 import { getUserId } from '../api/api';
 import storedCredentials from '../api/storedCredentials';
 
+export function OnCoronaSchoolDomain() {
+  const domainComponents = getDomainComponents();
+  return domainComponents.includes('corona-school');
+}
+
 export function LernFairRedirection() {
   const authContext = useContext(AuthContext);
   const location = useLocation();
@@ -22,7 +27,7 @@ export function LernFairRedirection() {
     // proceed directly.
     return (
       (authContext.status !== 'pending' || params.has('token')) &&
-      domainComponents.includes('corona-school')
+      OnCoronaSchoolDomain()
     );
   };
 
