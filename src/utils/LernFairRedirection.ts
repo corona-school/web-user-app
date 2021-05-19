@@ -17,8 +17,11 @@ export function LernFairRedirection() {
   const path = location.pathname;
 
   const ShouldRedirectToLernFairDomain = () => {
+    // Redirect if domain is 'corona-school.de'. Wait if auth is pending to get
+    // possible tokens in the storage. If token is given in the URL,
+    // proceed directly.
     return (
-      authContext.status !== 'pending' &&
+      (authContext.status !== 'pending' || params.has('token')) &&
       domainComponents.includes('corona-school')
     );
   };
