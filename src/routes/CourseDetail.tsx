@@ -30,7 +30,6 @@ import {
   Col,
   Popover,
 } from 'antd';
-import classnames from 'classnames';
 import AddInstructorModal from '../components/Modals/AddInstructorModal';
 import { ApiContext } from '../context/ApiContext';
 import { AuthContext } from '../context/AuthContext';
@@ -441,7 +440,8 @@ const CourseDetail = (props: Props) => {
     </Menu>
   );
 
-  const tsNavigator = navigator; // so that typescript compiles with share
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const tsNavigator: any = navigator; // so that typescript compiles with share
 
   const shareCourse = () => {
     if (tsNavigator.share) {
@@ -890,19 +890,25 @@ const CourseDetail = (props: Props) => {
                       {((isMyCourse && course.state === CourseState.ALLOWED) ||
                         course.subcourse.joined) &&
                         !hasEnded() && (
-                          <AntdButton
-                            type="primary"
-                            style={{
-                              backgroundColor: '#FCD95C',
-                              borderColor: '#FCD95C',
-                              color: '#373E47',
-                              width: '100%',
-                            }}
-                            onClick={joinBBBmeeting}
-                            disabled={!shouldEnableVideoChat()}
+                          <Popover
+                            className={classes.popover}
+                            content={videoChatHint()}
+                            trigger="hover"
                           >
-                            Zum Videochat
-                          </AntdButton>
+                            <AntdButton
+                              type="primary"
+                              style={{
+                                backgroundColor: '#FCD95C',
+                                borderColor: '#FCD95C',
+                                color: '#373E47',
+                                width: '100%',
+                              }}
+                              onClick={joinBBBmeeting}
+                              disabled={!shouldEnableVideoChat()}
+                            >
+                              Zum Videochat
+                            </AntdButton>
+                          </Popover>
                         )}
                       <ClipLoader
                         size={15}
@@ -912,33 +918,29 @@ const CourseDetail = (props: Props) => {
                     </div>
                   </Col>
 
-                  <Col md={24} sm={12} xs={12}>
-                    <div className={classes.videochatAction}>
-                      {((isMyCourse && course.state === CourseState.ALLOWED) ||
-                        course.subcourse.joined) &&
-                        !hasEnded() && (
-                          <Popover
-                            className={classes.popover}
-                            content={videoChatHint()}
-                            trigger="hover"
-                          >
-                            <div style={{ width: '100%' }}>
-                              <Button
-                                disabled={!shouldEnableVideoChat()}
-                                color="#373E47"
-                                className={classnames(classes.courseButton, {
-                                  [classes.disabled]: !shouldEnableVideoChat(),
-                                })}
-                                backgroundColor="#FCD95C"
-                                onClick={joinTestMeeting}
-                              >
-                                Videochat testen
-                              </Button>
-                            </div>
-                          </Popover>
-                        )}
-                    </div>
-                  </Col>
+                  {!shouldEnableVideoChat() && (
+                    <Col md={24} sm={12} xs={12}>
+                      <div className={classes.videochatAction}>
+                        {((isMyCourse &&
+                          course.state === CourseState.ALLOWED) ||
+                          course.subcourse.joined) &&
+                          !hasEnded() && (
+                            <AntdButton
+                              type="primary"
+                              style={{
+                                backgroundColor: '#FCD95C',
+                                borderColor: '#FCD95C',
+                                color: '#373E47',
+                                width: '100%',
+                              }}
+                              onClick={joinTestMeeting}
+                            >
+                              Videochat testen
+                            </AntdButton>
+                          )}
+                      </div>
+                    </Col>
+                  )}
 
                   {!isStudent && course.allowContact && (
                     <Col md={24} sm={12} xs={12}>
