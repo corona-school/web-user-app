@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import styles from './Select.module.scss';
 
 const Select: React.FC<{
@@ -7,6 +7,7 @@ const Select: React.FC<{
   className?: string;
   disabled?: boolean;
   placeholder?: string;
+  style?: CSSProperties;
 }> = (props) => {
   return (
     <select
@@ -15,6 +16,7 @@ const Select: React.FC<{
       value={props.value}
       disabled={props.disabled}
       placeholder={props.placeholder}
+      style={props.style ?? {}}
     >
       {props.children}
     </select>

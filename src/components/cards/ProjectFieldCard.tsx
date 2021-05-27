@@ -165,6 +165,7 @@ const ProjectFieldCard: React.FC<{
                 label={isCoach ? 'Bearbeiten' : 'Entfernen'}
                 onClick={isCoach ? () => setEdit(true) : handleDelete}
                 accentColor="#4db534"
+                small
               />
             </IconButtonWrapper>
           </>
@@ -259,6 +260,7 @@ export const AddProjectFieldCard: React.FC<Props> = ({
                 onChange={(e) =>
                   setProjectFieldName(e.target.value as ProjectField)
                 }
+                style={{ width: 180 }}
               >
                 {Object.entries(ProjectField)
                   .filter((p) => !projectFields.includes(p[1]))
@@ -319,6 +321,7 @@ export const AddProjectFieldCard: React.FC<Props> = ({
                 accentColor="#0199cb"
                 label="Speichern"
                 onClick={handleSave}
+                small
               />
             </IconButtonWrapper>
             <CloseButtonStyle onClick={() => setEditing(false)}>
@@ -335,6 +338,7 @@ export const AddProjectFieldCard: React.FC<Props> = ({
                 label="Hinzufügen"
                 onClick={() => setEditing(true)}
                 accentColor="#0199cb"
+                small
               />
             </IconButtonWrapper>
           </>

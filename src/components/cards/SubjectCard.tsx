@@ -253,6 +253,7 @@ export const AddSubjectCard: React.FC<Props> = ({ type, subjects }) => {
               <Select
                 value={subjectName}
                 onChange={(e) => setSubjectName(e.target.value as SubjectName)}
+                style={{ width: 180 }}
               >
                 {subjectOptions
                   .filter((s) => !subjects.includes(s))
