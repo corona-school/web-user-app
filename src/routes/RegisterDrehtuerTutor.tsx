@@ -113,6 +113,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         layout="vertical"
         name="basic"
         initialValues={{ remember: true }}
+        onFinish={registerTutor}
       >
         {!loading ? (
           renderForm()
@@ -125,7 +126,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         <div className={classes.buttonContainer}>
           {formState === 'start' && (
             <Button
-              onClick={registerTutor}
+              onClick={form.submit}
               className={classes.signupButton}
               color="white"
               backgroundColor="#4E6AE6"
