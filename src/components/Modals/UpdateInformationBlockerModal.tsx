@@ -3,8 +3,7 @@ import StyledReactModal from 'styled-react-modal';
 import { message } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
-import { Title, Text } from '../Typography';
-import Button from '../button';
+import { Title } from '../Typography';
 import { ModalContext } from '../../context/ModalContext';
 import EditableUserSettingsCard, {
   EditableUserSettings,
@@ -14,6 +13,7 @@ import { UserContext } from '../../context/UserContext';
 import { User } from '../../types';
 
 import classes from './UpdateInformationBlockerModal.module.scss';
+import DialogModalBase from './DialogModalBase';
 
 export const MODAL_IDENTIFIER = 'updateInformationBlocker';
 const MODAL_TITLE = 'Bitte aktualisiere deine Informationen zum Schulstart';
@@ -65,35 +65,26 @@ const UpdateInformationBlockerModal: React.FC<Props> = ({ user }) => {
       </StyledReactModal>
     );
   }
-
   return (
-    <StyledReactModal
-      isOpen={modalContext.openedModal === MODAL_IDENTIFIER}
-      onBackgroundClick={() => modalContext.setOpenedModal(null)}
-    >
-      <div className={classes.modal}>
-        <Title size="h2">{MODAL_TITLE}</Title>
-        <Text large>
+    <DialogModalBase accentColor="#54841d">
+      <DialogModalBase.Modal modalName={MODAL_IDENTIFIER}>
+        <DialogModalBase.Header>
+          <DialogModalBase.Title>{MODAL_TITLE}</DialogModalBase.Title>
+          <DialogModalBase.CloseButton />
+        </DialogModalBase.Header>
+        <DialogModalBase.Description>
           Bitte aktualisiere deine Informationen, damit wir dir am besten
           weiterhelfen können!
-        </Text>
+        </DialogModalBase.Description>
         <EditableUserSettingsCard
           editableUserSettings={editableUserSettings}
           onSettingChanges={setEditableUserSettings}
           isEditing
           personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
         />
-        <div className={classes.buttonContainer}>
-          <Button
-            backgroundColor="#F4F6FF"
-            color="#4E6AE6"
-            onClick={saveUserChanges}
-          >
-            Speichern
-          </Button>
-        </div>
-      </div>
-    </StyledReactModal>
+        <DialogModalBase.Button label="Speichern" onClick={saveUserChanges} />
+      </DialogModalBase.Modal>
+    </DialogModalBase>
   );
 };
 
