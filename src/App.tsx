@@ -135,6 +135,7 @@ const App: React.FC = () => {
               <CourseOverview backButtonRoute="/courses" />
             </PrivateRoute>
             <PrivateRoute path="/courses/:id" comeback>
+              <ScrollToTopOnMount />
               <CourseDetail />
             </PrivateRoute>
             <PrivateRoute
@@ -188,5 +189,15 @@ const App: React.FC = () => {
     </>
   );
 };
+
+/* Small helper to scroll back to top when navigating across certain routes
+   c.f. https://reactrouter.com/web/guides/scroll-restoration */
+function ScrollToTopOnMount() {
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return null;
+}
 
 export default App;
