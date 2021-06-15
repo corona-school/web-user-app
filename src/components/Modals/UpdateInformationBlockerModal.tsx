@@ -79,6 +79,7 @@ const UpdateInformationBlockerModal: React.FC<Props> = ({ user }) => {
         <EditableUserSettingsCard
           editableUserSettings={editableUserSettings}
           onSettingChanges={setEditableUserSettings}
+          user={user}
           isEditing
           personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
         />

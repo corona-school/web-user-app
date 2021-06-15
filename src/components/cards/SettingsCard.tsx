@@ -16,6 +16,7 @@ import context from '../../context';
 import classes from './SettingsCard.module.scss';
 import BecomeInstructorModal from '../Modals/BecomeInstructorModal';
 import BecomeInternModal from '../Modals/BecomeInternModal';
+import PhoneModal from '../Modals/PhoneModal';
 import EditableUserSettingsCard, {
   EditableUserSettings,
 } from './EditableUserSettingsCard';
@@ -50,6 +51,7 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
     grade: user.grade,
     schoolType: user.schoolType,
     university: user.university,
+    phone: user.phone,
   });
 
   useEffect(() => {
@@ -58,8 +60,9 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
       grade: user.grade,
       schoolType: user.schoolType,
       university: user.university,
+      phone: user.phone,
     });
-  }, [user.state, user.grade, user.schoolType, user.university]);
+  }, [user.state, user.grade, user.schoolType, user.university, user.phone]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -166,6 +169,7 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
           <EditableUserSettingsCard
             editableUserSettings={editableUserSettings}
             onSettingChanges={setEditableUserSettings}
+            user={user}
             isEditing={isEditing}
             personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
           />

@@ -4,6 +4,7 @@ export interface Tutee {
   firstname: string;
   lastname: string;
   email: string;
+  phone: string;
   grade: number;
   isTutee: boolean;
   // isTutee
@@ -34,6 +35,7 @@ export interface Tutor {
   firstname: string;
   lastname: string;
   email: string;
+  phone: string;
   isOfficial: boolean;
   isTutor: boolean;
   isInstructor: boolean;

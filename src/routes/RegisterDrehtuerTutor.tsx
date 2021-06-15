@@ -40,6 +40,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         state: formValues.state?.toLowerCase(),
         university: formValues.university,
         msg: formValues.msg ?? '',
+        phone: null,
         // empty
         isTutor: false,
         isOfficial: false,

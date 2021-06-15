@@ -40,6 +40,7 @@ export const RegisterDrehtuerTutee: React.FC = () => {
         state: formValues.state?.toLowerCase(),
         school: formValues.school?.toLowerCase(),
         grade: parseInt(formValues.grade),
+        phone: null,
         // empty
         msg: '',
         isProjectCoachee: false,

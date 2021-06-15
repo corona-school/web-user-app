@@ -127,6 +127,7 @@ const NewMatchConfirmationModal: React.FC<{
                 onSettingChanges={setEditableUserSettings}
                 isEditing={isEditing}
                 personType={user.type === 'pupil' ? 'tutee' : 'tutor'}
+                user={user}
               />
 
               <DialogModalBase.Content>
