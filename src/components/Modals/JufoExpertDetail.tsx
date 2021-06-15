@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import StyledReactModal from 'styled-react-modal';
 import { ClipLoader } from 'react-spinners';
+
 import { Text, Title } from '../Typography';
 import { ModalContext } from '../../context/ModalContext';
 import { ApiContext } from '../../context/ApiContext';
 import { Expert } from '../../types/Expert';
 import Button from '../button';
+import Tooltip from '../misc/Tooltip';
 
 import classes from './JufoExpertDetail.module.scss';
 import { UserContext } from '../../context/UserContext';
@@ -57,7 +59,6 @@ export const JufoExpertDetail: React.FC = () => {
       setExpert(e);
     }
   }, [isOpen]);
-
   useEffect(() => {
     if (!expert) {
       return;
@@ -157,6 +158,11 @@ export const JufoExpertDetail: React.FC = () => {
       onBackgroundClick={() => modalContext.setOpenedModal(null)}
     >
       <div className={classes.modal}>
+        <Button
+          onClick={() => modalContext.setOpenedModal('expertOverviewModal')}
+        >
+          Zurück
+        </Button>
         <div className={classes.title}>
           <Title size="h2">
             {expert.firstName} {expert.lastName}
@@ -186,30 +192,40 @@ export const JufoExpertDetail: React.FC = () => {
             </div>
           </div>
           <div className={classes.rightSide}>
-            {userContext.user.isProjectCoachee && (
+            {userContext.user.isProjectCoachee && pinned ? (
+              <Tooltip label="Nicht mehr anpinnen">
+                <Button
+                  autoFocus
+                  backgroundColor="#4E6AE6"
+                  color="#ffffff"
+                  className={classes.emailButton}
+                  image={<Icons.BookmarkSlashFilled />}
+                  onClick={unpinExpert}
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip label="Anpinnen">
+                <Button
+                  autoFocus
+                  backgroundColor="#4E6AE6"
+                  color="#ffffff"
+                  className={classes.emailButton}
+                  image={<Icons.BookmarkFilled />}
+                  onClick={pinExpert}
+                />
+              </Tooltip>
+            )}
+
+            <Tooltip label="Expert*in kontaktieren">
               <Button
                 autoFocus
                 backgroundColor="#4E6AE6"
                 color="#ffffff"
+                image={<Icons.EmailFilled />}
+                onClick={openEmailDialog}
                 className={classes.emailButton}
-                image={
-                  pinned ? (
-                    <Icons.BookmarkSlashFilled />
-                  ) : (
-                    <Icons.BookmarkFilled />
-                  )
-                }
-                onClick={pinned ? unpinExpert : pinExpert}
               />
-            )}
-            <Button
-              autoFocus
-              backgroundColor="#4E6AE6"
-              color="#ffffff"
-              image={<Icons.EmailFilled />}
-              onClick={openEmailDialog}
-              className={classes.emailButton}
-            />
+            </Tooltip>
           </div>
         </div>
         <Text large className={classes.label}>
@@ -223,7 +239,7 @@ export const JufoExpertDetail: React.FC = () => {
         </Text>
         <div className={classes.expertTags}>
           {expert.expertiseTags.map((tag) => (
-            <Tag background="#4E555C" color="#ffffff">
+            <Tag background="#4E555C" color="#ffffff" key={tag}>
               {tag}
             </Tag>
           ))}

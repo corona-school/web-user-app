@@ -6,7 +6,7 @@
   max-width: 600px;
   width: 100%;
   max-height: 90vh;
-  overflow: auto;
+  overflow: visible;
 
   align-items: center;
 
@@ -20,5 +20,10 @@
     button {
       margin: 8px;
     }
+  }
+
+  .expertSearch {
+    width: 100%;
+    margin-bottom: 2rem;
   }
 }
