@@ -495,7 +495,7 @@ const CourseDetail = (props: Props) => {
       }`;
     }
     if (course.subcourse.joined) {
-      return 'Verlassen';
+      return 'Kurs entfernen';
     }
     if (course.subcourse.onWaitingList) {
       return 'Warteliste verlassen';
