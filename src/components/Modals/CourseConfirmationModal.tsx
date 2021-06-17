@@ -39,7 +39,7 @@ const CourseConfirmationModal: React.FC<{
               joined: false,
             },
           });
-          message.success('Du hast den Kurs verlassen.');
+          message.success('Du hast den Kurs entfernt.');
           modalContext.setOpenedModal(null);
         });
     } else {
@@ -90,14 +90,14 @@ const CourseConfirmationModal: React.FC<{
             <DialogModalBase.Header>
               <DialogModalBase.Icon Icon={EnrollIcon} />
               <DialogModalBase.Title>
-                {mode === 'quit' ? 'Kurs verlassen' : 'Verbindliche Anmeldung'}
+                {mode === 'quit' ? 'Kurs entfernen' : 'Verbindliche Anmeldung'}
               </DialogModalBase.Title>
               <DialogModalBase.CloseButton />
             </DialogModalBase.Header>
             <div>
               <DialogModalBase.Description>
                 {mode === 'quit'
-                  ? 'Bist du dir sicher, dass du den Kurs verlassen möchtest?'
+                  ? 'Bist du dir sicher, dass du den Kurs entfernen möchtest?'
                   : 'Wenn du dich für diesen Kurs anmeldest, werden wir einen Platz für dich reservieren. Bist du sicher, dass du teilnehmen möchtest und zu den Kurszeiten verfügbar bist?'}
               </DialogModalBase.Description>
 
@@ -105,7 +105,7 @@ const CourseConfirmationModal: React.FC<{
                 <DialogModalBase.Form>
                   <DialogModalBase.ButtonBox>
                     <DialogModalBase.Button
-                      label={mode === 'quit' ? 'Verlassen' : 'Teilnehmen'}
+                      label={mode === 'quit' ? 'Kurs Entfernen' : 'Teilnehmen'}
                       onClick={submit}
                     />
                   </DialogModalBase.ButtonBox>
@@ -128,7 +128,7 @@ const CourseConfirmationModal: React.FC<{
                 Du hast dich erfolgreich für den Kurs{' '}
                 <span style={{ fontStyle: 'italic' }}>{course.name}</span>{' '}
                 angemeldet. Falls du kurzfristig doch nicht teilnehmen kannst,
-                dann verlasse den Kurs, damit dein Platz für andere
+                dann entferne den Kurs, damit dein Platz für andere
                 Schüler*innen frei wird. <br />
                 <br />
                 In Vorbereitung auf den Kurs solltest du das Videokonferenz-Tool
