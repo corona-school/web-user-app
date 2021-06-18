@@ -33,10 +33,31 @@ const grades = [
   '13',
 ];
 
+const SEARCH_STORE = 'lernfair_course_search';
+/* Persist the search configuration so that the user gets a consistent view across pages */
+let loadedConfig: {
+  allowedGrades: string[];
+  allowedTime: string[];
+  search: string;
+} | null = null;
+
+if (localStorage.getItem(SEARCH_STORE)) {
+  try {
+    loadedConfig = JSON.parse(localStorage.getItem(SEARCH_STORE));
+  } catch (error) {
+    console.log('Failed to reload search config', error);
+    // Silently fail as persistent search is not a breaking feature
+  }
+}
+
 export const CourseHeader: React.FC<Props> = (props) => {
-  const [allowedGrades, setAllowedGrades] = useState(grades);
-  const [allowedTime, setAllowedTime] = useState(['vormittags', 'nachmittags']);
-  const [search, setSearch] = useState('');
+  const [allowedGrades, setAllowedGrades] = useState(
+    loadedConfig?.allowedGrades ?? grades
+  );
+  const [allowedTime, setAllowedTime] = useState(
+    loadedConfig?.allowedTime ?? ['vormittags', 'nachmittags']
+  );
+  const [search, setSearch] = useState(loadedConfig?.search ?? '');
 
   const history = useHistory();
 
@@ -48,6 +69,11 @@ export const CourseHeader: React.FC<Props> = (props) => {
     );
   };
   useEffect(() => {
+    localStorage.setItem(
+      SEARCH_STORE,
+      JSON.stringify({ allowedTime, allowedGrades, search })
+    );
+
     const filteredCourses = props.courses
       .filter(
         (c) =>
@@ -100,7 +126,7 @@ export const CourseHeader: React.FC<Props> = (props) => {
     }
 
     props.onChange(filteredCourses);
-  }, [search, allowedGrades, allowedTime]);
+  }, [props.courses, search, allowedGrades, allowedTime]);
 
   const filterGrade = (checkedValue: string[]) => {
     setAllowedGrades(checkedValue);
