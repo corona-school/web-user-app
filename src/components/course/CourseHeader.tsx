@@ -71,7 +71,7 @@ export const CourseHeader: React.FC<Props> = (props) => {
   useEffect(() => {
     localStorage.setItem(
       SEARCH_STORE,
-      JSON.stringify({ allowedTime, allowedGrades, search })
+      JSON.stringify((loadedConfig = { allowedTime, allowedGrades, search }))
     );
 
     const filteredCourses = props.courses
