@@ -53,10 +53,9 @@ export const CourseHeader: React.FC<Props> = (props) => {
   useEffect(() => {
     const filteredCourses = props.courses
       .filter((c) => {
-        if (c.subcourse.maxParticipants === 7) {
-          console.log(c.subcourse.participants, c.subcourse.maxParticipants);
-        }
-        return c.subcourse.participants < c.subcourse.maxParticipants;
+        return onlyFree
+          ? c.subcourse.participants < c.subcourse.maxParticipants
+          : true;
       })
       .filter(
         (c) =>
