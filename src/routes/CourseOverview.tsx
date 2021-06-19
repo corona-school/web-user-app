@@ -70,7 +70,7 @@ export const CourseOverview: React.FC<Props> = ({
             }, 750);
           }
         }
-      }, 1000);
+      }, 100);
     }
   };
 
@@ -88,7 +88,7 @@ export const CourseOverview: React.FC<Props> = ({
           });
         scrollToTargetAdjustedTop(index.el, 80);
         scrollToItemInSection(hash, index.courseItemRefs, index.el);
-      }, 500);
+      }, 100);
     }
   };
 
