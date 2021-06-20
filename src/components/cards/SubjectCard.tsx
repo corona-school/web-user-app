@@ -94,8 +94,24 @@ const SubjectCard: React.FC<{
       .putUserSubjects(
         userContext.user.subjects.filter((s) => s.name !== subject.name)
       )
-      .then(userContext.fetchUserData)
-      .then(() => setLoading(null));
+      .then(
+        () => userContext.fetchUserData,
+        () => {
+          message.error(
+            'Das Fach konnte nicht gelöscht werden. Bitte versuche es später erneut',
+            9
+          );
+        }
+      )
+      .then(
+        () => setLoading(null),
+        () => {
+          message.error(
+            'Deine Daten konnten nicht abgerufen werden. Bitte versuche es später erneut.',
+            9
+          );
+        }
+      );
   };
 
   const Loader = ({ color }) => {
