@@ -37,6 +37,8 @@ export const CourseHeader: React.FC<Props> = (props) => {
   const [allowedGrades, setAllowedGrades] = useState(grades);
   const [allowedTime, setAllowedTime] = useState(['vormittags', 'nachmittags']);
   const [search, setSearch] = useState('');
+  // Only show courses that are free, i.e. those that aren't fully occupied yet.
+  const [onlyFree, setOnlyFree] = useState(false);
 
   const history = useHistory();
 
@@ -44,11 +46,17 @@ export const CourseHeader: React.FC<Props> = (props) => {
     return (
       search.length === 0 &&
       allowedGrades.length === grades.length &&
-      allowedTime.length === 2
+      allowedTime.length === 2 &&
+      !onlyFree
     );
   };
   useEffect(() => {
     const filteredCourses = props.courses
+      .filter((c) => {
+        return onlyFree
+          ? c.subcourse.participants < c.subcourse.maxParticipants
+          : true;
+      })
       .filter(
         (c) =>
           c.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()) ||
@@ -98,9 +106,9 @@ export const CourseHeader: React.FC<Props> = (props) => {
       props.onChange(null);
       return;
     }
-
+    console.log(filteredCourses);
     props.onChange(filteredCourses);
-  }, [search, allowedGrades, allowedTime]);
+  }, [search, allowedGrades, allowedTime, onlyFree]);
 
   const filterGrade = (checkedValue: string[]) => {
     setAllowedGrades(checkedValue);
@@ -184,6 +192,15 @@ export const CourseHeader: React.FC<Props> = (props) => {
                 Nachmittags
               </Checkbox>
             </Checkbox.Group>
+            <Divider style={{ margin: '8px 0px' }} />
+            <Checkbox
+              onChange={(e) => {
+                setOnlyFree(e.target.checked);
+              }}
+              checked={onlyFree}
+            >
+              Nur freie Kurse
+            </Checkbox>
           </div>
         </div>
         <div className={classes.searchContainer}>
@@ -201,6 +218,7 @@ export const CourseHeader: React.FC<Props> = (props) => {
               setAllowedGrades(grades);
               setSearch('');
               setAllowedTime(['vormittags', 'nachmittags']);
+              setOnlyFree(false);
             }}
             className={classNames(classes.resetButton, {
               [classes.hideResetButton]: isReset(),
