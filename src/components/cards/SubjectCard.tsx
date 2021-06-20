@@ -95,7 +95,7 @@ const SubjectCard: React.FC<{
         userContext.user.subjects.filter((s) => s.name !== subject.name)
       )
       .then(
-        () => userContext.fetchUserData,
+        () => userContext.fetchUserData(),
         () => {
           message.error(
             'Das Fach konnte nicht gelöscht werden. Bitte versuche es später erneut',
