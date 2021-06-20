@@ -7,6 +7,7 @@ import { LinkButton } from '../components/button';
 import { ApiContext } from '../context/ApiContext';
 import { AuthContext } from '../context/AuthContext';
 import classes from './InterestConfirmation.module.scss';
+import { OnCoronaSchoolDomain } from '../utils/LernFairRedirection';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -33,6 +34,7 @@ const InterestConfirmation: React.FC = () => {
     apiContext.editInterestConfirmationStatus
   ); // use ref to have not trigger rerender if apiContext changes, since this method is _currently_ of more static nature.
   useEffect(() => {
+    if (OnCoronaSchoolDomain()) return; // do not confirm on corona-school.de
     if (!confirmationStatus) {
       // ungültige Anfrage
       setState('failed');

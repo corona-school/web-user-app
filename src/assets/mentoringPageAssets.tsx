@@ -5,7 +5,7 @@ export const headerText =
   'Online-Nachhilfe ist möglicherweise auch für dich eine neue Erfahrung, ' +
   'welche viele Fragen und Schwierigkeiten aufwirft. Damit bist du nicht ' +
   'allein! Wir haben ein Mentoring-Programm entwickelt, um dich optimal zu ' +
-  'unterstützen. Mentor*innen der Corona School zeichnen sich durch ihre ' +
+  'unterstützen. Mentor*innen von Lern-Fair zeichnen sich durch ihre ' +
   'Berufserfahrung und Expertise in verschiedenen Bereichen aus. Hier kannst ' +
   'du deine Fragen loswerden und wertvolle Tipps für gute, digitale ' +
   'Zusammenarbeit erhalten. Darüber hinaus kannst du dich mit anderen ' +
@@ -43,7 +43,7 @@ export const messageLabels = new Map([
 export const AgreementText = (
   <>
     Ich habe die{' '}
-    <a href="https://www.corona-school.de/datenschutz">Datenschutzerklärung</a>{' '}
+    <a href="https://www.lern-fair.de/datenschutz">Datenschutzerklärung</a> zur
     zur Kenntnis genommen. Ich stimme einer elektronischen Speicherung und
     Verarbeitung meiner eingegebenen Daten zur Beantwortung meiner Anfrage zu.
   </>

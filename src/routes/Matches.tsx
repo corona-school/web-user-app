@@ -40,9 +40,7 @@ const Matches: React.FC = () => {
                   Du hast diese E-Mail von uns nie erhalten? Bei Problemen
                   kannst du dich an unser Team unter
                 </span>{' '}
-                <a href="mailto:support@corona-school.de">
-                  support@corona-school.de
-                </a>
+                <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>
                 <span> wenden.</span>
               </>
             }
@@ -72,9 +70,7 @@ const Matches: React.FC = () => {
                   <br /> <br />
                   Brauchst du nun wieder Hilfe? Wende dich dafür bitte an
                 </span>{' '}
-                <a href="mailto:support@corona-school.de">
-                  support@corona-school.de
-                </a>
+                <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>
                 <span>.</span>
               </>
             }

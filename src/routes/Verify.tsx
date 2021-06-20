@@ -4,6 +4,7 @@ import { redeemVerificationToken, getUserId } from '../api/api';
 import { AuthContext } from '../context/AuthContext';
 import storedCredentials from '../api/storedCredentials';
 import PageLoading from '../components/PageLoading';
+import { OnCoronaSchoolDomain } from '../utils/LernFairRedirection';
 
 const dev = process.env.NODE_ENV === 'development';
 
@@ -22,6 +23,7 @@ const Verify: React.FC = () => {
   const auth = useContext(AuthContext);
 
   useEffect(() => {
+    if (OnCoronaSchoolDomain()) return; // do not verify on corona-school.de
     if (verificationToken) {
       setState('pending');
       redeemVerificationToken(verificationToken)

@@ -16,7 +16,7 @@ export const BecomeCoachText = (
     individuell begleiten und so durch dein Wissen Schüler*innen in ihrer
     Neugier fördern. Mehr Informationen findest du{' '}
     <a
-      href="https://www.corona-school.de/1-zu-1-projektcoaching"
+      href="https://www.lern-fair.de/helfer/projektcoaching"
       style={{ color: '#0645AD' }}
     >
       hier
@@ -35,7 +35,7 @@ export const BecomeCoacheeText = (
     der Erfahrung der älteren Coach*in und bringe dein Projekt noch weiter nach
     vorne! <br /> Mehr Informationen findest du{' '}
     <a
-      href="https://www.corona-school.de/1-zu-1-projektcoaching"
+      href="https://www.lern-fair.de/schueler/projektcoaching"
       style={{ color: '#0645AD' }}
     >
       hier

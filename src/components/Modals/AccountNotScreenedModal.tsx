@@ -52,7 +52,7 @@ const AccountNotScreenedModal = () => {
             backgroundColor="#FFF7DB"
             color="#FFCC12"
             target="_blank"
-            href="https://authentication.corona-school.de"
+            href="https://authentication.lern-fair.de"
           >
             Kennenlernen
           </LinkButton>

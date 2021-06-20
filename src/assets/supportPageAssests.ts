@@ -1,6 +1,6 @@
 export const headerText =
-  'Hier findest du Materialien, die dich während deiner gesamten Zeit in der ' +
-  'Corona School unterstützen sollen. Insbesondere haben wir verschiedene ' +
+  'Hier findest du Materialien, die dich während deiner gesamten Zeit bei ' +
+  'Lern-Fair unterstützen sollen. Insbesondere haben wir verschiedene ' +
   'Leitfäden entwickelt, die dir den Einstieg erleichtern sollen. Welche ' +
   'digitalen Tools kann ich für den Online-Unterricht sinnvoll nutzen? Wie ' +
   'motiviere ich meine*n Schüler*in zum Lernen? Wie schaffe ich eine gute ' +

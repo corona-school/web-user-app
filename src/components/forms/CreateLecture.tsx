@@ -56,7 +56,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
                 ? moment(date).isBefore(moment(), 'day')
                 : moment(new Date())
                     .startOf('day')
-                    .add(2, 'days')
+                    .add(7, 'days')
                     .diff(date.clone().startOf('day'), 'days') >= 1;
             }}
             value={start}
@@ -155,7 +155,7 @@ export const CreateLecture: React.FC<Props> = (props) => {
             <div style={{ padding: '0px 0px 8px 24px', marginTop: '-8px' }}>
               <div className="ant-form-item-explain">
                 {!props.edit
-                  ? 'Der Termin muss mindestens 2 Tage in der Zukunft liegen.'
+                  ? 'Der Termin muss mindestens 7 Tage in der Zukunft liegen.'
                   : 'Bitte benachrichtige später die Teilnehmer*innen des Kurses über Änderungen eines Kursdatums mithilfe der "Nachricht senden" Funktion in den Einstellungen dieses Kurses.'}
               </div>
             </div>

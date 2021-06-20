@@ -12,7 +12,7 @@ const PublicCourse = () => {
         <div className={classes.logo}>
           <Icons.Logo />
           <Title style={{ margin: '0px 0px 0px 8px' }} size="h3">
-            Corona School
+            Lern-Fair
           </Title>
         </div>
       </div>
@@ -22,10 +22,8 @@ const PublicCourse = () => {
         />
       </div>
       <div className={classes.legal}>
-        <a href="https://www.corona-school.de/datenschutz-2">
-          Datenschutzerklärung
-        </a>
-        <a href="https://www.corona-school.de/impressum">Impressum</a>
+        <a href="https://www.lern-fair.de/datenschutz">Datenschutzerklärung</a>
+        <a href="https://www.lern-fair.de/impressum">Impressum</a>
       </div>
     </div>
   );

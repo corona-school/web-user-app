@@ -11,7 +11,7 @@ export const NoRegistration = () => {
       <div className={classes.signupContainer}>
         <a
           rel="noopener noreferrer"
-          href="https://www.corona-school.de/"
+          href="https://www.lern-fair.de/"
           target="_blank"
         >
           <Icons.Logo className={classes.logo} />

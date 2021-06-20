@@ -24,7 +24,7 @@ export const DataProtectionField: React.FC<Props> = (props) => {
         <Checkbox value="dataprotection">
           Ich habe die{' '}
           <a
-            href="https://www.corona-school.de/datenschutz-2"
+            href="https://www.lern-fair.de/datenschutz"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -48,8 +48,8 @@ export const DataProtectionField: React.FC<Props> = (props) => {
               Mir ist außerdem bekannt, dass meine Einwilligung freiwillig und
               jederzeit mit Wirkung für die Zukunft widerruflich ist. Ein
               Widerruf der Einwilligung kann formlos erfolgen (bspw. an{' '}
-              <a href="mailto:datenschutz@corona-school.de">
-                datenschutz@corona-school.de
+              <a href="mailto:datenschutz@lern-fair.de">
+                datenschutz@lern-fair.de
               </a>
               ). Mir ist bewusst, dass der Widerruf nur für die Zukunft gilt und
               daher Datenverarbeitungen bis zum Widerruf, insbesondere die
@@ -57,11 +57,11 @@ export const DataProtectionField: React.FC<Props> = (props) => {
               Matchingpartner*innen bis zum Zeitpunkt des Widerrufs unberührt
               bleiben. Weitere Datenschutzinformationen sind abrufbar unter{' '}
               <a
-                href="https://www.corona-school.de/datenschutz-2"
+                href="https://www.lern-fair.de/datenschutz"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                www.corona-school.de/datenschutz-2
+                https://www.lern-fair.de/datenschutz
               </a>
               .
             </>
