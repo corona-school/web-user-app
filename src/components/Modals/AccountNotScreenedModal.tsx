@@ -26,6 +26,7 @@ const CloseButtonStyle = styled.button`
 
 const AccountNotScreenedModal = () => {
   const modalContext = useContext(Context.Modal);
+  const { user } = useContext(Context.User);
 
   return (
     <StyledReactModal
@@ -52,7 +53,11 @@ const AccountNotScreenedModal = () => {
             backgroundColor="#FFF7DB"
             color="#FFCC12"
             target="_blank"
-            href="https://authentication.lern-fair.de"
+            href={
+              user.isOfficial != null && user.isOfficial
+                ? 'https://calendly.com/soenke-dll/praktikum-lern-fair'
+                : 'https://authentication.lern-fair.de'
+            }
           >
             Kennenlernen
           </LinkButton>
