@@ -99,6 +99,7 @@ const App: React.FC = () => {
           <PublicCourse />
         </Route>
         <Route exact path="/public/courses/:id">
+          <ScrollToTopOnMount />
           <PublicCourseDetail />
         </Route>
         <Route path="/verify">
