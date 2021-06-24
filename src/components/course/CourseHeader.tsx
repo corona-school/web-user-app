@@ -33,12 +33,34 @@ const grades = [
   '13',
 ];
 
+const SEARCH_STORE = 'lernfair_course_search';
+/* Persist the search configuration so that the user gets a consistent view across pages */
+let loadedConfig: {
+  allowedGrades: string[];
+  allowedTime: string[];
+  search: string;
+  onlyFree: boolean;
+} | null = null;
+
+if (localStorage.getItem(SEARCH_STORE)) {
+  try {
+    loadedConfig = JSON.parse(localStorage.getItem(SEARCH_STORE));
+  } catch (error) {
+    console.log('Failed to reload search config', error);
+    // Silently fail as persistent search is not a breaking feature
+  }
+}
+
 export const CourseHeader: React.FC<Props> = (props) => {
-  const [allowedGrades, setAllowedGrades] = useState(grades);
-  const [allowedTime, setAllowedTime] = useState(['vormittags', 'nachmittags']);
-  const [search, setSearch] = useState('');
+  const [allowedGrades, setAllowedGrades] = useState(
+    loadedConfig?.allowedGrades ?? grades
+  );
+  const [allowedTime, setAllowedTime] = useState(
+    loadedConfig?.allowedTime ?? ['vormittags', 'nachmittags']
+  );
+  const [search, setSearch] = useState(loadedConfig?.search ?? '');
   // Only show courses that are free, i.e. those that aren't fully occupied yet.
-  const [onlyFree, setOnlyFree] = useState(false);
+  const [onlyFree, setOnlyFree] = useState(loadedConfig?.onlyFree ?? false);
 
   const history = useHistory();
 
@@ -51,6 +73,13 @@ export const CourseHeader: React.FC<Props> = (props) => {
     );
   };
   useEffect(() => {
+    localStorage.setItem(
+      SEARCH_STORE,
+      JSON.stringify(
+        (loadedConfig = { allowedTime, allowedGrades, search, onlyFree })
+      )
+    );
+
     const filteredCourses = props.courses
       .filter((c) => {
         return onlyFree
@@ -108,7 +137,7 @@ export const CourseHeader: React.FC<Props> = (props) => {
     }
     console.log(filteredCourses);
     props.onChange(filteredCourses);
-  }, [search, allowedGrades, allowedTime, onlyFree]);
+  }, [props.courses, search, allowedGrades, allowedTime, onlyFree]);
 
   const filterGrade = (checkedValue: string[]) => {
     setAllowedGrades(checkedValue);
