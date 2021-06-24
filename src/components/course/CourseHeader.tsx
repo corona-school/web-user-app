@@ -39,6 +39,7 @@ let loadedConfig: {
   allowedGrades: string[];
   allowedTime: string[];
   search: string;
+  onlyFree: boolean;
 } | null = null;
 
 if (localStorage.getItem(SEARCH_STORE)) {
@@ -59,7 +60,7 @@ export const CourseHeader: React.FC<Props> = (props) => {
   );
   const [search, setSearch] = useState(loadedConfig?.search ?? '');
   // Only show courses that are free, i.e. those that aren't fully occupied yet.
-  const [onlyFree, setOnlyFree] = useState(false);
+  const [onlyFree, setOnlyFree] = useState(loadedConfig?.onlyFree ?? false);
 
   const history = useHistory();
 
@@ -74,7 +75,9 @@ export const CourseHeader: React.FC<Props> = (props) => {
   useEffect(() => {
     localStorage.setItem(
       SEARCH_STORE,
-      JSON.stringify((loadedConfig = { allowedTime, allowedGrades, search }))
+      JSON.stringify(
+        (loadedConfig = { allowedTime, allowedGrades, search, onlyFree })
+      )
     );
 
     const filteredCourses = props.courses
