@@ -147,14 +147,7 @@ export const CourseOverview: React.FC<Props> = ({
     'priorknowledge-required',
   ];
 
-  const priorityClubTagIDs = [
-    'personaldevelopment',
-    'orientation',
-    'major',
-    'after-school',
-    'teech-workshop',
-    'teech-talk',
-  ]; // descending
+  const priorityClubTagIDs = ['environment', 'mint']; // descending
   const clubTags = [
     ...tags
       .filter((t) => priorityClubTagIDs.includes(t.id))

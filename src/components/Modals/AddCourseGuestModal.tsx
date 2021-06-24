@@ -58,7 +58,7 @@ const AddCourseGuestModal: React.FC<{
           }
           if (err.response.status === 429) {
             message.error(
-              `Du kannst keine weitere Person mehr als Gäst*in einladen. Maximal 5 Personen dürfen eingeladen werden!`
+              `Du kannst keine weitere Person mehr als Gäst*in einladen. Maximal 10 Personen dürfen eingeladen werden!`
             );
             console.log(err);
             return;

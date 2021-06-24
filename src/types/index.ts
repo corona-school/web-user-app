@@ -53,6 +53,7 @@ export interface User {
   registrationDate: number;
   expertData?: ExpertData;
   pupilTutoringInterestConfirmationStatus?: InterestConfirmationStatus;
+  isOfficial?: boolean;
 }
 
 export enum ScreeningStatus {
