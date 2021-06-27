@@ -2,7 +2,7 @@ import { Form, message } from 'antd';
 import React, { useContext, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import Icons from '../assets/icons';
-import Button, { LinkButton } from '../components/button';
+import Button from '../components/button';
 import {
   DataProtectionField,
   EmailField,
@@ -99,10 +99,11 @@ export const RegisterDrehtuerTutee: React.FC = () => {
     <div>
       <div className={classes.signupContainer}>
         <Title className={classes.tuteeTitle}>
-          {formState === 'done' && (
+          {formState === 'done' ? (
             <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+          ) : (
+            <span>Registrieren</span>
           )}
-          <span>Registrieren</span>
         </Title>
       </div>
 
@@ -132,17 +133,6 @@ export const RegisterDrehtuerTutee: React.FC = () => {
             >
               Registrieren
             </Button>
-          )}
-          {formState === 'done' && (
-            <LinkButton
-              href="/login"
-              local
-              className={classes.signupButton}
-              color="white"
-              backgroundColor="#4E6AE6"
-            >
-              Anmelden
-            </LinkButton>
           )}
         </div>
       </Form>
