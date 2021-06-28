@@ -526,7 +526,7 @@ const RegisterTutee: React.FC<Props> = ({
             Es sieht so aus, als ob du noch Unterstützung bei der deutschen
             Sprache benötigst. Deswegen wirst du von uns mit einem/einer
             Helfer:in verbunden, der/die dir gezielt dabei hilft, deine
-            Deutschnkentnisse zu verbessern. Aus diesem Grund kannst du zum
+            Deutschkenntnisse zu verbessern. Aus diesem Grund kannst du zum
             jetzigen Zeitpunkt nur “Deutsch als Zweitsprache” als Fach
             auswählen. In anderen Fächern können wir dich leider nicht
             unterstützen.
