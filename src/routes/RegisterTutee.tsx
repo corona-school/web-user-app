@@ -526,7 +526,7 @@ const RegisterTutee: React.FC<Props> = ({
             Es sieht so aus, als ob du noch Unterstützung bei der deutschen
             Sprache benötigst. Deswegen wirst du von uns mit einem/einer
             Helfer:in verbunden, der/die dir gezielt dabei hilft, deine
-            Deutschkentnisse zu verbessern. Aus diesem Grund kannst du zum
+            Deutschkenntnisse zu verbessern. Aus diesem Grund kannst du zum
             jetzigen Zeitpunkt nur “Deutsch als Zweitsprache” als Fach
             auswählen. In anderen Fächern können wir dich leider nicht
             unterstützen.
@@ -855,11 +855,13 @@ const RegisterTutee: React.FC<Props> = ({
             <MagicIcon />
           </div>
           <div className={classes.autoMatchTextWrapper}>
-            <h3>Ich benötige möglichst schnell Hilfe.</h3>
+            <h3>Ich möchte möglichst schnell Hilfe erhalten.</h3>
             <p>
               Mit dieser Option gehen wir direkt auf die Suche nach einem/einer
-              Lernpartner:in für dich und melden uns bei dir per E-Mail sobald
-              wir jemanden gefunden haben.
+              Lernpartner:in für dich, nachdem du deine E-Mail-Adresse bestätigt
+              hast. Wir benachrichtigen dich per E-Mail, sobald wir jemanden
+              gefunden haben. <br />
+              Aktuell geschätzte Wartezeit: 14 Tage
             </p>
           </div>
         </AccentColorButton>
