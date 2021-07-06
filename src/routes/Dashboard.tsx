@@ -12,18 +12,13 @@ import UpdateInformationBlockerModal, {
 } from '../components/Modals/UpdateInformationBlockerModal';
 import Context from '../context';
 import { nextDateOfYearAfterDate } from '../utils/DateUtils';
-import { isProjectCoacheeButNotPupil } from '../utils/UserUtils';
 
 const Dashboard: React.FC = () => {
   const { setOpenedModal } = useContext(Context.Modal);
   const { user } = useContext(UserContext);
   const history = useHistory();
 
-  if (user.type === 'student' && !user.isTutor) {
-    history.push('/');
-  }
-
-  if (isProjectCoacheeButNotPupil(user)) {
+  if (!user.isTutor && !user.isPupil) {
     history.push('/');
   }
 
