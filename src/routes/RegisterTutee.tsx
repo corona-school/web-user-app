@@ -944,7 +944,7 @@ const RegisterTutee: React.FC<Props> = ({
             )}
 
             <div className={classes.buttonContainer}>
-              {formState !== 'start' && (
+              {formState !== 'start' && formState !== 'done' && (
                 <Button
                   onClick={back}
                   className={classes.backButton}
@@ -954,7 +954,7 @@ const RegisterTutee: React.FC<Props> = ({
                   Zurück
                 </Button>
               )}
-              {formState !== 'autoMatchChooser' && (
+              {formState !== 'autoMatchChooser' && formState !== 'done' && (
                 <Button
                   onClick={nextStep}
                   className={classes.signupButton}
@@ -964,7 +964,6 @@ const RegisterTutee: React.FC<Props> = ({
                   {formState === 'finish' && 'Registrieren'}
                   {formState === 'start' && 'Weiter'}
                   {formState === 'detail' && 'Weiter'}
-                  {formState === 'done' && 'Anmelden'}
                 </Button>
               )}
             </div>
@@ -1017,7 +1016,7 @@ const RegisterTutee: React.FC<Props> = ({
               )}
 
               <div className={classes.buttonContainer}>
-                {formState !== 'start' && (
+                {formState !== 'start' && formState !== 'done' && (
                   <Button
                     onClick={back}
                     className={classes.backButton}
@@ -1027,7 +1026,7 @@ const RegisterTutee: React.FC<Props> = ({
                     Zurück
                   </Button>
                 )}
-                {formState !== 'autoMatchChooser' && (
+                {formState !== 'autoMatchChooser' && formState !== 'done' && (
                   <Button
                     onClick={nextStep}
                     className={classes.signupButton}
@@ -1037,7 +1036,6 @@ const RegisterTutee: React.FC<Props> = ({
                     {formState === 'finish' && 'Registrieren'}
                     {formState === 'start' && 'Weiter'}
                     {formState === 'detail' && 'Weiter'}
-                    {formState === 'done' && 'Anmelden'}
                   </Button>
                 )}
               </div>
