@@ -71,7 +71,7 @@ const CourseConfirmationModal: React.FC<{
         .catch((e) => {
           if (e?.request.status === 429) {
             message.error(
-              'Teilnahme nicht möglich! Du kannst nur an maximal sechs aktiven Kursen teilnehmen!'
+              'Teilnahme nicht möglich! Du kannst nur an maximal zehn aktiven Kursen teilnehmen!'
             );
           } else {
             message.error('Es ist ein Fehler aufgetreten');
