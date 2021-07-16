@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import StyledReactModal from 'styled-react-modal';
 
 import { message } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { User } from '../../types';
-import Icons from '../../assets/icons';
 import CardBase from '../base/CardBase';
 import { Text, Title } from '../Typography';
 import CertificateModal from '../Modals/CerificateModal';
@@ -23,6 +21,7 @@ import SaveEditButton from '../button/SaveEditButton';
 import AccentColorButton from '../button/AccentColorButton';
 import { AuthContext } from '../../context/AuthContext';
 import BecomeTutorModal from '../Modals/BecomeTutorModal';
+import AccountDeactivationModal from '../Modals/AccountDeactivationModal';
 
 interface Props {
   user: User;
@@ -218,39 +217,7 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
       <BecomeInstructorModal user={user} />
       <BecomeInternModal user={user} />
       <BecomeTutorModal user={user} />
-      <StyledReactModal
-        isOpen={modalContext.openedModal === 'deactivateAccount'}
-      >
-        <div className={classes.modal}>
-          <Title size="h2">Account deaktivieren</Title>
-          <Text>
-            Schade, dass du die Corona School verlassen möchtest. Sobald du
-            deinen Account deaktivierst, werden deine aktuellen Zuordnungen
-            aufgelöst und deine Lernpartner*innen darüber informiert. Falls du
-            zu einem späteren Zeitpunkt wieder Teil der Corona School werden
-            möchtest, kannst du dich jederzeit wieder bei uns melden.
-          </Text>
-          <div className={classes.buttonContainer}>
-            <AccentColorButton
-              accentColor="#6E6E6E"
-              onClick={() => modalContext.setOpenedModal(null)}
-              label="Abbrechen"
-              Icon={Icons.Close}
-              small
-            />
-            <AccentColorButton
-              accentColor="#D03D53"
-              onClick={() =>
-                ApiContext.putUserActiveFalse().then(() =>
-                  window.location.assign('https://corona-school.de/')
-                )
-              }
-              label="Deaktivieren"
-              small
-            />
-          </div>
-        </div>
-      </StyledReactModal>
+      <AccountDeactivationModal />
     </>
   );
 };
