@@ -224,13 +224,17 @@ export const axiosPutUserProjectFields = async (
 export const axiosPutUserActive = async (
   id: string,
   token: string,
-  active: boolean
+  active: boolean,
+  deactivationReason?: string,
+  deactivationFeedback?: string
 ) => {
   const url = `${apiURL}/user/${id}/active/${active ? 'true' : 'false'}`;
 
   console.log(url);
   await axios
-    .put(url, undefined, { headers: { token } })
+    .put(url, active ? null : { deactivationReason, deactivationFeedback }, {
+      headers: { token },
+    })
     .catch(logError('putUserActive'));
 };
 

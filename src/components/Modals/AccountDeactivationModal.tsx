@@ -30,19 +30,20 @@ const AccountDeactivationModal = () => {
   const apiContext = useContext(ApiContext);
   const [pageIndex, setPageIndex] = useState(0);
   const [reason, setReason] = useState(null);
-  const [customReason, setCustomReason] = useState('');
+  const [feedback, setFeedback] = useState('');
 
   const submit = () => {
     // TODO submit feedback
-
+    alert(reason);
     apiContext
-      .putUserActiveFalse()
+      .putUserActiveFalse(reason, feedback)
       .then(() => window.location.assign('https://corona-school.de/'));
   };
 
   const onClose = () => {
     setPageIndex(0);
-    setCustomReason('');
+    setReason(null);
+    setFeedback('');
   };
   return (
     <DialogModalBase accentColor={accentColor}>
@@ -50,10 +51,7 @@ const AccountDeactivationModal = () => {
         <DialogModalBase.Header>
           <DialogModalBase.Icon Icon={Trashcan} />
           <DialogModalBase.Title>Account deaktivieren</DialogModalBase.Title>
-          <DialogModalBase.CloseButton
-            hook={onClose}
-            stateSettingMethods={[setReason]}
-          />
+          <DialogModalBase.CloseButton hook={onClose} />
         </DialogModalBase.Header>
         <div>
           {pageIndex === 0 && (
@@ -91,8 +89,8 @@ const AccountDeactivationModal = () => {
                       <>
                         <DialogModalBase.TextArea
                           label=""
-                          onChange={(e) => setCustomReason(e.target.value)}
-                          value={customReason}
+                          onChange={(e) => setFeedback(e.target.value)}
+                          value={feedback}
                         />
                         <DialogModalBase.Spacer />
                       </>
@@ -118,8 +116,8 @@ const AccountDeactivationModal = () => {
                 <DialogModalBase.Form>
                   <DialogModalBase.TextArea
                     label=""
-                    onChange={(e) => setCustomReason(e.target.value)}
-                    value={customReason}
+                    onChange={(e) => setFeedback(e.target.value)}
+                    value={feedback}
                   />
                   <DialogModalBase.Spacer />
                   <DialogModalBase.ButtonBox>
