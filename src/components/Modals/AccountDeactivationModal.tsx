@@ -33,8 +33,6 @@ const AccountDeactivationModal = () => {
   const [feedback, setFeedback] = useState('');
 
   const submit = () => {
-    // TODO submit feedback
-    alert(reason);
     apiContext
       .putUserActiveFalse(reason, feedback)
       .then(() => window.location.assign('https://corona-school.de/'));
