@@ -30,3 +30,10 @@ export const MatomoScript = () => {
   g.src = '//cdn.matomo.cloud/lernfair.matomo.cloud/matomo.js';
   s.parentNode.insertBefore(g, s);
 };
+
+export const MatomoTrackRegistration = () => {
+  window._paq = window._paq ?? [];
+  const paq = window._paq;
+
+  paq.push(['trackEvent', 'Formular Interaktion', 'Registrierung Abschluss']);
+};

@@ -29,6 +29,7 @@ import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
 import { languageOptions } from '../assets/languages';
 import YouTubeVideo from '../components/misc/YouTubeVideo';
+import { MatomoTrackRegistration } from '../components/misc/MatomoSupport';
 
 const { Option } = Select;
 
@@ -837,6 +838,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       .then(() => {
         setLoading(false);
         setFormState('done');
+        MatomoTrackRegistration();
       })
       .catch((err) => {
         if (err?.response?.status === 401) {
