@@ -34,7 +34,7 @@ interface IApiContext {
   putUserSubjects: (subjects: Subject[]) => Promise<void>;
   putUserProjectFields: (projectFields: ApiProjectFieldInfo[]) => Promise<void>;
   becomeInstructor: (data: BecomeInstructor | BecomeIntern) => Promise<void>;
-  putUserActiveFalse: () => Promise<void>;
+  putUserActiveFalse: (reason: string, feedback: string) => Promise<void>;
   createCertificate: (
     cerfiticateData: CertificateData
   ) => Promise<{ uuid: string; automatic: boolean }>;
@@ -315,8 +315,11 @@ export const ApiProvider: React.FC = ({ children }) => {
     data: BecomeInstructor | BecomeIntern
   ): Promise<void> => api.axiosBecomeInstructor(id, token, data);
 
-  const putUserActiveFalse = (): Promise<void> =>
-    api.axiosPutUserActive(id, token, false);
+  const putUserActiveFalse = (
+    reason: string,
+    feedback: string
+  ): Promise<void> =>
+    api.axiosPutUserActive(id, token, false, reason, feedback);
 
   const getCourses = (): Promise<CourseOverview[]> => api.axiosGetCourses();
 
