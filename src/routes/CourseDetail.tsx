@@ -1042,7 +1042,10 @@ const CourseDetail = (props: Props) => {
                   </Descriptions.Item>
                   <Descriptions.Item label="Teilnehmende">
                     {course.subcourse.participants}/
-                    {course.subcourse.maxParticipants}
+                    {course.subcourse.maxParticipants}{' '}
+                    {course.subcourse.waitingListCount > 0 && (
+                      <>(+{course.subcourse.waitingListCount} auf Warteliste)</>
+                    )}
                   </Descriptions.Item>
                   <Descriptions.Item label="Klasse">
                     {course.subcourse.minGrade}-{course.subcourse.maxGrade}{' '}

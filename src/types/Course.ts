@@ -51,6 +51,7 @@ export interface CourseSubCourse {
   onWaitingList: boolean;
   published: boolean;
   cancelled: boolean;
+  waitingListCount?: number;
 }
 
 export interface Tag {
