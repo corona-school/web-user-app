@@ -17,6 +17,7 @@ import {
 } from '../../types/Certificate';
 import { useAPICallable } from '../../context/ApiContext';
 import AccentColorButton from '../button/AccentColorButton';
+import { subjectOptions } from '../../assets/subjects';
 
 const { Option } = Select;
 
@@ -412,20 +413,15 @@ function InformationStep({
         </Title>
         <div className={classes.inputField}>
           <Select
-            disabled={!selectedPupil}
             onChange={(v: string[]) => {
               updateData({ subjects: v });
             }}
             value={subjects}
             mode="multiple"
-            placeholder={
-              selectedPupil
-                ? 'Wähle deine Fächer aus'
-                : 'Zuerst einen Schüler auswählen'
-            }
+            placeholder="Wähle deine Fächer aus"
             style={{ width: '100%' }}
           >
-            {selectedPupil?.subjects.map((s) => {
+            {subjectOptions.map((s) => {
               return (
                 <Option key={s} value={s}>
                   {s}
