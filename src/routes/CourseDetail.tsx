@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
@@ -14,18 +14,14 @@ import {
   WhatsAppOutlined,
   CopyOutlined,
   UserAddOutlined,
-  QuestionCircleOutlined,
 } from '@ant-design/icons';
 import {
-  Empty,
   Descriptions,
   Menu,
   Dropdown,
   message,
   Button as AntdButton,
-  List,
   Tooltip,
-  Popconfirm,
   Row,
   Col,
   Popover,
@@ -59,11 +55,10 @@ import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletion
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
 import Icons from '../assets/icons';
-import SearchParticipant from '../components/course/SearchParticipant';
-import SortParticipant from '../components/course/SortParticipant';
 import Button from '../components/button';
 import Images from '../assets/images';
 import { Spinner } from '../components/loading/Spinner';
+import CourseParticipants from '../components/course/CourseParticipants';
 
 moment.locale('de');
 
@@ -92,9 +87,6 @@ const CourseDetail = (props: Props) => {
     []
   );
   const [enteredFilter, setEnteredFilter] = useState('');
-
-  const [loadingCerts, setLoadingCerts] = useState<Set<string>>(new Set());
-  const loadingCertsRef = useRef(loadingCerts);
 
   const { id: urlParamID } = useParams<{ id: string }>();
   const id = props.id ?? urlParamID;
@@ -512,31 +504,6 @@ const CourseDetail = (props: Props) => {
     }
   };
 
-  const isLoadingParticipantCertificate = (participantID: string) => {
-    return loadingCertsRef.current.has(participantID);
-  };
-
-  const issueParticipantCertificate = (participantID: string) => {
-    if (isLoadingParticipantCertificate(participantID)) {
-      // already loading that cert)
-      return;
-    }
-    setLoadingCerts(new Set(loadingCertsRef.current.add(participantID)));
-    api
-      .issueCourseCertificates(course.id, course.subcourse.id, [participantID])
-      .then(() => {
-        message.success('Dem/Der Schüler*in wurde die Teilnahme bestätigt.');
-      })
-      .catch((err) => {
-        if (dev) console.error(err);
-        message.error('Es ist ein Fehler aufgetreten!');
-      })
-      .finally(() => {
-        loadingCertsRef.current.delete(participantID);
-        setLoadingCerts(new Set(loadingCertsRef.current));
-      });
-  };
-
   const getTodaysLectures = () => {
     return course.subcourse?.lectures?.filter((l) =>
       moment.unix(l.start).isSame(moment(), 'day')
@@ -612,81 +579,6 @@ const CourseDetail = (props: Props) => {
       });
   };
 
-  const renderParticipants = () => {
-    if (!course.subcourse) {
-      return null;
-    }
-    if (course.subcourse.participants === 0) {
-      return <Empty description="Du hast noch keine Teilnehmer*innen" />;
-    }
-
-    return (
-      <div>
-        <div>
-          <Row gutter={16}>
-            <Col
-              xxl={{ span: 12, offset: 12 }}
-              md={{ span: 18, offset: 6 }}
-              sm={24}
-              xs={24}
-            >
-              <SearchParticipant
-                inputValue={(value) => setEnteredFilter(value)}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <SortParticipant
-                setParticipantList={(value) => setParticipantList(value)}
-                getParticipantList={participantList}
-              />
-            </Col>
-          </Row>
-        </div>
-        <List
-          className={classes.participantList}
-          // itemLayout="horizontal"
-          dataSource={participantList}
-          renderItem={(item) => (
-            <List.Item
-              actions={[
-                <div>{item.schooltype}</div>,
-                <span>{item.grade} Klasse</span>,
-                <Popconfirm
-                  title={`Soll ${item.firstname} wirklich ein Zertifikat zugeschickt bekommen?`}
-                  icon={<QuestionCircleOutlined />}
-                  okText="Bestätigen"
-                  cancelText="Abbrechen"
-                  onConfirm={() => issueParticipantCertificate(item.uuid)}
-                  disabled={
-                    !hasEnded() || isLoadingParticipantCertificate(item.uuid)
-                  }
-                >
-                  <AntdButton
-                    type="primary"
-                    disabled={
-                      !hasEnded() || isLoadingParticipantCertificate(item.uuid)
-                    }
-                    loading={isLoadingParticipantCertificate(item.uuid)}
-                  >
-                    {isLoadingParticipantCertificate(item.uuid)
-                      ? 'Wird ausgestellt...'
-                      : 'Teilnahmezertifikat ausstellen'}
-                  </AntdButton>
-                </Popconfirm>,
-              ]}
-            >
-              <List.Item.Meta
-                title={`${item.firstname} ${item.lastname}`}
-                description={<a href={`mailto:${item.email}`}>{item.email}</a>}
-              />
-            </List.Item>
-          )}
-        />
-      </div>
-    );
-  };
   const renderJoinButton = () => {
     return (
       <AntdButton
@@ -1093,7 +985,14 @@ const CourseDetail = (props: Props) => {
                   Teilnehmer*innen
                 </Title>
 
-                <div>{renderParticipants()}</div>
+                <div>
+                  <CourseParticipants
+                    course={course}
+                    participantList={participantList}
+                    setParticipantList={setParticipantList}
+                    setEnteredFilter={setEnteredFilter}
+                  />
+                </div>
               </div>
             )}
           </Col>
