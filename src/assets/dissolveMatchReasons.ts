@@ -6,7 +6,8 @@ export const studentReasonOptions = {
   5: 'Wir hatten Schwierigkeiten auf zwischenmenschlicher Ebene',
   6: 'Wir konnten keine gemeinsamen Termine finden',
   7: 'Wir hatten technische Schwierigkeiten',
-  8: 'Sonstiges',
+  8: 'Wir hatten sprachliche Schwierigkeiten',
+  9: 'Sonstiges',
 };
 
 export const pupilReasonOptions = {
@@ -17,7 +18,8 @@ export const pupilReasonOptions = {
   5: 'Wir hatten Schwierigkeiten auf zwischenmenschlicher Ebene',
   6: 'Wir konnten keine gemeinsamen Termine finden',
   7: 'Wir hatten technische Schwierigkeiten',
-  8: 'Sonstiges',
+  8: 'Wir hatten sprachliche Schwierigkeiten',
+  9: 'Sonstiges',
 };
 
 export const coachReasonOptions = {
@@ -28,7 +30,8 @@ export const coachReasonOptions = {
   5: 'Wir hatten Schwierigkeiten auf zwischenmenschlicher Ebene',
   6: 'Wir konnten keine gemeinsamen Termine finden',
   7: 'Wir hatten technische Schwierigkeiten',
-  8: 'Sonstiges',
+  8: 'Wir hatten sprachliche Schwierigkeiten',
+  9: 'Sonstiges',
 };
 
 export const coacheeReasonOptions = {
@@ -39,5 +42,6 @@ export const coacheeReasonOptions = {
   5: 'Wir hatten Schwierigkeiten auf zwischenmenschlicher Ebene',
   6: 'Wir konnten keine gemeinsamen Termine finden',
   7: 'Wir hatten technische Schwierigkeiten',
-  8: 'Sonstiges',
+  8: 'Wir hatten sprachliche Schwierigkeiten',
+  9: 'Sonstiges',
 };
