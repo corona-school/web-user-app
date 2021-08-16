@@ -863,7 +863,7 @@ const RegisterTutee: React.FC<Props> = ({
               Lernpartner:in für dich, nachdem du deine E-Mail-Adresse bestätigt
               hast. Wir benachrichtigen dich per E-Mail, sobald wir jemanden
               gefunden haben. <br />
-              Aktuell geschätzte Wartezeit: 14 Tage
+              Aktuell geschätzte Wartezeit: 30 Tage
             </p>
           </div>
         </AccentColorButton>
