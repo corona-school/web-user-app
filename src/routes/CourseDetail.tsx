@@ -991,6 +991,7 @@ const CourseDetail = (props: Props) => {
                     participantList={participantList}
                     setParticipantList={setParticipantList}
                     setEnteredFilter={setEnteredFilter}
+                    hasEnded={hasEnded()}
                   />
                 </div>
               </div>

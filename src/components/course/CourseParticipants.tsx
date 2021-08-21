@@ -7,12 +7,14 @@ import IssueCertificateModal from '../Modals/IssueCertificateModal';
 import classes from '../../routes/CourseDetail.module.scss';
 import { ModalContext } from '../../context/ModalContext';
 import { CourseParticipant, ParsedCourseOverview } from '../../types/Course';
+import { SchoolTypesMap } from '../../assets/schoolTypes';
 
 interface Props {
   course: ParsedCourseOverview;
   participantList: CourseParticipant[];
   setEnteredFilter: (filter: string) => void;
   setParticipantList: (participantList: CourseParticipant[]) => void;
+  hasEnded: boolean;
 }
 
 export default function CourseParticipants(props: Props) {
@@ -63,8 +65,11 @@ export default function CourseParticipants(props: Props) {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <AccentColorButton
             accentColor={!isSelecting ? '#1890FF' : '#055202'}
-            disabled={selectedParticipants.length === 0 && isSelecting}
-            label={!isSelecting ? 'Teilnahmezertifikate ausstellen…' : 'Weiter'}
+            disabled={
+              (selectedParticipants.length === 0 && isSelecting) ||
+              !props.hasEnded
+            }
+            label={!isSelecting ? 'Teilnahmezertifikate ausstellen' : 'Weiter'}
             small
             onClick={() => {
               if (!isSelecting) {
@@ -106,7 +111,7 @@ export default function CourseParticipants(props: Props) {
         renderItem={(item) => (
           <List.Item
             actions={[
-              <div>{item.schooltype}</div>,
+              <div>{SchoolTypesMap[item.schooltype]}</div>,
               <span>{item.grade} Klasse</span>,
             ]}
           >
