@@ -7,6 +7,7 @@ export const studentReasonOptions = {
   6: 'Wir konnten keine gemeinsamen Termine finden',
   7: 'Wir hatten technische Schwierigkeiten',
   8: 'Sonstiges',
+  9: 'Wir hatten sprachliche Schwierigkeiten',
 };
 
 export const pupilReasonOptions = {
@@ -18,6 +19,7 @@ export const pupilReasonOptions = {
   6: 'Wir konnten keine gemeinsamen Termine finden',
   7: 'Wir hatten technische Schwierigkeiten',
   8: 'Sonstiges',
+  9: 'Wir hatten sprachliche Schwierigkeiten',
 };
 
 export const coachReasonOptions = {
@@ -29,6 +31,7 @@ export const coachReasonOptions = {
   6: 'Wir konnten keine gemeinsamen Termine finden',
   7: 'Wir hatten technische Schwierigkeiten',
   8: 'Sonstiges',
+  9: 'Wir hatten sprachliche Schwierigkeiten',
 };
 
 export const coacheeReasonOptions = {
@@ -40,4 +43,5 @@ export const coacheeReasonOptions = {
   6: 'Wir konnten keine gemeinsamen Termine finden',
   7: 'Wir hatten technische Schwierigkeiten',
   8: 'Sonstiges',
+  9: 'Wir hatten sprachliche Schwierigkeiten',
 };
