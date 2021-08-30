@@ -77,3 +77,10 @@
     }
   }
 }
+
+.hintWrapper {
+  cursor: not-allowed;
+  button {
+    pointer-events: none;
+  }
+}
