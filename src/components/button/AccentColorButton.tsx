@@ -30,9 +30,6 @@ const AccentColorButton: React.FC<{
   title,
   noBg,
   disabledHint,
-  onMouseEnter,
-  onMouseLeave,
-  onFocus,
 }) => {
   const getBaseButton = () => {
     return (
@@ -53,9 +50,6 @@ const AccentColorButton: React.FC<{
         }}
         disabled={disabled || false}
         title={title}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        onFocus={onFocus}
       >
         {children}
         {Icon != null && (
