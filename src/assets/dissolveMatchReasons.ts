@@ -8,6 +8,7 @@ export const studentReasonOptions = {
   7: 'Wir hatten technische Schwierigkeiten',
   8: 'Sonstiges',
   9: 'Wir hatten sprachliche Schwierigkeiten',
+  // 10: It turned out a user had a criminal record, and their account got cancelled. (don't include as option in frontend)
 };
 
 export const pupilReasonOptions = {
@@ -20,6 +21,7 @@ export const pupilReasonOptions = {
   7: 'Wir hatten technische Schwierigkeiten',
   8: 'Sonstiges',
   9: 'Wir hatten sprachliche Schwierigkeiten',
+  // 10: It turned out a user had a criminal record, and their account got cancelled.
 };
 
 export const coachReasonOptions = {
@@ -32,6 +34,7 @@ export const coachReasonOptions = {
   7: 'Wir hatten technische Schwierigkeiten',
   8: 'Sonstiges',
   9: 'Wir hatten sprachliche Schwierigkeiten',
+  // 10: It turned out a user had a criminal record, and their account got cancelled.
 };
 
 export const coacheeReasonOptions = {
@@ -44,4 +47,5 @@ export const coacheeReasonOptions = {
   7: 'Wir hatten technische Schwierigkeiten',
   8: 'Sonstiges',
   9: 'Wir hatten sprachliche Schwierigkeiten',
+  // 10: It turned out a user had a criminal record, and their account got cancelled.
 };
