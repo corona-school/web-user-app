@@ -84,9 +84,15 @@ const ContactCourseModal: React.FC<Props> = ({
     <DialogModalBase accentColor="#055202">
       <DialogModalBase.Modal modalName="contactCourseModal">
         <DialogModalBase.Header>
-          <DialogModalBase.Title>
-            Teilnehmer:innen kontaktieren
-          </DialogModalBase.Title>
+          {type === 'instructorToParticipants' ? (
+            <DialogModalBase.Title>
+              Teilnehmer:innen kontaktieren
+            </DialogModalBase.Title>
+          ) : (
+            <DialogModalBase.Title>
+              Tutor:innen kontaktieren
+            </DialogModalBase.Title>
+          )}
           <DialogModalBase.CloseButton
             hook={() => {
               setSelectedParticipants([]);
