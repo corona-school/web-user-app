@@ -49,11 +49,11 @@ import {
 } from '../components/cards/MyCourseCard';
 
 import { ModalContext } from '../context/ModalContext';
-import CourseMessageModal from '../components/Modals/CourseMessageModal';
 import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
+import ContactCourseModal from '../components/Modals/ContactCourseModal';
 import Icons from '../assets/icons';
 import Button from '../components/button';
 import Images from '../assets/images';
@@ -87,6 +87,11 @@ const CourseDetail = (props: Props) => {
     []
   );
   const [enteredFilter, setEnteredFilter] = useState('');
+
+  const [selectedParticipants, setSelectedParticipants] = useState<
+    CourseParticipant[]
+  >([]);
+  const [isSelectingParticipants, setSelectingParticipants] = useState(false);
 
   const { id: urlParamID } = useParams<{ id: string }>();
   const id = props.id ?? urlParamID;
@@ -153,7 +158,6 @@ const CourseDetail = (props: Props) => {
               data.lastname
                 .toUpperCase()
                 .includes(enteredFilter.toUpperCase()) ||
-              data.email.toUpperCase().includes(enteredFilter.toUpperCase()) ||
               data.grade.toFixed().includes(enteredFilter)
             ) {
               return data;
@@ -326,7 +330,11 @@ const CourseDetail = (props: Props) => {
   };
 
   const openWriteMessageModal = () => {
-    modalContext.setOpenedModal('courseMessageModal');
+    if (isMyCourse) {
+      setSelectingParticipants(false);
+      setSelectedParticipants(course.subcourse.participantList);
+    }
+    modalContext.setOpenedModal('contactCourseModal');
   };
 
   const shareData = {
@@ -985,7 +993,7 @@ const CourseDetail = (props: Props) => {
             {isMyCourse && (
               <div>
                 <Title size="h3" style={{ margin: '10px 0px' }}>
-                  Teilnehmer*innen
+                  Teilnehmer:innen
                 </Title>
 
                 <div>
@@ -995,6 +1003,10 @@ const CourseDetail = (props: Props) => {
                     setParticipantList={setParticipantList}
                     setEnteredFilter={setEnteredFilter}
                     hasEnded={hasEnded()}
+                    selectedParticipants={selectedParticipants}
+                    setSelectedParticipants={setSelectedParticipants}
+                    isSelecting={isSelectingParticipants}
+                    setSelecting={setSelectingParticipants}
                   />
                 </div>
               </div>
@@ -1024,12 +1036,14 @@ const CourseDetail = (props: Props) => {
           </div>
         </div>
       </div>
-      <CourseMessageModal
-        courseId={course.id}
-        subcourseId={course.subcourse.id}
+      <ContactCourseModal
+        course={course}
+        setSelectedParticipants={setSelectedParticipants}
+        selectedParticipants={selectedParticipants}
         type={
           isMyCourse ? 'instructorToParticipants' : 'participantToInstructors'
         }
+        setSelectingParticipants={setSelectingParticipants}
       />
       <CourseDeletionConfirmationModal courseId={course.id} />
       <AddInstructorModal

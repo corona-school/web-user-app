@@ -50,7 +50,7 @@ const IssueCertificateModal: React.FC<{
         <DialogModalBase.Description>
           {selectedParticipants.length > 1
             ? 'Bist du dir sicher, diesen Teilnehmern Kurszertifikate auszustellen?'
-            : 'Bist du dir sicher, diesem/dieser Teilnehmer*in ein Kurszertifikat auszustellen?'}
+            : 'Bist du dir sicher, diesem/dieser Teilnehmer:in ein Kurszertifikat auszustellen?'}
         </DialogModalBase.Description>
         <ul>
           {selectedParticipants.map((p) => (

@@ -8,6 +8,7 @@ import {
   Lecture,
   CourseOverview,
   Tag,
+  CourseParticipant,
 } from '../types/Course';
 import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
@@ -635,12 +636,13 @@ export const axiosSendCourseGroupMail = async (
   courseId: number,
   subCourseId: number,
   subject: string,
-  body: string
+  body: string,
+  addressees: CourseParticipant[]
 ) => {
   await axios
     .post(
       `${apiURL}/course/${courseId}/subcourse/${subCourseId}/groupmail`,
-      { subject, body },
+      { subject, body, addressees: addressees.map((p) => p.uuid) },
       {
         headers: { token },
       }

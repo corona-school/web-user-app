@@ -10,6 +10,8 @@ import {
   Lecture,
   CourseOverview,
   Tag,
+  Participant,
+  CourseParticipant,
 } from '../types/Course';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { CompletedSubCourse } from '../components/forms/CreateCourse';
@@ -117,7 +119,8 @@ interface IApiContext {
     courseId: number,
     subCourseId: number,
     subject: string,
-    body: string
+    body: string,
+    addressees: Participant[]
   ) => Promise<void>;
   issueCourseCertificates: (
     courseId: number,
@@ -448,9 +451,17 @@ export const ApiProvider: React.FC = ({ children }) => {
     courseId: number,
     subCourseId: number,
     subject: string,
-    body: string
+    body: string,
+    addressees: CourseParticipant[]
   ) =>
-    api.axiosSendCourseGroupMail(token, courseId, subCourseId, subject, body);
+    api.axiosSendCourseGroupMail(
+      token,
+      courseId,
+      subCourseId,
+      subject,
+      body,
+      addressees
+    );
 
   const issueCourseCertificates = (
     courseId: number,
