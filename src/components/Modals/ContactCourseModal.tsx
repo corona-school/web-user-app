@@ -51,8 +51,8 @@ const ContactCourseModal: React.FC<Props> = ({
     )
       .then(() => {
         notif.success('Nachricht wurde versendet.');
-        setMessage(null);
-        setSubject(null);
+        setMessage('');
+        setSubject('');
         modalContext.setOpenedModal(null);
       })
       .catch((err) => {
@@ -62,6 +62,9 @@ const ContactCourseModal: React.FC<Props> = ({
   };
 
   const getDescription = () => {
+    if (type === 'participantToInstructors') {
+      return 'Diese Nachricht wird an die Tutor:innen dieses Kurses verschickt.';
+    }
     if (selectedParticipants.length === 0) {
       return 'Diese Nachricht wird an alle Teilnehmenden des Kurses verschickt.';
     }
