@@ -54,7 +54,7 @@ const IssueCertificateModal: React.FC<{
         </DialogModalBase.Description>
         <ul>
           {selectedParticipants.map((p) => (
-            <li>
+            <li key={p.uuid}>
               {p.firstname} {p.lastname}
             </li>
           ))}
