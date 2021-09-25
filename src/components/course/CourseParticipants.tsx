@@ -19,6 +19,7 @@ interface Props {
   setSelectedParticipants: (selectedParticipants: CourseParticipant[]) => void;
   isSelecting: boolean;
   setSelecting: (isSelecting: boolean) => void;
+  canContact: boolean;
 }
 
 export default function CourseParticipants(props: Props) {
@@ -97,6 +98,8 @@ export default function CourseParticipants(props: Props) {
                   props.setSelecting(true);
                   setAction('contact');
                 }}
+                disabledHint="Du kannst keine Teilnehmer:innen mehr kontaktieren, nachdem 14 Tage seit Kursende vergangen sind."
+                disabled={!props.canContact}
               />
             </div>
           )}
@@ -131,6 +134,31 @@ export default function CourseParticipants(props: Props) {
             </div>
           )}
           {props.isSelecting && (
+            <div>
+              <AccentColorButton
+                accentColor="#505050"
+                noBg
+                label={
+                  props.participantList.length ===
+                  props.selectedParticipants.length
+                    ? 'Keine auswählen'
+                    : 'Alle auswählen'
+                }
+                small
+                onClick={() => {
+                  if (
+                    props.participantList.length ===
+                    props.selectedParticipants.length
+                  ) {
+                    props.setSelectedParticipants([]);
+                  } else {
+                    props.setSelectedParticipants(props.participantList);
+                  }
+                }}
+              />
+            </div>
+          )}
+          {props.isSelecting && (
             <span style={{ marginLeft: 20 }}>
               {props.selectedParticipants.length === 0
                 ? getHint()
@@ -158,6 +186,9 @@ export default function CourseParticipants(props: Props) {
               <input
                 type="checkbox"
                 style={{ marginRight: 20 }}
+                checked={props.selectedParticipants.some(
+                  (p) => p.uuid === item.uuid
+                )}
                 onChange={(e) => {
                   if (e.target.checked) {
                     props.setSelectedParticipants([
