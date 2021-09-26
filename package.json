@@ -29,7 +29,7 @@
     "@types/styled-components": "^5.1.0",
     "@types/styled-react-modal": "^1.2.0",
     "antd": "^4.9.4",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "classnames": "^2.2.6",
     "create-react-app": "^4.0.1",
     "express": "^4.17.1",
