@@ -53,7 +53,10 @@ import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
-import ContactCourseModal from '../components/Modals/ContactCourseModal';
+import {
+  ContactCourseModal,
+  ContactInstructorsModal,
+} from '../components/Modals/CourseContactModals';
 import Icons from '../assets/icons';
 import Button from '../components/button';
 import Images from '../assets/images';
@@ -333,8 +336,10 @@ const CourseDetail = (props: Props) => {
     if (isMyCourse) {
       setSelectingParticipants(false);
       setSelectedParticipants(course.subcourse.participantList);
+      modalContext.setOpenedModal('contactCourseModal');
+    } else {
+      modalContext.setOpenedModal('contactInstructorsModal');
     }
-    modalContext.setOpenedModal('contactCourseModal');
   };
 
   const shareData = {
@@ -1053,11 +1058,9 @@ const CourseDetail = (props: Props) => {
         course={course}
         setSelectedParticipants={setSelectedParticipants}
         selectedParticipants={selectedParticipants}
-        type={
-          isMyCourse ? 'instructorToParticipants' : 'participantToInstructors'
-        }
         setSelectingParticipants={setSelectingParticipants}
       />
+      <ContactInstructorsModal course={course} />
       <CourseDeletionConfirmationModal courseId={course.id} />
       <AddInstructorModal
         courseId={course.id}
