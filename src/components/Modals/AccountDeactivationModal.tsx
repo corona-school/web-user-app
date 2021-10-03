@@ -35,7 +35,7 @@ const AccountDeactivationModal = () => {
   const submit = () => {
     apiContext
       .putUserActiveFalse(reason, feedback)
-      .then(() => window.location.assign('https://corona-school.de/'));
+      .then(() => window.location.assign('https://lern-fair.de/'));
   };
 
   const onClose = () => {
