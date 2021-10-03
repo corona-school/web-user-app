@@ -5,6 +5,7 @@ import DialogModalBase from './DialogModalBase';
 import Images from '../../assets/images';
 import { ApiContext } from '../../context/ApiContext';
 import { ModalContext } from '../../context/ModalContext';
+import { MultipleFileSelect } from '../misc/MultipleFileSelect';
 
 const ContactModal = ({
   name,
@@ -16,6 +17,8 @@ const ContactModal = ({
   setMessage,
   submit,
   closeHook,
+  selectedFiles,
+  setSelectedFiles,
 }) => {
   return (
     <DialogModalBase accentColor="#055202">
@@ -47,6 +50,12 @@ const ContactModal = ({
               onChange={(e) => setMessage(e.target.value)}
               value={message}
             />
+            <DialogModalBase.Spacer />
+            <DialogModalBase.Label>Anhänge</DialogModalBase.Label>
+            <MultipleFileSelect
+              selectedFiles={selectedFiles}
+              setSelectedFiles={setSelectedFiles}
+            />
           </DialogModalBase.Form>
           <DialogModalBase.Spacer />
           <DialogModalBase.ButtonBox>
@@ -73,6 +82,7 @@ export const ContactCourseModal: React.FC<ContactCourseProps> = ({
 }) => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const api = useContext(ApiContext);
   const modalContext = useContext(ModalContext);
@@ -138,7 +148,10 @@ export const ContactCourseModal: React.FC<ContactCourseProps> = ({
         setSelectingParticipants(false);
         setSubject('');
         setMessage('');
+        setSelectedFiles([]);
       }}
+      selectedFiles={selectedFiles}
+      setSelectedFiles={setSelectedFiles}
     />
   );
 };
@@ -152,6 +165,7 @@ export const ContactInstructorsModal: React.FC<ContactInstructorsProps> = ({
 }) => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const api = useContext(ApiContext);
   const modalContext = useContext(ModalContext);
@@ -198,7 +212,10 @@ export const ContactInstructorsModal: React.FC<ContactInstructorsProps> = ({
       closeHook={() => {
         setSubject('');
         setMessage('');
+        setSelectedFiles([]);
       }}
+      selectedFiles={selectedFiles}
+      setSelectedFiles={setSelectedFiles}
     />
   );
 };
