@@ -461,7 +461,7 @@ const RegisterTutee: React.FC<Props> = ({
                 },
               }),
             ]}
-            extra="Hinweis für Gruppen: Es muss sich nur euer*e Gruppensprecher:in anmelden, wenn ihr als Team teilnehmen möchtet."
+            extra="Hinweis für Gruppen: Es muss sich nur euer:e Gruppensprecher:in anmelden, wenn ihr als Team teilnehmen möchtet."
           >
             <InputNumber
               style={{ margin: '0px 4px', width: '64px' }}

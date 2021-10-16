@@ -88,7 +88,7 @@ const NewMatchConfirmationModal: React.FC<{
                   erreichen, die herkömmliche Nachhilfe aufgrund persönlicher,
                   sozialer, kultureller oder finanzieller Ressourcen nicht oder
                   nur sehr schwer wahrnehmen können. Bitte fordere nur dann
-                  eine*n neue*n Lernpartner:in an, wenn du keine andere
+                  eine:n neue:n Lernpartner:in an, wenn du keine andere
                   Möglichkeit hast, Hilfe zu erhalten.
                 </p>
                 <p>
@@ -117,7 +117,7 @@ const NewMatchConfirmationModal: React.FC<{
               <DialogModalBase.Spacer />
               <h3>Überprüfe deine Informationen</h3>
               <p>
-                Damit wir dir eine*n optimale*n Lernpartner:in zuteilen können,
+                Damit wir dir eine:n optimale:n Lernpartner:in zuteilen können,
                 bitten wir dich deine persönlichen Informationen noch einmal zu
                 überprüfen.
               </p>

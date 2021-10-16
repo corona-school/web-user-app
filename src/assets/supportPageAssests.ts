@@ -3,7 +3,7 @@ export const headerText =
   'Lern-Fair unterstützen sollen. Insbesondere haben wir verschiedene ' +
   'Leitfäden entwickelt, die dir den Einstieg erleichtern sollen. Welche ' +
   'digitalen Tools kann ich für den Online-Unterricht sinnvoll nutzen? Wie ' +
-  'motiviere ich meine*n Schüler:in zum Lernen? Wie schaffe ich eine gute ' +
+  'motiviere ich meine:n Schüler:in zum Lernen? Wie schaffe ich eine gute ' +
   'Lernatmosphäre? Oder wo kann ich kostenlos weiteres Unterrichtsmaterial ' +
   'finden? Wir haben Antworten auf deine Fragen zusammengetragen und hier ' +
   'zur Verfügung gestellt.';

@@ -75,7 +75,7 @@ const InterestConfirmation: React.FC = () => {
           title: 'Vielen Dank für deine Bestätigung!',
           text: (
             <>
-              Sobald wir eine*n Student:in gefunden haben, werden wir dich
+              Sobald wir eine:n Student:in gefunden haben, werden wir dich
               schnellstmöglich per E-Mail informieren.
               <br />
               Bitte überprüfe dazu regelmäßig dein E-Mail-Postfach.

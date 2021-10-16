@@ -72,7 +72,7 @@ export default function CourseParticipants(props: Props) {
             disabledHint={
               !props.hasEnded
                 ? 'Du kannst erst Teilnehmerzertifikate ausstellen, wenn der Kurs vorüber ist.'
-                : 'Wähle mindestens eine*n Schüler:in aus.'
+                : 'Wähle mindestens eine:n Schüler:in aus.'
             }
             label={!isSelecting ? 'Teilnahmezertifikate ausstellen' : 'Weiter'}
             small

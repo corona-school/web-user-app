@@ -306,7 +306,7 @@ const CourseDetail = (props: Props) => {
         setIsLoadingVideoChat(false);
         if (err?.response?.status === 400) {
           message.error(
-            'Der Videochat wurde noch nicht gestartet. Du musst auf die*den Kursleiter:in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.'
+            'Der Videochat wurde noch nicht gestartet. Du musst auf die/den Kursleiter:in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.'
           );
         } else {
           message.error(
