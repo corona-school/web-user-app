@@ -176,14 +176,14 @@ export const CreateCourse: React.FC<Props> = (props) => {
             }),
           ]}
         >
-          <Select placeholder="Wähle eine Kursleiter*in aus, die/der die Kontaktanfragen erhält">
+          <Select placeholder="Wähle eine Kursleiter:in aus, die/der die Kontaktanfragen erhält">
             {instructors?.map((i) => (
               <Option value={i.id}>{`${i.firstname} ${i.lastname} ${
                 i.id === userContext.user.id ? '(Ich)' : ''
               }`}</Option>
             ))}
             <Option disabled value={null}>
-              Weitere Kursleiter*innen können in der Übersicht hinzugefügt
+              Weitere Kursleiter:innen können in der Übersicht hinzugefügt
               werden
             </Option>
           </Select>

@@ -9,7 +9,7 @@ const StatusTexts = new Map([
     {
       title: 'Wir warten auf eine Rückmeldung von dir!',
       description:
-        'Aktuell sind wir nicht auf der Suche nach einem/einer Lernpartner*in für dich. Unter dem Menüpunkt Zuordnung kannst du jederzeit eine*n neue*n Lernpartner*in anfordern. Bei Schwierigkeiten kannst du dich an support@lern-fair.de wenden',
+        'Aktuell sind wir nicht auf der Suche nach einem/einer Lernpartner:in für dich. Unter dem Menüpunkt Zuordnung kannst du jederzeit eine*n neue*n Lernpartner:in anfordern. Bei Schwierigkeiten kannst du dich an support@lern-fair.de wenden',
     },
   ],
   [
@@ -23,17 +23,17 @@ const StatusTexts = new Map([
   [
     'waitingForMatch',
     {
-      title: 'Wir suchen nach einem/einer Lernpartner*in für dich!',
+      title: 'Wir suchen nach einem/einer Lernpartner:in für dich!',
       description:
-        'Sobald wir eine*n geeignete*n Lernpartner*in für dich gefunden haben, werden wir dich schnellstmöglich per E-Mail informieren. Solltest du innerhalb einer Woche nichts von uns hören, überprüfe deinen Spam-Ordner und wende dich an support@lern-fair.de.',
+        'Sobald wir eine*n geeignete*n Lernpartner:in für dich gefunden haben, werden wir dich schnellstmöglich per E-Mail informieren. Solltest du innerhalb einer Woche nichts von uns hören, überprüfe deinen Spam-Ordner und wende dich an support@lern-fair.de.',
     },
   ],
   [
     'foundMatch',
     {
-      title: 'Wir haben eine*n Lernpartner*in für dich gefunden!',
+      title: 'Wir haben eine*n Lernpartner:in für dich gefunden!',
       description:
-        'Das gemeinsame Lernen kann nun endlich starten. Alle Informationen zu deinem/deiner neuen Lernpartner*in findest du im Menüpunkt Zuordnung. Bei Fragen und Schwierigkeiten kannst du dich jederzeit an support@lern-fair.de wenden.',
+        'Das gemeinsame Lernen kann nun endlich starten. Alle Informationen zu deinem/deiner neuen Lernpartner:in findest du im Menüpunkt Zuordnung. Bei Fragen und Schwierigkeiten kannst du dich jederzeit an support@lern-fair.de wenden.',
     },
   ],
   [
@@ -41,7 +41,7 @@ const StatusTexts = new Map([
     {
       title: ' Wir haben deinen Account deaktiviert! ',
       description:
-        'Schade, dass du Lern-Fair verlassen hast. Wir haben deine aktuellen Zuordnungen aufgelöst und deine Lernpartner*innen darüber informiert. Falls du zu einem späteren Zeitpunkt wieder Teil vo0n Lern-Fair werden möchtest, kannst du dich bei uns melden.',
+        'Schade, dass du Lern-Fair verlassen hast. Wir haben deine aktuellen Zuordnungen aufgelöst und deine Lernpartner:innen darüber informiert. Falls du zu einem späteren Zeitpunkt wieder Teil vo0n Lern-Fair werden möchtest, kannst du dich bei uns melden.',
     },
   ],
 ]);
@@ -91,7 +91,7 @@ const CheckInformationStep: Step = {
   title: 'Informationen überprüfen',
   image: <Images.StepsCheckInformation width="160px" height="160px" />,
   texts: [
-    'Damit wir dich mit einem/einer passende*n Lernpartner*in verbinden können, überprüfe bitte deine persönlichen Informationen.',
+    'Damit wir dich mit einem/einer passende*n Lernpartner:in verbinden können, überprüfe bitte deine persönlichen Informationen.',
     'Achte darauf, dass deine Fächer korrekt im System hinterlegt sind. ',
     'Sollte es dir nicht möglich sein ein bestimmtes Feld zu ändern, melde dich bei support@lern-fair.de.',
   ],
@@ -128,7 +128,7 @@ const MatchedStep: Step = {
   title: 'Zuordnung erhalten',
   image: <Images.StepsMatched width="160px" height="160px" />,
   texts: [
-    'Sobald wir eine*n geeignete*n Lernpartner*in für dich gefunden haben, werden wir dich schnellst- möglich per E-Mail informieren.',
+    'Sobald wir eine*n geeignete*n Lernpartner:in für dich gefunden haben, werden wir dich schnellst- möglich per E-Mail informieren.',
     'Bitte überprüfe dafür auch regelmäßig deinen Spam-Ordner.',
     'Solltest du innerhalb einer Woche nichts von uns hören, melde dich bitte bei support@lern-fair.de.',
   ],
@@ -144,11 +144,11 @@ const MatchedStep: Step = {
 };
 
 const ContactMatchStep: Step = {
-  title: 'Lernpartner*in kontaktieren',
+  title: 'Lernpartner:in kontaktieren',
   image: <Images.StepsContact width="160px" height="160px" />,
   texts: [
     'Überlege dir zunächst, wie viel Zeit du in das gemeinsame Lernen investieren möchtest und zu welchen Uhrzeiten du verfügbar bist.',
-    'Kontaktiere anschließend deine*n Lernpartner*in und schlag ihm/ihr einen Termin per E-Mail vor.',
+    'Kontaktiere anschließend deine*n Lernpartner:in und schlag ihm/ihr einen Termin per E-Mail vor.',
     ' Gerne könnt ihr genaue Inhalte schon vor dem ersten Gespräch abstimmen.',
   ],
   action: (
@@ -219,11 +219,11 @@ const FeedbackStep: Step = {
 };
 
 const RequestMatchStep: Step = {
-  title: 'Mehr Schüler*innen helfen',
+  title: 'Mehr Schüler:innen helfen',
   image: <Images.StepsRequest width="160px" height="160px" />,
   texts: [
-    'Durch die Schulschließungen benötigen immer mehr Schüler*innen Unterstützung beim Lernen.',
-    'Wir würden uns wahnsinnig freuen, wenn du weiteren Schüler*innen unter die Arme greifen möchtest.',
+    'Durch die Schulschließungen benötigen immer mehr Schüler:innen Unterstützung beim Lernen.',
+    'Wir würden uns wahnsinnig freuen, wenn du weiteren Schüler:innen unter die Arme greifen möchtest.',
     'Ganz nach deinen zeitlichen Kapazitäten kannst du jederzeit mehr oder auch weniger helfen.',
   ],
   action: (
@@ -268,7 +268,7 @@ const StudentNews = [
     headline: 'Mentoring Programm',
     text: (
       <span>
-        Du möchtest dich mit anderen Studierenden oder unseren Mentor*innen
+        Du möchtest dich mit anderen Studierenden oder unseren Mentor:innen
         austauschen?{' '}
         <a href="https://www.facebook.com/groups/coronaschoolgermany/">
           https://www.facebook.com/groups/coronaschoolgermany/

@@ -63,9 +63,9 @@ const CourseDeletionConfirmationModal: React.FC<Props> = (props) => {
           Möchtest du den Kurs wirklich absagen?
         </Text>
         <Text>
-          Sobald du deinen Kurs löschst werden alle Teilnehmer*innen deines
+          Sobald du deinen Kurs löschst werden alle Teilnehmer:innen deines
           Kurses per E-Mail informiert. Nach dem Löschvorgang hast du keine
-          Möglichkeit Inhalte und/oder Teilnehmer*innen deines Kurses zu sehen.
+          Möglichkeit Inhalte und/oder Teilnehmer:innen deines Kurses zu sehen.
           Falls du zu einem späteren Zeitpunkt wieder einen Kurs in der Corona
           School anbieten möchtest, kannst du jederzeit einen neuen Kurs
           erstellen.

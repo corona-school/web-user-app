@@ -46,25 +46,25 @@ const AddCourseGuestModal: React.FC<{
     setValidationProblemDescription(null);
     apiContext.inviteCourseGuest(courseId, email, firstname, lastname).then(
       () => {
-        message.success('Gäst*in wurde eingeladen!');
+        message.success('Gäst:in wurde eingeladen!');
         closeModal();
       },
       (err) => {
         if (err.response != null && err.response.status != null) {
           if (err.response.status === 409) {
-            message.error('Diese Person ist bereits Gäst*in deines Kurses.');
+            message.error('Diese Person ist bereits Gäst:in deines Kurses.');
             console.log(err);
             return;
           }
           if (err.response.status === 429) {
             message.error(
-              `Du kannst keine weitere Person mehr als Gäst*in einladen. Maximal 10 Personen dürfen eingeladen werden!`
+              `Du kannst keine weitere Person mehr als Gäst:in einladen. Maximal 10 Personen dürfen eingeladen werden!`
             );
             console.log(err);
             return;
           }
         }
-        message.error('Gäst*in konnte nicht eingeladen werden.');
+        message.error('Gäst:in konnte nicht eingeladen werden.');
         console.log(err);
       }
     );
@@ -75,7 +75,7 @@ const AddCourseGuestModal: React.FC<{
       <DialogModalBase.Modal modalName="addCourseGuestModal">
         <DialogModalBase.Header>
           <DialogModalBase.Icon Icon={AddIcon} />
-          <DialogModalBase.Title>Gäst*in hinzufügen</DialogModalBase.Title>
+          <DialogModalBase.Title>Gäst:in hinzufügen</DialogModalBase.Title>
           <DialogModalBase.CloseButton
             stateSettingMethods={[
               setEmail,
@@ -92,7 +92,7 @@ const AddCourseGuestModal: React.FC<{
             </DialogModalBase.Error>
           )}
           <DialogModalBase.Description>
-            Hier hast du die Möglichkeit, bis zu fünf Gäst*innen zu deinem Kurs
+            Hier hast du die Möglichkeit, bis zu fünf Gäst:innen zu deinem Kurs
             einzuladen. Nachdem du ihre Daten eingegeben hast, erhalten sie eine
             E-Mail mit einem Link über den sie später direkt dem Videochat
             beitreten können.
@@ -101,17 +101,17 @@ const AddCourseGuestModal: React.FC<{
           <DialogModalBase.Content>
             <DialogModalBase.Form>
               <DialogModalBase.TextBox
-                label="E-Mail-Adresse des/der Gäst*in"
+                label="E-Mail-Adresse des/der Gäst:in"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
               <DialogModalBase.TextBox
-                label="Vorname des/der Gäst*in"
+                label="Vorname des/der Gäst:in"
                 onChange={(e) => setFirstname(e.target.value)}
                 value={firstname}
               />
               <DialogModalBase.TextBox
-                label="Nachname des/der Gäst*in"
+                label="Nachname des/der Gäst:in"
                 onChange={(e) => setLastname(e.target.value)}
                 value={lastname}
               />

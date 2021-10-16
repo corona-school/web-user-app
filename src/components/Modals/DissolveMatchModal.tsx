@@ -168,7 +168,7 @@ const DissolveMatchModal: React.FC<{
                   ownType === 'student' ? 'Coachee' : 'Coach'
                 } verbunden werden?`}
               {!projectCoaching &&
-                'Möchtest du mit einem/einer neuen Lernpartner*in verbunden werden?'}
+                'Möchtest du mit einem/einer neuen Lernpartner:in verbunden werden?'}
             </p>
             <div>
               <CheckboxButton

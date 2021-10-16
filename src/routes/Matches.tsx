@@ -34,7 +34,7 @@ const Matches: React.FC = () => {
                   dein E-Mail-Postfach und folge den Anweisungen in unserer
                   E-Mail, um dein Interesse zu bestätigen. Sobald du dein
                   Interesse bestätigt hast, werden wir dich schnellstmöglich mit
-                  einem/einer Student*in verbinden.
+                  einem/einer Student:in verbinden.
                   <br />
                   <br />
                   Du hast diese E-Mail von uns nie erhalten? Bei Problemen

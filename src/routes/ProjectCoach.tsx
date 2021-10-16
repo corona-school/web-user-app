@@ -66,7 +66,7 @@ const ProjectCoach: React.FC = () => {
     return (
       <LeftHighlightCard highlightColor={theme.color.cardHighlightYellow}>
         <Title size="h3">
-          Schüler*innen bei außerschulischen Projekten unterstützen
+          Schüler:innen bei außerschulischen Projekten unterstützen
         </Title>
         <Text>{BecomeCoachText}</Text>
         <AccentColorButton
@@ -103,7 +103,7 @@ const ProjectCoach: React.FC = () => {
     const myExperts = experts.filter((e) => pinnedExperts.includes(e.id));
     return (
       <div className={classes.experts}>
-        <Title size="h2">Deine Expert*innen</Title>
+        <Title size="h2">Deine Expert:innen</Title>
         <div className={classes.cardContainer}>
           {myExperts.map((e) => (
             <div className={classes.expertContainer}>

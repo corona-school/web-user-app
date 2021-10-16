@@ -14,11 +14,11 @@ export const ExpertRequestCard: React.FC<Props> = (props) => {
       <CardNewBase className={classes.pendingContainer} disabled={false}>
         <div className={classes.titleContainer}>
           <Icons.Add height="20px" />
-          <Title size="h4">Mehr Expert*innen finden</Title>
+          <Title size="h4">Mehr Expert:innen finden</Title>
         </div>
 
         <Text className={classes.newTextContainer}>
-          Hier findest du eine ganze Liste weiterer Expert*innen mit ganz
+          Hier findest du eine ganze Liste weiterer Expert:innen mit ganz
           verschiedenen Kompetenzen, die dir bei deinen spezifischen Problemen
           helfen könnten.
         </Text>

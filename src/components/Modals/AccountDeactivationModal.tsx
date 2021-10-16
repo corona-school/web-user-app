@@ -56,7 +56,7 @@ const AccountDeactivationModal = () => {
             <div>
               <DialogModalBase.Description>
                 Sobald du deinen Account deaktivierst, werden deine aktuellen
-                Zuordnungen aufgelöst und deine Lernpartner*innen darüber
+                Zuordnungen aufgelöst und deine Lernpartner:innen darüber
                 informiert. Falls du zu einem späteren Zeitpunkt wieder Teil der
                 Corona School werden möchtest, kannst du dich jederzeit wieder
                 bei uns melden.

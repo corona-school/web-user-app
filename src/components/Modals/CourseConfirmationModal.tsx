@@ -129,7 +129,7 @@ const CourseConfirmationModal: React.FC<{
                 <span style={{ fontStyle: 'italic' }}>{course.name}</span>{' '}
                 angemeldet. Falls du kurzfristig doch nicht teilnehmen kannst,
                 dann entferne den Kurs, damit dein Platz für andere
-                Schüler*innen frei wird. <br />
+                Schüler:innen frei wird. <br />
                 <br />
                 In Vorbereitung auf den Kurs solltest du das Videokonferenz-Tool
                 einmal testen.

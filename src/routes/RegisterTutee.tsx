@@ -173,7 +173,7 @@ const RegisterTutee: React.FC<Props> = ({
               href="www.lern-fair.de/schueler/lernunterstuetzung"
               enableLink={isJufoSubdomain}
             />{' '}
-            von einem/einer Student*in erhalten.
+            von einem/einer Student:in erhalten.
           </>
           {isJufo && <DisabledExplanation />}
         </Checkbox>
@@ -461,7 +461,7 @@ const RegisterTutee: React.FC<Props> = ({
                 },
               }),
             ]}
-            extra="Hinweis für Gruppen: Es muss sich nur euer*e Gruppensprecher*in anmelden, wenn ihr als Team teilnehmen möchtet."
+            extra="Hinweis für Gruppen: Es muss sich nur euer*e Gruppensprecher:in anmelden, wenn ihr als Team teilnehmen möchtet."
           >
             <InputNumber
               style={{ margin: '0px 4px', width: '64px' }}
@@ -600,7 +600,7 @@ const RegisterTutee: React.FC<Props> = ({
         {!!cooperationMode && (
           <Form.Item
             className={classes.formItem}
-            label="E-Mail-Adresse Lehrer*in"
+            label="E-Mail-Adresse Lehrer:in"
             name="teacherEmail"
             rules={[
               {
@@ -631,7 +631,7 @@ const RegisterTutee: React.FC<Props> = ({
             extra="Beachte bitte, dass du hier nicht deine eigene, sondern die E-Mail-Adresse deiner Lehrkraft angeben musst. Mit dieser Angabe können wir dich deiner Schule zuordnen."
           >
             <Input
-              placeholder="Hier die E-Mail-Adresse deines/deiner Lehrer*in"
+              placeholder="Hier die E-Mail-Adresse deines/deiner Lehrer:in"
               type="email"
             />
           </Form.Item>
@@ -759,7 +759,7 @@ const RegisterTutee: React.FC<Props> = ({
       .catch((err) => {
         if (err.response?.status === 401) {
           setLoading(false);
-          message.error('Du bist schon als Schüler*in bei uns eingetragen.');
+          message.error('Du bist schon als Schüler:in bei uns eingetragen.');
           return;
         }
         setLoading(false);
@@ -922,7 +922,7 @@ const RegisterTutee: React.FC<Props> = ({
           <div className={classes.signupContainer}>
             <Title className={classes.tuteeTitle}>
               {formState === 'done' && (
-                <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+                <span>Du wurdest erfolgreich als Schüler:in registriert</span>
               )}
               {formState === 'start' && <span>Schritt 1/3</span>}
               {formState === 'detail' && <span>Schritt 2/3</span>}
@@ -993,10 +993,10 @@ const RegisterTutee: React.FC<Props> = ({
               </a>
               <Title className={classes.tuteeTitle}>
                 {formState === 'done' ? (
-                  <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+                  <span>Du wurdest erfolgreich als Schüler:in registriert</span>
                 ) : (
                   <span>
-                    Ich möchte mich registrieren als <b>Schüler*in</b>
+                    Ich möchte mich registrieren als <b>Schüler:in</b>
                   </span>
                 )}
               </Title>

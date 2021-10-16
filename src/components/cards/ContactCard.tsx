@@ -56,7 +56,7 @@ const ContactCard = () => {
           </Title>
           <Text large style={{ marginTop: '0px' }}>
             Wähle eine Kategorie für dein Anliegen aus und bekomme
-            Hilfestellungen von unseren Expert*innen.
+            Hilfestellungen von unseren Expert:innen.
           </Text>
         </div>
         <div className={classes.categorySelect}>
