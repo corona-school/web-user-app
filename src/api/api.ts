@@ -637,14 +637,26 @@ export const axiosSendCourseGroupMail = async (
   subCourseId: number,
   subject: string,
   body: string,
-  addressees: CourseParticipant[]
+  addressees: CourseParticipant[],
+  files?: File[]
 ) => {
+  const formData = new FormData();
+  formData.append('subject', subject);
+  formData.append('body', body);
+  formData.append('addressees', JSON.stringify(addressees.map((p) => p.uuid)));
+
+  if (files) {
+    files.forEach((f) => {
+      formData.append('attachments', f);
+    });
+  }
+
   await axios
     .post(
       `${apiURL}/course/${courseId}/subcourse/${subCourseId}/groupmail`,
-      { subject, body, addressees: addressees.map((p) => p.uuid) },
+      formData,
       {
-        headers: { token },
+        headers: { token, 'Content-Type': 'multipart/form-data' },
       }
     )
     .catch(logError('sendGroupcourseMail'));

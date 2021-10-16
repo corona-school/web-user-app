@@ -120,7 +120,8 @@ interface IApiContext {
     subCourseId: number,
     subject: string,
     body: string,
-    addressees: Participant[]
+    addressees: Participant[],
+    files?: File[]
   ) => Promise<void>;
   issueCourseCertificates: (
     courseId: number,
@@ -452,7 +453,8 @@ export const ApiProvider: React.FC = ({ children }) => {
     subCourseId: number,
     subject: string,
     body: string,
-    addressees: CourseParticipant[]
+    addressees: CourseParticipant[],
+    files?: File[]
   ) =>
     api.axiosSendCourseGroupMail(
       token,
@@ -460,7 +462,8 @@ export const ApiProvider: React.FC = ({ children }) => {
       subCourseId,
       subject,
       body,
-      addressees
+      addressees,
+      files
     );
 
   const issueCourseCertificates = (

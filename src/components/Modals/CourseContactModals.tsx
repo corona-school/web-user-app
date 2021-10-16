@@ -103,12 +103,14 @@ export const ContactCourseModal: React.FC<ContactCourseProps> = ({
         course.subcourse.id,
         subject,
         message,
-        selectedParticipants
+        selectedParticipants,
+        selectedFiles.length > 0 && selectedFiles
       )
       .then(() => {
         notif.success('Nachricht wurde versendet.');
         setMessage('');
         setSubject('');
+        setSelectedFiles([]);
         modalContext.setOpenedModal(null);
       })
       .catch((err) => {
