@@ -163,9 +163,7 @@ export const MultipleFileSelect: React.FC<MultipleFileProps> = ({
         onChange={(e) => {
           const files = [...e.target.files].map((f) => {
             return Object.assign(cleanFilename(f), {
-              id:
-                Math.random().toString(36).substring(2, 15) +
-                Math.random().toString(36).substring(2, 15),
+              id: Math.random().toString(36).substring(2), // generate random string by converting a random number to a string using the radix 36 and chopping off "0." in front through .substring(2).
             }); // avoid strange key-related behavior when selecting the same file twice (can't remove it)
           });
           setSelectedFiles([...selectedFiles, ...files]);
