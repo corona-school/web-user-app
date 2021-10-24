@@ -67,7 +67,9 @@ const ContactCard = () => {
             value={category}
           >
             {Object.values(MentoringCategory).map((c) => (
-              <option value={c}>{messageLabels.get(c)}</option>
+              <option key={c} value={c}>
+                {messageLabels.get(c)}
+              </option>
             ))}
           </Select>
         </div>

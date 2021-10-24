@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
-import { Tooltip } from 'antd';
 import { ThemeContext } from 'styled-components';
 import { Text, Title } from '../Typography';
 
@@ -63,39 +62,22 @@ const FeedbackCallCard = () => {
           ? getLimitedString(feedbackCall.description, 300)
           : feedbackCallText}
       </Text>
-      {linkActive && (
-        <AccentColorButton
-          onClick={() => window.open(feedbackCall.link, '_blank')}
-          accentColor="#F4486D"
-          label="Teilnehmen"
-          className={styles.buttonParticipate}
-          small
-        />
-      )}
-      {!linkActive && (
-        <Tooltip
-          title={
-            feedbackCall.link
-              ? 'Der Link wird 30 Minuten vor dem Call freigeschaltet.'
-              : 'Aktuell gibt es keinen Link.'
-          }
-          placement="topRight"
-          // TODO doesn't work
-        >
+      <div className={styles.buttonWrapper}>
+        <div className={styles.buttonParticipate}>
           <AccentColorButton
+            onClick={() => window.open(feedbackCall.link, '_blank')}
             accentColor="#F4486D"
             label="Teilnehmen"
-            className={styles.buttonParticipate}
-            disabled
-            title={
+            disabled={!linkActive}
+            disabledHint={
               feedbackCall.link
-                ? 'Der Link wird 30 Minuten vor dem Call freigeschaltet.'
+                ? 'Der Link wird 30 Minuten vor dem Anruf freigeschaltet.'
                 : 'Aktuell gibt es keinen Link.'
             }
             small
           />
-        </Tooltip>
-      )}
+        </div>
+      </div>
     </LeftHighlightCard>
   );
 };
