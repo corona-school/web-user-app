@@ -26,7 +26,7 @@
 }
 
 .fileName {
-  max-width: 230px;
+  max-width: 210px;
   display: inline-block;
   overflow: hidden;
   white-space:nowrap;
@@ -36,6 +36,7 @@
 .fileSize {
   margin-left: auto;
   margin-right: 10px;
+  flex-shrink: 0;
 }
 
 .editFile {
@@ -56,6 +57,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   &:hover {
     background-color: #64747c;
   }

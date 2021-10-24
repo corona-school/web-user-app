@@ -117,9 +117,9 @@ export const MultipleFileSelect: React.FC<MultipleFileProps> = ({
   };
   const getHint = () => {
     if (selectedFiles.length === 0) {
-      return 'Maximalgröße aller Dateien kombiniert: 25 MB';
+      return 'Maximalgröße aller Dateien kombiniert: 15 MB';
     }
-    const remaining = 25 * 10 ** 6 - getTotalSize();
+    const remaining = 15 * 10 ** 6 - getTotalSize();
     if (remaining >= 0) {
       return `${friendlyFileSize(remaining, true)} verbleibend`;
     }
