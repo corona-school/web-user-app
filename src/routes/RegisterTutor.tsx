@@ -165,7 +165,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         className={props.isJufoSubdomain ? classes.disabledCheckbox : undefined}
         checked={isJufo}
       >
-        Ich möchte Schüler*innen im{' '}
+        Ich möchte Schüler:innen im{' '}
         <LinkText
           text="1:1-Projektcoaching"
           href="www.lern-fair.de/helfer/projektcoaching"
@@ -206,7 +206,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             validator() {
               if ((!isGroups || !isTutor) && isOfficial) {
                 return Promise.reject(
-                  'Um am Praktikum teilzunehmen, musst du sowohl Schüler*innen im 1:1-Format beim Lernen als auch in Gruppenkursen helfen.'
+                  'Um am Praktikum teilzunehmen, musst du sowohl Schüler:innen im 1:1-Format beim Lernen als auch in Gruppenkursen helfen.'
                 );
               }
               if (!props.isInternship) {
@@ -264,7 +264,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           }
           extra={
             <div style={{ marginLeft: '8px' }}>
-              Mit diesem zusätzlichem Engagement kannst du Schüler*innen
+              Mit diesem zusätzlichem Engagement kannst du Schüler:innen
               ehrenamtlich über das 1:1-Projektcoaching hinaus unterstützen.
               Gruppenkurse erlauben es dir beispielsweise, einer ganzen Gruppe
               Wissen zu vermitteln.
@@ -282,7 +282,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       <Form.Item
         className={classes.formItem}
         name="additional"
-        label="Auf welche Art möchtest du Schüler*innen unterstützen?"
+        label="Auf welche Art möchtest du Schüler:innen unterstützen?"
         rules={[
           () => ({
             required: true,
@@ -469,7 +469,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         {isJufo && !isTutor && (
           <Form.Item
             className={classes.formItem}
-            label="Bist du offiziell als Student*in eingeschrieben?"
+            label="Bist du offiziell als Student:in eingeschrieben?"
             name="isUniversityStudent"
             rules={[
               {
@@ -487,7 +487,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    'Du musst entweder an Jugend forscht teilgenommen haben oder noch offiziell als Student*in eingeschrieben sein!'
+                    'Du musst entweder an Jugend forscht teilgenommen haben oder noch offiziell als Student:in eingeschrieben sein!'
                   );
                 },
               }),
@@ -554,7 +554,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
                       Projekt (Titel) du an Jugend forscht teilgenommen hast
                     </span>
                     . Diese Informationen benötigen wir, um dich eindeutig unter
-                    allen ehemaligen Jugend forscht Teilnehmer*innen
+                    allen ehemaligen Jugend forscht Teilnehmer:innen
                     identifizieren zu können. So hilfst du uns, dich schneller
                     verifizieren und freischalten zu können.
                   </>
@@ -570,7 +570,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         {isTutor && (
           <Form.Item
             className={classes.formItem}
-            label="In welchen Fächern kannst du Schüler*innen unterstützen? "
+            label="In welchen Fächern kannst du Schüler:innen unterstützen? "
             name="subjects"
             rules={[
               {
@@ -843,7 +843,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       .catch((err) => {
         if (err?.response?.status === 401) {
           setLoading(false);
-          message.error('Du bist schon als Tutor*in bei uns eingetragen.');
+          message.error('Du bist schon als Tutor:in bei uns eingetragen.');
           return;
         }
         setLoading(false);
@@ -927,7 +927,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       <div className={classes.signupContainer}>
         <Title className={classes.tutorTitle}>
           {formState === 'done' && (
-            <span>Du wurdest erfolgreich als Tutor*in registriert</span>
+            <span>Du wurdest erfolgreich als Tutor:in registriert</span>
           )}
           {formState === 'start' && <span>Schritt 1/3</span>}
           {formState === 'detail' && <span>Schritt 2/3</span>}

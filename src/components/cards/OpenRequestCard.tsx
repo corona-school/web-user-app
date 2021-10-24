@@ -72,7 +72,7 @@ const OpenRequestCard: React.FC<Props> = ({
             } für dich
             und werden uns schnellstmöglich bei dir melden.`}
           {!projectCoaching &&
-            'Wir sind auf der Suche nach einem bzw. einer Lernpartner*in für dich und werden uns schnellstmöglich bei dir melden.'}
+            'Wir sind auf der Suche nach einem bzw. einer Lernpartner:in für dich und werden uns schnellstmöglich bei dir melden.'}
         </Text>
         <div className={classes.buttonContainer}>
           <AccentColorButton
@@ -117,19 +117,19 @@ const OpenRequestCard: React.FC<Props> = ({
             <Text className={classes.newTextContainer}>
               {/* eslint-disable-next-line no-nested-ternary */}
               {userType === 'student'
-                ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine*n weitere*n Schüler*in unterstützen möchtest.'
+                ? 'Wir würden uns sehr darüber freuen, wenn du im Rahmen deiner zeitlichen Möglichkeiten eine:n weitere:n Schüler:in unterstützen möchtest.'
                 : disabled
-                ? `Du kannst leider keine*n neue*n ${
-                    projectCoaching ? 'Coach' : 'Student*in'
-                  } anfordern, da du schon eine*n ${
+                ? `Du kannst leider keine:n neue:n ${
+                    projectCoaching ? 'Coach' : 'Student:in'
+                  } anfordern, da du schon eine:n ${
                     projectCoaching
-                      ? 'Student*in für die 1:1-Lernunterstützung'
+                      ? 'Student:in für die 1:1-Lernunterstützung'
                       : 'Coach'
                   } anforderst.`
                 : `Hier kannst du ${
                     projectCoaching
                       ? 'einen neuen Coach anfordern, der'
-                      : 'eine*n neue*n Student*in anfordern, die'
+                      : 'eine:n neue:n Student:in anfordern, die'
                   }  dich beim Lernen unterstützt.`}
             </Text>
           )}

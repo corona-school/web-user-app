@@ -84,16 +84,16 @@ const NewMatchConfirmationModal: React.FC<{
               <DialogModalBase.TextBlock>
                 <h3>Wichtiger Hinweis</h3>
                 <p>
-                  Mit unserem Angebot möchten wir vor allem Schüler*innen
+                  Mit unserem Angebot möchten wir vor allem Schüler:innen
                   erreichen, die herkömmliche Nachhilfe aufgrund persönlicher,
                   sozialer, kultureller oder finanzieller Ressourcen nicht oder
                   nur sehr schwer wahrnehmen können. Bitte fordere nur dann
-                  eine*n neue*n Lernpartner*in an, wenn du keine andere
+                  eine:n neue:n Lernpartner:in an, wenn du keine andere
                   Möglichkeit hast, Hilfe zu erhalten.
                 </p>
                 <p>
                   Unsere anderen Projekte, wie z.B. unsere Kurse stehen
-                  weiterhin für alle Schüler*innen offen. Auf unserer Website
+                  weiterhin für alle Schüler:innen offen. Auf unserer Website
                   kannst du dir mehr Informationen dazu durchlesen.
                 </p>
               </DialogModalBase.TextBlock>
@@ -117,7 +117,7 @@ const NewMatchConfirmationModal: React.FC<{
               <DialogModalBase.Spacer />
               <h3>Überprüfe deine Informationen</h3>
               <p>
-                Damit wir dir eine*n optimale*n Lernpartner*in zuteilen können,
+                Damit wir dir eine:n optimale:n Lernpartner:in zuteilen können,
                 bitten wir dich deine persönlichen Informationen noch einmal zu
                 überprüfen.
               </p>

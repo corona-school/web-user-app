@@ -101,7 +101,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
       <div className={classes.signupContainer}>
         <Title className={classes.tuteeTitle}>
           {formState === 'done' ? (
-            <span>Du wurdest erfolgreich als Leiter*in registriert</span>
+            <span>Du wurdest erfolgreich als Leiter:in registriert</span>
           ) : (
             <span>Registrieren</span>
           )}

@@ -29,22 +29,22 @@ export const JufoExpertCard: React.FC = () => {
 
   const renderIntroduction = () => {
     return renderExpertListContent(
-      'Willst du als Expert*in gelistet werden?',
+      'Willst du als Expert:in gelistet werden?',
       <Text className={classes.emailText} large>
         Hier hast du die Möglichkeit, dir ein Profil für unsere
-        Expert*innenliste anzulegen.
+        Expert:innenliste anzulegen.
         <br />
-        Die Expert*innenliste bildet ein Angebot für Schüler*innen im Rahmen des
-        Projektcoachings, um Ansprechpartner*innen bei fachlichen Fragen in
+        Die Expert:innenliste bildet ein Angebot für Schüler:innen im Rahmen des
+        Projektcoachings, um Ansprechpartner:innen bei fachlichen Fragen in
         ihren Themengebieten zu finden. In deinem Profil beschreibst du
-        deswegen, in welchem spezifischen Bereichen du Expert*in bist, sodass
-        die Schüler*innen dich bei Bedarf dazu kontaktieren können. Dein Profil
-        wird dann in einer für alle registrierten Schüler*innen zugänglichen
+        deswegen, in welchem spezifischen Bereichen du Expert:in bist, sodass
+        die Schüler:innen dich bei Bedarf dazu kontaktieren können. Dein Profil
+        wird dann in einer für alle registrierten Schüler:innen zugänglichen
         Liste aufgeführt.
         <br />
-        Die Kontaktaufnahme der Schüler*innen verläuft One-Way, das heißt, deine
+        Die Kontaktaufnahme der Schüler:innen verläuft One-Way, das heißt, deine
         E-Mailadresse wird nicht öffentlich dargestellt. Über das Formular
-        können die Schüler*innen dir aber eine E-Mail schreiben, der du dann
+        können die Schüler:innen dir aber eine E-Mail schreiben, der du dann
         gerne antworten kannst.
         <br />
         Um Missbrauch vorzubeugen, wird dein Profil vor Veröffentlichung von
@@ -56,10 +56,10 @@ export const JufoExpertCard: React.FC = () => {
   };
   const renderPending = () => {
     return renderExpertListContent(
-      'Dein Expert*innenprofil wird überprüft...',
+      'Dein Expert:innenprofil wird überprüft...',
       <Text className={classes.emailText} large>
         Vor der Veröffentlichung überprüft unser Team das von dir erstellte
-        Expert*innenprofil.
+        Expert:innenprofil.
         <br />
         Wenn es ein Problem mit deinem Profil geben sollte, kontaktieren wir
         dich eventuell noch einmal.
@@ -70,7 +70,7 @@ export const JufoExpertCard: React.FC = () => {
 
   const renderExpertData = () => {
     return renderExpertListContent(
-      'Dein Expert*innenprofil ist freigeschaltet',
+      'Dein Expert:innenprofil ist freigeschaltet',
       <div>
         <Text large bold>
           Kontaktadresse
@@ -95,7 +95,7 @@ export const JufoExpertCard: React.FC = () => {
         </Text>
         <Text large>
           {userContext.user.expertData.active
-            ? 'sichtbar für alle Schüler*innen'
+            ? 'sichtbar für alle Schüler:innen'
             : 'ausgeblendet und nur sichtbar für dich'}
         </Text>
       </div>
@@ -104,9 +104,9 @@ export const JufoExpertCard: React.FC = () => {
 
   const renderExpertDenied = () => {
     return renderExpertListContent(
-      'Dein Expert*innenprofil ist blockiert',
+      'Dein Expert:innenprofil ist blockiert',
       <Text className={classes.emailText} large>
-        Wir haben festgestellt, dass dein Expert*innenprofil Mängel aufweist. Es
+        Wir haben festgestellt, dass dein Expert:innenprofil Mängel aufweist. Es
         ist bis auf Weiteres für die Veröffentlichung gesperrt! Wende dich bei
         Fragen bitte an unseren Support unter{' '}
         <a href="mailto:support@corona-school.de">support@corona-school.de</a>.
@@ -134,7 +134,7 @@ export const JufoExpertCard: React.FC = () => {
             <AccentColorButton
               onClick={() => modalContext.setOpenedModal('expertOverviewModal')}
               accentColor="#4E6AE6"
-              label="andere Expert*innen ansehen"
+              label="andere Expert:innen ansehen"
               small
             />
             <AccentColorButton

@@ -100,7 +100,7 @@ export const RegisterDrehtuerTutee: React.FC = () => {
       <div className={classes.signupContainer}>
         <Title className={classes.tuteeTitle}>
           {formState === 'done' ? (
-            <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+            <span>Du wurdest erfolgreich als Schüler:in registriert</span>
           ) : (
             <span>Registrieren</span>
           )}

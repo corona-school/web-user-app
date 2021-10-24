@@ -57,10 +57,10 @@ const InterestConfirmation: React.FC = () => {
       case 'refused':
         return {
           image: Images.Cancel,
-          title: 'Danke, dass du anderen Schüler*innen den Vortritt lässt!',
+          title: 'Danke, dass du anderen Schüler:innen den Vortritt lässt!',
           text: (
             <>
-              Wir werden nicht mehr nach einem/einer Lernpartner*in für dich
+              Wir werden nicht mehr nach einem/einer Lernpartner:in für dich
               suchen. <br />
               Dein Account bleibt aber aktiv und du kannst weiterhin unsere
               anderen <br />
@@ -75,7 +75,7 @@ const InterestConfirmation: React.FC = () => {
           title: 'Vielen Dank für deine Bestätigung!',
           text: (
             <>
-              Sobald wir eine*n Student*in gefunden haben, werden wir dich
+              Sobald wir eine:n Student:in gefunden haben, werden wir dich
               schnellstmöglich per E-Mail informieren.
               <br />
               Bitte überprüfe dazu regelmäßig dein E-Mail-Postfach.

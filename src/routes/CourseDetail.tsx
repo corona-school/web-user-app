@@ -306,7 +306,7 @@ const CourseDetail = (props: Props) => {
         setIsLoadingVideoChat(false);
         if (err?.response?.status === 400) {
           message.error(
-            'Der Videochat wurde noch nicht gestartet. Du musst auf die*den Kursleiter*in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.'
+            'Der Videochat wurde noch nicht gestartet. Du musst auf die/den Kursleiter:in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.'
           );
         } else {
           message.error(
@@ -680,13 +680,13 @@ const CourseDetail = (props: Props) => {
 
         {course.state !== CourseState.CANCELLED && (
           <Menu.Item key="6" icon={<UserAddOutlined />}>
-            Tutor*in hinzufügen
+            Tutor:in hinzufügen
           </Menu.Item>
         )}
 
         {course.state === CourseState.ALLOWED && (
           <Menu.Item key="7" icon={<UserAddOutlined />}>
-            Gäst*in einladen
+            Gäst:in einladen
           </Menu.Item>
         )}
       </Menu>
@@ -950,7 +950,7 @@ const CourseDetail = (props: Props) => {
                       .map((l) => `${l.duration}min.`)
                       .join(', ')}{' '}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Tutor*innen">
+                  <Descriptions.Item label="Tutor:innen">
                     {instructors
                       .filter((item, pos) => instructors.indexOf(item) === pos)
                       .join(', ')}
@@ -985,7 +985,7 @@ const CourseDetail = (props: Props) => {
             {isMyCourse && (
               <div>
                 <Title size="h3" style={{ margin: '10px 0px' }}>
-                  Teilnehmer*innen
+                  Teilnehmer:innen
                 </Title>
 
                 <div>
