@@ -51,6 +51,7 @@ interface IApiContext {
       signatureLocation: string;
     }
   ) => Promise<boolean>;
+  getRemissionRequest: () => Promise<string>;
   getCourses: () => Promise<CourseOverview[]>;
   getCourseTags: () => Promise<Tag[]>;
   getCourse: (id: string) => Promise<CourseOverview>;
@@ -188,6 +189,7 @@ export const ApiContext = React.createContext<IApiContext>({
   getCertificate: reject,
   getCertificates: reject,
   signCertificate: reject,
+  getRemissionRequest: reject,
   getCourses: reject,
   getCourseTags: reject,
   getCourse: reject,
@@ -537,6 +539,7 @@ export const ApiProvider: React.FC = ({ children }) => {
         getCertificate: withToken(api.axiosGetCertificate),
         getCertificates: withToken(api.axiosGetCertificates),
         signCertificate: withToken(api.axiosSignCertificate),
+        getRemissionRequest: withToken(api.axiosGetRemissionRequest),
         getCourses,
         getCourseTags,
         getCourse,

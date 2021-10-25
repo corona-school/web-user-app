@@ -33,6 +33,7 @@ import { Modals } from './Modals';
 import GuestJoinCourseMeeting from './routes/GuestJoinCourseMeeting';
 import InterestConfirmation from './routes/InterestConfirmation';
 import { LernFairRedirection } from './utils/LernFairRedirection';
+import RemissionRequest from './routes/RemissionRequest';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -183,6 +184,9 @@ const App: React.FC = () => {
           </PrivateRoute>
           <PrivateRoute path="/help">
             <Help />
+          </PrivateRoute>
+          <PrivateRoute path="/remission-request">
+            <RemissionRequest />
           </PrivateRoute>
         </PageComponent>
         <Route component={NotFound} />

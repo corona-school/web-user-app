@@ -293,6 +293,13 @@ export const axiosSignCertificate = postAPI<
   (res) => res.status >= 200 && res.status <= 300
 );
 
+export const axiosGetRemissionRequest = getAPI(
+  'getRemissionRequest',
+  '/certificate/remissionRequest',
+  (res) => res.data,
+  { responseType: 'blob' }
+);
+
 export const axiosGetCourses = async (): Promise<CourseOverview[]> => {
   const url = `${apiURL}/courses`;
 
