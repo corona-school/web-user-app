@@ -56,7 +56,7 @@ const ContactCard = () => {
           </Title>
           <Text large style={{ marginTop: '0px' }}>
             Wähle eine Kategorie für dein Anliegen aus und bekomme
-            Hilfestellungen von unseren Expert*innen.
+            Hilfestellungen von unseren Expert:innen.
           </Text>
         </div>
         <div className={classes.categorySelect}>
@@ -67,7 +67,9 @@ const ContactCard = () => {
             value={category}
           >
             {Object.values(MentoringCategory).map((c) => (
-              <option value={c}>{messageLabels.get(c)}</option>
+              <option key={c} value={c}>
+                {messageLabels.get(c)}
+              </option>
             ))}
           </Select>
         </div>

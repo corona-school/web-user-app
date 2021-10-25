@@ -35,9 +35,9 @@ export const DataProtectionField: React.FC<Props> = (props) => {
           {!props.isDrehtuer && (
             <>
               Mir ist insbesondere bekannt, dass meine Angaben an geeignete
-              Matchingpartner*innen übermittelt werden. Die Verarbeitung der
+              Matchingpartner:innen übermittelt werden. Die Verarbeitung der
               personenbezogenen Daten erfolgt auf privaten IT-Geräten der
-              Matchingpartner*innen. Es kann im Rahmen der Übermittlung dazu
+              Matchingpartner:innen. Es kann im Rahmen der Übermittlung dazu
               kommen, dass personenbezogene Daten an E-Mail Server (bspw.
               google-mail oder @me.com) außerhalb der Europäischen Union
               übermittelt werden. In Ländern außerhalb der Europäischen Union
@@ -54,7 +54,7 @@ export const DataProtectionField: React.FC<Props> = (props) => {
               ). Mir ist bewusst, dass der Widerruf nur für die Zukunft gilt und
               daher Datenverarbeitungen bis zum Widerruf, insbesondere die
               Weitergabe von meinen personenbezogenen Daten an geeignete
-              Matchingpartner*innen bis zum Zeitpunkt des Widerrufs unberührt
+              Matchingpartner:innen bis zum Zeitpunkt des Widerrufs unberührt
               bleiben. Weitere Datenschutzinformationen sind abrufbar unter{' '}
               <a
                 href="https://www.lern-fair.de/datenschutz"

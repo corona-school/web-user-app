@@ -71,7 +71,7 @@ const MatchCard: React.FC<Props> = ({
         </div>
         <div className={classes.tagContainer}>
           <Tag background="#4E555C" color="#ffffff">
-            {type === 'pupil' ? `${match.grade}. Klasse` : `Student*in`}
+            {type === 'pupil' ? `${match.grade}. Klasse` : `Student:in`}
           </Tag>
         </div>
         <div className={classes.subjectContainer}>
@@ -155,7 +155,7 @@ export const ProjectMatchCard: React.FC<ProjectProps> = ({
               </Tag>
             )}
             <Tag background="#4E555C" color="#ffffff">
-              {`${match.projectMemberCount} Projektteilnehmer*innen`}
+              {`${match.projectMemberCount} Projektteilnehmer:innen`}
             </Tag>
           </div>
         )}

@@ -174,7 +174,7 @@ const EditExpertProfileModal = () => {
           <DialogModalBase.Description>
             Ich stimme zu, dass meine angegebenen Infomationen, außer der
             E-Mail-Adresse, veröffentlicht werden. Ich bin einverstanden, dass
-            die Schüler*innen mich kontaktieren können und ich Kontaktanfragen
+            die Schüler:innen mich kontaktieren können und ich Kontaktanfragen
             per E-Mail bekomme. Die Einverständnis gilt bis auf Widerruf,
             welcher jederzeit möglich ist und nur die zukünftige Kommunikation
             beeinflussen kann.

@@ -54,7 +54,7 @@ const BecomeInternModal: React.FC<Props> = ({ user }) => {
     api
       .becomeInstructor(data)
       .then(() => {
-        message.success('Du wurdest als Kursleiter*in angemeldet.');
+        message.success('Du wurdest als Kursleiter:in angemeldet.');
         modalContext.setOpenedModal(null);
         userContext.fetchUserData();
       })
@@ -135,7 +135,7 @@ const BecomeInternModal: React.FC<Props> = ({ user }) => {
 
           <Form.Item
             className={classes.formItem}
-            label="In welchen Fächern kannst du Schüler*innen unterstützen? "
+            label="In welchen Fächern kannst du Schüler:innen unterstützen? "
             name="subjects"
             rules={[
               {

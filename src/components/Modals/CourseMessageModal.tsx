@@ -75,7 +75,7 @@ const CourseMessageModal: React.FC<Props> = (props) => {
         )}
         {props.type === 'participantToInstructors' && (
           <>
-            Hier kannst du den Kursleiter*innen dieses Kurses eine Nachricht
+            Hier kannst du den Kursleiter:innen dieses Kurses eine Nachricht
             schreiben. Antworten auf deine Nachricht werden dir per E-Mail
             zugestellt.
           </>
