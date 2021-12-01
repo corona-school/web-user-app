@@ -21,6 +21,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
+import { RequestCode, VerifyCode } from '../types/Phone';
 import { Expert, ExpertTag, ExpertUpdate } from '../types/Expert';
 import { IExposedCertificate, ISupportedLanguage } from '../types/Certificate';
 
@@ -148,6 +149,8 @@ interface IApiContext {
   postUserRoleProjectCoachee: (
     projectCoacheeData: BecomeProjectCoachee
   ) => Promise<void>;
+  postRequestCode: (requestCodeData: RequestCode) => Promise<void>;
+  postVerifyCode: (verifyCodeData: VerifyCode) => Promise<void>;
   addInstructor: (courseId: number, email: string) => Promise<void>;
   inviteCourseGuest: (
     courseID: number,
@@ -222,6 +225,8 @@ export const ApiContext = React.createContext<IApiContext>({
   postContactMentor: reject,
   postUserRoleProjectCoach: reject,
   postUserRoleProjectCoachee: reject,
+  postRequestCode: reject,
+  postVerifyCode: reject,
   addInstructor: reject,
   inviteCourseGuest: reject,
   deleteCourseImage: reject,
@@ -497,6 +502,12 @@ export const ApiProvider: React.FC = ({ children }) => {
     projectCoacheeData: BecomeProjectCoachee
   ) => api.axiosPostUserRoleProjectCoachee(token, id, projectCoacheeData);
 
+  const postRequestCode = (requestCodeData: RequestCode) =>
+    api.axiosPostRequestCode(token, id, requestCodeData);
+
+  const postVerifyCode = (verifyCodeData: VerifyCode) =>
+    api.axiosPostVerifyCode(token, id, verifyCodeData);
+
   const addInstructor = (courseId: number, email: string) =>
     api.axiosAddInstructor(token, courseId, email);
 
@@ -572,6 +583,8 @@ export const ApiProvider: React.FC = ({ children }) => {
         getCooperatingSchools,
         postUserRoleProjectCoach,
         postUserRoleProjectCoachee,
+        postRequestCode,
+        postVerifyCode,
         addInstructor,
         inviteCourseGuest,
         deleteCourseImage,

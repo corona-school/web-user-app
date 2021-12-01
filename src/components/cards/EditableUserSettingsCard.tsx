@@ -1,24 +1,39 @@
-import React from 'react';
-import { Select } from 'antd';
+import React, { useContext } from 'react';
+import { Select, Input, Button } from 'antd';
 import { Text } from '../Typography';
-
+import { User } from '../../types';
 import { StatesMap } from '../../assets/states';
 import classes from './EditableUserSettingsCard.module.scss';
 import { SchoolTypesMap } from '../../assets/schoolTypes';
 import UniSelect from '../forms/select/UniSelect';
+import context from '../../context';
 
 const SettingWrapper: React.FC<{
   title: string;
   value: string;
   isEditing: boolean;
   children: React.ReactNode;
-}> = ({ title, value, isEditing, children }) => {
+  verify: boolean;
+  modalContext;
+}> = ({ title, value, isEditing, children, verify, modalContext }) => {
   return (
     <>
       <Text large bold>
         {title}
       </Text>
-      {!isEditing && <Text large>{value}</Text>}
+      {!isEditing && (
+        <Text large>
+          {value}
+          {verify && (
+            <Button
+              className={classes.verifyBtn}
+              onClick={() => modalContext.setOpenedModal('Phone')}
+            >
+              Verifizieren
+            </Button>
+          )}
+        </Text>
+      )}
       <div className={classes.settingEditArea}>{isEditing && children}</div>
     </>
   );
@@ -29,19 +44,26 @@ export interface EditableUserSettings {
   grade?: number;
   state?: string;
   schoolType?: string;
+  phone?: string;
+  phoneNr?: string;
+  phonePrefix?: string;
 }
 interface Props {
   editableUserSettings: EditableUserSettings;
   onSettingChanges?: (newValue: EditableUserSettings) => void;
   isEditing?: boolean;
   personType: 'tutee' | 'tutor';
+  user: User;
 }
 const EditableUserSettingsCard: React.FC<Props> = ({
   editableUserSettings,
   onSettingChanges,
   isEditing = false,
   personType,
+  user,
 }) => {
+  const modalContext = useContext(context.Modal);
+
   return (
     <div className={classes.baseContainer}>
       {personType === 'tutor' && (
@@ -49,6 +71,8 @@ const EditableUserSettingsCard: React.FC<Props> = ({
           title="Universität"
           value={editableUserSettings.university}
           isEditing={isEditing}
+          verify={false}
+          modalContext={modalContext}
         >
           <UniSelect
             className={classes.settingEditAreaSelect}
@@ -67,6 +91,8 @@ const EditableUserSettingsCard: React.FC<Props> = ({
           title="Klassenstufe"
           value={`${editableUserSettings.grade}. Klasse`}
           isEditing={isEditing}
+          verify={false}
+          modalContext={modalContext}
         >
           <Select
             className={classes.settingEditAreaSelect}
@@ -95,6 +121,8 @@ const EditableUserSettingsCard: React.FC<Props> = ({
         title="Bundesland"
         value={StatesMap[editableUserSettings.state.toUpperCase()]}
         isEditing={isEditing}
+        verify={false}
+        modalContext={modalContext}
       >
         <Select
           className={classes.settingEditAreaSelect}
@@ -125,6 +153,8 @@ const EditableUserSettingsCard: React.FC<Props> = ({
           title="Schultyp"
           value={SchoolTypesMap[editableUserSettings.schoolType]}
           isEditing={isEditing}
+          verify={false}
+          modalContext={modalContext}
         >
           <Select
             className={classes.settingEditAreaSelect}
@@ -145,6 +175,77 @@ const EditableUserSettingsCard: React.FC<Props> = ({
           </Select>
         </SettingWrapper>
       )}
+      <SettingWrapper
+        title="Handynummer"
+        value={editableUserSettings.phone}
+        isEditing={isEditing}
+        verify={
+          editableUserSettings.phone &&
+          user.phoneConfirmed !== editableUserSettings.phone
+        }
+        modalContext={modalContext}
+      >
+        <Input
+          addonBefore={
+            <Select
+              style={{
+                width: 70,
+              }}
+              onChange={(selectedPhonePrefix) => {
+                let { phoneNr } = editableUserSettings;
+                if (!phoneNr && editableUserSettings.phone) {
+                  phoneNr = editableUserSettings.phone.substring(3);
+                }
+                onSettingChanges({
+                  ...editableUserSettings,
+                  phonePrefix: selectedPhonePrefix,
+                  phone: phoneNr ? selectedPhonePrefix + phoneNr : null,
+                });
+              }}
+              defaultValue={
+                editableUserSettings.phone
+                  ? editableUserSettings.phone.substring(0, 3)
+                  : editableUserSettings.phonePrefix || '+49'
+              }
+            >
+              <Select.Option value="+49">+49</Select.Option>
+              <Select.Option value="+41">+41</Select.Option>
+              <Select.Option value="+43">+43</Select.Option>
+            </Select>
+          }
+          suffix={
+            editableUserSettings.phone &&
+            user.phoneConfirmed === editableUserSettings.phone
+              ? 'Verifiziert'
+              : ''
+          }
+          className={classes.settingEditAreaSelect}
+          style={{ width: '100%' }}
+          onChange={(phoneNum) => {
+            let { phonePrefix } = editableUserSettings;
+            if (!phonePrefix && editableUserSettings.phone) {
+              phonePrefix = editableUserSettings.phone.substring(0, 3);
+            } else if (!phonePrefix) {
+              phonePrefix = '+49';
+            }
+            onSettingChanges({
+              ...editableUserSettings,
+              phoneNr: parseInt(phoneNum.target.value)
+                ? `${parseInt(phoneNum.target.value)}`
+                : '',
+              phone: parseInt(phoneNum.target.value)
+                ? phonePrefix + parseInt(phoneNum.target.value)
+                : null,
+            });
+          }}
+          placeholder="1234567891"
+          defaultValue={
+            editableUserSettings.phone
+              ? editableUserSettings.phone.substring(3)
+              : ''
+          }
+        />
+      </SettingWrapper>
     </div>
   );
 };

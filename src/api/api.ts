@@ -18,6 +18,7 @@ import {
   BecomeProjectCoach,
   BecomeProjectCoachee,
 } from '../types/ProjectCoach';
+import { RequestCode, VerifyCode } from '../types/Phone';
 
 import {
   ICertificateSignature,
@@ -796,6 +797,36 @@ export const axiosPostUserRoleProjectCoachee = async (
       headers: { token },
     })
     .catch(logError('becomeProjectCoachee'));
+};
+
+export const axiosPostRequestCode = (
+  token: string,
+  id: string,
+  requestCodeData: RequestCode
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/code/request/`, requestCodeData, {
+        headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => reject(err));
+  });
+};
+
+export const axiosPostVerifyCode = (
+  token: string,
+  id: string,
+  verifyCodeData: VerifyCode
+): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    axios
+      .post(`${apiURL}/code/verify/`, verifyCodeData, {
+        headers: { token },
+      })
+      .then(() => resolve())
+      .catch((err) => reject(err));
+  });
 };
 
 export const axiosAddInstructor = (

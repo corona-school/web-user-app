@@ -51,6 +51,8 @@ export interface User {
   schoolType?: string;
   lastUpdatedSettingsViaBlocker: number;
   registrationDate: number;
+  phone?: string;
+  phoneConfirmed?: string;
   expertData?: ExpertData;
   pupilTutoringInterestConfirmationStatus?: InterestConfirmationStatus;
   isOfficial?: boolean;
