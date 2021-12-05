@@ -132,7 +132,8 @@ interface IApiContext {
     courseId: number,
     subCourseId: number,
     subject: string,
-    body: string
+    body: string,
+    files?: File[]
   ) => Promise<void>;
   joinBBBmeeting: (
     courseId: number,
@@ -477,14 +478,16 @@ export const ApiProvider: React.FC = ({ children }) => {
     courseId: number,
     subCourseId: number,
     subject: string,
-    body: string
+    body: string,
+    files?: File[]
   ) =>
     api.axiosSendCourseInstructorMail(
       token,
       courseId,
       subCourseId,
       subject,
-      body
+      body,
+      files
     );
 
   const joinBBBmeeting = (courseId: number, subcourseId: number) =>

@@ -187,12 +187,14 @@ export const ContactInstructorsModal: React.FC<ContactInstructorsProps> = ({
         course.id,
         course.subcourse.id,
         subject,
-        message
+        message,
+        selectedFiles.length > 0 && selectedFiles
       )
       .then(() => {
         notif.success('Nachricht wurde versendet.');
         setMessage('');
         setSubject('');
+        setSelectedFiles([]);
         modalContext.setOpenedModal(null);
       })
       .catch((err) => {

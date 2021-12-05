@@ -667,14 +667,25 @@ export const axiosSendCourseInstructorMail = async (
   courseId: number,
   subCourseId: number,
   subject: string,
-  body: string
+  body: string,
+  files?: File[]
 ) => {
+  const formData = new FormData();
+  formData.append('subject', subject);
+  formData.append('body', body);
+
+  if (files) {
+    files.forEach((f) => {
+      formData.append('attachments', f);
+    });
+  }
+
   await axios
     .post(
       `${apiURL}/course/${courseId}/subcourse/${subCourseId}/instructormail`,
-      { subject, body },
+      formData,
       {
-        headers: { token },
+        headers: { token, 'Content-Type': 'multipart/form-data' },
       }
     )
     .catch(logError('sendCourseInstructorMail'));
