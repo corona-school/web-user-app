@@ -200,3 +200,15 @@
     }
   }
 }
+
+.autoMatchNote {
+  background-color: #e6ecf3;
+  padding: 20px;
+}
+
+.autoMatchNoteButtonBox {
+  display: flex;
+  button {
+    margin-right: 20px;
+  }
+}
