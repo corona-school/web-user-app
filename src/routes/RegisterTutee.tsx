@@ -76,6 +76,90 @@ interface Props {
   isDrehtuerSubdomain?: boolean;
 }
 
+function AutoMatchChooser({ setRequestsAutoMatch, nextStep }) {
+  const [renderNote, setRenderNote] = useState(false);
+  return (
+    <>
+      <h1 className={classes.autoMatchHeadline}>Wie möchtest du fortfahren?</h1>
+      <AccentColorButton
+        accentColor="#0366e0"
+        onClick={() => {
+          setRenderNote(true);
+        }}
+        className={classes.autoMatch}
+      >
+        <div className={classes.autoMatchIconWrapper}>
+          <MagicIcon />
+        </div>
+        <div className={classes.autoMatchTextWrapper}>
+          <h3>Ich möchte möglichst schnell Hilfe erhalten.</h3>
+          <p>
+            Mit dieser Option gehen wir direkt auf die Suche nach einem:r
+            Lernpartner:in für dich, nachdem du deine E-Mail-Adresse bestätigt
+            hast. Wir benachrichtigen dich per E-Mail, sobald wir jemanden
+            gefunden haben.
+          </p>
+        </div>
+      </AccentColorButton>
+      {renderNote && (
+        <div className={classes.autoMatchNote}>
+          <b>Achtung: Lange Wartezeit</b>
+          <p>
+            Derzeit benötigen sehr viele Schüler:innen in Deutschland unsere
+            Hilfe, unsere Warteliste ist daher lang. Aktuell dauert es zwischen
+            <b> 30 und 90 Tagen</b>, bis wir dich mit einem:r geeigneten
+            Helfer:in verbinden können. Bitte schließe die Registrierung nur
+            dann ab, wenn du bereit bist, so lange zu warten. Wir geben unser
+            Bestes, allen Schüler:innen die nötige Unterstützung zur Verfügung
+            zu stellen.
+          </p>
+          <p>Vielen Dank für dein Verständnis!</p>
+          <div className={classes.autoMatchNoteButtonBox}>
+            <AccentColorButton
+              accentColor="#e00315"
+              label="Abbrechen"
+              small
+              onClick={() => {
+                setRenderNote(false);
+              }}
+            />
+            <AccentColorButton
+              accentColor="#0366e0"
+              label="Ich bin bereit, zu warten"
+              small
+              onClick={(e) => {
+                setRequestsAutoMatch(true);
+                nextStep(e);
+              }}
+            />
+          </div>
+        </div>
+      )}
+      {!renderNote && (
+        <AccentColorButton
+          accentColor="#0366e0"
+          onClick={(e) => {
+            setRequestsAutoMatch(false);
+            nextStep(e);
+          }}
+          className={classes.autoMatch}
+        >
+          <div className={classes.autoMatchIconWrapper}>
+            <ClockIcon />
+          </div>
+          <div className={classes.autoMatchTextWrapper}>
+            <h3>Ich möchte mich erstmal nur umsehen.</h3>
+            <p>
+              Mit dieser Option kannst du zu einem späteren Zeitpunkt selbst
+              eine:n Lernpartner:in anfordern.
+            </p>
+          </div>
+        </AccentColorButton>
+      )}
+    </>
+  );
+}
+
 const RegisterTutee: React.FC<Props> = ({
   cooperationMode,
   isJufoSubdomain,
@@ -839,58 +923,6 @@ const RegisterTutee: React.FC<Props> = ({
     }
   };
 
-  const renderAutoMatchChooser = () => {
-    return (
-      <>
-        <h1 className={classes.autoMatchHeadline}>
-          Wie möchtest du fortfahren?
-        </h1>
-        <AccentColorButton
-          accentColor="#0366e0"
-          onClick={(e) => {
-            setRequestsAutoMatch(true);
-            nextStep(e);
-          }}
-          className={classes.autoMatch}
-        >
-          <div className={classes.autoMatchIconWrapper}>
-            <MagicIcon />
-          </div>
-          <div className={classes.autoMatchTextWrapper}>
-            <h3>Ich möchte möglichst schnell Hilfe erhalten.</h3>
-            <p>
-              Mit dieser Option gehen wir direkt auf die Suche nach einem/einer
-              Lernpartner:in für dich, nachdem du deine E-Mail-Adresse bestätigt
-              hast. Wir benachrichtigen dich per E-Mail, sobald wir jemanden
-              gefunden haben. <br />
-              Aktuell geschätzte Wartezeit: 30 Tage
-            </p>
-          </div>
-        </AccentColorButton>
-
-        <AccentColorButton
-          accentColor="#0366e0"
-          onClick={(e) => {
-            setRequestsAutoMatch(false);
-            nextStep(e);
-          }}
-          className={classes.autoMatch}
-        >
-          <div className={classes.autoMatchIconWrapper}>
-            <ClockIcon />
-          </div>
-          <div className={classes.autoMatchTextWrapper}>
-            <h3>Ich möchte mich erstmal nur umsehen.</h3>
-            <p>
-              Mit dieser Option kannst du zu einem späteren Zeitpunkt selbst
-              eine:n Lernpartner:in anfordern.
-            </p>
-          </div>
-        </AccentColorButton>
-      </>
-    );
-  };
-
   const renderFormItems = () => {
     if (formState === 'start') {
       return renderStart();
@@ -899,7 +931,12 @@ const RegisterTutee: React.FC<Props> = ({
       return renderDetail();
     }
     if (formState === 'autoMatchChooser') {
-      return renderAutoMatchChooser();
+      return (
+        <AutoMatchChooser
+          setRequestsAutoMatch={setRequestsAutoMatch}
+          nextStep={nextStep}
+        />
+      );
     }
     if (formState === 'finish') {
       return renderFinish();
