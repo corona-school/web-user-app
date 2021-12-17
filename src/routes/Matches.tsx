@@ -10,7 +10,8 @@ import MatchCard from '../components/cards/MatchCard';
 import CancelMatchModal from '../components/Modals/CancelMatchModal';
 
 const STUDENT_MAX_REQUESTS = 3;
-const PUPIL_MAX_MATCHES = 1;
+const PUPIL_MAX_REQUESTS = 1;
+const PUPIL_MAX_MATCHES = 3;
 
 function ConfirmationPending() {
   return (
@@ -99,6 +100,8 @@ const Matches: React.FC = () => {
 
     if (user.pupilTutoringInterestConfirmationStatus === 'refused')
       return <ConfirmationRefused />;
+
+    if (user.matchesRequested >= PUPIL_MAX_REQUESTS) return null;
 
     if (user.matches.length + user.matchesRequested >= PUPIL_MAX_MATCHES)
       return <LimitExceeded />;
