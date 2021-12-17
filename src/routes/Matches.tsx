@@ -9,6 +9,10 @@ import classes from './Matches.module.scss';
 import MatchCard from '../components/cards/MatchCard';
 import CancelMatchModal from '../components/Modals/CancelMatchModal';
 
+/* NOTE: In case you're rewriting this code in the new GraphQL based frontend, 
+    the Me entity will hopefully contain a boolean "canRequestMatch" indicating whether the user can request further matches,
+    That way we avoid replicating backend logic in here
+*/
 const STUDENT_MAX_REQUESTS = 3;
 const PUPIL_MAX_REQUESTS = 1;
 const PUPIL_MAX_MATCHES = 3;
