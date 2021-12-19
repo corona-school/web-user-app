@@ -15,7 +15,7 @@ import CancelMatchModal from '../components/Modals/CancelMatchModal';
 */
 const STUDENT_MAX_REQUESTS = 3;
 const PUPIL_MAX_REQUESTS = 1;
-const PUPIL_MAX_MATCHES = 3;
+const PUPIL_MAX_MATCHES = 1;
 
 function ConfirmationPending() {
   return (
@@ -73,7 +73,7 @@ function ConfirmationRefused() {
   );
 }
 
-function LimitExceeded() {
+/* function LimitExceeded() {
   return (
     <Result
       className={classes.resultBox}
@@ -92,7 +92,7 @@ function LimitExceeded() {
       }
     />
   );
-}
+} */
 
 const Matches: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -108,7 +108,10 @@ const Matches: React.FC = () => {
     if (user.matchesRequested >= PUPIL_MAX_REQUESTS) return null;
 
     if (user.matches.length + user.matchesRequested >= PUPIL_MAX_MATCHES)
-      return <LimitExceeded />;
+      return null;
+
+    // TODO: In case the user had more than 3 dissolved matches, show <LimitExceeded />
+    // In the future this can be checked with GraphQL's pupil { canRequestMatch { reason } }
 
     return (
       <OpenRequestCard
