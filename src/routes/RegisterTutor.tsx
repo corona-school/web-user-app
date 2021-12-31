@@ -30,6 +30,7 @@ import { NoRegistration } from '../components/NoService';
 import { languageOptions } from '../assets/languages';
 import YouTubeVideo from '../components/misc/YouTubeVideo';
 import { MatomoTrackRegistration } from '../components/misc/MatomoSupport';
+import { DeclarationOfSelfCommitment } from '../components/forms/registration/DeclarationOfSelfCommitment';
 
 const { Option } = Select;
 
@@ -739,6 +740,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
             </Checkbox.Group>
           </Form.Item>
         )}
+        <DeclarationOfSelfCommitment className={classes.formItem} />
         <DataProtectionField className={classes.formItem} />
       </>
     );
