@@ -25,7 +25,7 @@ const StatusTexts = new Map([
     {
       title: 'Wir suchen nach einem/einer Lernpartner:in für dich!',
       description:
-        'Sobald wir eine:n geeignete:n Lernpartner:in für dich gefunden haben, werden wir dich schnellstmöglich per E-Mail informieren. Solltest du innerhalb einer Woche nichts von uns hören, überprüfe deinen Spam-Ordner und wende dich an support@lern-fair.de.',
+        'Sobald wir eine:n geeignete:n Lernpartner:in für dich gefunden haben, werden wir dich schnellstmöglich per E-Mail informieren. Solltest du innerhalb von 30 Tagen nichts von uns hören, überprüfe deinen Spam-Ordner und wende dich an support@lern-fair.de.',
     },
   ],
   [
@@ -130,7 +130,7 @@ const MatchedStep: Step = {
   texts: [
     'Sobald wir eine:n geeignete:n Lernpartner:in für dich gefunden haben, werden wir dich schnellst- möglich per E-Mail informieren.',
     'Bitte überprüfe dafür auch regelmäßig deinen Spam-Ordner.',
-    'Solltest du innerhalb einer Woche nichts von uns hören, melde dich bitte bei support@lern-fair.de.',
+    'Solltest du innerhalb von 30 Tagen nichts von uns hören, melde dich bitte bei support@lern-fair.de.',
   ],
   action: (
     <AccentColorLinkButton
