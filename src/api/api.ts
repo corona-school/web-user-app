@@ -456,6 +456,16 @@ export const axiosRegisterStateTutee = (tutee: Tutee) => {
     .catch(logError('registerStateTutee'));
 };
 
+export const axiosRegisterCoDuTutee = (tutee: Tutee) => {
+  if (!isValidTutee(tutee)) {
+    throw new Error('Tutee is not valid');
+  }
+  return axios
+    .post(`${apiURL}/register/tutee/codu`, tutee)
+    .then((response) => response.data)
+    .catch(logError('registerCoDuTutee'));
+};
+
 export const axiosRegisterTutor = (tutor: Tutor) => {
   if (!isValidTutor(tutor)) {
     throw new Error('Tutor is not valid');

@@ -26,7 +26,7 @@ const useQuery = () => {
 };
 
 const Login: React.FC<{
-  mode: string;
+  mode: 'login' | 'register';
   isStudent?: boolean;
   isPupil?: boolean;
 }> = ({ mode, isStudent, isPupil }) => {
@@ -51,6 +51,16 @@ const Login: React.FC<{
 
   const [registerAsStudent, setRegisterAsStudent] = useState(false);
   const [registerAsPupil, setRegisterAsPupil] = useState(false);
+
+  const domainComponents = getDomainComponents();
+  const subdomain = domainComponents?.length > 0 && domainComponents[0];
+  const isJufoSubdomain = subdomain === 'jufo';
+  const isDrehtuerSubdomain = subdomain === 'drehtuer';
+  const isCoDuSubdomain = subdomain === 'codu';
+
+  // Forbid user to change to login mode if they use a subdomain
+  const allowPickMode =
+    !isCoDuSubdomain && !isJufoSubdomain && !isDrehtuerSubdomain;
 
   const Loader = () => {
     return (
@@ -190,11 +200,6 @@ const Login: React.FC<{
       break;
   }
 
-  const domainComponents = getDomainComponents();
-  const subdomain = domainComponents?.length > 0 && domainComponents[0];
-  const isJufoSubdomain = subdomain === 'jufo';
-  const isDrehtuerSubdomain = subdomain === 'drehtuer';
-
   // no token in the url (at least not a valid one) / no token in localStorage (at least not a valid one)
   return (
     <SignupContainer shouldShowBackButton={false}>
@@ -213,28 +218,30 @@ const Login: React.FC<{
       )}
       {loginState !== 'success' && (
         <div className={classes.signinContainer}>
-          <div className={classes.formHeader}>
-            <button
-              className={`${classes.formHeaderButton} ${
-                pageIndex === 0 ? classes.activePage : ''
-              }`}
-              onClick={() => setPageIndex(0)}
-            >
-              <p>Anmelden</p>
-            </button>
-            <button
-              className={`${classes.formHeaderButton} ${
-                pageIndex === 1 ? classes.activePage : ''
-              }`}
-              onClick={() => {
-                setRegisterAsPupil(false); // Reset student/pupil choice upon button click
-                setRegisterAsStudent(false);
-                setPageIndex(1);
-              }}
-            >
-              <p>Registrieren</p>
-            </button>
-          </div>
+          {allowPickMode && (
+            <div className={classes.formHeader}>
+              <button
+                className={`${classes.formHeaderButton} ${
+                  pageIndex === 0 ? classes.activePage : ''
+                }`}
+                onClick={() => setPageIndex(0)}
+              >
+                <p>Anmelden</p>
+              </button>
+              <button
+                className={`${classes.formHeaderButton} ${
+                  pageIndex === 1 ? classes.activePage : ''
+                }`}
+                onClick={() => {
+                  setRegisterAsPupil(false); // Reset student/pupil choice upon button click
+                  setRegisterAsStudent(false);
+                  setPageIndex(1);
+                }}
+              >
+                <p>Registrieren</p>
+              </button>
+            </div>
+          )}
           {pageIndex === 0 ? (
             <div className={classes.form}>
               {errorHasOccurred && (
@@ -267,6 +274,7 @@ const Login: React.FC<{
                 <RegisterTutee
                   isJufoSubdomain={isJufoSubdomain}
                   isDrehtuerSubdomain={isDrehtuerSubdomain}
+                  isCoDuSubdomain={isCoDuSubdomain}
                 />
               </Route>
               <Route path="/register/internship">
