@@ -86,7 +86,10 @@ export const BecomeCoDuStudentModal: React.FC<{
                 <DialogModalBase.ButtonBox>
                   <DialogModalBase.Button
                     label="Okay"
-                    onClick={() => modalContext.setOpenedModal(null)}
+                    onClick={() => {
+                      setPageIndex(0);
+                      modalContext.setOpenedModal(null);
+                    }}
                   />
                 </DialogModalBase.ButtonBox>
               </DialogModalBase.Form>
