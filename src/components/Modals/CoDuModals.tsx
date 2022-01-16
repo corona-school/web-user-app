@@ -1,7 +1,17 @@
 import StyledReactModal from 'styled-react-modal';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import context from '../../context';
 import classes from './CoDuModals.module.scss';
+import DialogModalBase from './DialogModalBase';
+import { ReactComponent as Checkmark } from '../../assets/icons/check-double-solid.svg';
+import {
+  becomeCoDuErrorText,
+  introductionText,
+  subjectErrorText,
+} from '../../assets/coDuAssets';
+import { checkCoDuSubjectRequirements } from '../../utils/SubjectUtil';
+
+const accentColor = '#FFCC12';
 
 export const CoDuSubjectErrorModal = () => {
   const modalContext = useContext(context.Modal);
@@ -12,17 +22,78 @@ export const CoDuSubjectErrorModal = () => {
       onEscapeKeydown={() => modalContext.setOpenedModal('')}
       onBackgroundClick={() => modalContext.setOpenedModal('')}
     >
-      <div className={classes.subjectErrorModal}>
-        Du nimmst an der CoDu-Studie teil. Daher musst du mindestens eines der
-        Fächer <strong>Mathematik, Deutsch oder Englisch</strong> anbieten.
-        Zusätzlich musst du eines dieser Fächer für mindestens eine{' '}
-        <strong>Klassenstufe zwischen 8 und 10 </strong>
-        gewählt haben.
-        <br />
-        Wenn du überzeugt bist, dass es sich dabei um einen Fehler handelt,
-        wende dich bitte an{' '}
-        <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>.
-      </div>
+      <div className={classes.subjectErrorModal}>{subjectErrorText}</div>
     </StyledReactModal>
+  );
+};
+
+export const BecomeCoDuStudentModal: React.FC<{
+  requestNewMatch: (isCodu: boolean) => void;
+}> = ({ requestNewMatch }) => {
+  const [pageIndex, setPageIndex] = useState(0);
+
+  const userContext = useContext(context.User);
+  const modalContext = useContext(context.Modal);
+
+  const processDecision = (isCodu: boolean) => {
+    requestNewMatch(isCodu);
+    modalContext.setOpenedModal(null);
+  };
+
+  return (
+    <DialogModalBase accentColor={accentColor}>
+      <DialogModalBase.Modal modalName="becomeCoDuStudentModal">
+        <DialogModalBase.Header>
+          <DialogModalBase.Icon Icon={Checkmark} />
+          <DialogModalBase.Title>Neues Match anfordern</DialogModalBase.Title>
+          <DialogModalBase.CloseButton hook={() => setPageIndex(0)} />
+        </DialogModalBase.Header>
+
+        {pageIndex === 0 && (
+          <>
+            <DialogModalBase.TextBlock>
+              {introductionText}
+            </DialogModalBase.TextBlock>
+
+            <DialogModalBase.Content>
+              <DialogModalBase.Form>
+                <DialogModalBase.ButtonBox>
+                  <DialogModalBase.Button
+                    label="An der CoDu-Studie teilnehmen"
+                    onClick={() =>
+                      !checkCoDuSubjectRequirements(userContext.user.subjects)
+                        ? setPageIndex(1)
+                        : processDecision(true)
+                    }
+                  />
+                  <DialogModalBase.Button
+                    label="Nicht teilnehmen"
+                    onClick={() => processDecision(false)}
+                  />
+                </DialogModalBase.ButtonBox>
+              </DialogModalBase.Form>
+            </DialogModalBase.Content>
+          </>
+        )}
+
+        {pageIndex === 1 && (
+          <>
+            <DialogModalBase.TextBlock>
+              {becomeCoDuErrorText}
+            </DialogModalBase.TextBlock>
+            <DialogModalBase.Content>
+              <DialogModalBase.Form>
+                <DialogModalBase.ButtonBox>
+                  <DialogModalBase.Button
+                    label="Okay"
+                    onClick={() => modalContext.setOpenedModal(null)}
+                  />
+                </DialogModalBase.ButtonBox>
+              </DialogModalBase.Form>
+            </DialogModalBase.Content>
+          </>
+        )}
+      </DialogModalBase.Modal>
+    </DialogModalBase>
   );
 };
