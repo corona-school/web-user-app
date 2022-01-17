@@ -54,6 +54,7 @@ export interface User {
   expertData?: ExpertData;
   pupilTutoringInterestConfirmationStatus?: InterestConfirmationStatus;
   isOfficial?: boolean;
+  isCodu?: boolean;
 }
 
 export enum ScreeningStatus {

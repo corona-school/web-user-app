@@ -42,6 +42,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         msg: formValues.msg ?? '',
         // empty
         isTutor: false,
+        isCodu: false,
         isOfficial: false,
         isInstructor: true,
         isProjectCoach: false,

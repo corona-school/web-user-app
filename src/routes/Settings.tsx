@@ -19,6 +19,7 @@ import {
 } from '../types/Certificate';
 import SignCertificateModal from '../components/Modals/SignCertificateModal';
 import CertificateCard from '../components/cards/CertificateCard';
+import { CoDuSubjectErrorModal } from '../components/Modals/CoDuModals';
 
 const Wrapper = styled.div`
   display: flex;
@@ -122,6 +123,7 @@ const Settings: React.FC = () => {
             />
           </Wrapper>
         </div>
+        <CoDuSubjectErrorModal />
       </>
     );
   };
