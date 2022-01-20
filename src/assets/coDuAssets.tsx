@@ -10,7 +10,14 @@ export const introductionText = (
     der Teilnahme an der Studie stimmst du einer Weitergabe deiner
     anonymisierten Daten an das IAB, welches die Datenauswertung vornimmt, zu.
     Weitere Infos findest du{' '}
-    <a href="https://www.lern-fair.de/codu-studie">hier</a>.
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href="https://www.lern-fair.de/codu-studie"
+    >
+      hier
+    </a>
+    .
   </>
 );
 
