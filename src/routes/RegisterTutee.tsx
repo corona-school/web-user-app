@@ -813,7 +813,10 @@ const RegisterTutee: React.FC<Props> = ({
   };
 
   const mapFormDataToTutee = (data: FormData): Tutee | null => {
-    const { cToken } = qs.parse(location.search, { ignoreQueryPrefix: true });
+    const cToken = qs.parse(location.search, { ignoreQueryPrefix: true })[
+      'c-token'
+    ];
+
     if (
       !data.firstname ||
       !data.lastname ||
