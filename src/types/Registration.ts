@@ -23,6 +23,7 @@ export interface Tutee {
   languages: string[];
   learningGermanSince?: string;
   requestsAutoMatch?: boolean;
+  cToken?: string; // CoDu
 }
 
 export interface SchoolInfo {

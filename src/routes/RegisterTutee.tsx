@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { useHistory, useLocation, Link } from 'react-router-dom';
+import qs from 'qs';
 import Icons from '../assets/icons';
 import { Title, Text, LinkText } from '../components/Typography';
 import Button from '../components/button';
@@ -178,6 +179,7 @@ const RegisterTutee: React.FC<Props> = ({
   isCoDuSubdomain,
 }) => {
   const history = useHistory();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'autoMatchChooser' | 'finish' | 'done'
@@ -811,14 +813,17 @@ const RegisterTutee: React.FC<Props> = ({
   };
 
   const mapFormDataToTutee = (data: FormData): Tutee | null => {
+    const { cToken } = qs.parse(location.search, { ignoreQueryPrefix: true });
     if (
       !data.firstname ||
       !data.lastname ||
       !data.email ||
       (!data.grade && !isOnlyJufo) ||
       (!data.state &&
+        !isCoDuSubdomain &&
         (!cooperationMode ||
-          cooperationMode.kind === 'SpecificStateCooperation'))
+          cooperationMode.kind === 'SpecificStateCooperation')) ||
+      (!cToken && isCoDuSubdomain)
     ) {
       return null;
     }
@@ -849,6 +854,7 @@ const RegisterTutee: React.FC<Props> = ({
       learningGermanSince: data.learningGermanSince,
       redirectTo,
       requestsAutoMatch,
+      cToken,
     };
   };
 
