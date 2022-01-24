@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { useHistory, useLocation, Link } from 'react-router-dom';
+import qs from 'qs';
 import Icons from '../assets/icons';
 import { Title, Text, LinkText } from '../components/Typography';
 import Button from '../components/button';
@@ -74,6 +75,7 @@ interface Props {
   cooperationMode?: CooperationMode;
   isJufoSubdomain?: boolean;
   isDrehtuerSubdomain?: boolean;
+  isCoDuSubdomain?: boolean;
 }
 
 function AutoMatchChooser({ setRequestsAutoMatch, nextStep }) {
@@ -160,24 +162,38 @@ function AutoMatchChooser({ setRequestsAutoMatch, nextStep }) {
   );
 }
 
+function initFormData(isCoDuSubdomain: boolean) {
+  if (isCoDuSubdomain) {
+    return {
+      subjects: [{ name: 'Mathematik' }, { name: 'Deutsch' }],
+      isTutee: true,
+    };
+  }
+  return {};
+}
+
 const RegisterTutee: React.FC<Props> = ({
   cooperationMode,
   isJufoSubdomain,
   isDrehtuerSubdomain,
+  isCoDuSubdomain,
 }) => {
   const history = useHistory();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'autoMatchChooser' | 'finish' | 'done'
   >('start');
-  const [isTutee, setTutee] = useState(false);
+  const [isTutee, setTutee] = useState(isCoDuSubdomain || false);
   const [isGroups, setGroups] = useState(false);
   const [isJufo, setJufo] = useState(isJufoSubdomain ?? false);
 
   const [isGermanNative, setIsGermanNative] = useState<boolean>(true);
   const [dazOnly, setDazOnly] = useState<boolean>(false);
 
-  const [formData, setFormData] = useState<FormData>({});
+  const [formData, setFormData] = useState<FormData>(
+    initFormData(isCoDuSubdomain)
+  );
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
 
@@ -400,6 +416,15 @@ const RegisterTutee: React.FC<Props> = ({
       </Form.Item>
     );
   };
+  const renderPicker = () => {
+    if (isJufoSubdomain) {
+      return renderOfferPickerForJufo();
+    }
+    if (!isCoDuSubdomain) {
+      return renderOfferPickerNormal();
+    }
+    return <></>;
+  };
 
   const renderStart = () => {
     return (
@@ -415,8 +440,7 @@ const RegisterTutee: React.FC<Props> = ({
           className={classes.formItem}
         />
 
-        {(isJufoSubdomain && renderOfferPickerForJufo()) ||
-          renderOfferPickerNormal()}
+        {renderPicker()}
       </>
     );
   };
@@ -432,7 +456,7 @@ const RegisterTutee: React.FC<Props> = ({
           />
         )}
 
-        {cooperationMode?.kind !== 'GeneralSchoolCooperation' && (
+        {cooperationMode?.kind === 'SpecificStateCooperation' && (
           <StateField
             className={classes.formItem}
             defaultState={
@@ -638,6 +662,22 @@ const RegisterTutee: React.FC<Props> = ({
                   );
                 },
               }),
+              () => ({
+                validator(rule, value) {
+                  if (isCoDuSubdomain) {
+                    if (
+                      value.some((x) => x === 'Mathematik') &&
+                      value.some((x) => x === 'Deutsch')
+                    ) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      'Du musst Mathematik und Deutsch auswählen.'
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              }),
             ]}
             initialValue={
               formData.subjects
@@ -750,6 +790,10 @@ const RegisterTutee: React.FC<Props> = ({
 
   const back = () => {
     if (formState === 'finish') {
+      if (isCoDuSubdomain) {
+        setFormState('detail');
+        return;
+      }
       if (isTutee) {
         setFormState('autoMatchChooser');
       } else {
@@ -769,14 +813,22 @@ const RegisterTutee: React.FC<Props> = ({
   };
 
   const mapFormDataToTutee = (data: FormData): Tutee | null => {
+    const coduToken = qs.parse(location.search, { ignoreQueryPrefix: true })[
+      'c-token'
+    ];
+
+    const registrationSource = isCoDuSubdomain ? 'codu' : undefined;
+
     if (
       !data.firstname ||
       !data.lastname ||
       !data.email ||
       (!data.grade && !isOnlyJufo) ||
       (!data.state &&
+        !isCoDuSubdomain &&
         (!cooperationMode ||
-          cooperationMode.kind === 'SpecificStateCooperation'))
+          cooperationMode.kind === 'SpecificStateCooperation')) ||
+      (!coduToken && isCoDuSubdomain)
     ) {
       return null;
     }
@@ -795,7 +847,7 @@ const RegisterTutee: React.FC<Props> = ({
       subjects: subjects || [],
       grade: data.grade,
       school: data.school?.toLowerCase(),
-      state: data.state?.toLowerCase(),
+      state: data.state?.toLowerCase() || 'other',
       isProjectCoachee: data.isJufo,
       isJufoParticipant: data.isJufoParticipant,
       projectFields: data.project,
@@ -807,6 +859,8 @@ const RegisterTutee: React.FC<Props> = ({
       learningGermanSince: data.learningGermanSince,
       redirectTo,
       requestsAutoMatch,
+      coduToken,
+      registrationSource,
     };
   };
 
@@ -818,12 +872,14 @@ const RegisterTutee: React.FC<Props> = ({
     }
     console.log(tutee);
 
-    const registerAPICall = cooperationMode
-      ? apiContext.registerStateTutee
-      : apiContext.registerTutee;
-
+    const registerAPICall = () => {
+      if (cooperationMode) {
+        return apiContext.registerStateTutee;
+      }
+      return apiContext.registerTutee;
+    };
     setLoading(true);
-    registerAPICall(tutee)
+    registerAPICall()(tutee)
       .then(() => {
         setLoading(false);
         setFormState('done');
@@ -897,7 +953,12 @@ const RegisterTutee: React.FC<Props> = ({
           learningGermanSince: formValues.learningGermanSince,
         });
         if (isTutee) {
-          setFormState('autoMatchChooser');
+          if (isCoDuSubdomain) {
+            setRequestsAutoMatch(true);
+            setFormState('finish');
+          } else {
+            setFormState('autoMatchChooser');
+          }
         } else {
           // skip auto match view if user hasn't signed up for tutoring
           setFormState('finish');

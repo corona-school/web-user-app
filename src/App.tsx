@@ -21,19 +21,19 @@ import { ScreeningStatus } from './types';
 import NotFound from './routes/NotFound';
 import PageComponent from './components/PageComponent';
 import Course from './routes/Course';
-import RegisterTutee from './routes/RegisterTutee';
 import { CourseForm } from './routes/CourseForm';
 import CourseDetail from './routes/CourseDetail';
 import PublicCourseDetail from './routes/PublicCourseDetail';
-import { getDomainComponents } from './utils/DomainUtils';
 import ProjectCoach from './routes/ProjectCoach';
-import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
 import { CourseOverview } from './routes/CourseOverview';
 import { Modals } from './Modals';
 import GuestJoinCourseMeeting from './routes/GuestJoinCourseMeeting';
 import InterestConfirmation from './routes/InterestConfirmation';
 import { LernFairRedirection } from './utils/LernFairRedirection';
 import RemissionRequest from './routes/RemissionRequest';
+import { getDomainComponents } from './utils/DomainUtils';
+import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
+import RegisterTutee from './routes/RegisterTutee';
 
 const GlobalStyle = createGlobalStyle`
 
