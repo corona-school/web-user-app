@@ -817,6 +817,8 @@ const RegisterTutee: React.FC<Props> = ({
       'c-token'
     ];
 
+    const registrationSource = isCoDuSubdomain ? 'codu' : undefined;
+
     if (
       !data.firstname ||
       !data.lastname ||
@@ -845,7 +847,7 @@ const RegisterTutee: React.FC<Props> = ({
       subjects: subjects || [],
       grade: data.grade,
       school: data.school?.toLowerCase(),
-      state: data.state?.toLowerCase(),
+      state: data.state?.toLowerCase() || 'other',
       isProjectCoachee: data.isJufo,
       isJufoParticipant: data.isJufoParticipant,
       projectFields: data.project,
@@ -858,6 +860,7 @@ const RegisterTutee: React.FC<Props> = ({
       redirectTo,
       requestsAutoMatch,
       cToken,
+      registrationSource,
     };
   };
 
@@ -872,9 +875,6 @@ const RegisterTutee: React.FC<Props> = ({
     const registerAPICall = () => {
       if (cooperationMode) {
         return apiContext.registerStateTutee;
-      }
-      if (isCoDuSubdomain) {
-        return apiContext.registerCoDuTutee;
       }
       return apiContext.registerTutee;
     };

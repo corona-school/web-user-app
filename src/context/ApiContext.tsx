@@ -108,7 +108,6 @@ interface IApiContext {
   ) => Promise<void>;
   registerTutee: (tutee: Tutee) => Promise<void>;
   registerStateTutee: (tutee: Tutee) => Promise<void>;
-  registerCoDuTutee: (tutee: Tutee) => Promise<void>;
   checkEmail: (email: string) => Promise<void>;
   registerTutor: (tutor: Tutor) => Promise<void>;
   editInterestConfirmationStatus: (
@@ -212,7 +211,6 @@ export const ApiContext = React.createContext<IApiContext>({
   cancelLecture: reject,
   registerTutee: reject,
   registerStateTutee: reject,
-  registerCoDuTutee: reject,
   registerTutor: reject,
   editInterestConfirmationStatus: reject,
   sendCourseGroupMail: reject,
@@ -400,9 +398,6 @@ export const ApiProvider: React.FC = ({ children }) => {
   const registerStateTutee = (tutee: Tutee): Promise<void> =>
     api.axiosRegisterStateTutee(tutee);
 
-  const registerCoDuTutee = (tutee: Tutee): Promise<void> =>
-    api.axiosRegisterCoDuTutee(tutee);
-
   const registerTutor = (tutor: Tutor): Promise<void> =>
     api.axiosRegisterTutor(tutor);
 
@@ -551,7 +546,6 @@ export const ApiProvider: React.FC = ({ children }) => {
         getMyCourses,
         registerTutee,
         registerStateTutee,
-        registerCoDuTutee,
         checkEmail,
         registerTutor,
         editInterestConfirmationStatus,
