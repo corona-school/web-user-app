@@ -31,6 +31,9 @@ import GuestJoinCourseMeeting from './routes/GuestJoinCourseMeeting';
 import InterestConfirmation from './routes/InterestConfirmation';
 import { LernFairRedirection } from './utils/LernFairRedirection';
 import RemissionRequest from './routes/RemissionRequest';
+import { getDomainComponents } from './utils/DomainUtils';
+import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
+import RegisterTutee from './routes/RegisterTutee';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -57,7 +60,27 @@ const GlobalStyle = createGlobalStyle`
 const App: React.FC = () => {
   const userContext = useContext(UserContext);
 
+  const domainComponents = getDomainComponents();
+
+  const subdomain = domainComponents?.length > 0 && domainComponents[0];
+  const cooperationMode = getCooperationModeForSubdomain(subdomain);
+
   LernFairRedirection();
+
+  if (subdomain && cooperationMode) {
+    // render the special page for cooperations with states of Germany
+    return (
+      <>
+        <GlobalStyle />
+        <Switch>
+          <Route exact path="/">
+            <RegisterTutee cooperationMode={cooperationMode} />
+          </Route>
+          <Route component={NotFound} />
+        </Switch>
+      </>
+    );
+  }
 
   return (
     <>
