@@ -141,3 +141,11 @@
     margin: 0px 0px !important;
   }
 }
+
+.highlightedCheckbox {
+  line-height: 32px;
+  background-color: rgba(255, 210, 46, 0.6);
+  border: rgb(255, 210, 46) solid 2px;
+  border-radius: 15px;
+  padding: 16px 24px;
+}

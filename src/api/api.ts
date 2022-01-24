@@ -109,6 +109,7 @@ export const putUser = async (
     state?: string;
     university?: string;
     schoolType?: string;
+    isCodu?: boolean;
     lastUpdatedSettingsViaBlocker: number;
   }
 ) => {

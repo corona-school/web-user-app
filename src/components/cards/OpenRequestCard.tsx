@@ -15,6 +15,7 @@ import { ReactComponent as Trashcan } from '../../assets/icons/trashcan.svg';
 import NewMatchConfirmationModal from '../Modals/NewMatchConfirmationModal';
 import { ModalContext } from '../../context/ModalContext';
 import theme from '../../theme';
+import { BecomeCoDuStudentModal } from '../Modals/CoDuModals';
 
 interface Props {
   type: 'pending' | 'new';
@@ -34,7 +35,10 @@ const OpenRequestCard: React.FC<Props> = ({
   const { user, fetchUserData } = useContext(Context.User);
   const modalContext = useContext(ModalContext);
 
-  const modifyMatchesRequested = (f: (value: number) => number): void => {
+  const modifyMatchesRequested = (
+    f: (value: number) => number,
+    isCodu?: boolean
+  ): void => {
     if (typeof user.matchesRequested !== 'number') return;
     setLoading(true);
     putUser(credentials, {
@@ -47,6 +51,7 @@ const OpenRequestCard: React.FC<Props> = ({
         ? f(user.projectMatchesRequested)
         : user.projectMatchesRequested,
       grade: user.grade,
+      isCodu: isCodu !== undefined ? isCodu : user.isCodu,
       lastUpdatedSettingsViaBlocker: user.lastUpdatedSettingsViaBlocker,
     })
       .then(() => {
@@ -94,7 +99,9 @@ const OpenRequestCard: React.FC<Props> = ({
         disabled={disabled}
         onClick={() => {
           if (!loading) {
-            if (projectCoaching || user.type === 'student') {
+            if (!projectCoaching && user.type === 'student' && !user.isCodu) {
+              modalContext.setOpenedModal('becomeCoDuStudentModal');
+            } else if (projectCoaching || user.type === 'student') {
               modifyMatchesRequested((x) => x + 1);
             } else {
               modalContext.setOpenedModal('newMatchConfirmationModal');
@@ -137,6 +144,11 @@ const OpenRequestCard: React.FC<Props> = ({
       </button>
       <NewMatchConfirmationModal
         requestNewMatch={() => modifyMatchesRequested((x) => x + 1)}
+      />
+      <BecomeCoDuStudentModal
+        requestNewMatch={(isCodu) =>
+          modifyMatchesRequested((x) => x + 1, isCodu)
+        }
       />
     </div>
   );

@@ -31,6 +31,7 @@ import { languageOptions } from '../assets/languages';
 import YouTubeVideo from '../components/misc/YouTubeVideo';
 import { MatomoTrackRegistration } from '../components/misc/MatomoSupport';
 import { DeclarationOfSelfCommitment } from '../components/forms/registration/DeclarationOfSelfCommitment';
+import { introductionText } from '../assets/coDuAssets';
 
 const { Option } = Select;
 
@@ -43,6 +44,7 @@ interface FormData {
   isInstructor?: boolean;
   isTutor?: boolean;
   isJufo?: boolean;
+  isCodu?: boolean;
   // isJufo
   project?: string[];
   wasJufoParticipant?: 'yes' | 'no' | 'idk';
@@ -82,6 +84,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const [isTutor, setTutor] = useState(
     props.isStudent || props.isInternship || false
   );
+  const [isCodu, setCodu] = useState(false);
   const [supportsInDaz, setSupportsInDaz] = useState<boolean>(false);
   const [isGroups, setGroups] = useState(
     props.isInternship || props.isClub || false
@@ -125,6 +128,19 @@ const RegisterTutor: React.FC<Props> = (props) => {
           enableLink={props.isJufoSubdomain}
         />{' '}
         für Schülerinnen anbieten.
+      </Checkbox>
+    );
+  };
+
+  const renderIsCoDuCheckbox = () => {
+    return (
+      <Checkbox
+        onChange={() => setCodu(!isCodu)}
+        value="isCodu"
+        checked={isCodu}
+        className={classes.highlightedCheckbox}
+      >
+        {introductionText}
       </Checkbox>
     );
   };
@@ -297,6 +313,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         ]}
       >
         {renderIsTutorCheckbox()}
+        {isTutor && renderIsCoDuCheckbox()}
         {renderIsGroupsCheckbox()}
         {renderIsJufoCheckbox()}
       </Form.Item>
@@ -578,6 +595,25 @@ const RegisterTutor: React.FC<Props> = (props) => {
                 required: true,
                 message: 'Bitte trage deine Fächer ein',
               },
+              {
+                validator(_, value: string[]) {
+                  if (
+                    !isCodu ||
+                    value.filter((v) =>
+                      ['Deutsch', 'Englisch', 'Mathematik'].includes(v)
+                    ).length > 0
+                  ) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error(
+                      'Wenn du an der CoDu-Studie teilnehmen möchtest, ' +
+                        'musst du mindestens eines der Fächer Deutsch, ' +
+                        'Englisch oder Mathematik wählen.'
+                    )
+                  );
+                },
+              },
             ]}
           >
             <Select
@@ -794,6 +830,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       state: data.state?.toLowerCase(),
       supportsInDaz: data.supportsInDaz === 'yes',
       languages: data.languages,
+      isCodu: data.isCodu,
       redirectTo,
     };
   };
@@ -872,6 +909,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           email: formValues.email,
           isOfficial,
           isTutor,
+          isCodu,
           isInstructor: isGroups,
           isJufo,
         });

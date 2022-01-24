@@ -38,6 +38,7 @@ export interface Tutor {
   isOfficial: boolean;
   isTutor: boolean;
   isInstructor: boolean;
+  isCodu: boolean;
   // isOfficial
   state?: string;
   university?: string;
