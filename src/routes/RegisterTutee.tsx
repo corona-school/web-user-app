@@ -813,7 +813,7 @@ const RegisterTutee: React.FC<Props> = ({
   };
 
   const mapFormDataToTutee = (data: FormData): Tutee | null => {
-    const cToken = qs.parse(location.search, { ignoreQueryPrefix: true })[
+    const coduToken = qs.parse(location.search, { ignoreQueryPrefix: true })[
       'c-token'
     ];
 
@@ -828,7 +828,7 @@ const RegisterTutee: React.FC<Props> = ({
         !isCoDuSubdomain &&
         (!cooperationMode ||
           cooperationMode.kind === 'SpecificStateCooperation')) ||
-      (!cToken && isCoDuSubdomain)
+      (!coduToken && isCoDuSubdomain)
     ) {
       return null;
     }
@@ -859,7 +859,7 @@ const RegisterTutee: React.FC<Props> = ({
       learningGermanSince: data.learningGermanSince,
       redirectTo,
       requestsAutoMatch,
-      cToken,
+      coduToken,
       registrationSource,
     };
   };
