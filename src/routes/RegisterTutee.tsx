@@ -456,15 +456,17 @@ const RegisterTutee: React.FC<Props> = ({
           />
         )}
 
-        {cooperationMode?.kind === 'SpecificStateCooperation' && (
-          <StateField
-            className={classes.formItem}
-            defaultState={
-              cooperationMode?.stateInfo?.abbrev.toUpperCase() ?? formData.state
-            }
-            disabled={!!cooperationMode}
-          />
-        )}
+        {cooperationMode?.kind !== 'GeneralSchoolCooperation' &&
+          !isCoDuSubdomain && (
+            <StateField
+              className={classes.formItem}
+              defaultState={
+                cooperationMode?.stateInfo?.abbrev.toUpperCase() ??
+                formData.state
+              }
+              disabled={!!cooperationMode}
+            />
+          )}
         <GradeField
           className={classes.formItem}
           defaultGrade={formData.grade ? `${formData.grade}` : undefined}
@@ -825,9 +827,9 @@ const RegisterTutee: React.FC<Props> = ({
       !data.email ||
       (!data.grade && !isOnlyJufo) ||
       (!data.state &&
-        !isCoDuSubdomain &&
         (!cooperationMode ||
-          cooperationMode.kind === 'SpecificStateCooperation')) ||
+          cooperationMode.kind === 'SpecificStateCooperation') &&
+        !isCoDuSubdomain) ||
       (!coduToken && isCoDuSubdomain)
     ) {
       return null;
