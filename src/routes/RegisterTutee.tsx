@@ -165,7 +165,6 @@ function AutoMatchChooser({ setRequestsAutoMatch, nextStep }) {
 function initFormData(isCoDuSubdomain: boolean) {
   if (isCoDuSubdomain) {
     return {
-      subjects: [{ name: 'Mathematik' }, { name: 'Deutsch' }],
       isTutee: true,
     };
   }
@@ -665,19 +664,20 @@ const RegisterTutee: React.FC<Props> = ({
                 },
               }),
               () => ({
-                validator(rule, value) {
-                  if (isCoDuSubdomain) {
-                    if (
-                      value.some((x) => x === 'Mathematik') &&
-                      value.some((x) => x === 'Deutsch')
-                    ) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(
-                      'Du musst Mathematik und Deutsch auswählen.'
-                    );
+                validator(_, value: string[]) {
+                  if (
+                    !isCoDuSubdomain ||
+                    value.filter((v) =>
+                      ['Deutsch', 'Englisch', 'Mathematik'].includes(v)
+                    ).length > 0
+                  ) {
+                    return Promise.resolve();
                   }
-                  return Promise.resolve();
+                  return Promise.reject(
+                    new Error(
+                      'Du musst Deutsch, Englisch und/ oder Mathematik wählen.'
+                    )
+                  );
                 },
               }),
             ]}
