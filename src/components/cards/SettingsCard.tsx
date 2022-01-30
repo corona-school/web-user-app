@@ -13,7 +13,6 @@ import context from '../../context';
 
 import classes from './SettingsCard.module.scss';
 import BecomeInstructorModal from '../Modals/BecomeInstructorModal';
-import BecomeInternModal from '../Modals/BecomeInternModal';
 import EditableUserSettingsCard, {
   EditableUserSettings,
 } from './EditableUserSettingsCard';
@@ -84,14 +83,6 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
     const buttons = [];
 
     if (!user.isInstructor) {
-      buttons.push(
-        <AccentColorButton
-          onClick={() => modalContext.setOpenedModal('startInternship')}
-          accentColor="#4E6AE6"
-          label="Praktikum anmelden"
-          small
-        />
-      );
       buttons.push(
         <AccentColorButton
           onClick={() => modalContext.setOpenedModal('becomeInstructor')}
@@ -215,7 +206,6 @@ const SettingsCard: React.FC<Props> = ({ user, reloadCertificates }) => {
       </CardBase>
       <CertificateModal user={user} reloadCertificates={reloadCertificates} />
       <BecomeInstructorModal user={user} />
-      <BecomeInternModal user={user} />
       <BecomeTutorModal user={user} />
       <AccountDeactivationModal />
     </>

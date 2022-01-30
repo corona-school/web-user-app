@@ -20,6 +20,7 @@ import Register from './Register';
 import { getDomainComponents } from '../utils/DomainUtils';
 import RegisterTutor from './RegisterTutor';
 import { ReactComponent as PaperPlane } from '../assets/icons/paper-plane-solid.svg';
+import { NoRegistration } from '../components/NoService';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -278,7 +279,7 @@ const Login: React.FC<{
                 />
               </Route>
               <Route path="/register/internship">
-                <RegisterTutor isInternship />
+                <NoRegistration />
               </Route>
               <Route path="/register/club">
                 <RegisterTutor isClub isJufoSubdomain={isJufoSubdomain} />

@@ -39,7 +39,6 @@ interface FormData {
   firstname?: string;
   lastname?: string;
   email?: string;
-  isOfficial?: boolean;
   isInstructor?: boolean;
   isTutor?: boolean;
   isJufo?: boolean;
@@ -64,7 +63,6 @@ interface FormData {
 }
 
 interface Props {
-  isInternship?: boolean;
   isClub?: boolean;
   isStudent?: boolean;
   isJufoSubdomain?: boolean;
@@ -78,14 +76,9 @@ const useQuery = () => {
 const RegisterTutor: React.FC<Props> = (props) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [isOfficial, setOfficial] = useState(props.isInternship || false);
-  const [isTutor, setTutor] = useState(
-    props.isStudent || props.isInternship || false
-  );
+  const [isTutor, setTutor] = useState(props.isStudent || false);
   const [supportsInDaz, setSupportsInDaz] = useState<boolean>(false);
-  const [isGroups, setGroups] = useState(
-    props.isInternship || props.isClub || false
-  );
+  const [isGroups, setGroups] = useState(props.isClub || false);
   const [isJufo, setJufo] = useState(props.isJufoSubdomain ?? false);
   const [wasJufoParticipant, setWasJufoParticipant] = useState(true);
   const [isUniversityStudent, setIsUniversityStudent] = useState(true);
@@ -109,9 +102,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
     return (
       <Checkbox
         onChange={() => {
-          if (props.isInternship) {
-            return;
-          }
           setTutor(!isTutor);
         }}
         value="isTutor"
@@ -133,9 +123,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
     return (
       <Checkbox
         onChange={() => {
-          if (props.isInternship) {
-            return;
-          }
           setGroups(!isGroups);
         }}
         value="isGroups"
@@ -180,57 +167,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
         </span>
         ) unterstützen.
       </Checkbox>
-    );
-  };
-
-  const renderDLLFormItem = () => {
-    return (
-      <Form.Item
-        className={classes.formItem}
-        name="official"
-        label={
-          <span>
-            Für Lehramtsstudierende: Möchtest du dich für unser{' '}
-            <a
-              href="https://www.lern-fair.de/helfer/digital-lehren-lernen"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              digitales Praktikum
-            </a>{' '}
-            anmelden?
-          </span>
-        }
-        rules={[
-          () => ({
-            required: props.isInternship,
-            validator() {
-              if ((!isGroups || !isTutor) && isOfficial) {
-                return Promise.reject(
-                  'Um am Praktikum teilzunehmen, musst du sowohl Schüler:innen im 1:1-Format beim Lernen als auch in Gruppenkursen helfen.'
-                );
-              }
-              if (!props.isInternship) {
-                return Promise.resolve();
-              }
-              if (props.isInternship && isOfficial) {
-                return Promise.resolve();
-              }
-              return Promise.reject('Bitte wähle eine Option aus.');
-            },
-          }),
-        ]}
-      >
-        <Checkbox
-          onChange={() => {
-            setOfficial(!isOfficial);
-          }}
-          style={{ lineHeight: '32px', marginLeft: '8px' }}
-          checked={isOfficial}
-        >
-          Ja
-        </Checkbox>
-      </Form.Item>
     );
   };
 
@@ -359,7 +295,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
         </Form.Item>
         {(props.isJufoSubdomain && renderOfferPickerForJufo()) ||
           renderOfferPickerNormal()}
-        {renderDLLFormItem()}
       </>
     );
   };
@@ -680,26 +615,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
           />
         )}
 
-        {isOfficial && (
-          <Form.Item
-            className={classes.formItem}
-            label="Aufwand des Moduls (in Stunden)"
-            name="hours"
-            rules={[
-              {
-                required: true,
-                message: 'Bitte trage dein zeitlichen Aufwand ein',
-              },
-            ]}
-          >
-            <InputNumber
-              placeholder="40h"
-              min={1}
-              max={500}
-              defaultValue={formData.hours}
-            />
-          </Form.Item>
-        )}
         <MessageField
           className={classes.formItem}
           isGroups={isGroups}
@@ -778,7 +693,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       email: data.email.toLowerCase(),
       isTutor: data.isTutor,
       subjects: data.subjects || [],
-      isOfficial: data.isOfficial,
+      isOfficial: false,
       isInstructor: data.isInstructor,
       university: data.university,
       module: data.module,
@@ -870,7 +785,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
           firstname: formValues.firstname,
           lastname: formValues.lastname,
           email: formValues.email,
-          isOfficial,
           isTutor,
           isInstructor: isGroups,
           isJufo,
