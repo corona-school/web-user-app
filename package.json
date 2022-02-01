@@ -2,6 +2,9 @@
   "name": "web-user-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "dev": "react-scripts start",
     "dev:local": "REACT_APP_MODE=LOCAL react-scripts start",
