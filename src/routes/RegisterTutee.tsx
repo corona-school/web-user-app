@@ -775,7 +775,10 @@ const RegisterTutee: React.FC<Props> = ({
           defaultChecked={formData.newsletter}
           isPupil
         />
-        <DataProtectionField className={classes.formItem} />
+        <DataProtectionField
+          className={classes.formItem}
+          isCodu={isCoDuSubdomain}
+        />
       </>
     );
   };
