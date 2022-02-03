@@ -35,6 +35,16 @@
   flex-direction: column;
 }
 
+.lfPlusHint {
+  width: 100%;
+  height: fit-content;
+  background-color: rgba(255, 210, 46, 0.6);
+  border: rgb(255, 210, 46) solid 2px;
+  border-radius: 15px;
+  padding: 8px;
+  text-align: center;
+}
+
 .formContainerGroup {
   display: flex;
   margin: 0;
@@ -138,7 +148,7 @@
     line-height: 30px !important;
     width: 100%;
     text-align: center;
-    margin: 0px 0px !important;
+    margin: 0 0 !important;
   }
 }
 
