@@ -778,6 +778,7 @@ const RegisterTutee: React.FC<Props> = ({
         <DataProtectionField
           className={classes.formItem}
           isCodu={isCoDuSubdomain}
+          isTutor={false}
         />
       </>
     );
