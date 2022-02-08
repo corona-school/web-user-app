@@ -789,7 +789,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           </Form.Item>
         )}
         <DeclarationOfSelfCommitment className={classes.formItem} />
-        <DataProtectionField className={classes.formItem} />
+        <DataProtectionField className={classes.formItem} isTutor />
       </>
     );
   };

@@ -4,6 +4,7 @@ import classes from './DataProtectionField.module.scss';
 
 interface Props {
   className: string;
+  isTutor: boolean;
   isDrehtuer?: boolean;
   isCodu?: boolean;
 }
@@ -34,7 +35,7 @@ export const DataProtectionField: React.FC<Props> = (props) => {
             </a>{' '}
             des Corona School e.V. zur Kenntnis genommen. Mir ist insbesondere
             bewusst, dass die von mir angegebenen Daten zur Durchführung der
-            Angebote an zugeteilte Helfer:innen weitergegeben werden.
+            Angebote an zugeteilte {props.isTutor ? "Schüler:innen" : "Helfer:innen"} weitergegeben werden.
             <br />
             <br />
             <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
@@ -65,7 +66,7 @@ export const DataProtectionField: React.FC<Props> = (props) => {
             </a>{' '}
             zur Kenntnis genommen. Mir ist insbesondere bewusst, dass die von
             mir angegebenen Daten zur Durchführung der Angebote an zugeteilte
-            Helfer:innen weitergegeben werden.
+            {props.isTutor ? "Schüler:innen" : "Helfer:innen"} weitergegeben werden.
             <br />
             <br />
             <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}

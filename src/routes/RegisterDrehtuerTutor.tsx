@@ -92,7 +92,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         <StateField className={classes.formItem} />
         <UniversityField className={classes.formItem} />
         <MessageField className={classes.formItem} isGroups />
-        <DataProtectionField className={classes.formItem} isDrehtuer />
+        <DataProtectionField className={classes.formItem} isDrehtuer isTutor />
       </>
     );
   };
