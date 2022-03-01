@@ -136,6 +136,16 @@ const App: React.FC = () => {
             >
               <CourseOverview backButtonRoute="/courses" />
             </PrivateRoute>
+            <PrivateRoute
+              path="/matches/revisions"
+              active={
+                userContext.user.type === 'pupil' ||
+                userContext.user.instructorScreeningStatus ===
+                  ScreeningStatus.Accepted
+              }
+            >
+              <CourseOverview backButtonRoute="/matches" revisionOnly />
+            </PrivateRoute>
             <PrivateRoute path="/courses/:id" comeback>
               <ScrollToTopOnMount />
               <CourseDetail />
@@ -150,16 +160,16 @@ const App: React.FC = () => {
             >
               <Course />
             </PrivateRoute>
+            <PrivateRoute
+              path="/matches"
+              active={
+                userContext.user.type === 'pupil' ||
+                userContext.user.screeningStatus === ScreeningStatus.Accepted
+              }
+            >
+              <Matches />
+            </PrivateRoute>
           </Switch>
-          <PrivateRoute
-            path="/matches"
-            active={
-              userContext.user.type === 'pupil' ||
-              userContext.user.screeningStatus === ScreeningStatus.Accepted
-            }
-          >
-            <Matches />
-          </PrivateRoute>
           <PrivateRoute
             path="/project-coaching"
             active={

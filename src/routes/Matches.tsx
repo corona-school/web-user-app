@@ -8,8 +8,10 @@ import { Title } from '../components/Typography';
 import classes from './Matches.module.scss';
 import MatchCard from '../components/cards/MatchCard';
 import CancelMatchModal from '../components/Modals/CancelMatchModal';
+import { CoursesPersonalList } from '../components/course/CoursesPersonalList';
+import { CourseBanner } from '../components/course/CourseBanner';
 
-/* NOTE: In case you're rewriting this code in the new GraphQL based frontend, 
+/* NOTE: In case you're rewriting this code in the new GraphQL based frontend,
     the Me entity will hopefully contain a boolean "canRequestMatch" indicating whether the user can request further matches,
     That way we avoid replicating backend logic in here
 */
@@ -206,6 +208,14 @@ const Matches: React.FC = () => {
         <Title size="h2">Entfernte Zuordnungen</Title>
       )}
       {dissolvedMatches}
+      <div>
+        <Title size="h1">Gruppen-Lernunterstützung</Title>
+        <CourseBanner
+          targetGroup={user.type === 'student' ? 'instructors' : 'participants'}
+          revisionsOnly
+        />
+        <CoursesPersonalList revisionsOnly />
+      </div>
     </div>
   );
 };

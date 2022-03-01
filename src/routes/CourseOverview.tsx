@@ -25,11 +25,13 @@ import { Spinner } from '../components/loading/Spinner';
 interface Props {
   customCourseLink?: (course: ParsedCourseOverview) => string;
   backButtonRoute?: string;
+  revisionOnly?: boolean;
 }
 
 export const CourseOverview: React.FC<Props> = ({
   customCourseLink,
   backButtonRoute,
+  revisionOnly = false,
 }) => {
   const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<
@@ -100,7 +102,15 @@ export const CourseOverview: React.FC<Props> = ({
     apiContext
       .getCourses()
       .then((apiCourses) => {
-        setCourses(apiCourses.map(parseCourse));
+        setCourses(
+          apiCourses
+            .map(parseCourse)
+            .filter((c) =>
+              revisionOnly
+                ? c.category === 'revision'
+                : c.category !== 'revision'
+            )
+        );
         return apiContext.getCourseTags();
       })
       .then((apiTags) => {
