@@ -164,7 +164,9 @@ const App: React.FC = () => {
               path="/matches"
               active={
                 userContext.user.type === 'pupil' ||
-                userContext.user.screeningStatus === ScreeningStatus.Accepted
+                userContext.user.screeningStatus === ScreeningStatus.Accepted ||
+                userContext.user.instructorScreeningStatus ===
+                  ScreeningStatus.Accepted
               }
             >
               <Matches />

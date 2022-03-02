@@ -10,6 +10,7 @@ import MatchCard from '../components/cards/MatchCard';
 import CancelMatchModal from '../components/Modals/CancelMatchModal';
 import { CoursesPersonalList } from '../components/course/CoursesPersonalList';
 import { CourseBanner } from '../components/course/CourseBanner';
+import { ScreeningStatus } from '../types';
 
 /* NOTE: In case you're rewriting this code in the new GraphQL based frontend,
     the Me entity will hopefully contain a boolean "canRequestMatch" indicating whether the user can request further matches,
@@ -189,33 +190,43 @@ const Matches: React.FC = () => {
   ));
   return (
     <div className={classes.container}>
-      <div className={classes.containerRequests}>
-        <Title size="h1">Deine Anfragen</Title>
-        <div className={classes.openRequests}>
-          {openRequests}
-          {openNewRequest}
+      {(user.type === 'pupil' ||
+        user.screeningStatus === ScreeningStatus.Accepted) && (
+        <>
+          <div className={classes.containerRequests}>
+            <Title size="h1">Deine Anfragen</Title>
+            <div className={classes.openRequests}>
+              {openRequests}
+              {openNewRequest}
+            </div>
+          </div>
+          <Title size="h2">Deine Zuordnungen</Title>
+          {currentMatches.length === 0 && (
+            <Empty
+              style={{ maxWidth: '1000px' }}
+              description="Du hast keine aktiven Zuordnungen"
+            />
+          )}
+          {currentMatches}
+          {dissolvedMatches.length > 0 && (
+            <Title size="h2">Entfernte Zuordnungen</Title>
+          )}
+          {dissolvedMatches}
+        </>
+      )}
+      {(user.type === 'pupil' ||
+        user.instructorScreeningStatus === ScreeningStatus.Accepted) && (
+        <div>
+          <Title size="h1">Gruppen-Lernunterstützung</Title>
+          <CourseBanner
+            targetGroup={
+              user.type === 'student' ? 'instructors' : 'participants'
+            }
+            revisionsOnly
+          />
+          <CoursesPersonalList revisionsOnly />
         </div>
-      </div>
-      <Title size="h2">Deine Zuordnungen</Title>
-      {currentMatches.length === 0 && (
-        <Empty
-          style={{ maxWidth: '1000px' }}
-          description="Du hast keine aktiven Zuordnungen"
-        />
       )}
-      {currentMatches}
-      {dissolvedMatches.length > 0 && (
-        <Title size="h2">Entfernte Zuordnungen</Title>
-      )}
-      {dissolvedMatches}
-      <div>
-        <Title size="h1">Gruppen-Lernunterstützung</Title>
-        <CourseBanner
-          targetGroup={user.type === 'student' ? 'instructors' : 'participants'}
-          revisionsOnly
-        />
-        <CoursesPersonalList revisionsOnly />
-      </div>
     </div>
   );
 };
