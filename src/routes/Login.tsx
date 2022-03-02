@@ -20,6 +20,8 @@ import Register from './Register';
 import { getDomainComponents } from '../utils/DomainUtils';
 import RegisterTutor from './RegisterTutor';
 import { ReactComponent as PaperPlane } from '../assets/icons/paper-plane-solid.svg';
+import { RegisterParticipant } from './RegisterParticipant';
+import { RegisterInstructor } from './RegisterInstructor';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -277,6 +279,9 @@ const Login: React.FC<{
                   isCoDuSubdomain={isCoDuSubdomain}
                 />
               </Route>
+              <Route path="/register/participant">
+                <RegisterParticipant />
+              </Route>
               <Route path="/register/internship">
                 <RegisterTutor isInternship />
               </Route>
@@ -291,6 +296,9 @@ const Login: React.FC<{
                   isJufoSubdomain={isJufoSubdomain}
                   isDrehtuerSubdomain={isDrehtuerSubdomain}
                 />
+              </Route>
+              <Route path="/register/instructor">
+                <RegisterInstructor />
               </Route>
               <Route exact path="/register">
                 <Register />
