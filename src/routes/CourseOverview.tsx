@@ -16,7 +16,7 @@ import {
   scrollToTargetAdjustedTop,
 } from '../utils/CourseUtil';
 import classes from './CourseOverview.module.scss';
-import { Text } from '../components/Typography';
+import { Text, Title } from '../components/Typography';
 import { env } from '../api/config';
 import { NoCourses } from '../components/NoService';
 import CourseCard from '../components/cards/CourseCard';
@@ -39,6 +39,7 @@ export const CourseOverview: React.FC<Props> = ({
   >(null);
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(false);
+  const [bannerType, setBannerType] = useState<'pupil' | 'student'>('pupil');
   const apiContext = useContext(ApiContext);
   const userContext = useContext(UserContext);
 
@@ -128,6 +129,9 @@ export const CourseOverview: React.FC<Props> = ({
 
   useEffect(() => {
     loadCourses();
+    setBannerType(
+      userContext.user.id !== 'defaultId' ? userContext.user.type : 'pupil'
+    );
   }, [userContext.user.type]);
 
   const coachingTag = tags
@@ -278,6 +282,69 @@ export const CourseOverview: React.FC<Props> = ({
 
   return (
     <>
+      {!revisionOnly && (
+        <div
+          style={{
+            backgroundColor: 'rgba(255, 210, 46, 0.6)',
+            padding: '30px',
+          }}
+        >
+          <Title style={{ textAlign: 'left' }}>
+            Unsere Projektwoche: <b>Abschluss und dann?</b>
+          </Title>
+          {bannerType === 'pupil' && (
+            <Text>
+              Vom 21.-25. März gibt es ein buntes Programm rund um das Thema{' '}
+              <b>Abschluss und dann?</b>. In verschiedenen Kursen kannst du dich
+              mit Themen rund um Studium, Ausbildung und Freiwilligendienst,
+              aber auch Bewerbungen und Studienfinanzierung auseinandersetzen.
+              <br />
+              Dies findet im Rahmen des neuen Programms &quot;Lern-Fair Fokus
+              &ndash; die digitalen Projektwochen&quot; statt, wozu du mehr
+              Informationen auf unserer Website{' '}
+              <a
+                href="https://www.lern-fair.de/schueler/fokus"
+                rel="noopener noreferrer"
+                target="_blank"
+                style={{ textDecoration: 'underline', color: '#373e47' }}
+              >
+                hier
+              </a>{' '}
+              findest.
+              <br />
+              Stöbere hier durch das Angebot der Projektwoche und melde dich
+              kostenlos zu den digitalen Angeboten an!
+            </Text>
+          )}
+          {bannerType === 'student' && (
+            <Text>
+              Vom 21.-25. März gibt es ein buntes Programm rund um das Thema{' '}
+              <b>Abschluss und dann?</b>. Schüler:innen können sich dort mit
+              verschiedenen Themen rund um Studium, Ausbildung und
+              Freiwilligendienst, aber auch Bewerbungen und Studienfinanzierung
+              auseinandersetzen.
+              <br />
+              Dies findet im Rahmen des neuen Programms &quot;Lern-Fair Fokus
+              &ndash; die digitalen Projektwochen&quot; statt, wozu du mehr
+              Informationen auf unserer Website{' '}
+              <a
+                href="https://www.lern-fair.de/helfer/fokus"
+                rel="noopener noreferrer"
+                target="_blank"
+                style={{ textDecoration: 'underline', color: '#373e47' }}
+              >
+                hier
+              </a>{' '}
+              findest.
+              <br />
+              Erstelle hier einen Kurs zu einer Lern-Fair Fokus Projektwoche und
+              stöbere durch das Angebot der anstehenden Projektwoche. Außerdem
+              kannst du deinen eigenen eingestellten Kurs finden, sobald dieser
+              freigeschaltet wurde.
+            </Text>
+          )}
+        </div>
+      )}
       <CourseHeader
         courses={courses}
         onChange={(courseList) => {
