@@ -36,7 +36,7 @@
     margin: 8px;
 
     .stepText {
-      margin-left: 0px;
+      margin-left: 0;
       font-weight: 300;
       max-width: 440px;
     }
@@ -48,7 +48,7 @@
   }
 }
 .inputContainer {
-  margin: 16px 0px;
+  margin: 16px 0;
   width: 100%;
   max-width: 400px;
   display: flex;
@@ -166,7 +166,11 @@
 .buttonBox {
   display: flex;
   justify-content: center;
+}
 
+.registrationBox {
+  text-align: center;
+  margin-top: 20px;
 }
 
 .registerAs {

@@ -16,7 +16,6 @@ import AccentColorButton from '../components/button/AccentColorButton';
 import Textbox from '../components/misc/Textbox';
 import styles from '../components/button/SaveEditButton.module.scss';
 import RegisterTutee from './RegisterTutee';
-import Register from './Register';
 import { getDomainComponents } from '../utils/DomainUtils';
 import RegisterTutor from './RegisterTutor';
 import { ReactComponent as PaperPlane } from '../assets/icons/paper-plane-solid.svg';
@@ -40,7 +39,8 @@ const Login: React.FC<{
   >('idle');
   const [email, setEmail] = useState('');
   const [errorHasOccurred, setErrorHasOccurred] = useState(false);
-  const [pageIndex, setPageIndex] = useState(mode === 'login' ? 0 : 1);
+
+  const pageIndex = mode === 'login' ? 0 : 1;
   const query = useQuery();
   const token = query.get('token');
   const history = useHistory();
@@ -59,10 +59,6 @@ const Login: React.FC<{
   const isJufoSubdomain = subdomain === 'jufo';
   const isDrehtuerSubdomain = subdomain === 'drehtuer';
   const isCoDuSubdomain = subdomain === 'codu';
-
-  // Forbid user to change to login mode if they use a subdomain
-  const allowPickMode =
-    !isCoDuSubdomain && !isJufoSubdomain && !isDrehtuerSubdomain;
 
   const Loader = () => {
     return (
@@ -220,30 +216,6 @@ const Login: React.FC<{
       )}
       {loginState !== 'success' && (
         <div className={classes.signinContainer}>
-          {allowPickMode && (
-            <div className={classes.formHeader}>
-              <button
-                className={`${classes.formHeaderButton} ${
-                  pageIndex === 0 ? classes.activePage : ''
-                }`}
-                onClick={() => setPageIndex(0)}
-              >
-                <p>Anmelden</p>
-              </button>
-              <button
-                className={`${classes.formHeaderButton} ${
-                  pageIndex === 1 ? classes.activePage : ''
-                }`}
-                onClick={() => {
-                  setRegisterAsPupil(false); // Reset student/pupil choice upon button click
-                  setRegisterAsStudent(false);
-                  setPageIndex(1);
-                }}
-              >
-                <p>Registrieren</p>
-              </button>
-            </div>
-          )}
           {pageIndex === 0 ? (
             <div className={classes.form}>
               {errorHasOccurred && (
@@ -268,6 +240,12 @@ const Login: React.FC<{
                   disabled={loginState === 'loading'}
                 />
               </div>
+              <div className={classes.registrationBox}>
+                Du hast noch keinen Account?{' '}
+                <a href="https://www.lern-fair.de/registrierung">
+                  Registriere dich hier!
+                </a>
+              </div>
             </div>
           ) : (
             <div className={classes.form}>
@@ -285,9 +263,6 @@ const Login: React.FC<{
               <Route path="/register/internship">
                 <RegisterTutor isInternship />
               </Route>
-              <Route path="/register/club">
-                <RegisterTutor isClub isJufoSubdomain={isJufoSubdomain} />
-              </Route>
               <Route path="/register/student">
                 <RegisterTutor isStudent isJufoSubdomain={isJufoSubdomain} />
               </Route>
@@ -299,9 +274,6 @@ const Login: React.FC<{
               </Route>
               <Route path="/register/instructor">
                 <RegisterInstructor />
-              </Route>
-              <Route exact path="/register">
-                <Register />
               </Route>
             </div>
           )}
