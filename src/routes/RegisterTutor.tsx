@@ -1,14 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import {
-  Form,
-  Input,
-  Checkbox,
-  InputNumber,
-  Select,
-  message,
-  Radio,
-} from 'antd';
+import { Form, Input, Checkbox, Select, message, Radio } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Title, LinkText, Text } from '../components/Typography';
 import Button from '../components/button';
@@ -80,10 +72,7 @@ const useQuery = () => {
 const RegisterTutor: React.FC<Props> = (props) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [isOfficial, setOfficial] = useState(props.isInternship || false);
-  const [isTutor, setTutor] = useState(
-    props.isStudent || props.isInternship || false
-  );
+  const [isTutor, setTutor] = useState(!props.isJufoSubdomain);
   const [isCodu, setCodu] = useState(false);
   const [supportsInDaz, setSupportsInDaz] = useState<boolean>(false);
   const [isGroups, setGroups] = useState(
@@ -138,7 +127,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         onChange={() => setCodu(!isCodu)}
         value="isCodu"
         checked={isCodu}
-        className={classes.highlightedCheckbox}
+        style={{ lineHeight: '32px', marginLeft: '8px' }}
       >
         {introductionText}
       </Checkbox>
@@ -158,14 +147,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         style={{ lineHeight: '32px', marginLeft: '8px' }}
         checked={isGroups}
       >
-        Ich möchte einen{' '}
-        <LinkText
-          text="Gruppenkurs"
-          href="www.lern-fair.de/helfer/gruppenkurse"
-          enableLink={props.isJufoSubdomain}
-        />{' '}
-        bei Lern-Fair anbieten (z.{' '}B. Sommer-AG, Repetitorium,
-        Lerncoaching).
+        Ich möchte zusätzlich Gruppen-Lernunterstützungen anbieten.
       </Checkbox>
     );
   };
@@ -196,57 +178,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
         </span>
         ) unterstützen.
       </Checkbox>
-    );
-  };
-
-  const renderDLLFormItem = () => {
-    return (
-      <Form.Item
-        className={classes.formItem}
-        name="official"
-        label={
-          <span>
-            Für Lehramtsstudierende: Möchtest du dich für unser{' '}
-            <a
-              href="https://www.lern-fair.de/helfer/digital-lehren-lernen"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              digitales Praktikum
-            </a>{' '}
-            anmelden?
-          </span>
-        }
-        rules={[
-          () => ({
-            required: props.isInternship,
-            validator() {
-              if ((!isGroups || !isTutor) && isOfficial) {
-                return Promise.reject(
-                  'Um am Praktikum teilzunehmen, musst du sowohl Schüler:innen im 1:1-Format beim Lernen als auch in Gruppenkursen helfen.'
-                );
-              }
-              if (!props.isInternship) {
-                return Promise.resolve();
-              }
-              if (props.isInternship && isOfficial) {
-                return Promise.resolve();
-              }
-              return Promise.reject('Bitte wähle eine Option aus.');
-            },
-          }),
-        ]}
-      >
-        <Checkbox
-          onChange={() => {
-            setOfficial(!isOfficial);
-          }}
-          style={{ lineHeight: '32px', marginLeft: '8px' }}
-          checked={isOfficial}
-        >
-          Ja
-        </Checkbox>
-      </Form.Item>
     );
   };
 
@@ -299,23 +230,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
       <Form.Item
         className={classes.formItem}
         name="additional"
-        label="Auf welche Art möchtest du Schüler:innen unterstützen?"
-        rules={[
-          () => ({
-            required: true,
-            validator() {
-              if (isGroups || isTutor || isJufo) {
-                return Promise.resolve();
-              }
-              return Promise.reject('Bitte wähle eine Option aus.');
-            },
-          }),
-        ]}
+        label="Auf welche Art möchtest du noch Schüler:innen unterstützen?"
       >
-        {renderIsTutorCheckbox()}
-        {isTutor && renderIsCoDuCheckbox()}
         {renderIsGroupsCheckbox()}
-        {renderIsJufoCheckbox()}
+        {isTutor && renderIsCoDuCheckbox()}
       </Form.Item>
     );
   };
@@ -388,7 +306,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
         </Form.Item>
         {(props.isJufoSubdomain && renderOfferPickerForJufo()) ||
           renderOfferPickerNormal()}
-        {renderDLLFormItem()}
       </>
     );
   };
@@ -728,26 +645,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
           />
         )}
 
-        {isOfficial && (
-          <Form.Item
-            className={classes.formItem}
-            label="Aufwand des Moduls (in Stunden)"
-            name="hours"
-            rules={[
-              {
-                required: true,
-                message: 'Bitte trage dein zeitlichen Aufwand ein',
-              },
-            ]}
-          >
-            <InputNumber
-              placeholder="40h"
-              min={1}
-              max={500}
-              defaultValue={formData.hours}
-            />
-          </Form.Item>
-        )}
         <MessageField
           className={classes.formItem}
           isGroups={isGroups}
@@ -826,7 +723,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       email: data.email.toLowerCase(),
       isTutor: data.isTutor,
       subjects: data.subjects || [],
-      isOfficial: data.isOfficial,
+      isOfficial: false,
       isInstructor: data.isInstructor,
       university: data.university,
       module: data.module,
@@ -919,7 +816,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
           firstname: formValues.firstname,
           lastname: formValues.lastname,
           email: formValues.email,
-          isOfficial,
           isTutor,
           isCodu,
           isInstructor: isGroups,
