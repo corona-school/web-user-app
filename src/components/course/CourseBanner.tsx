@@ -45,7 +45,11 @@ export const CourseBanner: React.FC<Props> = ({
             local
             accentColor="#4E6AE6"
             // className={classes.courseButton}
-            label="Kursangebote entdecken"
+            label={
+              revisionsOnly
+                ? 'Gruppen-Lernunterstützung entdecken'
+                : 'Projektwoche entdecken'
+            }
             small
             Icon={MagnifyingGlass}
           />
