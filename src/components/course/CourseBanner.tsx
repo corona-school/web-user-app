@@ -4,6 +4,11 @@ import classes from './CourseBanner.module.scss';
 import { Title, Text } from '../Typography';
 import AccentColorLinkButton from '../button/AccentColorLinkButton';
 import { ReactComponent as MagnifyingGlass } from '../../assets/icons/search-solid.svg';
+import {
+  projectWeekPupilText,
+  projectWeekStudentText,
+  projectWeekTitle,
+} from '../../assets/projectWeekBannerAssets';
 
 interface Props {
   showImage?: boolean;
@@ -22,22 +27,31 @@ export const CourseBanner: React.FC<Props> = ({
       <div className={classes.couseOverviewContent}>
         <div className={classes.courseOverviewHeader}>
           <div className={classes.textLeft}>
-            <Title size="h2" bold className={classes.title}>
-              Unser Angebot
-            </Title>
             {revisionsOnly && (
-              <Text large>
-                {targetGroup === 'participants'
-                  ? 'Schau gerne durch unser Angebot und melde dich für eine Hausaufgabenbetreuung oder ein Repetitorium an!'
-                  : 'Hier kannst du dir alle Gruppen-Lernunterstützungen auf unserer Plattform anschauen und auch deine zugelassenen Angebote findest du dort wieder.'}
-              </Text>
+              <>
+                <Title size="h2" bold className={classes.title}>
+                  Unser Angebot
+                </Title>
+                <Text large>
+                  {targetGroup === 'participants'
+                    ? 'Schau gerne durch unser Angebot und melde dich für eine Hausaufgabenbetreuung oder ein Repetitorium an!'
+                    : 'Hier kannst du dir alle Gruppen-Lernunterstützungen auf unserer Plattform anschauen und auch deine zugelassenen Angebote findest du dort wieder.'}
+                </Text>
+              </>
             )}
             {!revisionsOnly && (
-              <Text large>
-                {targetGroup === 'participants'
-                  ? 'Schau gerne durch unser Angebot neuer und spannender Kurse und melde dich zu unseren Gruppenkursen an!'
-                  : 'Hier kannst du dir alle Kurse auf unserer Plattform anschauen und auch deine zugelassenen Kurse findest du dort wieder.'}
-              </Text>
+              <>
+                <Title size="h2" bold className={classes.title}>
+                  {projectWeekTitle}
+                </Title>
+                <Text large>
+                  {targetGroup === 'participants' ? (
+                    <>{projectWeekPupilText}</>
+                  ) : (
+                    <>{projectWeekStudentText}</>
+                  )}
+                </Text>
+              </>
             )}
           </div>
           <AccentColorLinkButton
