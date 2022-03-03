@@ -70,7 +70,7 @@ const Navigation: React.FC<Props> = (props) => {
             }
             onClick={() => props.setMenuOpen(false)}
           >
-            Kurse
+            Projektwoche
           </NavButton>
         )}
         {(isPupil || isTutor || isInstructor) && (
@@ -84,7 +84,7 @@ const Navigation: React.FC<Props> = (props) => {
             }
             onClick={() => props.setMenuOpen(false)}
           >
-            Zuordnung
+            Lernunterstützung
           </NavButton>
         )}
         {(type === 'pupil' || isProjectCoach || isTutor) && (

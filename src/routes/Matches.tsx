@@ -194,7 +194,7 @@ const Matches: React.FC = () => {
         user.screeningStatus === ScreeningStatus.Accepted) && (
         <>
           <div className={classes.containerRequests}>
-            <Title size="h1">Deine Anfragen</Title>
+            <Title size="h1">1:1-Lernunterstützung</Title>
             <div className={classes.openRequests}>
               {openRequests}
               {openNewRequest}
