@@ -87,6 +87,7 @@ const CourseDetail = (props: Props) => {
     []
   );
   const [enteredFilter, setEnteredFilter] = useState('');
+  const [isRevision, setIsRevision] = useState<boolean>(false);
 
   const { id: urlParamID } = useParams<{ id: string }>();
   const id = props.id ?? urlParamID;
@@ -108,6 +109,7 @@ const CourseDetail = (props: Props) => {
       .then((course) => {
         const parsedCourse = parseCourse(course);
         setCourse(parsedCourse);
+        setIsRevision(parsedCourse.category === 'revision');
         setParticipantList(parsedCourse.subcourse.participantList);
 
         if (props.setIsWaitingList) {
@@ -706,14 +708,18 @@ const CourseDetail = (props: Props) => {
               if (props.publicView) {
                 history.push(
                   history.location.hash.length > 0
-                    ? `/public/courses/${history.location.hash}`
-                    : '/public/courses'
+                    ? `/public/${isRevision ? 'revisions' : 'courses'}/${
+                        history.location.hash
+                      }`
+                    : `/public/${isRevision ? 'revisions' : 'courses'}`
                 );
               } else {
                 history.push(
                   history.location.hash.length > 0
-                    ? `/courses/overview/${history.location.hash}`
-                    : '/courses'
+                    ? `${
+                        isRevision ? '/matches/revisions' : '/courses/overview'
+                      }/${history.location.hash}`
+                    : `${isRevision ? '/matches' : '/courses'}`
                 );
               }
             }}

@@ -5,7 +5,11 @@ import classes from './PublicCourse.module.scss';
 import Icons from '../assets/icons';
 import { CourseOverview } from './CourseOverview';
 
-const PublicCourse = () => {
+interface Props {
+  revisions?: boolean;
+}
+
+const PublicCourse: React.FC<Props> = ({ revisions = false }) => {
   return (
     <div className={classes.container}>
       <div className={classes.header}>
@@ -19,6 +23,7 @@ const PublicCourse = () => {
       <div className={classes.main}>
         <CourseOverview
           customCourseLink={(course) => `/public/courses/${course.id}`}
+          revisionOnly={revisions}
         />
       </div>
       <div className={classes.legal}>
