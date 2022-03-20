@@ -769,20 +769,22 @@ const CourseDetail = (props: Props) => {
                       </Dropdown>
                     </Col>
                   )}
-                  <Col md={24} sm={12} xs={12}>
-                    {!(
-                      canJoinCourse() ||
-                      canJoinWaitingList() ||
-                      canDisjoinCourse() ||
-                      canDisjoinWaitingList()
-                    ) ? (
-                      <Tooltip title={getJoinBtnDisabledReason}>
-                        {renderJoinButton()}
-                      </Tooltip>
-                    ) : (
-                      renderJoinButton()
-                    )}
-                  </Col>
+                  {!props.publicView && (
+                    <Col md={24} sm={12} xs={12}>
+                      {!(
+                        canJoinCourse() ||
+                        canJoinWaitingList() ||
+                        canDisjoinCourse() ||
+                        canDisjoinWaitingList()
+                      ) ? (
+                        <Tooltip title={getJoinBtnDisabledReason}>
+                          {renderJoinButton()}
+                        </Tooltip>
+                      ) : (
+                        renderJoinButton()
+                      )}
+                    </Col>
+                  )}
                   <Col md={24} sm={12} xs={12}>
                     <div className={classes.videochatAction}>
                       {((isMyCourse && course.state === CourseState.ALLOWED) ||
