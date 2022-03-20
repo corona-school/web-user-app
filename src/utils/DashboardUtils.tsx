@@ -9,7 +9,7 @@ const StatusTexts = new Map([
     {
       title: 'Wir warten auf eine Rückmeldung von dir!',
       description:
-        'Aktuell sind wir nicht auf der Suche nach einem/einer Lernpartner:in für dich. Unter dem Menüpunkt Zuordnung kannst du jederzeit eine:n neue:n Lernpartner:in anfordern. Bei Schwierigkeiten kannst du dich an support@lern-fair.de wenden',
+        'Aktuell sind wir nicht auf der Suche nach einem/einer Lernpartner:in für dich. Unter dem Menüpunkt Lernunterstützung kannst du jederzeit eine:n neue:n Lernpartner:in anfordern. Bei Schwierigkeiten kannst du dich an support@lern-fair.de wenden',
     },
   ],
   [
@@ -33,7 +33,7 @@ const StatusTexts = new Map([
     {
       title: 'Wir haben eine:n Lernpartner:in für dich gefunden!',
       description:
-        'Das gemeinsame Lernen kann nun endlich starten. Alle Informationen zu deinem/deiner neuen Lernpartner:in findest du im Menüpunkt Zuordnung. Bei Fragen und Schwierigkeiten kannst du dich jederzeit an support@lern-fair.de wenden.',
+        'Das gemeinsame Lernen kann nun endlich starten. Alle Informationen zu deinem/deiner neuen Lernpartner:in findest du im Menüpunkt Lernunterstützung. Bei Fragen und Schwierigkeiten kannst du dich jederzeit an support@lern-fair.de wenden.',
     },
   ],
   [
@@ -41,7 +41,7 @@ const StatusTexts = new Map([
     {
       title: ' Wir haben deinen Account deaktiviert! ',
       description:
-        'Schade, dass du Lern-Fair verlassen hast. Wir haben deine aktuellen Zuordnungen aufgelöst und deine Lernpartner:innen darüber informiert. Falls du zu einem späteren Zeitpunkt wieder Teil vo0n Lern-Fair werden möchtest, kannst du dich bei uns melden.',
+        'Schade, dass du Lern-Fair verlassen hast. Wir haben deine aktuellen Lernunterstützung aufgelöst und deine Lernpartner:innen darüber informiert. Falls du zu einem späteren Zeitpunkt wieder Teil vo0n Lern-Fair werden möchtest, kannst du dich bei uns melden.',
     },
   ],
 ]);
