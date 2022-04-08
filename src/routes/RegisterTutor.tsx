@@ -278,13 +278,13 @@ const RegisterTutor: React.FC<Props> = (props) => {
 
         <Form.Item
           className={classes.formItem}
-          label={isJufo && !isTutor ? 'E-Mail-Adresse' : 'Uni E-Mail-Adresse'}
+          label="E-Mail-Adresse"
           name="email"
           validateFirst
           rules={[
             {
               required: true,
-              message: 'Bitte trage deine (Uni-)E-Mail-Adresse ein!',
+              message: 'Bitte trage deine E-Mail-Adresse ein!',
             },
             {
               type: 'email',
