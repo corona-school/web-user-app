@@ -241,7 +241,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const renderStart = () => {
     return (
       <>
-        <div className={classes.lfPlusHint}>
+        {/*<div className={classes.lfPlusHint}>
           Wenn du dich für unser Programm{' '}
           <a
             href="https://www.lern-fair.de/helfer/plus"
@@ -252,7 +252,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           </a>{' '}
           bewerben möchtest, dann klicke{' '}
           <a href="https://lern-fair.de/plus-bewerbung">hier</a>.
-        </div>
+        </div>*/}
         <div className={classes.formContainerGroup}>
           <Form.Item
             className={classes.formItem}
