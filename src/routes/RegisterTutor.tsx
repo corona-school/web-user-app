@@ -241,7 +241,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const renderStart = () => {
     return (
       <>
-        <div className={classes.lfPlusHint}>
+        {/*<div className={classes.lfPlusHint}>
           Wenn du dich für unser Programm{' '}
           <a
             href="https://www.lern-fair.de/helfer/plus"
@@ -252,7 +252,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           </a>{' '}
           bewerben möchtest, dann klicke{' '}
           <a href="https://lern-fair.de/plus-bewerbung">hier</a>.
-        </div>
+        </div>*/}
         <div className={classes.formContainerGroup}>
           <Form.Item
             className={classes.formItem}
@@ -278,13 +278,13 @@ const RegisterTutor: React.FC<Props> = (props) => {
 
         <Form.Item
           className={classes.formItem}
-          label={isJufo && !isTutor ? 'E-Mail-Adresse' : 'Uni E-Mail-Adresse'}
+          label="E-Mail-Adresse"
           name="email"
           validateFirst
           rules={[
             {
               required: true,
-              message: 'Bitte trage deine (Uni-)E-Mail-Adresse ein!',
+              message: 'Bitte trage deine E-Mail-Adresse ein!',
             },
             {
               type: 'email',

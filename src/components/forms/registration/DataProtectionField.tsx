@@ -35,7 +35,9 @@ export const DataProtectionField: React.FC<Props> = (props) => {
             </a>{' '}
             des Corona School e.V. zur Kenntnis genommen. Mir ist insbesondere
             bewusst, dass die von mir angegebenen Daten zur Durchführung der
-            Angebote an zugeteilte {props.isTutor ? "Schüler:innen" : "Helfer:innen"} weitergegeben werden.
+            Angebote an zugeteilte {props.isTutor ? "Schüler:innen" : "Helfer:innen"} weitergegeben werden 
+            und deren Mailadressen ggf. von Anbietern außerhalb der EU zur Verfügung gestellt werden,
+            die die Einhaltung des europäischen Datenschutzniveaus nicht gewährleisten können.
             <br />
             <br />
             <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
@@ -66,7 +68,9 @@ export const DataProtectionField: React.FC<Props> = (props) => {
             </a>{' '}
             zur Kenntnis genommen. Mir ist insbesondere bewusst, dass die von
             mir angegebenen Daten zur Durchführung der Angebote an zugeteilte
-            {props.isTutor ? "Schüler:innen" : "Helfer:innen"} weitergegeben werden.
+            {props.isTutor ? "Schüler:innen" : "Helfer:innen"} weitergegeben werden
+            und deren Mailadressen ggf. von Anbietern außerhalb der EU zur Verfügung gestellt werden,
+            die die Einhaltung des europäischen Datenschutzniveaus nicht gewährleisten können.
             <br />
             <br />
             <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
