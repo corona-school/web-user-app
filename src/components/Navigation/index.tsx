@@ -70,7 +70,7 @@ const Navigation: React.FC<Props> = (props) => {
             }
             onClick={() => props.setMenuOpen(false)}
           >
-            Projektwoche
+            Fokuswochen
           </NavButton>
         )}
         {(isPupil || isTutor || isInstructor) && (

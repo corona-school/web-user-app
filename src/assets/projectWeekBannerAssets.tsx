@@ -2,20 +2,14 @@ import React from 'react';
 
 export const projectWeekTitle = (
   <>
-    Unsere Projektwoche: <b>Abschluss und dann?</b>
+    Unsere Fokuswoche: <b>Lernen lernen</b>
   </>
 );
 
 export const projectWeekPupilText = (
   <>
-    Vom 21.-25. März gibt es ein buntes Programm rund um das Thema{' '}
-    <b>Abschluss und dann?</b>. In verschiedenen Kursen kannst du dich mit
-    Themen rund um Studium, Ausbildung und Freiwilligendienst, aber auch
-    Bewerbungen und Studienfinanzierung auseinandersetzen.
-    <br />
-    Dies findet im Rahmen des neuen Programms &quot;Lern-Fair Fokus &ndash; die
-    digitalen Projektwochen&quot; statt, wozu du mehr Informationen auf unserer
-    Website{' '}
+    Vom 9. - 13. Mai wird ein vielseitiges Programm zum Thema “Lernen lernen” stattfinden. In verschiedenen Kursen kannst du dich über Lernstrategien, Zeitplanung, Selbstbewusstsein und vieles mehr informieren und austauschen.
+    Dies findet im Rahmen des neuen Programms Lern-Fair Fokus statt, wozu du mehr Informationen auf unserer Website
     <a
       href="https://www.lern-fair.de/schueler/fokus"
       rel="noopener noreferrer"
@@ -26,20 +20,15 @@ export const projectWeekPupilText = (
     </a>{' '}
     findest.
     <br />
-    Stöbere hier durch das Angebot der Projektwoche und melde dich kostenlos zu
+    Stöbere hier durch das Angebot der anstehende Fokuswoche und melde dich kostenlos zu
     den digitalen Angeboten an!
   </>
 );
 
 export const projectWeekStudentText = (
   <>
-    Vom 21.-25. März gibt es ein buntes Programm rund um das Thema{' '}
-    <b>Abschluss und dann?</b>. Schüler:innen können sich dort mit verschiedenen
-    Themen rund um Studium, Ausbildung und Freiwilligendienst, aber auch
-    Bewerbungen und Studienfinanzierung auseinandersetzen.
-    <br />
-    Dies findet im Rahmen des neuen Programms &quot;Lern-Fair Fokus &ndash; die
-    digitalen Projektwochen&quot; statt, wozu du mehr Informationen auf unserer
+    Hier finden Kurse im Rahmen des neuen Programms &quot;Lern-Fair Fokus &ndash; die
+    digitalen Fokuswochen&quot; statt, wozu du mehr Informationen auf unserer
     Website{' '}
     <a
       href="https://www.lern-fair.de/helfer/fokus"
@@ -51,8 +40,8 @@ export const projectWeekStudentText = (
     </a>{' '}
     findest.
     <br />
-    Erstelle hier einen Kurs zu einer Lern-Fair Fokus Projektwoche und stöbere
-    durch das Angebot der anstehenden Projektwoche. Außerdem kannst du deinen
+    Erstelle hier einen Kurs zu einer Lern-Fair Fokuswoche und stöbere
+    durch das Angebot der anstehenden Fokuswoche. Außerdem kannst du deinen
     eigenen eingestellten Kurs finden, sobald dieser freigeschaltet wurde.
   </>
 );
