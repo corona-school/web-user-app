@@ -34,7 +34,7 @@ export const projectWeekStudentText = (
       target="_blank"
       style={{ textDecoration: 'underline', color: '#373e47' }}
     >
-    Lern-Fair Fokus
+    {" "}Lern-Fair Fokus{" "}
     </a> 
     gibt es ein buntes Programm für interessierte Schüler:innen rund um ein bestimmtes Themengebiet. Für 2022 sind folgende Themenschwerpunkte geplant:
     <ul>
@@ -46,6 +46,6 @@ export const projectWeekStudentText = (
       <li>MINT-Projekte & KI 07.11. - 11.11.</li>
     </ul>
     Stöbere hier durch das Angebot der anstehenden Fokuswoche und erstelle selbst einen Kurs. Außerdem kannst du deinen eigenen eingestellten Kurs finden, sobald dieser freigeschaltet wurde.
-    Schreibe uns deine Ideen, deine Fragen oder deine Anmerkungen per Mail an <a href="mailto:fokus@lern-fair.de" style={{ textDecoration: 'underline', color: '#373e47' }}>mailto:fokus@lern-fair.de</a>.
+    Schreibe uns deine Ideen, deine Fragen oder deine Anmerkungen per Mail an <a href="mailto:fokus@lern-fair.de" style={{ textDecoration: 'underline', color: '#373e47' }}>fokus@lern-fair.de</a>.
   </>
 );
