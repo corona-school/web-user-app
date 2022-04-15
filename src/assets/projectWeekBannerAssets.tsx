@@ -9,16 +9,16 @@ export const projectWeekTitle = (
 export const projectWeekPupilText = (
   <>
     Vom 9. - 13. Mai wird ein vielseitiges Programm zum Thema “Lernen lernen” stattfinden. In verschiedenen Kursen kannst du dich über Lernstrategien, Zeitplanung, Selbstbewusstsein und vieles mehr informieren und austauschen.
-    Dies findet im Rahmen des neuen Programms Lern-Fair Fokus statt, wozu du mehr Informationen auf unserer Website
+    Dies findet im Rahmen des neuen Programms{" "}
     <a
       href="https://www.lern-fair.de/schueler/fokus"
       rel="noopener noreferrer"
       target="_blank"
       style={{ textDecoration: 'underline', color: '#373e47' }}
     >
-      hier
-    </a>{' '}
-    findest.
+      Lern-Fair Fokus
+    </a>
+    {' '}statt.
     <br />
     Stöbere hier durch das Angebot der anstehende Fokuswoche und melde dich kostenlos zu
     den digitalen Angeboten an!
@@ -27,16 +27,16 @@ export const projectWeekPupilText = (
 
 export const projectWeekStudentText = (
   <>
-    In den Fokuswochen von 
+    In den Fokuswochen von{" "}
     <a
       href="https://www.lern-fair.de/helfer/fokus"
       rel="noopener noreferrer"
       target="_blank"
       style={{ textDecoration: 'underline', color: '#373e47' }}
     >
-    {" "}Lern-Fair Fokus{" "}
+    Lern-Fair Fokus
     </a> 
-    gibt es ein buntes Programm für interessierte Schüler:innen rund um ein bestimmtes Themengebiet. Für 2022 sind folgende Themenschwerpunkte geplant:
+    {" "}gibt es ein buntes Programm für interessierte Schüler:innen rund um ein bestimmtes Themengebiet. Für 2022 sind folgende Themenschwerpunkte geplant:
     <ul>
       <li>Abschluss und dann? 21.03. - 25.03.</li>
       <li>Lernen lernen 09.05. - 13.05.</li>
