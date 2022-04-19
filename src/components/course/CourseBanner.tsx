@@ -62,7 +62,7 @@ export const CourseBanner: React.FC<Props> = ({
             label={
               revisionsOnly
                 ? 'Gruppen-Lernunterstützung entdecken'
-                : 'Projektwoche entdecken'
+                : 'Fokuswochen entdecken'
             }
             small
             Icon={MagnifyingGlass}
