@@ -23,7 +23,7 @@ import { languageOptions } from '../assets/languages';
 import YouTubeVideo from '../components/misc/YouTubeVideo';
 import { MatomoTrackRegistration } from '../components/misc/MatomoSupport';
 import { DeclarationOfSelfCommitment } from '../components/forms/registration/DeclarationOfSelfCommitment';
-import { introductionText } from '../assets/coDuAssets';
+// import { introductionText } from '../assets/coDuAssets';
 
 const { Option } = Select;
 
@@ -73,7 +73,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [isTutor, setTutor] = useState(!props.isJufoSubdomain);
-  const [isCodu, setCodu] = useState(false);
+  // const [isCodu, setCodu] = useState(false);
   const [supportsInDaz, setSupportsInDaz] = useState<boolean>(false);
   const [isGroups, setGroups] = useState(
     props.isInternship || props.isClub || false
@@ -121,18 +121,18 @@ const RegisterTutor: React.FC<Props> = (props) => {
     );
   };
 
-  const renderIsCoDuCheckbox = () => {
-    return (
-      <Checkbox
-        onChange={() => setCodu(!isCodu)}
-        value="isCodu"
-        checked={isCodu}
-        style={{ lineHeight: '32px', marginLeft: '8px' }}
-      >
-        {introductionText}
-      </Checkbox>
-    );
-  };
+  // const renderIsCoDuCheckbox = () => {
+  //   return (
+  //     <Checkbox
+  //       onChange={() => setCodu(!isCodu)}
+  //       value="isCodu"
+  //       checked={isCodu}
+  //       style={{ lineHeight: '32px', marginLeft: '8px' }}
+  //     >
+  //       {introductionText}
+  //     </Checkbox>
+  //   );
+  // };
 
   const renderIsGroupsCheckbox = () => {
     return (
@@ -233,7 +233,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         label="Auf welche Art möchtest du noch Schüler:innen unterstützen?"
       >
         {renderIsGroupsCheckbox()}
-        {isTutor && renderIsCoDuCheckbox()}
+        {/* {isTutor && renderIsCoDuCheckbox()} */}
       </Form.Item>
     );
   };
@@ -241,7 +241,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const renderStart = () => {
     return (
       <>
-        {/*<div className={classes.lfPlusHint}>
+        {/* <div className={classes.lfPlusHint}>
           Wenn du dich für unser Programm{' '}
           <a
             href="https://www.lern-fair.de/helfer/plus"
@@ -252,7 +252,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           </a>{' '}
           bewerben möchtest, dann klicke{' '}
           <a href="https://lern-fair.de/plus-bewerbung">hier</a>.
-        </div>*/}
+        </div> */}
         <div className={classes.formContainerGroup}>
           <Form.Item
             className={classes.formItem}
@@ -524,25 +524,25 @@ const RegisterTutor: React.FC<Props> = (props) => {
                 required: true,
                 message: 'Bitte trage deine Fächer ein',
               },
-              {
-                validator(_, value: string[]) {
-                  if (
-                    !isCodu ||
-                    value.filter((v) =>
-                      ['Deutsch', 'Englisch', 'Mathematik'].includes(v)
-                    ).length > 0
-                  ) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    new Error(
-                      'Wenn du an der CoDu-Studie teilnehmen möchtest, ' +
-                        'musst du mindestens eines der Fächer Deutsch, ' +
-                        'Englisch oder Mathematik wählen.'
-                    )
-                  );
-                },
-              },
+              // {
+              //   validator(_, value: string[]) {
+              //     if (
+              //       !isCodu ||
+              //       value.filter((v) =>
+              //         ['Deutsch', 'Englisch', 'Mathematik'].includes(v)
+              //       ).length > 0
+              //     ) {
+              //       return Promise.resolve();
+              //     }
+              //     return Promise.reject(
+              //       new Error(
+              //         'Wenn du an der CoDu-Studie teilnehmen möchtest, ' +
+              //           'musst du mindestens eines der Fächer Deutsch, ' +
+              //           'Englisch oder Mathematik wählen.'
+              //       )
+              //     );
+              //   },
+              // },
             ]}
           >
             <Select
@@ -739,7 +739,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       state: data.state?.toLowerCase(),
       supportsInDaz: data.supportsInDaz === 'yes',
       languages: data.languages,
-      isCodu: data.isCodu,
+      isCodu: false,
       redirectTo,
     };
   };
@@ -817,7 +817,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           lastname: formValues.lastname,
           email: formValues.email,
           isTutor,
-          isCodu,
+          // isCodu,
           isInstructor: isGroups,
           isJufo,
         });

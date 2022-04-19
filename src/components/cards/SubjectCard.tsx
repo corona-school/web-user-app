@@ -13,7 +13,7 @@ import Select from '../misc/Select';
 import { ReactComponent as AddIcon } from '../../assets/icons/plus-solid.svg';
 import { ReactComponent as Trashcan } from '../../assets/icons/trashcan.svg';
 import { ReactComponent as EditIcon } from '../../assets/icons/pen-solid.svg';
-import { checkCoDuSubjectRequirements } from '../../utils/SubjectUtil';
+// import { checkCoDuSubjectRequirements } from '../../utils/SubjectUtil';
 
 const CardWrapper = styled.div`
   padding: 15px;
@@ -60,7 +60,7 @@ const SubjectCard: React.FC<{
   const [editMaxGrade, setEditMaxGrade] = useState(subject.maxGrade || 13);
 
   const apiContext = useContext(Context.Api);
-  const modalContext = useContext(Context.Modal);
+  // const modalContext = useContext(Context.Modal);
   const userContext = useContext(Context.User);
   const isStudent = type === 'student';
 
@@ -83,11 +83,11 @@ const SubjectCard: React.FC<{
       s.name === subject.name ? modified : s
     );
 
-    if (userContext.user.isCodu && !checkCoDuSubjectRequirements(newSubjects)) {
-      modalContext.setOpenedModal('coDuSubjectErrorModal');
-      setLoading(null);
-      return;
-    }
+    // if (userContext.user.isCodu && !checkCoDuSubjectRequirements(newSubjects)) {
+    //   modalContext.setOpenedModal('coDuSubjectErrorModal');
+    //   setLoading(null);
+    //   return;
+    // }
 
     apiContext
       .putUserSubjects(newSubjects)
@@ -104,11 +104,11 @@ const SubjectCard: React.FC<{
       (s) => s.name !== subject.name
     );
 
-    if (userContext.user.isCodu && !checkCoDuSubjectRequirements(newSubjects)) {
-      modalContext.setOpenedModal('coDuSubjectErrorModal');
-      setLoading(null);
-      return;
-    }
+    // if (userContext.user.isCodu && !checkCoDuSubjectRequirements(newSubjects)) {
+    //   modalContext.setOpenedModal('coDuSubjectErrorModal');
+    //   setLoading(null);
+    //   return;
+    // }
 
     apiContext
       .putUserSubjects(newSubjects)

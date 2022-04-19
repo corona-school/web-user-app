@@ -99,9 +99,7 @@ const OpenRequestCard: React.FC<Props> = ({
         disabled={disabled}
         onClick={() => {
           if (!loading) {
-            if (!projectCoaching && user.type === 'student' && !user.isCodu) {
-              modalContext.setOpenedModal('becomeCoDuStudentModal');
-            } else if (projectCoaching || user.type === 'student') {
+            if (projectCoaching || user.type === 'student') {
               modifyMatchesRequested((x) => x + 1);
             } else {
               modalContext.setOpenedModal('newMatchConfirmationModal');
