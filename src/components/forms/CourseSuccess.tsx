@@ -49,13 +49,16 @@ const CourseSuccess: React.FC<Props> = ({
       {!published && lectures.length > 0 && (
         <>
           <div>
-            Dein Kurs wurde erstellt und kann bearbeitet werden. Soll er für
-            Schüler sichtbar sein?
+            Dein Kurs wurde erfolgreich erstellt und kann weiterhin von dir
+            bearbeitet werden.
+            <br />
+            Möchtest du den Kurs direkt zur Prüfung durch das Lern-Fair Team
+            freigeben?
           </div>
           <AccentColorButton
             onClick={publishCourse}
             accentColor="#4E6AE6"
-            label="Kurs veröffentlichen"
+            label="Zur Prüfung freigeben"
           />
           <AccentColorButton
             onClick={() => history.push(`/courses/${course.id}`)}
@@ -68,7 +71,7 @@ const CourseSuccess: React.FC<Props> = ({
         <>
           <div>
             Dein Kurs wurde erstellt und kann bearbeitet werden. Füge Termine
-            hinzu, um den Kurs veröffentlichen zu können
+            hinzu, um den Kurs veröffentlichen zu können.
           </div>
           <AccentColorButton
             onClick={goBack}
@@ -85,8 +88,8 @@ const CourseSuccess: React.FC<Props> = ({
       )}
       {published && (
         <div>
-          Dein Kurs ist für Schüler sichtbar, sobald er von Lern-Fair
-          freigegeben wurde.
+          Danke für die Freigabe zur Prüfung! Dein Kurs wird für Schüler:innen
+          sichtbar, sobald er durch das Lern-Fair Team freigeschaltet wurde.
           <AccentColorButton
             onClick={() => history.push(`/courses/${course.id}`)}
             accentColor="#GGGGGG"
