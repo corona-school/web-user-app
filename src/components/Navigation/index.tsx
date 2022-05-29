@@ -26,6 +26,7 @@ const Navigation: React.FC<Props> = (props) => {
       isParticipant,
       isTutor,
       isPupil,
+      isProjectCoachee,
     },
     user,
   } = useContext(UserContext);
@@ -87,7 +88,7 @@ const Navigation: React.FC<Props> = (props) => {
             Lernunterstützung
           </NavButton>
         )}
-        {(type === 'pupil' || isProjectCoach || isTutor) && (
+        {(isProjectCoachee || isProjectCoach) && (
           <NavButton
             to="/project-coaching"
             icon={<Icons.ProjectCoachingIcon />}
