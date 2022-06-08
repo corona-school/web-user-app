@@ -9,14 +9,14 @@ export const projectWeekTitle = (
 export const projectWeekPupilText = (
   <>
     Vom 27.06.-01.07. findet die nächste
-    <a
+    {' '}<a
       href="https://www.lern-fair.de/schueler/fokus"
       rel="noopener noreferrer"
       target="_blank"
       style={{ textDecoration: 'underline', color: '#373e47' }}
     >
-      {" "}Fokuswoche{" "}
-    </a>
+      Fokuswoche
+    </a>{' '}
     zum Thema „Kommunikation“ statt. An jedem Tag steht ein spannender
     Themenschwerpunkt an. Wir starten in die Woche mit einem Tag rund um die
     digitale Kommunikation, in der es unter anderem um Social Media geht. Auch
