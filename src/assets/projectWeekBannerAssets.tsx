@@ -15,7 +15,7 @@ export const projectWeekPupilText = (
       target="_blank"
       style={{ textDecoration: 'underline', color: '#373e47' }}
     >
-      Fokuswoche
+      {" "}Fokuswoche{" "}
     </a>
     zum Thema „Kommunikation“ statt. An jedem Tag steht ein spannender
     Themenschwerpunkt an. Wir starten in die Woche mit einem Tag rund um die
