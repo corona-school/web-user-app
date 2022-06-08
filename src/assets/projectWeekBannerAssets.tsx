@@ -2,7 +2,7 @@ import React from 'react';
 
 export const projectWeekTitle = (
   <>
-    Unsere Fokuswoche: <b>Lernen lernen</b>
+    Unsere Fokuswoche: <b>Kommunikation</b>
   </>
 );
 
