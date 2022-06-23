@@ -102,8 +102,8 @@ export const Text = styled.div<{ large?: boolean; bold?: boolean }>`
   font-weight: ${(props) => (props.bold ? 'bold' : 'normal')};
   color: #373e47;
   a {
-    text-decoration: 'underline';
-    color: #373e47;
+    text-decoration-line: underline;
+    color: #1890ff;
   }
 `;
 

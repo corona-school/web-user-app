@@ -32,6 +32,7 @@ import AccentColorButton from '../components/button/AccentColorButton';
 import { ReactComponent as ClockIcon } from '../assets/icons/clock-regular.svg';
 import { ReactComponent as MagicIcon } from '../assets/icons/magic-solid.svg';
 import { MatomoTrackRegistration } from '../components/misc/MatomoSupport';
+import { disadvantageAdvice } from '../assets/registrationAssets';
 
 const { Option } = Select;
 
@@ -240,17 +241,7 @@ const RegisterTutee: React.FC<Props> = ({
       <>
         {isTutee && !isCoDuSubdomain && !cooperationMode && (
           <div className={classes.registrationHint}>
-            <Text>
-              Die Lernunterstützung richtet sich ausschließlich an
-              Schüler:innen, die keine oder nur sehr eingeschränkt Möglichkeiten
-              haben, herkömmliche Bildungsangebote (wie z.B. bezahlte Nachhilfe){' '}
-              wahrzunehmen. Dies kann finanzielle, soziale, persönliche oder{' '}
-              kulturelle Gründe haben.{' '}
-              <b>
-                Bitte melde dich für die Lernunterstützung nur an, wenn das bei
-                dir zutrifft.
-              </b>
-            </Text>
+            <Text>{disadvantageAdvice}</Text>
           </div>
         )}
 
