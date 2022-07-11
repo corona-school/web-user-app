@@ -25,6 +25,9 @@ const initialActivities = [
   'Digitale Unterstützung bei der Prüfungsvorbereitung',
   'Digitale Unterstützung beim Lernen',
   'Begleitung auf dem Weg zum selbstständigen Lernen',
+  'Beratung hinsichtlich der berufliche Laufbahn',
+  'Psychosoziale Beratung (in schwierigen Lebenssituationen)',
+  'Persönlicher Austausch',
 ];
 
 const ActivityForm = ({ certificateData, setCertificateData }: Props) => {
