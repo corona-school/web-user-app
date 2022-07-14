@@ -31,13 +31,27 @@ export const DataProtectionField: React.FC<Props> = (props) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Datenschutzerklärung
+              Datenschutzbestimmungen
             </a>{' '}
-            des Corona School e.V. zur Kenntnis genommen. Mir ist insbesondere
-            bewusst, dass die von mir angegebenen Daten zur Durchführung der
-            Angebote an zugeteilte {props.isTutor ? "Schüler:innen" : "Helfer:innen"} weitergegeben werden 
-            und deren Mailadressen ggf. von Anbietern außerhalb der EU zur Verfügung gestellt werden,
-            die die Einhaltung des europäischen Datenschutzniveaus nicht gewährleisten können.
+            zur Kenntnis genommen und bin damit einverstanden, dass der
+            Lern-Fair e.V. meine persönlichen Daten entsprechend des Zwecks,
+            Umfangs und der Dauer wie in der Datenschutzerklärung angegeben,
+            verarbeitet und gespeichert werden.
+            <br />
+            Mir ist insbesondere bewusst, dass die von mir angegebenen Daten zur
+            Durchführung der Angebote an zugeteilte Nutzer:innen weitergegeben
+            werden und deren Mailadressen ggf. von Anbietern außerhalb der EU
+            zur Verfügung gestellt werden, die die Einhaltung des europäischen
+            Datenschutzniveaus nicht gewährleisten können.
+            <br />
+            Ich stimme ferner ausdrücklich der Verarbeitung meiner
+            personenbezogenen Daten über unsere in den USA sitzenden
+            Auftragsverarbeiter Google und Heroku zu, die die Einhaltung des
+            europäischen Datenschutzniveaus aufgrund der Möglichkeit von
+            Anfragen von US-Nachrichtendiensten nicht gewährleisten können. Zu
+            diesem Zweck hat Lern-Fair Standardvertragsklauseln abgeschlossen
+            und weitergehende Sicherheitsmaßnahmen vereinbart, Art. 46 Abs. 2
+            lit. c DSGVO.
             <br />
             <br />
             <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
@@ -56,7 +70,7 @@ export const DataProtectionField: React.FC<Props> = (props) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Datenschutzerklärung des Corona School e.V.
+              Datenschutzbestimmungen des Lern-Fair e.V.
             </a>{' '}
             sowie die{' '}
             <a
@@ -66,11 +80,25 @@ export const DataProtectionField: React.FC<Props> = (props) => {
             >
               Datenschutzerklärung der Studie <i>Corona & Du</i>
             </a>{' '}
-            zur Kenntnis genommen. Mir ist insbesondere bewusst, dass die von
-            mir angegebenen Daten zur Durchführung der Angebote an zugeteilte
-            {props.isTutor ? "Schüler:innen" : "Helfer:innen"} weitergegeben werden
-            und deren Mailadressen ggf. von Anbietern außerhalb der EU zur Verfügung gestellt werden,
-            die die Einhaltung des europäischen Datenschutzniveaus nicht gewährleisten können.
+            zur Kenntnis genommen und bin damit einverstanden, dass der
+            Lern-Fair e.V. meine persönlichen Daten entsprechend des Zwecks,
+            Umfangs und der Dauer wie in der Datenschutzerklärung angegeben,
+            verarbeitet und gespeichert werden.
+            <br />
+            Mir ist insbesondere bewusst, dass die von mir angegebenen Daten zur
+            Durchführung der Angebote an zugeteilte Nutzer:innen weitergegeben
+            werden und deren Mailadressen ggf. von Anbietern außerhalb der EU
+            zur Verfügung gestellt werden, die die Einhaltung des europäischen
+            Datenschutzniveaus nicht gewährleisten können.
+            <br />
+            Ich stimme ich ferner ausdrücklich der Verarbeitung meiner
+            personenbezogenen Daten über unsere in den USA sitzenden
+            Auftragsverarbeiter Google und Heroku zu, die die Einhaltung des
+            europäischen Datenschutzniveaus aufgrund der Möglichkeit von
+            Anfragen von US-Nachrichtendiensten nicht gewährleisten können. Zu
+            diesem Zweck hat Lern-Fair Standardvertragsklauseln abgeschlossen
+            und weitergehende Sicherheitsmaßnahmen vereinbart, Art. 46 Abs. 2
+            lit. c DSGVO.
             <br />
             <br />
             <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
