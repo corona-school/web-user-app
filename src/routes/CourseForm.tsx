@@ -179,6 +179,7 @@ export const CourseForm: React.FC = () => {
           course={course}
           subCourse={subCourse}
           lectures={lectures}
+          goBack={() => setPosition(2)}
         />
       );
     }

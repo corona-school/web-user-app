@@ -1,30 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ThemeContext } from 'styled-components';
 import { Empty } from 'antd';
-import { Text, Title } from '../components/Typography';
+import { Title } from '../components/Typography';
 import context from '../context';
 import classes from './ProjectCoach.module.scss';
-import { LeftHighlightCard } from '../components/cards/FlexibleHighlightCard';
-import BecomeProjectCoachModal from '../components/Modals/BecomeProjectCoachModal';
-import BecomeProjectCoacheeModal from '../components/Modals/BecomeProjectCoacheeModal';
 import { UserContext } from '../context/UserContext';
 import { ProjectMatchCard } from '../components/cards/MatchCard';
-import OpenRequestCard from '../components/cards/OpenRequestCard';
 import { ScreeningStatus } from '../types';
-import {
-  BecomeCoacheeText,
-  BecomeCoachText,
-} from '../assets/ProjectCoachingAssets';
 import CancelMatchModal from '../components/Modals/CancelMatchModal';
 import { ExpertRequestCard } from '../components/cards/ExpertRequestCard';
 import { ApiContext } from '../context/ApiContext';
 import { Expert } from '../types/Expert';
 import { JufoExpertDetailCard } from '../components/cards/JufoExpertDetailCard';
-import AccentColorButton from '../components/button/AccentColorButton';
+import CardBase from '../components/base/CardBase';
 
 const ProjectCoach: React.FC = () => {
   const { user } = useContext(context.User);
-  const theme = useContext(ThemeContext);
   const modalContext = useContext(context.Modal);
   const userContext = useContext(UserContext);
   const apiContext = useContext(ApiContext);
@@ -62,40 +52,6 @@ const ProjectCoach: React.FC = () => {
     });
   }, [userContext.user]);
 
-  const BecomeProjectCoach = () => {
-    return (
-      <LeftHighlightCard highlightColor={theme.color.cardHighlightYellow}>
-        <Title size="h3">
-          Schüler*innen bei außerschulischen Projekten unterstützen
-        </Title>
-        <Text>{BecomeCoachText}</Text>
-        <AccentColorButton
-          accentColor="#e78b00"
-          className={classes.buttonParticipate}
-          onClick={() => modalContext.setOpenedModal('becomeProjectCoach')}
-          label="Jetzt 1:1-Projektcoach werden"
-          small
-        />
-      </LeftHighlightCard>
-    );
-  };
-
-  const BecomeProjectCoachee = () => {
-    return (
-      <LeftHighlightCard highlightColor={theme.color.cardHighlightYellow}>
-        <Title size="h3">Unterstützung bei Projekten bekommen</Title>
-        <Text>{BecomeCoacheeText}</Text>
-        <AccentColorButton
-          accentColor="#e78b00"
-          className={classes.buttonParticipate}
-          onClick={() => modalContext.setOpenedModal('becomeProjectCoachee')}
-          label="Jetzt anmelden"
-          small
-        />
-      </LeftHighlightCard>
-    );
-  };
-
   const renderJufoExpertCards = () => {
     if (!user.isProjectCoachee) {
       return null;
@@ -103,7 +59,7 @@ const ProjectCoach: React.FC = () => {
     const myExperts = experts.filter((e) => pinnedExperts.includes(e.id));
     return (
       <div className={classes.experts}>
-        <Title size="h2">Deine Expert*innen</Title>
+        <Title size="h2">Deine Expert:innen</Title>
         <div className={classes.cardContainer}>
           {myExperts.map((e) => (
             <div className={classes.expertContainer}>
@@ -126,84 +82,6 @@ const ProjectCoach: React.FC = () => {
   };
 
   const Matches = () => {
-    const openRequests = (() => {
-      if (userContext.user.type === 'pupil') {
-        if (
-          userContext.user.projectMatches.filter((match) => !match.dissolved)
-            .length === 1
-        ) {
-          return (
-            <Empty description="Du hast im Moment keine offenen Anfragen." />
-          );
-        }
-        if (userContext.user.projectMatchesRequested === 0) {
-          return (
-            <OpenRequestCard
-              type="new"
-              userType={userContext.user.type}
-              projectCoaching
-              disabled={
-                userContext.user.isPupil &&
-                userContext.user.matchesRequested > 0
-              }
-            />
-          );
-        }
-        if (userContext.user.projectMatchesRequested >= 1) {
-          return (
-            <>
-              {[...Array(userContext.user.projectMatchesRequested).keys()].map(
-                () => (
-                  <OpenRequestCard
-                    type="pending"
-                    userType={userContext.user.type}
-                    projectCoaching
-                    disabled={false}
-                  />
-                )
-              )}
-            </>
-          );
-        }
-      }
-
-      if (userContext.user.projectMatchesRequested === 0) {
-        return (
-          <OpenRequestCard
-            type="new"
-            userType={userContext.user.type}
-            projectCoaching
-            disabled={false}
-          />
-        );
-      }
-
-      return (
-        <>
-          {[...Array(userContext.user.projectMatchesRequested).keys()].map(
-            (_, i) => (
-              <OpenRequestCard
-                // eslint-disable-next-line react/no-array-index-key
-                key={`project-request-${i}`}
-                type="pending"
-                userType={userContext.user.type}
-                projectCoaching
-                disabled={false}
-              />
-            )
-          )}
-          {userContext.user.projectMatchesRequested < 3 && (
-            <OpenRequestCard
-              type="new"
-              userType={userContext.user.type}
-              projectCoaching
-              disabled={false}
-            />
-          )}
-        </>
-      );
-    })();
-
     const currentMatches = userContext.user.projectMatches
       .filter((match) => !match.dissolved)
       .map((match) => (
@@ -241,7 +119,6 @@ const ProjectCoach: React.FC = () => {
 
     return (
       <div className={classes.containerRequests}>
-        <div className={classes.openRequests}>{openRequests}</div>
         {renderJufoExpertCards()}
         <Title size="h2">Deine Zuordnungen</Title>
         {currentMatches.length === 0 && (
@@ -262,15 +139,37 @@ const ProjectCoach: React.FC = () => {
   return (
     <div className={classes.container}>
       <Title size="h1">1:1-Projektcoaching</Title>
-      {!user.isProjectCoach && user.isTutor && <BecomeProjectCoach />}
-      {!user.isProjectCoachee && user.type === 'pupil' && (
-        <BecomeProjectCoachee />
-      )}
+      <CardBase highlightColor="#4e6ae6">
+        <div style={{ margin: '10px' }}>
+          Das 1:1-Projektcoaching wird überarbeitet und in ein neues Angebot
+          überführt. Daher ist keine weitere Anfrage für ein Matching mehr
+          möglich. <br />
+          Die Zusammenarbeit in deinem bisherigen Team ist davon nicht
+          betroffen, ihr könnt sehr gerne gemeinsam weitertüfteln wie bisher.
+          <br />
+          {userContext.user.type !== 'student' ? (
+            <>
+              Erfahre <a href=" lern-fair.de/schueler/projektcoaching">hier</a>{' '}
+              mehr zu den Fokuswochen von Lern-Fair Fokus, dem Nachfolger des
+              1:1-Projektcoachings. Im Rahmen der Fokuswoche “MINT und
+              Künstliche Intelligenz” vom 07. bis 11. November 2022 kannst du
+              dich dort auch für die Unterstützung deines Projektes anmelden.
+            </>
+          ) : (
+            <>
+              Erfahre{' '}
+              <a href="https://lern-fair.de/helfer/projektcoaching">hier</a>{' '}
+              mehr zu den Fokuswochen von Lern-Fair Fokus, dem Nachfolger des
+              1:1-Projektcoachings. Im Rahmen der Fokuswoche “MINT und
+              Künstliche Intelligenz” vom 07. bis 11. November 2022 kannst du
+              dort Schüler:innen bei ihrem Projekt unterstützen.
+            </>
+          )}
+        </div>
+      </CardBase>
       {((user.isProjectCoach &&
         user.projectCoachingScreeningStatus === ScreeningStatus.Accepted) ||
         user.isProjectCoachee) && <Matches />}
-      <BecomeProjectCoachModal />
-      <BecomeProjectCoacheeModal />
     </div>
   );
 };

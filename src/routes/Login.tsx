@@ -16,17 +16,18 @@ import AccentColorButton from '../components/button/AccentColorButton';
 import Textbox from '../components/misc/Textbox';
 import styles from '../components/button/SaveEditButton.module.scss';
 import RegisterTutee from './RegisterTutee';
-import Register from './Register';
 import { getDomainComponents } from '../utils/DomainUtils';
 import RegisterTutor from './RegisterTutor';
 import { ReactComponent as PaperPlane } from '../assets/icons/paper-plane-solid.svg';
+import { RegisterParticipant } from './RegisterParticipant';
+import { RegisterInstructor } from './RegisterInstructor';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
 const Login: React.FC<{
-  mode: string;
+  mode: 'login' | 'register';
   isStudent?: boolean;
   isPupil?: boolean;
 }> = ({ mode, isStudent, isPupil }) => {
@@ -38,7 +39,8 @@ const Login: React.FC<{
   >('idle');
   const [email, setEmail] = useState('');
   const [errorHasOccurred, setErrorHasOccurred] = useState(false);
-  const [pageIndex, setPageIndex] = useState(mode === 'login' ? 0 : 1);
+
+  const pageIndex = mode === 'login' ? 0 : 1;
   const query = useQuery();
   const token = query.get('token');
   const history = useHistory();
@@ -51,6 +53,12 @@ const Login: React.FC<{
 
   const [registerAsStudent, setRegisterAsStudent] = useState(false);
   const [registerAsPupil, setRegisterAsPupil] = useState(false);
+
+  const domainComponents = getDomainComponents();
+  const subdomain = domainComponents?.length > 0 && domainComponents[0];
+  const isJufoSubdomain = subdomain === 'jufo';
+  const isDrehtuerSubdomain = subdomain === 'drehtuer';
+  const isCoDuSubdomain = subdomain === 'codu';
 
   const Loader = () => {
     return (
@@ -190,11 +198,6 @@ const Login: React.FC<{
       break;
   }
 
-  const domainComponents = getDomainComponents();
-  const subdomain = domainComponents?.length > 0 && domainComponents[0];
-  const isJufoSubdomain = subdomain === 'jufo';
-  const isDrehtuerSubdomain = subdomain === 'drehtuer';
-
   // no token in the url (at least not a valid one) / no token in localStorage (at least not a valid one)
   return (
     <SignupContainer shouldShowBackButton={false}>
@@ -213,28 +216,6 @@ const Login: React.FC<{
       )}
       {loginState !== 'success' && (
         <div className={classes.signinContainer}>
-          <div className={classes.formHeader}>
-            <button
-              className={`${classes.formHeaderButton} ${
-                pageIndex === 0 ? classes.activePage : ''
-              }`}
-              onClick={() => setPageIndex(0)}
-            >
-              <p>Anmelden</p>
-            </button>
-            <button
-              className={`${classes.formHeaderButton} ${
-                pageIndex === 1 ? classes.activePage : ''
-              }`}
-              onClick={() => {
-                setRegisterAsPupil(false); // Reset student/pupil choice upon button click
-                setRegisterAsStudent(false);
-                setPageIndex(1);
-              }}
-            >
-              <p>Registrieren</p>
-            </button>
-          </div>
           {pageIndex === 0 ? (
             <div className={classes.form}>
               {errorHasOccurred && (
@@ -259,6 +240,12 @@ const Login: React.FC<{
                   disabled={loginState === 'loading'}
                 />
               </div>
+              <div className={classes.registrationBox}>
+                Du hast noch keinen Account?{' '}
+                <a href="https://www.lern-fair.de/registrierung">
+                  Registriere dich hier!
+                </a>
+              </div>
             </div>
           ) : (
             <div className={classes.form}>
@@ -267,13 +254,14 @@ const Login: React.FC<{
                 <RegisterTutee
                   isJufoSubdomain={isJufoSubdomain}
                   isDrehtuerSubdomain={isDrehtuerSubdomain}
+                  isCoDuSubdomain={isCoDuSubdomain}
                 />
+              </Route>
+              <Route path="/register/participant">
+                <RegisterParticipant />
               </Route>
               <Route path="/register/internship">
                 <RegisterTutor isInternship />
-              </Route>
-              <Route path="/register/club">
-                <RegisterTutor isClub isJufoSubdomain={isJufoSubdomain} />
               </Route>
               <Route path="/register/student">
                 <RegisterTutor isStudent isJufoSubdomain={isJufoSubdomain} />
@@ -284,8 +272,8 @@ const Login: React.FC<{
                   isDrehtuerSubdomain={isDrehtuerSubdomain}
                 />
               </Route>
-              <Route exact path="/register">
-                <Register />
+              <Route path="/register/instructor">
+                <RegisterInstructor />
               </Route>
             </div>
           )}

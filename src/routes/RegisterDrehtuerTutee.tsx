@@ -90,7 +90,11 @@ export const RegisterDrehtuerTutee: React.FC = () => {
         <SchoolKindField className={classes.formItem} />
         <StateField className={classes.formItem} />
         <GradeField className={classes.formItem} />
-        <DataProtectionField className={classes.formItem} isDrehtuer />
+        <DataProtectionField
+          className={classes.formItem}
+          isDrehtuer
+          isTutor={false}
+        />
       </>
     );
   };
@@ -100,7 +104,7 @@ export const RegisterDrehtuerTutee: React.FC = () => {
       <div className={classes.signupContainer}>
         <Title className={classes.tuteeTitle}>
           {formState === 'done' ? (
-            <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+            <span>Du wurdest erfolgreich als Schüler:in registriert</span>
           ) : (
             <span>Registrieren</span>
           )}

@@ -134,7 +134,7 @@ export const JufoExpertDetail: React.FC = () => {
           <div className={classes.buttonContainer}>
             <Images.NotFound />
             <Text large className={classes.text}>
-              Expert*in konnte nicht gefunden werden.
+              Expert:in konnte nicht gefunden werden.
             </Text>
             <Button
               backgroundColor="#4E6AE6"

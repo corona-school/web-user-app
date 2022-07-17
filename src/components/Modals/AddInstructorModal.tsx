@@ -32,26 +32,26 @@ const AddInstructorModal: React.FC<{
     setEmailInvalid(false);
     apiContext.addInstructor(courseId, email).then(
       () => {
-        message.success('Tutor*in wurde hinzugefügt!');
+        message.success('Tutor:in wurde hinzugefügt!');
         closeModal();
         updateDetails();
       },
       (err) => {
         if (err.response != null && err.response.status != null) {
           if (err.response.status === 409) {
-            message.error('Diese Person ist bereits Tutor*in des Kurses.');
+            message.error('Diese Person ist bereits Tutor:in des Kurses.');
             console.log(err);
             return;
           }
           if (err.response.status === 404) {
             message.error(
-              `Diese Person konnte nicht gefunden werden. ${email} muss sich zunächst auf der Plattform als Kursleiter*in registieren.`
+              `Diese Person konnte nicht gefunden werden. ${email} muss sich zunächst auf der Plattform als Kursleiter:in registieren.`
             );
             console.log(err);
             return;
           }
         }
-        message.error('Tutor*in konnte nicht hinzugefügt werden.');
+        message.error('Tutor:in konnte nicht hinzugefügt werden.');
         console.log(err);
       }
     );
@@ -62,7 +62,7 @@ const AddInstructorModal: React.FC<{
       <DialogModalBase.Modal modalName="addInstructorModal">
         <DialogModalBase.Header>
           <DialogModalBase.Icon Icon={AddIcon} />
-          <DialogModalBase.Title>Tutor*in hinzufügen</DialogModalBase.Title>
+          <DialogModalBase.Title>Tutor:in hinzufügen</DialogModalBase.Title>
           <DialogModalBase.CloseButton
             stateSettingMethods={[setEmail, setEmailInvalid]}
           />
@@ -74,7 +74,7 @@ const AddInstructorModal: React.FC<{
             </DialogModalBase.Error>
           )}
           <DialogModalBase.Description>
-            Du hast die Möglichkeit, weitere Personen als Tutor*innen zu deinem
+            Du hast die Möglichkeit, weitere Personen als Tutor:innen zu deinem
             Kurs hinzuzufügen. Um eine Person hinzuzufügen, brauchst du
             lediglich die E-Mail-Adresse, mit der die Person bei der Corona
             School registriert ist.
@@ -83,7 +83,7 @@ const AddInstructorModal: React.FC<{
           <DialogModalBase.Content>
             <DialogModalBase.Form>
               <DialogModalBase.TextBox
-                label="E-Mail-Adresse des/der Tutor*in"
+                label="E-Mail-Adresse des/der Tutor:in"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />

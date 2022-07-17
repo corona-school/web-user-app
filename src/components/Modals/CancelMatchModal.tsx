@@ -234,7 +234,7 @@ const CancelMatchModal: React.FC<{
                     ownType === 'student' ? 'Coachee' : 'Coach'
                   } verbunden werden?`}
                 {!projectCoaching &&
-                  'Möchtest du mit einem/einer neuen Lernpartner*in verbunden werden?'}
+                  'Möchtest du mit einem/einer neuen Lernpartner:in verbunden werden?'}
               </DialogModalBase.Subheading>
 
               <DialogModalBase.InputCompound direction="horizontal">

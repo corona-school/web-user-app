@@ -6,19 +6,19 @@ import Button from '../components/button';
 import {
   DataProtectionField,
   EmailField,
-  MessageField,
+  GradeField,
   NameField,
+  SchoolKindField,
   StateField,
-  UniversityField,
 } from '../components/forms/registration';
 import { Title } from '../components/Typography';
 import { ApiContext } from '../context/ApiContext';
-import { Tutor } from '../types/Registration';
-import classes from './RegisterDrehtuerTutor.module.scss';
+import { Tutee } from '../types/Registration';
+import classes from './RegisterParticipant.module.scss';
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
 
-export const RegisterDrehtuerTutor: React.FC = () => {
+export const RegisterParticipant: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState<'start' | 'done'>('start');
 
@@ -29,32 +29,30 @@ export const RegisterDrehtuerTutor: React.FC = () => {
     return <NoRegistration />;
   }
 
-  const registerTutor = async () => {
+  const registerTutee = async () => {
     try {
       const formValues = await form.validateFields();
-
-      const data: Tutor = {
+      console.log(formValues);
+      const data: Tutee = {
         firstname: formValues.firstname,
         lastname: formValues.lastname,
         email: formValues.email,
         state: formValues.state?.toLowerCase(),
-        university: formValues.university,
-        msg: formValues.msg ?? '',
+        school: formValues.school?.toLowerCase(),
+        grade: parseInt(formValues.grade),
         // empty
-        isTutor: false,
-        isCodu: false,
-        isOfficial: false,
-        isInstructor: true,
-        isProjectCoach: false,
+        msg: '',
+        isProjectCoachee: false,
+        isTutee: false,
         languages: [],
         newsletter: false,
-        registrationSource: 'DREHTUER',
+        registrationSource: 'NORMAL',
       };
 
       setLoading(true);
 
       apiContext
-        .registerTutor(data)
+        .registerTutee(data)
         .then(() => {
           setFormState('done');
         })
@@ -89,10 +87,10 @@ export const RegisterDrehtuerTutor: React.FC = () => {
       <>
         <NameField className={classes.formItem} />
         <EmailField className={classes.formItem} />
+        <SchoolKindField className={classes.formItem} />
         <StateField className={classes.formItem} />
-        <UniversityField className={classes.formItem} />
-        <MessageField className={classes.formItem} isGroups />
-        <DataProtectionField className={classes.formItem} isDrehtuer isTutor />
+        <GradeField className={classes.formItem} />
+        <DataProtectionField className={classes.formItem} isTutor={false} />
       </>
     );
   };
@@ -102,7 +100,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
       <div className={classes.signupContainer}>
         <Title className={classes.tuteeTitle}>
           {formState === 'done' ? (
-            <span>Du wurdest erfolgreich als Leiter:in registriert</span>
+            <span>Du wurdest erfolgreich als Teilnehmer:in registriert</span>
           ) : (
             <span>Registrieren</span>
           )}
@@ -115,7 +113,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         layout="vertical"
         name="basic"
         initialValues={{ remember: true }}
-        onFinish={registerTutor}
+        onFinish={registerTutee}
       >
         {!loading ? (
           renderForm()

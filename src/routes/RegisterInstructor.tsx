@@ -6,19 +6,16 @@ import Button from '../components/button';
 import {
   DataProtectionField,
   EmailField,
-  MessageField,
   NameField,
-  StateField,
-  UniversityField,
 } from '../components/forms/registration';
 import { Title } from '../components/Typography';
 import { ApiContext } from '../context/ApiContext';
 import { Tutor } from '../types/Registration';
-import classes from './RegisterDrehtuerTutor.module.scss';
+import classes from './RegisterInstructor.module.scss';
 import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
 
-export const RegisterDrehtuerTutor: React.FC = () => {
+export const RegisterInstructor: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState<'start' | 'done'>('start');
 
@@ -37,10 +34,10 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         firstname: formValues.firstname,
         lastname: formValues.lastname,
         email: formValues.email,
-        state: formValues.state?.toLowerCase(),
-        university: formValues.university,
-        msg: formValues.msg ?? '',
         // empty
+        state: 'other',
+        university: '',
+        msg: '',
         isTutor: false,
         isCodu: false,
         isOfficial: false,
@@ -48,7 +45,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
         isProjectCoach: false,
         languages: [],
         newsletter: false,
-        registrationSource: 'DREHTUER',
+        registrationSource: 'NORMAL',
       };
 
       setLoading(true);
@@ -89,10 +86,7 @@ export const RegisterDrehtuerTutor: React.FC = () => {
       <>
         <NameField className={classes.formItem} />
         <EmailField className={classes.formItem} />
-        <StateField className={classes.formItem} />
-        <UniversityField className={classes.formItem} />
-        <MessageField className={classes.formItem} isGroups />
-        <DataProtectionField className={classes.formItem} isDrehtuer isTutor />
+        <DataProtectionField className={classes.formItem} isTutor />
       </>
     );
   };

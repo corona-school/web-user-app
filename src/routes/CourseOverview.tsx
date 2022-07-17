@@ -16,20 +16,27 @@ import {
   scrollToTargetAdjustedTop,
 } from '../utils/CourseUtil';
 import classes from './CourseOverview.module.scss';
-import { Text } from '../components/Typography';
+import { Text, Title } from '../components/Typography';
 import { env } from '../api/config';
 import { NoCourses } from '../components/NoService';
 import CourseCard from '../components/cards/CourseCard';
 import { Spinner } from '../components/loading/Spinner';
+import {
+  projectWeekPupilText,
+  projectWeekStudentText,
+  projectWeekTitle,
+} from '../assets/projectWeekBannerAssets';
 
 interface Props {
   customCourseLink?: (course: ParsedCourseOverview) => string;
   backButtonRoute?: string;
+  revisionOnly?: boolean;
 }
 
 export const CourseOverview: React.FC<Props> = ({
   customCourseLink,
   backButtonRoute,
+  revisionOnly = false,
 }) => {
   const [courses, setCourses] = useState<ParsedCourseOverview[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<
@@ -37,6 +44,7 @@ export const CourseOverview: React.FC<Props> = ({
   >(null);
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(false);
+  const [bannerType, setBannerType] = useState<'pupil' | 'student'>('pupil');
   const apiContext = useContext(ApiContext);
   const userContext = useContext(UserContext);
 
@@ -100,7 +108,15 @@ export const CourseOverview: React.FC<Props> = ({
     apiContext
       .getCourses()
       .then((apiCourses) => {
-        setCourses(apiCourses.map(parseCourse));
+        setCourses(
+          apiCourses
+            .map(parseCourse)
+            .filter((c) =>
+              revisionOnly
+                ? c.category === 'revision'
+                : c.category !== 'revision'
+            )
+        );
         return apiContext.getCourseTags();
       })
       .then((apiTags) => {
@@ -118,6 +134,9 @@ export const CourseOverview: React.FC<Props> = ({
 
   useEffect(() => {
     loadCourses();
+    setBannerType(
+      userContext.user.id !== 'defaultId' ? userContext.user.type : 'pupil'
+    );
   }, [userContext.user.type]);
 
   const coachingTag = tags
@@ -268,13 +287,27 @@ export const CourseOverview: React.FC<Props> = ({
 
   return (
     <>
-      <CourseHeader
-        courses={courses}
-        onChange={(courseList) => {
-          setFilteredCourses(courseList);
-        }}
-        backButtonRoute={backButtonRoute}
-      />
+      {!revisionOnly && (
+        <div
+          style={{
+            backgroundColor: 'rgba(255, 210, 46, 0.6)',
+            padding: '30px',
+          }}
+        >
+          <Title>{projectWeekTitle}</Title>
+          {bannerType === 'pupil' && <Text>{projectWeekPupilText}</Text>}
+          {bannerType === 'student' && <Text>{projectWeekStudentText}</Text>}
+        </div>
+      )}
+      {revisionOnly && (
+        <CourseHeader
+          courses={courses}
+          onChange={(courseList) => {
+            setFilteredCourses(courseList);
+          }}
+          backButtonRoute={backButtonRoute}
+        />
+      )}
       {loading && (
         <Spinner message="Kursübersicht wird geladen..." color="#f4486d" />
       )}

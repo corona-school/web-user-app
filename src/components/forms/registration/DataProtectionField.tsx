@@ -4,7 +4,9 @@ import classes from './DataProtectionField.module.scss';
 
 interface Props {
   className: string;
+  isTutor: boolean;
   isDrehtuer?: boolean;
+  isCodu?: boolean;
 }
 
 export const DataProtectionField: React.FC<Props> = (props) => {
@@ -21,60 +23,92 @@ export const DataProtectionField: React.FC<Props> = (props) => {
       ]}
     >
       <Checkbox.Group className={classes.checkboxGroup}>
-        <Checkbox value="dataprotection">
-          Ich habe die{' '}
-          <a
-            href="https://www.lern-fair.de/datenschutz"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Datenschutzerklärung
-          </a>{' '}
-          des Corona School e.V. zur Kenntnis genommen und willige in die
-          Verarbeitung personenbezogener Daten zu den angegebenen Zwecken ein.{' '}
-          {!props.isDrehtuer && (
-            <>
-              Mir ist insbesondere bekannt, dass meine Angaben an geeignete
-              Matchingpartner*innen übermittelt werden. Die Verarbeitung der
-              personenbezogenen Daten erfolgt auf privaten IT-Geräten der
-              Matchingpartner*innen. Es kann im Rahmen der Übermittlung dazu
-              kommen, dass personenbezogene Daten an E-Mail Server (bspw.
-              google-mail oder @me.com) außerhalb der Europäischen Union
-              übermittelt werden. In Ländern außerhalb der Europäischen Union
-              besteht ggf. kein adäquates Datenschutzniveau. Zudem kann die
-              Durchsetzung von Rechten erschwert bzw. ausgeschlossen sein. Mir
-              sind diese Risiken bewusst und bekannt.
-              <br />
-              Mir ist außerdem bekannt, dass meine Einwilligung freiwillig und
-              jederzeit mit Wirkung für die Zukunft widerruflich ist. Ein
-              Widerruf der Einwilligung kann formlos erfolgen (bspw. an{' '}
-              <a href="mailto:datenschutz@lern-fair.de">
-                datenschutz@lern-fair.de
-              </a>
-              ). Mir ist bewusst, dass der Widerruf nur für die Zukunft gilt und
-              daher Datenverarbeitungen bis zum Widerruf, insbesondere die
-              Weitergabe von meinen personenbezogenen Daten an geeignete
-              Matchingpartner*innen bis zum Zeitpunkt des Widerrufs unberührt
-              bleiben. Weitere Datenschutzinformationen sind abrufbar unter{' '}
-              <a
-                href="https://www.lern-fair.de/datenschutz"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                https://www.lern-fair.de/datenschutz
-              </a>
-              .
-            </>
-          )}
-          <br />
-          <br />
-          <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
-          <span style={{ fontStyle: 'italic' }}>
-            Für den Fall, dass die einwilligende Person das 18. Lebensjahr noch
-            nicht vollendet hat, hat der Träger der elterlichen Verantwortung
-            für die Person die Einwilligung zu erklären.
-          </span>
-        </Checkbox>
+        {!props.isCodu && (
+          <Checkbox value="dataprotection">
+            Ich habe die{' '}
+            <a
+              href="https://www.lern-fair.de/datenschutz"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Datenschutzbestimmungen
+            </a>{' '}
+            zur Kenntnis genommen und bin damit einverstanden, dass der
+            Lern-Fair e.V. meine persönlichen Daten entsprechend des Zwecks,
+            Umfangs und der Dauer wie in der Datenschutzerklärung angegeben,
+            verarbeitet und gespeichert werden.
+            <br />
+            Mir ist insbesondere bewusst, dass die von mir angegebenen Daten zur
+            Durchführung der Angebote an zugeteilte Nutzer:innen weitergegeben
+            werden und deren Mailadressen ggf. von Anbietern außerhalb der EU
+            zur Verfügung gestellt werden, die die Einhaltung des europäischen
+            Datenschutzniveaus nicht gewährleisten können.
+            <br />
+            Ich stimme ferner ausdrücklich der Verarbeitung meiner
+            personenbezogenen Daten über unsere in den USA sitzenden
+            Auftragsverarbeiter Google und Heroku zu, die die Einhaltung des
+            europäischen Datenschutzniveaus aufgrund der Möglichkeit von
+            Anfragen von US-Nachrichtendiensten nicht gewährleisten können. Zu
+            diesem Zweck hat Lern-Fair Standardvertragsklauseln abgeschlossen
+            und weitergehende Sicherheitsmaßnahmen vereinbart, Art. 46 Abs. 2
+            lit. c DSGVO.
+            <br />
+            <br />
+            <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
+            <span style={{ fontStyle: 'italic' }}>
+              Für den Fall, dass die einwilligende Person das 18. Lebensjahr
+              noch nicht vollendet hat, hat der Träger der elterlichen
+              Verantwortung für die Person die Einwilligung zu erklären.
+            </span>
+          </Checkbox>
+        )}
+        {props.isCodu && (
+          <Checkbox value="dataprotection">
+            Ich habe die{' '}
+            <a
+              href="https://www.lern-fair.de/datenschutz"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Datenschutzbestimmungen des Lern-Fair e.V.
+            </a>{' '}
+            sowie die{' '}
+            <a
+              href="https://lern-fair.de/codu-studie-datenschutzerklaerung"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Datenschutzerklärung der Studie <i>Corona & Du</i>
+            </a>{' '}
+            zur Kenntnis genommen und bin damit einverstanden, dass der
+            Lern-Fair e.V. meine persönlichen Daten entsprechend des Zwecks,
+            Umfangs und der Dauer wie in der Datenschutzerklärung angegeben,
+            verarbeitet und gespeichert werden.
+            <br />
+            Mir ist insbesondere bewusst, dass die von mir angegebenen Daten zur
+            Durchführung der Angebote an zugeteilte Nutzer:innen weitergegeben
+            werden und deren Mailadressen ggf. von Anbietern außerhalb der EU
+            zur Verfügung gestellt werden, die die Einhaltung des europäischen
+            Datenschutzniveaus nicht gewährleisten können.
+            <br />
+            Ich stimme ich ferner ausdrücklich der Verarbeitung meiner
+            personenbezogenen Daten über unsere in den USA sitzenden
+            Auftragsverarbeiter Google und Heroku zu, die die Einhaltung des
+            europäischen Datenschutzniveaus aufgrund der Möglichkeit von
+            Anfragen von US-Nachrichtendiensten nicht gewährleisten können. Zu
+            diesem Zweck hat Lern-Fair Standardvertragsklauseln abgeschlossen
+            und weitergehende Sicherheitsmaßnahmen vereinbart, Art. 46 Abs. 2
+            lit. c DSGVO.
+            <br />
+            <br />
+            <span style={{ fontWeight: 'bold' }}>Hinweis:</span>{' '}
+            <span style={{ fontStyle: 'italic' }}>
+              Für den Fall, dass die einwilligende Person das 18. Lebensjahr
+              noch nicht vollendet hat, hat der Träger der elterlichen
+              Verantwortung für die Person die Einwilligung zu erklären.
+            </span>
+          </Checkbox>
+        )}
       </Checkbox.Group>
     </Form.Item>
   );

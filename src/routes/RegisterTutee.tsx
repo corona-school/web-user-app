@@ -1,18 +1,10 @@
 import React, { useState, useContext } from 'react';
-import {
-  Form,
-  Input,
-  Checkbox,
-  Select,
-  message,
-  Radio,
-  InputNumber,
-  Tooltip,
-} from 'antd';
+import { Form, Input, Select, message, Radio, InputNumber } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { useHistory, useLocation, Link } from 'react-router-dom';
+import qs from 'qs';
 import Icons from '../assets/icons';
-import { Title, Text, LinkText } from '../components/Typography';
+import { Title, Text } from '../components/Typography';
 import Button from '../components/button';
 import classes from './RegisterTutee.module.scss';
 import { Subject } from '../types';
@@ -40,6 +32,7 @@ import AccentColorButton from '../components/button/AccentColorButton';
 import { ReactComponent as ClockIcon } from '../assets/icons/clock-regular.svg';
 import { ReactComponent as MagicIcon } from '../assets/icons/magic-solid.svg';
 import { MatomoTrackRegistration } from '../components/misc/MatomoSupport';
+import { disadvantageAdvice } from '../assets/registrationAssets';
 
 const { Option } = Select;
 
@@ -74,26 +67,121 @@ interface Props {
   cooperationMode?: CooperationMode;
   isJufoSubdomain?: boolean;
   isDrehtuerSubdomain?: boolean;
+  isCoDuSubdomain?: boolean;
+}
+
+function AutoMatchChooser({ setRequestsAutoMatch, nextStep }) {
+  const [renderNote, setRenderNote] = useState(false);
+  return (
+    <>
+      <h1 className={classes.autoMatchHeadline}>Wie möchtest du fortfahren?</h1>
+      <AccentColorButton
+        accentColor="#0366e0"
+        onClick={() => {
+          setRenderNote(true);
+        }}
+        className={classes.autoMatch}
+      >
+        <div className={classes.autoMatchIconWrapper}>
+          <MagicIcon />
+        </div>
+        <div className={classes.autoMatchTextWrapper}>
+          <h3>Ich möchte möglichst schnell Hilfe erhalten.</h3>
+          <p>
+            Mit dieser Option gehen wir direkt auf die Suche nach einem:r
+            Lernpartner:in für dich, nachdem du deine E-Mail-Adresse bestätigt
+            hast. Wir benachrichtigen dich per E-Mail, sobald wir jemanden
+            gefunden haben.
+          </p>
+        </div>
+      </AccentColorButton>
+      {renderNote && (
+        <div className={classes.autoMatchNote}>
+          <b>Achtung: Lange Wartezeit</b>
+          <p>
+            Derzeit benötigen sehr viele Schüler:innen in Deutschland unsere
+            Hilfe, unsere Warteliste ist daher lang. Aktuell dauert es zwischen
+            <b> 30 und 90 Tagen</b>, bis wir dich mit einem:r geeigneten
+            Helfer:in verbinden können. Bitte schließe die Registrierung nur
+            dann ab, wenn du bereit bist, so lange zu warten. Wir geben unser
+            Bestes, allen Schüler:innen die nötige Unterstützung zur Verfügung
+            zu stellen.
+          </p>
+          <p>Vielen Dank für dein Verständnis!</p>
+          <div className={classes.autoMatchNoteButtonBox}>
+            <AccentColorButton
+              accentColor="#e00315"
+              label="Abbrechen"
+              small
+              onClick={() => {
+                setRenderNote(false);
+              }}
+            />
+            <AccentColorButton
+              accentColor="#0366e0"
+              label="Ich bin bereit, zu warten"
+              small
+              onClick={(e) => {
+                setRequestsAutoMatch(true);
+                nextStep(e);
+              }}
+            />
+          </div>
+        </div>
+      )}
+      {!renderNote && (
+        <AccentColorButton
+          accentColor="#0366e0"
+          onClick={(e) => {
+            setRequestsAutoMatch(false);
+            nextStep(e);
+          }}
+          className={classes.autoMatch}
+        >
+          <div className={classes.autoMatchIconWrapper}>
+            <ClockIcon />
+          </div>
+          <div className={classes.autoMatchTextWrapper}>
+            <h3>Ich möchte mich erstmal nur umsehen.</h3>
+            <p>
+              Mit dieser Option kannst du zu einem späteren Zeitpunkt selbst
+              eine:n Lernpartner:in anfordern.
+            </p>
+          </div>
+        </AccentColorButton>
+      )}
+    </>
+  );
+}
+
+function initFormData(isCoDuSubdomain: boolean) {
+  if (isCoDuSubdomain) {
+    return {
+      isTutee: true,
+    };
+  }
+  return {};
 }
 
 const RegisterTutee: React.FC<Props> = ({
   cooperationMode,
   isJufoSubdomain,
   isDrehtuerSubdomain,
+  isCoDuSubdomain,
 }) => {
   const history = useHistory();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState<
     'start' | 'detail' | 'autoMatchChooser' | 'finish' | 'done'
   >('start');
-  const [isTutee, setTutee] = useState(false);
-  const [isGroups, setGroups] = useState(false);
-  const [isJufo, setJufo] = useState(isJufoSubdomain ?? false);
 
   const [isGermanNative, setIsGermanNative] = useState<boolean>(true);
   const [dazOnly, setDazOnly] = useState<boolean>(false);
 
-  const [formData, setFormData] = useState<FormData>({});
+  const [formData, setFormData] = useState<FormData>(
+    initFormData(isCoDuSubdomain)
+  );
   const [form] = Form.useForm();
   const apiContext = useContext(Context.Api);
 
@@ -101,7 +189,9 @@ const RegisterTutee: React.FC<Props> = ({
 
   const [schoolInfo, setSchoolInfo] = useState<SchoolInfo[]>(null);
 
-  const isOnlyJufo = isJufo && !isTutee && !isGroups;
+  const isTutee = isCoDuSubdomain || !isJufoSubdomain;
+
+  const isJufo = isJufoSubdomain;
 
   const [requestsAutoMatch, setRequestsAutoMatch] = useState(false);
 
@@ -129,14 +219,6 @@ const RegisterTutee: React.FC<Props> = ({
       });
   }
 
-  const DisabledExplanation = () => {
-    return (
-      <Tooltip title="Du kannst dich nicht gleichzeitig für die 1:1-Lernunterstützung und das 1:1-Projektcoaching anmelden.">
-        <Icons.Help fill="grey" />
-      </Tooltip>
-    );
-  };
-
   const SetDaZStatus = (learningGermanSince) => {
     form.setFieldsValue({ subjects: ['Deutsch als Zweitsprache'] });
 
@@ -154,172 +236,15 @@ const RegisterTutee: React.FC<Props> = ({
     }
   };
 
-  const renderIsTuteeCheckbox = () => {
-    return (
-      <>
-        <Checkbox
-          onChange={() => {
-            setTutee(!isTutee);
-          }}
-          style={{ lineHeight: '32px', marginLeft: '8px' }}
-          checked={isTutee}
-          defaultChecked={formData.isTutee}
-          disabled={isJufo}
-        >
-          <>
-            Ich möchte{' '}
-            <LinkText
-              text="Lernunterstützung im 1:1-Format"
-              href="www.lern-fair.de/schueler/lernunterstuetzung"
-              enableLink={isJufoSubdomain}
-            />{' '}
-            von einem/einer Student*in erhalten.
-          </>
-          {isJufo && <DisabledExplanation />}
-        </Checkbox>
-        {isTutee && (
-          <div className={classes.registrationHint}>
-            <Text>
-              Die 1:1-Lernunterstützung richtet sich ausschließlich an{' '}
-              Schüler:innen, die keine oder nur sehr eingeschränkt Möglichkeiten{' '}
-              haben, herkömmliche Bildungsangebote (wie z.B. bezahlte Nachhilfe){' '}
-              wahrzunehmen. Dies kann finanzielle, soziale, persönliche oder{' '}
-              kulturelle Gründe haben.{' '}
-              <b>
-                Bitte melde dich für die 1:1-Lernunterstützung nur an, wenn das
-                bei dir zutrifft.
-              </b>{' '}
-              Unsere anderen Angebote stehen weiterhin für alle Schüler:innen{' '}
-              offen.
-            </Text>
-          </div>
-        )}
-      </>
-    );
-  };
-
-  const renderIsGroupsCheckbox = () => {
-    return (
-      <Checkbox
-        onChange={() => {
-          setGroups(!isGroups);
-        }}
-        value="isGroups"
-        style={{ lineHeight: '32px', marginLeft: '8px' }}
-        checked={isGroups}
-      >
-        Ich möchte an{' '}
-        <LinkText
-          text="Gruppenkursen"
-          href="www.lern-fair.de/schueler/gruppenkurse"
-          enableLink={isJufoSubdomain}
-        />{' '}
-        von Lern-Fair teilnehmen (z.{' '}B. Sommer-AG, Repetitorium,
-        Lerncoaching).
-      </Checkbox>
-    );
-  };
-
-  const renderIsJufoCheckbox = () => {
-    return (
-      <Checkbox
-        disabled={isJufoSubdomain || isTutee}
-        onChange={() => {
-          setJufo(!isJufo);
-        }}
-        value="isJufo"
-        style={{ lineHeight: '32px', marginLeft: '8px' }}
-        className={isJufoSubdomain ? classes.disabledCheckbox : undefined}
-        checked={isJufo}
-      >
-        <>
-          Ich suche Unterstützung bei der Erarbeitung meines
-          (Forschungs-)Projekts (z.{' '}B. im Rahmen einer Teilnahme an{' '}
-          <span style={{ fontWeight: isJufoSubdomain ? 'bolder' : 'normal' }}>
-            Jugend forscht
-          </span>
-          ) und möchte am{' '}
-          <LinkText
-            text="1:1-Projektcoaching"
-            href="https://www.lern-fair.de/schueler/projektcoaching"
-            enableLink={isJufoSubdomain}
-          />{' '}
-          teilnehmen.
-        </>
-        {isTutee && <DisabledExplanation />}
-      </Checkbox>
-    );
-  };
-
-  const renderOfferPickerForJufo = () => {
-    return (
-      <>
-        <Form.Item
-          className={classes.formItem}
-          name="jufoDefault"
-          rules={[
-            () => ({
-              validator() {
-                if (isJufo) {
-                  return Promise.resolve();
-                }
-                return Promise.reject('Bitte wähle eine Option aus.');
-              },
-            }),
-          ]}
-        >
-          {renderIsJufoCheckbox()}
-        </Form.Item>
-        <Form.Item
-          className={classes.formItem}
-          name="additional"
-          label={
-            <span style={{ fontWeight: 'bold' }}>
-              Wobei können wir dir noch helfen?
-            </span>
-          }
-          style={{ marginTop: '30px' }}
-          extra={
-            <div style={{ marginLeft: '8px' }}>
-              Neben individueller Unterstützung bei der Erarbeitung eines
-              Projekts, besteht die Möglichkeit, dass du dich zusätzlich noch
-              für weitere Angebote anmeldest.
-            </div>
-          }
-        >
-          {renderIsGroupsCheckbox()}
-        </Form.Item>
-      </>
-    );
-  };
-
-  const renderOfferPickerNormal = () => {
-    return (
-      <Form.Item
-        className={classes.formItem}
-        name="additional"
-        label="Wie können wir dir helfen?"
-        rules={[
-          () => ({
-            validator() {
-              if (isGroups || isTutee || isJufo) {
-                return Promise.resolve();
-              }
-              return Promise.reject('Bitte wähle eine Option aus.');
-            },
-          }),
-        ]}
-      >
-        {renderIsTuteeCheckbox()}
-        {renderIsGroupsCheckbox()}
-        {renderIsJufoCheckbox()}
-      </Form.Item>
-    );
-  };
-
   const renderStart = () => {
     return (
       <>
+        {isTutee && !isCoDuSubdomain && !cooperationMode && (
+          <div className={classes.registrationHint}>
+            <Text>{disadvantageAdvice}</Text>
+          </div>
+        )}
+
         <NameField
           firstname={formData.firstname}
           lastname={formData.lastname}
@@ -330,9 +255,6 @@ const RegisterTutee: React.FC<Props> = ({
           initialValue={formData.email}
           className={classes.formItem}
         />
-
-        {(isJufoSubdomain && renderOfferPickerForJufo()) ||
-          renderOfferPickerNormal()}
       </>
     );
   };
@@ -348,20 +270,22 @@ const RegisterTutee: React.FC<Props> = ({
           />
         )}
 
-        {cooperationMode?.kind !== 'GeneralSchoolCooperation' && (
-          <StateField
-            className={classes.formItem}
-            defaultState={
-              cooperationMode?.stateInfo?.abbrev.toUpperCase() ?? formData.state
-            }
-            disabled={!!cooperationMode}
-          />
-        )}
+        {cooperationMode?.kind !== 'GeneralSchoolCooperation' &&
+          !isCoDuSubdomain && (
+            <StateField
+              className={classes.formItem}
+              defaultState={
+                cooperationMode?.stateInfo?.abbrev.toUpperCase() ??
+                formData.state
+              }
+              disabled={!!cooperationMode}
+            />
+          )}
         <GradeField
           className={classes.formItem}
           defaultGrade={formData.grade ? `${formData.grade}` : undefined}
-          emptyOption={isOnlyJufo && !cooperationMode}
-          allowEverything={isOnlyJufo}
+          emptyOption={isJufo && !cooperationMode}
+          allowEverything={isJufo}
         />
         {isJufo && (
           <Form.Item
@@ -461,7 +385,7 @@ const RegisterTutee: React.FC<Props> = ({
                 },
               }),
             ]}
-            extra="Hinweis für Gruppen: Es muss sich nur euer*e Gruppensprecher*in anmelden, wenn ihr als Team teilnehmen möchtet."
+            extra="Hinweis für Gruppen: Es muss sich nur euer:e Gruppensprecher:in anmelden, wenn ihr als Team teilnehmen möchtet."
           >
             <InputNumber
               style={{ margin: '0px 4px', width: '64px' }}
@@ -554,6 +478,23 @@ const RegisterTutee: React.FC<Props> = ({
                   );
                 },
               }),
+              () => ({
+                validator(_, value: string[]) {
+                  if (
+                    !isCoDuSubdomain ||
+                    value.filter((v) =>
+                      ['Deutsch', 'Englisch', 'Mathematik'].includes(v)
+                    ).length > 0
+                  ) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error(
+                      'Du musst Deutsch, Englisch und/ oder Mathematik wählen.'
+                    )
+                  );
+                },
+              }),
             ]}
             initialValue={
               formData.subjects
@@ -600,7 +541,7 @@ const RegisterTutee: React.FC<Props> = ({
         {!!cooperationMode && (
           <Form.Item
             className={classes.formItem}
-            label="E-Mail-Adresse Lehrer*in"
+            label="E-Mail-Adresse Lehrer:in"
             name="teacherEmail"
             rules={[
               {
@@ -631,7 +572,7 @@ const RegisterTutee: React.FC<Props> = ({
             extra="Beachte bitte, dass du hier nicht deine eigene, sondern die E-Mail-Adresse deiner Lehrkraft angeben musst. Mit dieser Angabe können wir dich deiner Schule zuordnen."
           >
             <Input
-              placeholder="Hier die E-Mail-Adresse deines/deiner Lehrer*in"
+              placeholder="Hier die E-Mail-Adresse deines/deiner Lehrer:in"
               type="email"
             />
           </Form.Item>
@@ -649,7 +590,11 @@ const RegisterTutee: React.FC<Props> = ({
           defaultChecked={formData.newsletter}
           isPupil
         />
-        <DataProtectionField className={classes.formItem} />
+        <DataProtectionField
+          className={classes.formItem}
+          isCodu={isCoDuSubdomain}
+          isTutor={false}
+        />
       </>
     );
   };
@@ -666,6 +611,10 @@ const RegisterTutee: React.FC<Props> = ({
 
   const back = () => {
     if (formState === 'finish') {
+      if (isCoDuSubdomain) {
+        setFormState('detail');
+        return;
+      }
       if (isTutee) {
         setFormState('autoMatchChooser');
       } else {
@@ -685,14 +634,22 @@ const RegisterTutee: React.FC<Props> = ({
   };
 
   const mapFormDataToTutee = (data: FormData): Tutee | null => {
+    const coduToken = qs.parse(location.search, { ignoreQueryPrefix: true })[
+      'c-token'
+    ];
+
+    const registrationSource = isCoDuSubdomain ? 'codu' : undefined;
+
     if (
       !data.firstname ||
       !data.lastname ||
       !data.email ||
-      (!data.grade && !isOnlyJufo) ||
+      (!data.grade && !isJufo) ||
       (!data.state &&
         (!cooperationMode ||
-          cooperationMode.kind === 'SpecificStateCooperation'))
+          cooperationMode.kind === 'SpecificStateCooperation') &&
+        !isCoDuSubdomain) ||
+      (!coduToken && isCoDuSubdomain)
     ) {
       return null;
     }
@@ -707,12 +664,12 @@ const RegisterTutee: React.FC<Props> = ({
       firstname: data.firstname,
       lastname: data.lastname,
       email: data.email.toLowerCase(),
-      isTutee: data.isTutee,
+      isTutee: isCoDuSubdomain || !isJufoSubdomain,
       subjects: subjects || [],
       grade: data.grade,
       school: data.school?.toLowerCase(),
-      state: data.state?.toLowerCase(),
-      isProjectCoachee: data.isJufo,
+      state: data.state?.toLowerCase() || 'other',
+      isProjectCoachee: !!isJufoSubdomain,
       isJufoParticipant: data.isJufoParticipant,
       projectFields: data.project,
       projectMemberCount: data.projectMemberCount,
@@ -723,6 +680,8 @@ const RegisterTutee: React.FC<Props> = ({
       learningGermanSince: data.learningGermanSince,
       redirectTo,
       requestsAutoMatch,
+      coduToken,
+      registrationSource,
     };
   };
 
@@ -734,12 +693,14 @@ const RegisterTutee: React.FC<Props> = ({
     }
     console.log(tutee);
 
-    const registerAPICall = cooperationMode
-      ? apiContext.registerStateTutee
-      : apiContext.registerTutee;
-
+    const registerAPICall = () => {
+      if (cooperationMode) {
+        return apiContext.registerStateTutee;
+      }
+      return apiContext.registerTutee;
+    };
     setLoading(true);
-    registerAPICall(tutee)
+    registerAPICall()(tutee)
       .then(() => {
         setLoading(false);
         setFormState('done');
@@ -759,7 +720,7 @@ const RegisterTutee: React.FC<Props> = ({
       .catch((err) => {
         if (err.response?.status === 401) {
           setLoading(false);
-          message.error('Du bist schon als Schüler*in bei uns eingetragen.');
+          message.error('Du bist schon als Schüler:in bei uns eingetragen.');
           return;
         }
         setLoading(false);
@@ -813,7 +774,12 @@ const RegisterTutee: React.FC<Props> = ({
           learningGermanSince: formValues.learningGermanSince,
         });
         if (isTutee) {
-          setFormState('autoMatchChooser');
+          if (isCoDuSubdomain) {
+            setRequestsAutoMatch(true);
+            setFormState('finish');
+          } else {
+            setFormState('autoMatchChooser');
+          }
         } else {
           // skip auto match view if user hasn't signed up for tutoring
           setFormState('finish');
@@ -839,58 +805,6 @@ const RegisterTutee: React.FC<Props> = ({
     }
   };
 
-  const renderAutoMatchChooser = () => {
-    return (
-      <>
-        <h1 className={classes.autoMatchHeadline}>
-          Wie möchtest du fortfahren?
-        </h1>
-        <AccentColorButton
-          accentColor="#0366e0"
-          onClick={(e) => {
-            setRequestsAutoMatch(true);
-            nextStep(e);
-          }}
-          className={classes.autoMatch}
-        >
-          <div className={classes.autoMatchIconWrapper}>
-            <MagicIcon />
-          </div>
-          <div className={classes.autoMatchTextWrapper}>
-            <h3>Ich möchte möglichst schnell Hilfe erhalten.</h3>
-            <p>
-              Mit dieser Option gehen wir direkt auf die Suche nach einem/einer
-              Lernpartner:in für dich, nachdem du deine E-Mail-Adresse bestätigt
-              hast. Wir benachrichtigen dich per E-Mail, sobald wir jemanden
-              gefunden haben. <br />
-              Aktuell geschätzte Wartezeit: 30 Tage
-            </p>
-          </div>
-        </AccentColorButton>
-
-        <AccentColorButton
-          accentColor="#0366e0"
-          onClick={(e) => {
-            setRequestsAutoMatch(false);
-            nextStep(e);
-          }}
-          className={classes.autoMatch}
-        >
-          <div className={classes.autoMatchIconWrapper}>
-            <ClockIcon />
-          </div>
-          <div className={classes.autoMatchTextWrapper}>
-            <h3>Ich möchte mich erstmal nur umsehen.</h3>
-            <p>
-              Mit dieser Option kannst du zu einem späteren Zeitpunkt selbst
-              eine:n Lernpartner:in anfordern.
-            </p>
-          </div>
-        </AccentColorButton>
-      </>
-    );
-  };
-
   const renderFormItems = () => {
     if (formState === 'start') {
       return renderStart();
@@ -899,7 +813,12 @@ const RegisterTutee: React.FC<Props> = ({
       return renderDetail();
     }
     if (formState === 'autoMatchChooser') {
-      return renderAutoMatchChooser();
+      return (
+        <AutoMatchChooser
+          setRequestsAutoMatch={setRequestsAutoMatch}
+          nextStep={nextStep}
+        />
+      );
     }
     if (formState === 'finish') {
       return renderFinish();
@@ -922,7 +841,7 @@ const RegisterTutee: React.FC<Props> = ({
           <div className={classes.signupContainer}>
             <Title className={classes.tuteeTitle}>
               {formState === 'done' && (
-                <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+                <span>Du wurdest erfolgreich als Schüler:in registriert</span>
               )}
               {formState === 'start' && <span>Schritt 1/3</span>}
               {formState === 'detail' && <span>Schritt 2/3</span>}
@@ -993,10 +912,10 @@ const RegisterTutee: React.FC<Props> = ({
               </a>
               <Title className={classes.tuteeTitle}>
                 {formState === 'done' ? (
-                  <span>Du wurdest erfolgreich als Schüler*in registriert</span>
+                  <span>Du wurdest erfolgreich als Schüler:in registriert</span>
                 ) : (
                   <span>
-                    Ich möchte mich registrieren als <b>Schüler*in</b>
+                    Ich möchte mich registrieren als <b>Schüler:in</b>
                   </span>
                 )}
               </Title>

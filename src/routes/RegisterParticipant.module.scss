@@ -36,7 +36,7 @@
 
 .formContainer {
   min-height: fit-content;
-  max-width: 520px;
+  max-width: 620px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -60,7 +60,7 @@
     line-height: 30px !important;
     width: 100%;
     text-align: center;
-    margin: 0px 0px !important;
+    margin: 0 0 !important;
   }
 }
 
@@ -70,7 +70,7 @@
     line-height: 30px !important;
     width: 100%;
     text-align: center;
-    margin: 0px 0px !important;
+    margin: 0 0 !important;
   }
 }
 
@@ -93,7 +93,6 @@
 .buttonContainer {
   display: flex;
   width: 100%;
-  max-width: 600px;
   align-items: center;
   justify-content: center;
 
@@ -158,57 +157,8 @@
     color: rgba(0, 0, 0, 0.7);
   }
   //change color of tick if disabled
-  :global(.ant-checkbox-disabled.ant-checkbox-checked .ant-checkbox-inner::after) {
+  :global(.ant-checkbox-disabled.ant-checkbox-checked
+      .ant-checkbox-inner::after) {
     border-color: #1890ff;
-  }
-}
-
-.autoMatchHeadline {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.autoMatch {
-  height: 140px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  padding: 0;
-  .autoMatchIconWrapper {
-    min-width: 120px;
-    max-width: 120px;
-    svg {
-      min-width: 40px;
-      max-width: 40px;
-      fill: #0366e0;
-    }
-  }
-
-  .autoMatchTextWrapper {
-    text-align: left;
-    > p {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 300;
-      width: 90%;
-    }
-    > h3 {
-      color: #0366e0;
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 7px;
-    }
-  }
-}
-
-.autoMatchNote {
-  background-color: #e6ecf3;
-  padding: 20px;
-}
-
-.autoMatchNoteButtonBox {
-  display: flex;
-  button {
-    margin-right: 20px;
   }
 }

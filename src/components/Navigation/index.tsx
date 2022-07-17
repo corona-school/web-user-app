@@ -26,6 +26,7 @@ const Navigation: React.FC<Props> = (props) => {
       isParticipant,
       isTutor,
       isPupil,
+      isProjectCoachee,
     },
     user,
   } = useContext(UserContext);
@@ -70,22 +71,24 @@ const Navigation: React.FC<Props> = (props) => {
             }
             onClick={() => props.setMenuOpen(false)}
           >
-            Kurse
+            Fokuswochen
           </NavButton>
         )}
-        {(isPupil || isTutor) && (
+        {(isPupil || isTutor || isInstructor) && (
           <NavButton
             to="/matches"
             icon={<Icons.Match />}
             active={
-              type === 'pupil' || screeningStatus === ScreeningStatus.Accepted
+              type === 'pupil' ||
+              screeningStatus === ScreeningStatus.Accepted ||
+              instructorScreeningStatus === ScreeningStatus.Accepted
             }
             onClick={() => props.setMenuOpen(false)}
           >
-            Zuordnung
+            Lernunterstützung
           </NavButton>
         )}
-        {(type === 'pupil' || isProjectCoach || isTutor) && (
+        {(isProjectCoachee || isProjectCoach) && (
           <NavButton
             to="/project-coaching"
             icon={<Icons.ProjectCoachingIcon />}

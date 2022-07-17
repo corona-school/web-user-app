@@ -1,14 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import {
-  Form,
-  Input,
-  Checkbox,
-  InputNumber,
-  Select,
-  message,
-  Radio,
-} from 'antd';
+import { Form, Input, Checkbox, Select, message, Radio } from 'antd';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { Title, LinkText, Text } from '../components/Typography';
 import Button from '../components/button';
@@ -30,6 +22,8 @@ import { NoRegistration } from '../components/NoService';
 import { languageOptions } from '../assets/languages';
 import YouTubeVideo from '../components/misc/YouTubeVideo';
 import { MatomoTrackRegistration } from '../components/misc/MatomoSupport';
+import { DeclarationOfSelfCommitment } from '../components/forms/registration/DeclarationOfSelfCommitment';
+// import { introductionText } from '../assets/coDuAssets';
 
 const { Option } = Select;
 
@@ -42,6 +36,7 @@ interface FormData {
   isInstructor?: boolean;
   isTutor?: boolean;
   isJufo?: boolean;
+  isCodu?: boolean;
   // isJufo
   project?: string[];
   wasJufoParticipant?: 'yes' | 'no' | 'idk';
@@ -77,10 +72,8 @@ const useQuery = () => {
 const RegisterTutor: React.FC<Props> = (props) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [isOfficial, setOfficial] = useState(props.isInternship || false);
-  const [isTutor, setTutor] = useState(
-    props.isStudent || props.isInternship || false
-  );
+  const [isTutor, setTutor] = useState(!props.isJufoSubdomain);
+  // const [isCodu, setCodu] = useState(false);
   const [supportsInDaz, setSupportsInDaz] = useState<boolean>(false);
   const [isGroups, setGroups] = useState(
     props.isInternship || props.isClub || false
@@ -128,6 +121,19 @@ const RegisterTutor: React.FC<Props> = (props) => {
     );
   };
 
+  // const renderIsCoDuCheckbox = () => {
+  //   return (
+  //     <Checkbox
+  //       onChange={() => setCodu(!isCodu)}
+  //       value="isCodu"
+  //       checked={isCodu}
+  //       style={{ lineHeight: '32px', marginLeft: '8px' }}
+  //     >
+  //       {introductionText}
+  //     </Checkbox>
+  //   );
+  // };
+
   const renderIsGroupsCheckbox = () => {
     return (
       <Checkbox
@@ -141,14 +147,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         style={{ lineHeight: '32px', marginLeft: '8px' }}
         checked={isGroups}
       >
-        Ich möchte einen{' '}
-        <LinkText
-          text="Gruppenkurs"
-          href="www.lern-fair.de/helfer/gruppenkurse"
-          enableLink={props.isJufoSubdomain}
-        />{' '}
-        bei Lern-Fair anbieten (z.{' '}B. Sommer-AG, Repetitorium,
-        Lerncoaching).
+        Ich möchte zusätzlich Gruppen-Lernunterstützungen anbieten.
       </Checkbox>
     );
   };
@@ -165,7 +164,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         className={props.isJufoSubdomain ? classes.disabledCheckbox : undefined}
         checked={isJufo}
       >
-        Ich möchte Schüler*innen im{' '}
+        Ich möchte Schüler:innen im{' '}
         <LinkText
           text="1:1-Projektcoaching"
           href="www.lern-fair.de/helfer/projektcoaching"
@@ -179,57 +178,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
         </span>
         ) unterstützen.
       </Checkbox>
-    );
-  };
-
-  const renderDLLFormItem = () => {
-    return (
-      <Form.Item
-        className={classes.formItem}
-        name="official"
-        label={
-          <span>
-            Für Lehramtsstudierende: Möchtest du dich für unser{' '}
-            <a
-              href="https://www.lern-fair.de/helfer/digital-lehren-lernen"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              digitales Praktikum
-            </a>{' '}
-            anmelden?
-          </span>
-        }
-        rules={[
-          () => ({
-            required: props.isInternship,
-            validator() {
-              if ((!isGroups || !isTutor) && isOfficial) {
-                return Promise.reject(
-                  'Um am Praktikum teilzunehmen, musst du sowohl Schüler*innen im 1:1-Format beim Lernen als auch in Gruppenkursen helfen.'
-                );
-              }
-              if (!props.isInternship) {
-                return Promise.resolve();
-              }
-              if (props.isInternship && isOfficial) {
-                return Promise.resolve();
-              }
-              return Promise.reject('Bitte wähle eine Option aus.');
-            },
-          }),
-        ]}
-      >
-        <Checkbox
-          onChange={() => {
-            setOfficial(!isOfficial);
-          }}
-          style={{ lineHeight: '32px', marginLeft: '8px' }}
-          checked={isOfficial}
-        >
-          Ja
-        </Checkbox>
-      </Form.Item>
     );
   };
 
@@ -264,7 +212,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
           }
           extra={
             <div style={{ marginLeft: '8px' }}>
-              Mit diesem zusätzlichem Engagement kannst du Schüler*innen
+              Mit diesem zusätzlichem Engagement kannst du Schüler:innen
               ehrenamtlich über das 1:1-Projektcoaching hinaus unterstützen.
               Gruppenkurse erlauben es dir beispielsweise, einer ganzen Gruppe
               Wissen zu vermitteln.
@@ -282,22 +230,10 @@ const RegisterTutor: React.FC<Props> = (props) => {
       <Form.Item
         className={classes.formItem}
         name="additional"
-        label="Auf welche Art möchtest du Schüler*innen unterstützen?"
-        rules={[
-          () => ({
-            required: true,
-            validator() {
-              if (isGroups || isTutor || isJufo) {
-                return Promise.resolve();
-              }
-              return Promise.reject('Bitte wähle eine Option aus.');
-            },
-          }),
-        ]}
+        label="Auf welche Art möchtest du noch Schüler:innen unterstützen?"
       >
-        {renderIsTutorCheckbox()}
         {renderIsGroupsCheckbox()}
-        {renderIsJufoCheckbox()}
+        {/* {isTutor && renderIsCoDuCheckbox()} */}
       </Form.Item>
     );
   };
@@ -305,6 +241,18 @@ const RegisterTutor: React.FC<Props> = (props) => {
   const renderStart = () => {
     return (
       <>
+        {/* <div className={classes.lfPlusHint}>
+          Wenn du dich für unser Programm{' '}
+          <a
+            href="https://www.lern-fair.de/helfer/plus"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Lern-Fair Plus<sup>+</sup>
+          </a>{' '}
+          bewerben möchtest, dann klicke{' '}
+          <a href="https://lern-fair.de/plus-bewerbung">hier</a>.
+        </div> */}
         <div className={classes.formContainerGroup}>
           <Form.Item
             className={classes.formItem}
@@ -330,13 +278,13 @@ const RegisterTutor: React.FC<Props> = (props) => {
 
         <Form.Item
           className={classes.formItem}
-          label={isJufo && !isTutor ? 'E-Mail-Adresse' : 'Uni E-Mail-Adresse'}
+          label="E-Mail-Adresse"
           name="email"
           validateFirst
           rules={[
             {
               required: true,
-              message: 'Bitte trage deine (Uni-)E-Mail-Adresse ein!',
+              message: 'Bitte trage deine E-Mail-Adresse ein!',
             },
             {
               type: 'email',
@@ -358,7 +306,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
         </Form.Item>
         {(props.isJufoSubdomain && renderOfferPickerForJufo()) ||
           renderOfferPickerNormal()}
-        {renderDLLFormItem()}
       </>
     );
   };
@@ -469,7 +416,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         {isJufo && !isTutor && (
           <Form.Item
             className={classes.formItem}
-            label="Bist du offiziell als Student*in eingeschrieben?"
+            label="Bist du offiziell als Student:in eingeschrieben?"
             name="isUniversityStudent"
             rules={[
               {
@@ -487,7 +434,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    'Du musst entweder an Jugend forscht teilgenommen haben oder noch offiziell als Student*in eingeschrieben sein!'
+                    'Du musst entweder an Jugend forscht teilgenommen haben oder noch offiziell als Student:in eingeschrieben sein!'
                   );
                 },
               }),
@@ -554,7 +501,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
                       Projekt (Titel) du an Jugend forscht teilgenommen hast
                     </span>
                     . Diese Informationen benötigen wir, um dich eindeutig unter
-                    allen ehemaligen Jugend forscht Teilnehmer*innen
+                    allen ehemaligen Jugend forscht Teilnehmer:innen
                     identifizieren zu können. So hilfst du uns, dich schneller
                     verifizieren und freischalten zu können.
                   </>
@@ -570,13 +517,32 @@ const RegisterTutor: React.FC<Props> = (props) => {
         {isTutor && (
           <Form.Item
             className={classes.formItem}
-            label="In welchen Fächern kannst du Schüler*innen unterstützen? "
+            label="In welchen Fächern kannst du Schüler:innen unterstützen? "
             name="subjects"
             rules={[
               {
                 required: true,
                 message: 'Bitte trage deine Fächer ein',
               },
+              // {
+              //   validator(_, value: string[]) {
+              //     if (
+              //       !isCodu ||
+              //       value.filter((v) =>
+              //         ['Deutsch', 'Englisch', 'Mathematik'].includes(v)
+              //       ).length > 0
+              //     ) {
+              //       return Promise.resolve();
+              //     }
+              //     return Promise.reject(
+              //       new Error(
+              //         'Wenn du an der CoDu-Studie teilnehmen möchtest, ' +
+              //           'musst du mindestens eines der Fächer Deutsch, ' +
+              //           'Englisch oder Mathematik wählen.'
+              //       )
+              //     );
+              //   },
+              // },
             ]}
           >
             <Select
@@ -679,26 +645,6 @@ const RegisterTutor: React.FC<Props> = (props) => {
           />
         )}
 
-        {isOfficial && (
-          <Form.Item
-            className={classes.formItem}
-            label="Aufwand des Moduls (in Stunden)"
-            name="hours"
-            rules={[
-              {
-                required: true,
-                message: 'Bitte trage dein zeitlichen Aufwand ein',
-              },
-            ]}
-          >
-            <InputNumber
-              placeholder="40h"
-              min={1}
-              max={500}
-              defaultValue={formData.hours}
-            />
-          </Form.Item>
-        )}
         <MessageField
           className={classes.formItem}
           isGroups={isGroups}
@@ -739,7 +685,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
             </Checkbox.Group>
           </Form.Item>
         )}
-        <DataProtectionField className={classes.formItem} />
+        <DeclarationOfSelfCommitment className={classes.formItem} />
+        <DataProtectionField className={classes.formItem} isTutor />
       </>
     );
   };
@@ -776,7 +723,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       email: data.email.toLowerCase(),
       isTutor: data.isTutor,
       subjects: data.subjects || [],
-      isOfficial: data.isOfficial,
+      isOfficial: false,
       isInstructor: data.isInstructor,
       university: data.university,
       module: data.module,
@@ -792,6 +739,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       state: data.state?.toLowerCase(),
       supportsInDaz: data.supportsInDaz === 'yes',
       languages: data.languages,
+      isCodu: false,
       redirectTo,
     };
   };
@@ -843,7 +791,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       .catch((err) => {
         if (err?.response?.status === 401) {
           setLoading(false);
-          message.error('Du bist schon als Tutor*in bei uns eingetragen.');
+          message.error('Du bist schon als Tutor:in bei uns eingetragen.');
           return;
         }
         setLoading(false);
@@ -868,8 +816,8 @@ const RegisterTutor: React.FC<Props> = (props) => {
           firstname: formValues.firstname,
           lastname: formValues.lastname,
           email: formValues.email,
-          isOfficial,
           isTutor,
+          // isCodu,
           isInstructor: isGroups,
           isJufo,
         });
@@ -927,7 +875,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
       <div className={classes.signupContainer}>
         <Title className={classes.tutorTitle}>
           {formState === 'done' && (
-            <span>Du wurdest erfolgreich als Tutor*in registriert</span>
+            <span>Du wurdest erfolgreich als Tutor:in registriert</span>
           )}
           {formState === 'start' && <span>Schritt 1/3</span>}
           {formState === 'detail' && <span>Schritt 2/3</span>}

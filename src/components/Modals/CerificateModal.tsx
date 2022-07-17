@@ -238,21 +238,21 @@ function IntroductionStep({ setStep }: StepProps) {
         euch problemlos Folgendes bestätigen:
         <li>Registrierung auf unserer Plattform</li>
         <li>Durchlaufen eines Eignungsgesprächs</li>
-        <li>Vermittlung an eine*n Schüler*in</li>
+        <li>Vermittlung an eine:n Schüler:in</li>
       </Text>
       <Text>
         Das Ausmaß und die genauen Inhalte der ehrenamtlichen Tätigkeit werden
-        durch deine*n Schüler*in bestätigt. Um den Prozess so einfach wie
+        durch deine:n Schüler:in bestätigt. Um den Prozess so einfach wie
         möglich zu gestalten, kannst du auf der folgenden Seite
         <li>das zeitliche Ausmaß der ehrenamtlichen Tätigkeit</li>
         <li>die genauen Inhalte und Aufgaben der ehrenamtlichen Tätigkeit</li>
-        angeben. Mit diesen Informationen werden wir deine*n Schüler*in
+        angeben. Mit diesen Informationen werden wir deine:n Schüler:in
         kontaktieren und uns eine Bestätigung durch den/die
-        Erziehungsberechtige*n einholen. Anschließend erhältst du eine
+        Erziehungsberechtige:n einholen. Anschließend erhältst du eine
         automatisierte E-Mail von uns mit deiner Bescheinigung.
         <br />
         Wenn du innerhalb einer Woche nichts von uns hörst, kannst du bei
-        deinem/deiner Schüler*in nochmal nachhaken oder uns unter{' '}
+        deinem/deiner Schüler:in nochmal nachhaken oder uns unter{' '}
         <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>{' '}
         kontaktieren.
       </Text>
@@ -296,7 +296,7 @@ function InformationStep({
 
   function nextStep() {
     if (!pupil) {
-      message.info('Ein*e Schüler*in muss ausgewählt sein.');
+      message.info('Ein:e Schüler:in muss ausgewählt sein.');
       return;
     }
     if (subjects.length === 0) {
@@ -333,11 +333,11 @@ function InformationStep({
       <StepHeader step="information" title="Informationen eintragen" />
       <div className={classes.generalInformationContainer}>
         <Title size="h5" bold>
-          Schüler*in
+          Schüler:in
         </Title>
         <div className={classes.inputField}>
           <Select
-            placeholder="Wähle deine*n Schüler*in"
+            placeholder="Wähle deine:n Schüler:in"
             value={pupil}
             onChange={(pupil) => {
               updateData({
@@ -551,7 +551,7 @@ function ChooseModeStep({ data, prevStep, createCertificate }: StepProps) {
         Bescheinigung automatisch anfordern
       </Button>
       Alternativ kannst du die Bescheinigung auch manuell herunterladen, und an
-      deine*n Schüler*in per E-Mail verschicken:
+      deine:n Schüler:in per E-Mail verschicken:
       <Button
         backgroundColor="#585858"
         color="white"
@@ -570,9 +570,9 @@ function StartedAutomatic({ resetData }: { resetData() }) {
       title="Automatischen Prozess gestartet!"
       onClose={resetData}
     >
-      Geschafft! Wir haben eine E-Mail an deine*n Schüler*in gesendet und warten
+      Geschafft! Wir haben eine E-Mail an deine:n Schüler:in gesendet und warten
       auf die Bestätigung der Informationen durch den/die
-      Erziehungsberechtige*n. Wir melden uns danach sofort bei dir per E-Mail
+      Erziehungsberechtige:n. Wir melden uns danach sofort bei dir per E-Mail
       mit der fertigen Bescheinigung.
     </StepContainer>
   );

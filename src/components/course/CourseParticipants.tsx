@@ -31,7 +31,7 @@ export default function CourseParticipants(props: Props) {
   }
 
   if (props.course.subcourse.participants === 0) {
-    return <Empty description="Du hast noch keine Teilnehmer*innen" />;
+    return <Empty description="Du hast noch keine Teilnehmer:innen" />;
   }
 
   const resetSelect = () => {

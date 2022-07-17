@@ -8,141 +8,160 @@ import { Title } from '../components/Typography';
 import classes from './Matches.module.scss';
 import MatchCard from '../components/cards/MatchCard';
 import CancelMatchModal from '../components/Modals/CancelMatchModal';
+import { CoursesPersonalList } from '../components/course/CoursesPersonalList';
+import { CourseBanner } from '../components/course/CourseBanner';
+import { ScreeningStatus } from '../types';
+
+/* NOTE: In case you're rewriting this code in the new GraphQL based frontend,
+    the Me entity will hopefully contain a boolean "canRequestMatch" indicating whether the user can request further matches,
+    That way we avoid replicating backend logic in here
+*/
+const STUDENT_MAX_REQUESTS = 3;
+const PUPIL_MAX_REQUESTS = 1;
+const PUPIL_MAX_MATCHES = 1;
+
+function ConfirmationPending() {
+  return (
+    <Result
+      className={classes.resultBox}
+      status="info"
+      title="Wir warten auf deine Bestätigung!"
+      subTitle={
+        <>
+          <span>
+            Dazu haben wir dir eine E-Mail geschickt. Schau einfach in dein
+            E-Mail-Postfach und folge den Anweisungen in unserer E-Mail, um dein
+            Interesse zu bestätigen. Sobald du dein Interesse bestätigt hast,
+            werden wir dich schnellstmöglich mit einem/einer Student:in
+            verbinden.
+            <br />
+            <br />
+            Du hast diese E-Mail von uns nie erhalten? Bei Problemen kannst du
+            dich an unser Team unter
+          </span>{' '}
+          <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>
+          <span> wenden.</span>
+        </>
+      }
+    />
+  );
+}
+
+function ConfirmationRefused() {
+  return (
+    <Result
+      className={classes.resultBox}
+      status="info"
+      icon={<SmileOutlined />}
+      title="Danke, dass du deinen Platz abgetreten hast!"
+      subTitle={
+        <>
+          <span>
+            In der Vergangenheit haben wir dir eine E-Mail geschickt und darin
+            dein weiteres Interesse an diesem Angebot erfragt. Du hast uns
+            damals mitgeteilt, dass du unser Angebot nicht mehr benötigst. Da
+            aktuell der Andrang auf dieses kostenlose Angebot sehr groß ist,
+            sind die Plätze begrenzt. Wir haben deinen Platz daher wieder
+            freigegeben.
+            <br />
+            Hier kannst du deshalb keine neue Hilfe anfordern.
+            <br /> <br />
+            Brauchst du nun wieder Hilfe? Wende dich dafür bitte an
+          </span>{' '}
+          <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>
+          <span>.</span>
+        </>
+      }
+    />
+  );
+}
+
+/* function LimitExceeded() {
+  return (
+    <Result
+      className={classes.resultBox}
+      status="info"
+      icon={<SmileOutlined />}
+      title="Maximale Anzahl an Machtes erreicht"
+      subTitle={
+        <>
+          Du hast die maximale Anzahl an Matches erreicht, wir können dir leider
+          keine:n weitere:n Lernpartner:in zuteilen. Es gibt sehr viele
+          Schüler:innen, die auf unsere Unterstützung warten. Wende dich bitte
+          an <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>,
+          wenn du weiterhin Unterstützung benötigst und/oder diesbezüglich
+          Fragen hast
+        </>
+      }
+    />
+  );
+} */
 
 const Matches: React.FC = () => {
-  const userContext = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const modalContext = useContext(Context.Modal);
 
-  const openRequests = (() => {
-    if (userContext.user.type === 'pupil') {
-      if (userContext.user.matches.length === 1)
-        return (
-          <Empty description="Du hast im Moment keine offenen Anfragen." />
-        );
-      if (
-        userContext.user.pupilTutoringInterestConfirmationStatus === 'pending'
-      ) {
-        return (
-          <Result
-            className={classes.resultBox}
-            status="info"
-            title="Wir warten auf deine Bestätigung!"
-            subTitle={
-              <>
-                <span>
-                  Dazu haben wir dir eine E-Mail geschickt. Schau einfach in
-                  dein E-Mail-Postfach und folge den Anweisungen in unserer
-                  E-Mail, um dein Interesse zu bestätigen. Sobald du dein
-                  Interesse bestätigt hast, werden wir dich schnellstmöglich mit
-                  einem/einer Student*in verbinden.
-                  <br />
-                  <br />
-                  Du hast diese E-Mail von uns nie erhalten? Bei Problemen
-                  kannst du dich an unser Team unter
-                </span>{' '}
-                <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>
-                <span> wenden.</span>
-              </>
-            }
-          />
-        );
-      }
-      if (
-        userContext.user.pupilTutoringInterestConfirmationStatus === 'refused'
-      ) {
-        return (
-          <Result
-            className={classes.resultBox}
-            status="info"
-            icon={<SmileOutlined />}
-            title="Danke, dass du deinen Platz abgetreten hast!"
-            subTitle={
-              <>
-                <span>
-                  In der Vergangenheit haben wir dir eine E-Mail geschickt und
-                  darin dein weiteres Interesse an diesem Angebot erfragt. Du
-                  hast uns damals mitgeteilt, dass du unser Angebot nicht mehr
-                  benötigst. Da aktuell der Andrang auf dieses kostenlose
-                  Angebot sehr groß ist, sind die Plätze begrenzt. Wir haben
-                  deinen Platz daher wieder freigegeben.
-                  <br />
-                  Hier kannst du deshalb keine neue Hilfe anfordern.
-                  <br /> <br />
-                  Brauchst du nun wieder Hilfe? Wende dich dafür bitte an
-                </span>{' '}
-                <a href="mailto:support@lern-fair.de">support@lern-fair.de</a>
-                <span>.</span>
-              </>
-            }
-          />
-        );
-      }
-      if (userContext.user.matchesRequested === 0) {
-        return (
-          <OpenRequestCard
-            type="new"
-            userType={userContext.user.type}
-            projectCoaching={false}
-            disabled={
-              userContext.user.isProjectCoachee &&
-              userContext.user.projectMatchesRequested > 0
-            }
-          />
-        );
-      }
-      if (userContext.user.matchesRequested >= 1) {
-        return (
-          <>
-            {[...Array(userContext.user.matchesRequested).keys()].map(() => (
-              <OpenRequestCard
-                type="pending"
-                userType={userContext.user.type}
-                projectCoaching={false}
-                disabled={false}
-              />
-            ))}
-          </>
-        );
-      }
-    }
+  function pupilOpenNewRequest() {
+    if (user.pupilTutoringInterestConfirmationStatus === 'pending')
+      return <ConfirmationPending />;
 
-    if (userContext.user.matchesRequested === 0) {
-      return (
-        <OpenRequestCard
-          type="new"
-          userType={userContext.user.type}
-          projectCoaching={false}
-          disabled={false}
-        />
-      );
-    }
+    if (user.pupilTutoringInterestConfirmationStatus === 'refused')
+      return <ConfirmationRefused />;
+
+    if (user.matchesRequested >= PUPIL_MAX_REQUESTS) return null;
+
+    if (user.matches.length + user.matchesRequested >= PUPIL_MAX_MATCHES)
+      return null;
+
+    // TODO: In case the user had more than 3 dissolved matches, show <LimitExceeded />
+    // In the future this can be checked with GraphQL's pupil { canRequestMatch { reason } }
 
     return (
+      <OpenRequestCard
+        type="new"
+        userType={user.type}
+        projectCoaching={false}
+        disabled={user.isProjectCoachee && user.projectMatchesRequested > 0}
+      />
+    );
+  }
+
+  function studentOpenNewRequest() {
+    return (
       <>
-        {[...Array(userContext.user.matchesRequested).keys()].map(() => (
-          <OpenRequestCard
-            type="pending"
-            userType={userContext.user.type}
-            projectCoaching={false}
-            disabled={false}
-          />
-        ))}
-        {userContext.user.matchesRequested < 3 && (
+        {user.matchesRequested < STUDENT_MAX_REQUESTS && (
           <OpenRequestCard
             type="new"
-            userType={userContext.user.type}
+            userType={user.type}
             projectCoaching={false}
             disabled={false}
           />
         )}
       </>
     );
-  })();
+  }
 
-  const currentMatches = userContext.user.matches.map((match) => (
+  const openNewRequest =
+    user.type === 'pupil' ? pupilOpenNewRequest() : studentOpenNewRequest();
+
+  const openRequests =
+    user.matchesRequested === 0 ? (
+      <Empty description="Du hast im Moment keine offenen Anfragen." />
+    ) : (
+      [...Array(user.matchesRequested).keys()].map(() => (
+        <OpenRequestCard
+          type="pending"
+          userType={user.type}
+          projectCoaching={false}
+          disabled={false}
+        />
+      ))
+    );
+
+  const currentMatches = user.matches.map((match) => (
     <React.Fragment key={match.uuid}>
       <MatchCard
-        type={userContext.user.type === 'student' ? 'pupil' : 'student'}
+        type={user.type === 'student' ? 'pupil' : 'student'}
         match={match}
         handleDissolveMatch={() => {
           modalContext.setOpenedModal(`cancelMatchModal${match.uuid}`);
@@ -153,42 +172,61 @@ const Matches: React.FC = () => {
         identifier={`cancelMatchModal${match.uuid}`}
         matchUuid={match.uuid}
         matchFirstname={match.firstname}
-        ownType={userContext.user.type}
+        ownType={user.type}
         projectCoaching={false}
       />
     </React.Fragment>
   ));
 
-  const dissolvedMatches = userContext.user.dissolvedMatches.map(
-    (dissolvedMatch) => (
-      <React.Fragment key={dissolvedMatch.uuid}>
-        <MatchCard
-          type={userContext.user.type === 'student' ? 'pupil' : 'student'}
-          match={dissolvedMatch}
-          handleDissolveMatch={() => {}}
-          dissolved
-        />
-      </React.Fragment>
-    )
-  );
+  const dissolvedMatches = user.dissolvedMatches.map((dissolvedMatch) => (
+    <React.Fragment key={dissolvedMatch.uuid}>
+      <MatchCard
+        type={user.type === 'student' ? 'pupil' : 'student'}
+        match={dissolvedMatch}
+        handleDissolveMatch={() => {}}
+        dissolved
+      />
+    </React.Fragment>
+  ));
   return (
     <div className={classes.container}>
-      <div className={classes.containerRequests}>
-        <Title size="h1">Deine Anfragen</Title>
-        <div className={classes.openRequests}>{openRequests}</div>
-      </div>
-      <Title size="h2">Deine Zuordnungen</Title>
-      {currentMatches.length === 0 && (
-        <Empty
-          style={{ maxWidth: '1000px' }}
-          description="Du hast keine aktiven Zuordnungen"
-        />
+      {(user.type === 'pupil' ||
+        user.screeningStatus === ScreeningStatus.Accepted) && (
+        <>
+          <div className={classes.containerRequests}>
+            <Title size="h1">1:1-Lernunterstützung</Title>
+            <div className={classes.openRequests}>
+              {openRequests}
+              {openNewRequest}
+            </div>
+          </div>
+          <Title size="h2">Deine Zuordnungen</Title>
+          {currentMatches.length === 0 && (
+            <Empty
+              style={{ maxWidth: '1000px' }}
+              description="Du hast keine aktiven Zuordnungen"
+            />
+          )}
+          {currentMatches}
+          {dissolvedMatches.length > 0 && (
+            <Title size="h2">Entfernte Zuordnungen</Title>
+          )}
+          {dissolvedMatches}
+        </>
       )}
-      {currentMatches}
-      {dissolvedMatches.length > 0 && (
-        <Title size="h2">Entfernte Zuordnungen</Title>
+      {(user.type === 'pupil' ||
+        user.instructorScreeningStatus === ScreeningStatus.Accepted) && (
+        <div>
+          <Title size="h1">Gruppen-Lernunterstützung</Title>
+          <CourseBanner
+            targetGroup={
+              user.type === 'student' ? 'instructors' : 'participants'
+            }
+            revisionsOnly
+          />
+          <CoursesPersonalList revisionsOnly />
+        </div>
       )}
-      {dissolvedMatches}
     </div>
   );
 };

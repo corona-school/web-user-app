@@ -90,6 +90,7 @@ const CourseDetail = (props: Props) => {
     []
   );
   const [enteredFilter, setEnteredFilter] = useState('');
+  const [isRevision, setIsRevision] = useState<boolean>(false);
 
   const [selectedParticipants, setSelectedParticipants] = useState<
     CourseParticipant[]
@@ -116,6 +117,7 @@ const CourseDetail = (props: Props) => {
       .then((course) => {
         const parsedCourse = parseCourse(course);
         setCourse(parsedCourse);
+        setIsRevision(parsedCourse.category === 'revision');
         setParticipantList(parsedCourse.subcourse.participantList);
 
         if (props.setIsWaitingList) {
@@ -313,7 +315,7 @@ const CourseDetail = (props: Props) => {
         setIsLoadingVideoChat(false);
         if (err?.response?.status === 400) {
           message.error(
-            'Der Videochat wurde noch nicht gestartet. Du musst auf die*den Kursleiter*in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.'
+            'Der Videochat wurde noch nicht gestartet. Du musst auf die/den Kursleiter:in warten. Probiere es später bzw. kurz vorm Beginn des Kurses noch einmal.'
           );
         } else {
           message.error(
@@ -705,13 +707,13 @@ const CourseDetail = (props: Props) => {
 
         {course.state !== CourseState.CANCELLED && (
           <Menu.Item key="6" icon={<UserAddOutlined />}>
-            Tutor*in hinzufügen
+            Tutor:in hinzufügen
           </Menu.Item>
         )}
 
         {course.state === CourseState.ALLOWED && (
           <Menu.Item key="7" icon={<UserAddOutlined />}>
-            Gäst*in einladen
+            Gäst:in einladen
           </Menu.Item>
         )}
       </Menu>
@@ -731,14 +733,18 @@ const CourseDetail = (props: Props) => {
               if (props.publicView) {
                 history.push(
                   history.location.hash.length > 0
-                    ? `/public/courses/${history.location.hash}`
-                    : '/public/courses'
+                    ? `/public/${isRevision ? 'revisions' : 'courses'}/${
+                        history.location.hash
+                      }`
+                    : `/public/${isRevision ? 'revisions' : 'courses'}`
                 );
               } else {
                 history.push(
                   history.location.hash.length > 0
-                    ? `/courses/overview/${history.location.hash}`
-                    : '/courses'
+                    ? `${
+                        isRevision ? '/matches/revisions' : '/courses/overview'
+                      }/${history.location.hash}`
+                    : `${isRevision ? '/matches' : '/courses'}`
                 );
               }
             }}
@@ -788,20 +794,22 @@ const CourseDetail = (props: Props) => {
                       </Dropdown>
                     </Col>
                   )}
-                  <Col md={24} sm={12} xs={12}>
-                    {!(
-                      canJoinCourse() ||
-                      canJoinWaitingList() ||
-                      canDisjoinCourse() ||
-                      canDisjoinWaitingList()
-                    ) ? (
-                      <Tooltip title={getJoinBtnDisabledReason}>
-                        {renderJoinButton()}
-                      </Tooltip>
-                    ) : (
-                      renderJoinButton()
-                    )}
-                  </Col>
+                  {!props.publicView && (
+                    <Col md={24} sm={12} xs={12}>
+                      {!(
+                        canJoinCourse() ||
+                        canJoinWaitingList() ||
+                        canDisjoinCourse() ||
+                        canDisjoinWaitingList()
+                      ) ? (
+                        <Tooltip title={getJoinBtnDisabledReason}>
+                          {renderJoinButton()}
+                        </Tooltip>
+                      ) : (
+                        renderJoinButton()
+                      )}
+                    </Col>
+                  )}
                   <Col md={24} sm={12} xs={12}>
                     <div className={classes.videochatAction}>
                       {((isMyCourse && course.state === CourseState.ALLOWED) ||
@@ -975,7 +983,7 @@ const CourseDetail = (props: Props) => {
                       .map((l) => `${l.duration}min.`)
                       .join(', ')}{' '}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Tutor*innen">
+                  <Descriptions.Item label="Tutor:innen">
                     {instructors
                       .filter((item, pos) => instructors.indexOf(item) === pos)
                       .join(', ')}

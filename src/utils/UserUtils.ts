@@ -4,19 +4,19 @@ export const getUserTags = (user: User) => {
   const studentTags = [];
 
   if (user.type === 'pupil') {
-    return ['Schüler*in'];
+    return ['Schüler:in'];
   }
 
   if (user.isTutor) {
-    studentTags.push('Tutor*in');
+    studentTags.push('Tutor:in');
   }
 
   if (user.isInstructor) {
-    studentTags.push('Kursleiter*in');
+    studentTags.push('Kursleiter:in');
   }
 
   if (user.isProjectCoach) {
-    studentTags.push('Projektcoach*in');
+    studentTags.push('Projektcoach:in');
   }
   return studentTags;
 };

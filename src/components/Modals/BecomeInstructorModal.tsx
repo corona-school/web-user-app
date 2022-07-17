@@ -43,7 +43,7 @@ const BecomeInstructorModal: React.FC<Props> = () => {
     api
       .becomeInstructor(data)
       .then(() => {
-        message.success('Du wurdest als Kursleiter*in angemeldet.');
+        message.success('Du wurdest als Kursleiter:in angemeldet.');
         modalContext.setOpenedModal(null);
         userContext.fetchUserData();
       })
@@ -62,7 +62,7 @@ const BecomeInstructorModal: React.FC<Props> = () => {
         isOpen={modalContext.openedModal === 'becomeInstructor'}
       >
         <div className={classes.modal}>
-          <Title size="h2">Kursleiter*in werden</Title>
+          <Title size="h2">Kursleiter:in werden</Title>
           <ClipLoader size={100} color="#123abc" loading />
           <div className={classes.buttonContainer}>
             <Button backgroundColor="#F4F6FF" color="#4E6AE6">
@@ -80,7 +80,7 @@ const BecomeInstructorModal: React.FC<Props> = () => {
       onBackgroundClick={() => modalContext.setOpenedModal(null)}
     >
       <div className={classes.modal}>
-        <Title size="h2">Kursleiter*in werden</Title>
+        <Title size="h2">Kursleiter:in werden</Title>
         <Text large>
           Beschreibe die Inhalte deines Gruppenkurses (3-5 Sätze)
         </Text>

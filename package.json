@@ -2,6 +2,9 @@
   "name": "web-user-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "dev": "react-scripts start",
     "dev:local": "REACT_APP_MODE=LOCAL react-scripts start",
@@ -29,14 +32,15 @@
     "@types/styled-components": "^5.1.0",
     "@types/styled-react-modal": "^1.2.0",
     "antd": "^4.9.4",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "classnames": "^2.2.6",
     "create-react-app": "^4.0.1",
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
-    "moment": "^2.26.0",
+    "moment": "^2.29.2",
+    "qs": "^6.10.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-https-redirect": "^1.1.0",
@@ -48,7 +52,7 @@
     "react-spinners": "^0.8.3",
     "styled-components": "^5.1.0",
     "styled-react-modal": "^2.0.1",
-    "universities-info-germany": "^1.0.0"
+    "universities-info-germany": "^1.1.0"
   },
   "devDependencies": {
     "@types/react-signature-canvas": "^1.0.1",
@@ -66,8 +70,8 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "4.0.0",
-    "node-sass": "^4.14.1",
     "prettier": "^2.0.5",
+    "sass": "^1.49.9",
     "typescript": "^3.7.5"
   },
   "eslintConfig": {

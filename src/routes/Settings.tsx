@@ -7,10 +7,6 @@ import SettingsCard from '../components/cards/SettingsCard';
 import { Title } from '../components/Typography';
 import classes from './Settings.module.scss';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
-import ProjectFieldCard, {
-  AddProjectFieldCard,
-} from '../components/cards/ProjectFieldCard';
-import { JufoExpertCard } from '../components/cards/JufoExpertCard';
 import { useAPI, useAPIResult } from '../context/ApiContext';
 import {
   ICertificateSignature,
@@ -19,6 +15,7 @@ import {
 } from '../types/Certificate';
 import SignCertificateModal from '../components/Modals/SignCertificateModal';
 import CertificateCard from '../components/cards/CertificateCard';
+import { CoDuSubjectErrorModal } from '../components/Modals/CoDuModals';
 
 const Wrapper = styled.div`
   display: flex;
@@ -122,31 +119,7 @@ const Settings: React.FC = () => {
             />
           </Wrapper>
         </div>
-      </>
-    );
-  };
-
-  const renderProjectFields = () => {
-    return (
-      <>
-        <Title size="h3" className={classes.subjectTitle}>
-          Deine Projektbereiche
-        </Title>
-        <div>
-          <Wrapper>
-            {userContext.user.projectFields.map((projectInformation) => (
-              <ProjectFieldCard
-                key={projectInformation.name}
-                type={userContext.user.type === 'student' ? 'coach' : 'coachee'}
-                field={projectInformation}
-              />
-            ))}
-            <AddProjectFieldCard
-              type={userContext.user.type === 'student' ? 'coach' : 'coachee'}
-              projectFields={userContext.user.projectFields.map((p) => p.name)}
-            />
-          </Wrapper>
-        </div>
+        <CoDuSubjectErrorModal />
       </>
     );
   };
@@ -181,13 +154,9 @@ const Settings: React.FC = () => {
         reloadCertificates={reloadCertificates}
       />
 
-      <JufoExpertCard />
-
       {(userContext.user.isTutor || userContext.user.isPupil) &&
         renderSubjects()}
 
-      {(userContext.user.isProjectCoach || userContext.user.isProjectCoachee) &&
-        renderProjectFields()}
       {renderCertificatesTable()}
       <AccountNotScreenedModal />
       {certificateToSign && (

@@ -110,6 +110,7 @@ export const putUser = async (
     state?: string;
     university?: string;
     schoolType?: string;
+    isCodu?: boolean;
     lastUpdatedSettingsViaBlocker: number;
   }
 ) => {
@@ -292,6 +293,13 @@ export const axiosSignCertificate = postAPI<
   (uuid) => `/certificate/${uuid}/sign`,
   (uuid, signature) => signature,
   (res) => res.status >= 200 && res.status <= 300
+);
+
+export const axiosGetRemissionRequest = getAPI(
+  'getRemissionRequest',
+  '/certificate/remissionRequest',
+  (res) => res.data,
+  { responseType: 'blob' }
 );
 
 export const axiosGetCourses = async (): Promise<CourseOverview[]> => {

@@ -21,18 +21,19 @@ import { ScreeningStatus } from './types';
 import NotFound from './routes/NotFound';
 import PageComponent from './components/PageComponent';
 import Course from './routes/Course';
-import RegisterTutee from './routes/RegisterTutee';
 import { CourseForm } from './routes/CourseForm';
 import CourseDetail from './routes/CourseDetail';
 import PublicCourseDetail from './routes/PublicCourseDetail';
-import { getDomainComponents } from './utils/DomainUtils';
 import ProjectCoach from './routes/ProjectCoach';
-import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
 import { CourseOverview } from './routes/CourseOverview';
 import { Modals } from './Modals';
 import GuestJoinCourseMeeting from './routes/GuestJoinCourseMeeting';
 import InterestConfirmation from './routes/InterestConfirmation';
 import { LernFairRedirection } from './utils/LernFairRedirection';
+import RemissionRequest from './routes/RemissionRequest';
+import { getDomainComponents } from './utils/DomainUtils';
+import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
+import RegisterTutee from './routes/RegisterTutee';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -98,6 +99,9 @@ const App: React.FC = () => {
         <Route exact path="/public/courses">
           <PublicCourse />
         </Route>
+        <Route exact path="/public/revisions">
+          <PublicCourse revisions />
+        </Route>
         <Route exact path="/public/courses/:id">
           <ScrollToTopOnMount />
           <PublicCourseDetail />
@@ -135,6 +139,16 @@ const App: React.FC = () => {
             >
               <CourseOverview backButtonRoute="/courses" />
             </PrivateRoute>
+            <PrivateRoute
+              path="/matches/revisions"
+              active={
+                userContext.user.type === 'pupil' ||
+                userContext.user.instructorScreeningStatus ===
+                  ScreeningStatus.Accepted
+              }
+            >
+              <CourseOverview backButtonRoute="/matches" revisionOnly />
+            </PrivateRoute>
             <PrivateRoute path="/courses/:id" comeback>
               <ScrollToTopOnMount />
               <CourseDetail />
@@ -149,16 +163,18 @@ const App: React.FC = () => {
             >
               <Course />
             </PrivateRoute>
+            <PrivateRoute
+              path="/matches"
+              active={
+                userContext.user.type === 'pupil' ||
+                userContext.user.screeningStatus === ScreeningStatus.Accepted ||
+                userContext.user.instructorScreeningStatus ===
+                  ScreeningStatus.Accepted
+              }
+            >
+              <Matches />
+            </PrivateRoute>
           </Switch>
-          <PrivateRoute
-            path="/matches"
-            active={
-              userContext.user.type === 'pupil' ||
-              userContext.user.screeningStatus === ScreeningStatus.Accepted
-            }
-          >
-            <Matches />
-          </PrivateRoute>
           <PrivateRoute
             path="/project-coaching"
             active={
@@ -183,6 +199,9 @@ const App: React.FC = () => {
           </PrivateRoute>
           <PrivateRoute path="/help">
             <Help />
+          </PrivateRoute>
+          <PrivateRoute path="/remission-request">
+            <RemissionRequest />
           </PrivateRoute>
         </PageComponent>
         <Route component={NotFound} />
