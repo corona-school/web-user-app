@@ -113,7 +113,8 @@ const Navigation: React.FC<Props> = (props) => {
         )}
         {isTutor && (
           <NavButton
-            to="/support"
+            to={{ pathname: "https://www.lern-fair.de/hilfestellungen" }}
+            target="_blank"
             icon={<Icons.Support />}
             onClick={() => props.setMenuOpen(false)}
           >
