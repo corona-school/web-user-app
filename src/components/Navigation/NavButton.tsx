@@ -48,13 +48,14 @@ export const LogoutNavLink = styled(StyledNavLink)`
   }
 `;
 export const NavButton: React.FC<{
-  to: string;
+  to: string | { pathname: string };
   icon?: ReactElement;
   active?: boolean;
   onClick?: () => void;
-}> = ({ to, icon, children, active = true, onClick }) => {
+  target?: '_blank';
+}> = ({ to, icon, children, target, active = true, onClick }) => {
   return (
-    <StyledNavLink to={to} active={active} onClick={onClick}>
+    <StyledNavLink target={target} to={to} active={active} onClick={onClick}>
       {icon}
       {children}
     </StyledNavLink>
