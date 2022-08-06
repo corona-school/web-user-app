@@ -1,0 +1,81 @@
+.fileContainerWrapper {
+  width: 80%;
+  display: flex;
+  background-color: #e7e7e7;
+  border-radius: 5px;
+  margin: 10px 0;
+  align-items: center;
+  height: 40px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileInfo {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.textBox {
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  max-width: 160px;
+}
+
+.fileName {
+  max-width: 210px;
+  display: inline-block;
+  overflow: hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+}
+
+.fileSize {
+  margin-left: auto;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.editFile {
+  margin-left: 10px;
+  svg {
+    width: 15px;
+    height: 15px;
+    fill: #232323;
+  }
+}
+
+.removeFile {
+  background-color: #4d5a60;
+  width: 40px;
+  height: 40px;
+  color: #ffffff;
+  border-radius: 0 5px 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  &:hover {
+    background-color: #64747c;
+  }
+  svg {
+    width: 25px;
+    height: 25px;
+    fill: #e7e7e7;
+  }
+}
+
+.buttonBox {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  span {
+    font-size: 12px;
+    margin-left: 15px;
+    color: #6c6c6c;
+    font-weight: 400;
+  }
+}

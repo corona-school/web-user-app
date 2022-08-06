@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ThemeContext } from 'styled-components';
 import { Empty } from 'antd';
-import { Text, Title } from '../components/Typography';
+import { Title } from '../components/Typography';
 import context from '../context';
 import classes from './ProjectCoach.module.scss';
 import { UserContext } from '../context/UserContext';
 import { ProjectMatchCard } from '../components/cards/MatchCard';
-import OpenRequestCard from '../components/cards/OpenRequestCard';
 import { ScreeningStatus } from '../types';
 import CancelMatchModal from '../components/Modals/CancelMatchModal';
 import { ExpertRequestCard } from '../components/cards/ExpertRequestCard';
@@ -17,7 +15,6 @@ import CardBase from '../components/base/CardBase';
 
 const ProjectCoach: React.FC = () => {
   const { user } = useContext(context.User);
-  const theme = useContext(ThemeContext);
   const modalContext = useContext(context.Modal);
   const userContext = useContext(UserContext);
   const apiContext = useContext(ApiContext);

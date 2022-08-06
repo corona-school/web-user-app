@@ -1,43 +1,43 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useContext, useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 import moment from 'moment';
 
 import {
-  DeleteOutlined,
-  MailOutlined,
   CheckCircleOutlined,
-  DownOutlined,
-  ShareAltOutlined,
-  WhatsAppOutlined,
   CopyOutlined,
+  DeleteOutlined,
+  DownOutlined,
+  MailOutlined,
+  ShareAltOutlined,
   UserAddOutlined,
+  WhatsAppOutlined,
 } from '@ant-design/icons';
 import {
-  Descriptions,
-  Menu,
-  Dropdown,
-  message,
   Button as AntdButton,
-  Tooltip,
-  Row,
   Col,
+  Descriptions,
+  Dropdown,
+  Menu,
+  message,
   Popover,
+  Row,
+  Tooltip,
 } from 'antd';
 import AddInstructorModal from '../components/Modals/AddInstructorModal';
 import { ApiContext } from '../context/ApiContext';
 import { AuthContext } from '../context/AuthContext';
 import {
-  ParsedCourseOverview,
-  CourseState,
   Course,
-  SubCourse,
   CourseParticipant,
+  CourseState,
+  ParsedCourseOverview,
+  SubCourse,
   Tag as CourseTag,
 } from '../types/Course';
-import { Title, Text } from '../components/Typography';
+import { Text, Title } from '../components/Typography';
 import { Tag } from '../components/Tag';
 import 'moment/locale/de';
 import classes from './CourseDetail.module.scss';
@@ -49,11 +49,14 @@ import {
 } from '../components/cards/MyCourseCard';
 
 import { ModalContext } from '../context/ModalContext';
-import CourseMessageModal from '../components/Modals/CourseMessageModal';
 import { apiURL, dev } from '../api/config';
 import CourseDeletionConfirmationModal from '../components/Modals/CourseDeletionConfirmationModal';
 import CourseConfirmationModal from '../components/Modals/CourseConfirmationModal';
 import AddCourseGuestModal from '../components/Modals/AddCourseGuestModal';
+import {
+  ContactCourseModal,
+  ContactInstructorsModal,
+} from '../components/Modals/CourseContactModals';
 import Icons from '../assets/icons';
 import Button from '../components/button';
 import Images from '../assets/images';
@@ -88,6 +91,11 @@ const CourseDetail = (props: Props) => {
   );
   const [enteredFilter, setEnteredFilter] = useState('');
   const [isRevision, setIsRevision] = useState<boolean>(false);
+
+  const [selectedParticipants, setSelectedParticipants] = useState<
+    CourseParticipant[]
+  >([]);
+  const [isSelectingParticipants, setSelectingParticipants] = useState(false);
 
   const { id: urlParamID } = useParams<{ id: string }>();
   const id = props.id ?? urlParamID;
@@ -155,7 +163,6 @@ const CourseDetail = (props: Props) => {
               data.lastname
                 .toUpperCase()
                 .includes(enteredFilter.toUpperCase()) ||
-              data.email.toUpperCase().includes(enteredFilter.toUpperCase()) ||
               data.grade.toFixed().includes(enteredFilter)
             ) {
               return data;
@@ -328,7 +335,13 @@ const CourseDetail = (props: Props) => {
   };
 
   const openWriteMessageModal = () => {
-    modalContext.setOpenedModal('courseMessageModal');
+    if (isMyCourse) {
+      setSelectingParticipants(false);
+      setSelectedParticipants(course.subcourse.participantList);
+      modalContext.setOpenedModal('contactCourseModal');
+    } else {
+      modalContext.setOpenedModal('contactInstructorsModal');
+    }
   };
 
   const shareData = {
@@ -358,19 +371,31 @@ const CourseDetail = (props: Props) => {
     return !(!course.subcourse || isStudent);
   };
 
-  const hasEnded = () => {
+  const getLastLectureEnd = () => {
     const lectures = course.subcourse.lectures.sort(
       (a, b) => a.start - b.start
     );
     const lastLecture = lectures[lectures.length - 1];
     if (lastLecture != null) {
-      const lectureEnd = moment
+      return moment
         .unix(lastLecture.start)
         .add(lastLecture.duration, 'minutes');
+    }
+    return null;
+  };
 
-      return moment().isAfter(lectureEnd);
+  const hasEnded = () => {
+    if (getLastLectureEnd) {
+      return moment().isAfter(getLastLectureEnd());
     }
 
+    return false;
+  };
+
+  const canContact = () => {
+    if (getLastLectureEnd) {
+      return !moment().isAfter(getLastLectureEnd().add(14, 'days'));
+    }
     return false;
   };
 
@@ -1003,6 +1028,11 @@ const CourseDetail = (props: Props) => {
                     setParticipantList={setParticipantList}
                     setEnteredFilter={setEnteredFilter}
                     hasEnded={hasEnded()}
+                    selectedParticipants={selectedParticipants}
+                    setSelectedParticipants={setSelectedParticipants}
+                    isSelecting={isSelectingParticipants}
+                    setSelecting={setSelectingParticipants}
+                    canContact={canContact()}
                   />
                 </div>
               </div>
@@ -1032,13 +1062,13 @@ const CourseDetail = (props: Props) => {
           </div>
         </div>
       </div>
-      <CourseMessageModal
-        courseId={course.id}
-        subcourseId={course.subcourse.id}
-        type={
-          isMyCourse ? 'instructorToParticipants' : 'participantToInstructors'
-        }
+      <ContactCourseModal
+        course={course}
+        setSelectedParticipants={setSelectedParticipants}
+        selectedParticipants={selectedParticipants}
+        setSelectingParticipants={setSelectingParticipants}
       />
+      <ContactInstructorsModal course={course} />
       <CourseDeletionConfirmationModal courseId={course.id} />
       <AddInstructorModal
         courseId={course.id}

@@ -10,6 +10,8 @@ import {
   Lecture,
   CourseOverview,
   Tag,
+  Participant,
+  CourseParticipant,
 } from '../types/Course';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
 import { CompletedSubCourse } from '../components/forms/CreateCourse';
@@ -118,7 +120,9 @@ interface IApiContext {
     courseId: number,
     subCourseId: number,
     subject: string,
-    body: string
+    body: string,
+    addressees: Participant[],
+    files?: File[]
   ) => Promise<void>;
   issueCourseCertificates: (
     courseId: number,
@@ -129,7 +133,8 @@ interface IApiContext {
     courseId: number,
     subCourseId: number,
     subject: string,
-    body: string
+    body: string,
+    files?: File[]
   ) => Promise<void>;
   joinBBBmeeting: (
     courseId: number,
@@ -450,9 +455,19 @@ export const ApiProvider: React.FC = ({ children }) => {
     courseId: number,
     subCourseId: number,
     subject: string,
-    body: string
+    body: string,
+    addressees: CourseParticipant[],
+    files?: File[]
   ) =>
-    api.axiosSendCourseGroupMail(token, courseId, subCourseId, subject, body);
+    api.axiosSendCourseGroupMail(
+      token,
+      courseId,
+      subCourseId,
+      subject,
+      body,
+      addressees,
+      files
+    );
 
   const issueCourseCertificates = (
     courseId: number,
@@ -465,14 +480,16 @@ export const ApiProvider: React.FC = ({ children }) => {
     courseId: number,
     subCourseId: number,
     subject: string,
-    body: string
+    body: string,
+    files?: File[]
   ) =>
     api.axiosSendCourseInstructorMail(
       token,
       courseId,
       subCourseId,
       subject,
-      body
+      body,
+      files
     );
 
   const joinBBBmeeting = (courseId: number, subcourseId: number) =>

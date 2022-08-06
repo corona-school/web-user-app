@@ -4,7 +4,6 @@ import { CompletedCourse, CompletedLecture } from '../../routes/CourseForm';
 import { CompletedSubCourse } from './CreateCourse';
 
 import classes from './CourseSuccess.module.scss';
-import Button from '../button';
 
 import Images from '../../assets/images';
 import AccentColorButton from '../button/AccentColorButton';

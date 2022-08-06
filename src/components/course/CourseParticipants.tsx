@@ -15,15 +15,16 @@ interface Props {
   setEnteredFilter: (filter: string) => void;
   setParticipantList: (participantList: CourseParticipant[]) => void;
   hasEnded: boolean;
+  selectedParticipants: CourseParticipant[];
+  setSelectedParticipants: (selectedParticipants: CourseParticipant[]) => void;
+  isSelecting: boolean;
+  setSelecting: (isSelecting: boolean) => void;
+  canContact: boolean;
 }
 
 export default function CourseParticipants(props: Props) {
   const modalContext = useContext(ModalContext);
-
-  const [isSelecting, setSelecting] = useState(false);
-  const [selectedParticipants, setSelectedParticipants] = useState<
-    CourseParticipant[]
-  >([]);
+  const [action, setAction] = useState<'certificate' | 'contact'>(null);
 
   if (!props.course.subcourse) {
     return null;
@@ -34,8 +35,19 @@ export default function CourseParticipants(props: Props) {
   }
 
   const resetSelect = () => {
-    setSelectedParticipants([]);
-    setSelecting(false);
+    props.setSelectedParticipants([]);
+    props.setSelecting(false);
+  };
+
+  const getHint = () => {
+    switch (action) {
+      case 'certificate':
+        return 'Bitte wähle die Teilnehmenden aus, für die du die Zertifikate ausstellen willst.';
+      case 'contact':
+        return 'Bitte wähle die Teilnehmenden aus, die du kontaktieren willst.';
+      default:
+        return '';
+    }
   };
 
   return (
@@ -63,28 +75,54 @@ export default function CourseParticipants(props: Props) {
         </Row>
         <br />
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <AccentColorButton
-            accentColor={!isSelecting ? '#1890FF' : '#055202'}
-            disabled={
-              (selectedParticipants.length === 0 && isSelecting) ||
-              !props.hasEnded
-            }
-            disabledHint={
-              !props.hasEnded
-                ? 'Du kannst erst Teilnehmerzertifikate ausstellen, wenn der Kurs vorüber ist.'
-                : 'Wähle mindestens eine:n Schüler:in aus.'
-            }
-            label={!isSelecting ? 'Teilnahmezertifikate ausstellen' : 'Weiter'}
-            small
-            onClick={() => {
-              if (!isSelecting) {
-                setSelecting(true);
-              } else {
-                modalContext.setOpenedModal('issueCertificateModal');
+          {!props.isSelecting && (
+            <AccentColorButton
+              accentColor="#1890FF"
+              disabled={!props.hasEnded}
+              label="Teilnahmezertifikate ausstellen"
+              disabledHint="Du kannst erst Teilnahmezertifikate ausstellen, wenn der Kurs vorüber ist."
+              small
+              onClick={() => {
+                props.setSelecting(true);
+                setAction('certificate');
+              }}
+            />
+          )}
+          {!props.isSelecting && (
+            <div style={{ marginLeft: 10 }}>
+              <AccentColorButton
+                accentColor="#1890FF"
+                label="Teilnehmende kontaktieren"
+                small
+                onClick={() => {
+                  props.setSelecting(true);
+                  setAction('contact');
+                }}
+                disabledHint="Du kannst keine Teilnehmer:innen mehr kontaktieren, nachdem 14 Tage seit Kursende vergangen sind."
+                disabled={!props.canContact}
+              />
+            </div>
+          )}
+
+          {props.isSelecting && (
+            <AccentColorButton
+              accentColor="#055202"
+              disabled={
+                props.selectedParticipants.length === 0 && props.isSelecting
               }
-            }}
-          />
-          {isSelecting && (
+              disabledHint="Wähle mindestens eine:n Teilnehmer:in aus."
+              label="Weiter"
+              small
+              onClick={() => {
+                if (action === 'certificate') {
+                  modalContext.setOpenedModal('issueCertificateModal');
+                } else if (action === 'contact') {
+                  modalContext.setOpenedModal('contactCourseModal');
+                }
+              }}
+            />
+          )}
+          {props.isSelecting && (
             <div style={{ marginLeft: 10 }}>
               <AccentColorButton
                 accentColor="#842c2c"
@@ -95,41 +133,71 @@ export default function CourseParticipants(props: Props) {
               />
             </div>
           )}
-          {isSelecting && (
+          {props.isSelecting && (
+            <div>
+              <AccentColorButton
+                accentColor="#505050"
+                noBg
+                label={
+                  props.participantList.length ===
+                  props.selectedParticipants.length
+                    ? 'Keine auswählen'
+                    : 'Alle auswählen'
+                }
+                small
+                onClick={() => {
+                  if (
+                    props.participantList.length ===
+                    props.selectedParticipants.length
+                  ) {
+                    props.setSelectedParticipants([]);
+                  } else {
+                    props.setSelectedParticipants(props.participantList);
+                  }
+                }}
+              />
+            </div>
+          )}
+          {props.isSelecting && (
             <span style={{ marginLeft: 20 }}>
-              {selectedParticipants.length === 0
-                ? 'Bitte wähle die Schüler aus, für die du die Zertifikate ausstellen willst.'
-                : `${selectedParticipants.length} Schüler ausgewählt`}
+              {props.selectedParticipants.length === 0
+                ? getHint()
+                : `${props.selectedParticipants.length} Teilnehmende ausgewählt`}
             </span>
           )}
         </div>
         <IssueCertificateModal
           course={props.course}
-          selectedParticipants={selectedParticipants}
+          selectedParticipants={props.selectedParticipants}
           resetSelect={resetSelect}
         />
       </div>
       <List
         className={classes.participantList}
-        // itemLayout="horizontal"
         dataSource={props.participantList}
         renderItem={(item) => (
           <List.Item
             actions={[
               <div>{SchoolTypesMap[item.schooltype]}</div>,
-              <span>{item.grade} Klasse</span>,
+              <span>{item.grade}. Klasse</span>,
             ]}
           >
-            {isSelecting && (
+            {props.isSelecting && (
               <input
                 type="checkbox"
                 style={{ marginRight: 20 }}
+                checked={props.selectedParticipants.some(
+                  (p) => p.uuid === item.uuid
+                )}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setSelectedParticipants([...selectedParticipants, item]);
+                    props.setSelectedParticipants([
+                      ...props.selectedParticipants,
+                      item,
+                    ]);
                   } else {
-                    setSelectedParticipants([
-                      ...selectedParticipants.filter(
+                    props.setSelectedParticipants([
+                      ...props.selectedParticipants.filter(
                         (p) => p.uuid !== item.uuid
                       ),
                     ]);
@@ -137,10 +205,7 @@ export default function CourseParticipants(props: Props) {
                 }}
               />
             )}
-            <List.Item.Meta
-              title={`${item.firstname} ${item.lastname}`}
-              description={<a href={`mailto:${item.email}`}>{item.email}</a>}
-            />
+            <List.Item.Meta title={`${item.firstname} ${item.lastname}`} />
           </List.Item>
         )}
       />

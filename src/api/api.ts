@@ -8,6 +8,7 @@ import {
   Lecture,
   CourseOverview,
   Tag,
+  CourseParticipant,
 } from '../types/Course';
 import { apiURL, dev } from './config';
 import { BecomeInstructor, BecomeIntern } from '../types/Instructor';
@@ -643,14 +644,27 @@ export const axiosSendCourseGroupMail = async (
   courseId: number,
   subCourseId: number,
   subject: string,
-  body: string
+  body: string,
+  addressees: CourseParticipant[],
+  files?: File[]
 ) => {
+  const formData = new FormData();
+  formData.append('subject', subject);
+  formData.append('body', body);
+  formData.append('addressees', JSON.stringify(addressees.map((p) => p.uuid)));
+
+  if (files) {
+    files.forEach((f) => {
+      formData.append('attachments', f);
+    });
+  }
+
   await axios
     .post(
       `${apiURL}/course/${courseId}/subcourse/${subCourseId}/groupmail`,
-      { subject, body },
+      formData,
       {
-        headers: { token },
+        headers: { token, 'Content-Type': 'multipart/form-data' },
       }
     )
     .catch(logError('sendGroupcourseMail'));
@@ -661,14 +675,25 @@ export const axiosSendCourseInstructorMail = async (
   courseId: number,
   subCourseId: number,
   subject: string,
-  body: string
+  body: string,
+  files?: File[]
 ) => {
+  const formData = new FormData();
+  formData.append('subject', subject);
+  formData.append('body', body);
+
+  if (files) {
+    files.forEach((f) => {
+      formData.append('attachments', f);
+    });
+  }
+
   await axios
     .post(
       `${apiURL}/course/${courseId}/subcourse/${subCourseId}/instructormail`,
-      { subject, body },
+      formData,
       {
-        headers: { token },
+        headers: { token, 'Content-Type': 'multipart/form-data' },
       }
     )
     .catch(logError('sendCourseInstructorMail'));

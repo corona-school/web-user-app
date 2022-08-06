@@ -7,9 +7,6 @@ import SettingsCard from '../components/cards/SettingsCard';
 import { Title } from '../components/Typography';
 import classes from './Settings.module.scss';
 import AccountNotScreenedModal from '../components/Modals/AccountNotScreenedModal';
-import ProjectFieldCard, {
-  AddProjectFieldCard,
-} from '../components/cards/ProjectFieldCard';
 import { useAPI, useAPIResult } from '../context/ApiContext';
 import {
   ICertificateSignature,
@@ -126,7 +123,6 @@ const Settings: React.FC = () => {
       </>
     );
   };
-
 
   const renderCertificatesTable = () => {
     if (!certificates.value?.length) return null;

@@ -60,14 +60,6 @@ const SortParticipant: React.FC<SortParticipantProps> = React.memo(
               </AntdButton>
             </li>
             <li>
-              <AntdButton onClick={() => sort('email')}>
-                E-Mail-Addresse
-                <Icons.SortSolid
-                  style={{ marginLeft: '5px', height: '12px' }}
-                />
-              </AntdButton>
-            </li>
-            <li>
               <AntdButton onClick={() => sort('grade')}>
                 Klasse
                 <Icons.SortSolid

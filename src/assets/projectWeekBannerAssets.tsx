@@ -8,8 +8,8 @@ export const projectWeekTitle = (
 
 export const projectWeekPupilText = (
   <>
-    Vom 27.06.-01.07. findet die nächste
-    {' '}<a
+    Vom 27.06.-01.07. findet die nächste{' '}
+    <a
       href="https://www.lern-fair.de/schueler/fokus"
       rel="noopener noreferrer"
       target="_blank"
@@ -28,14 +28,14 @@ export const projectWeekPupilText = (
 
 export const projectWeekStudentText = (
   <>
-    In den Fokuswochen von{" "}
+    In den Fokuswochen von{' '}
     <a
       href="https://www.lern-fair.de/helfer/fokus"
       rel="noopener noreferrer"
       target="_blank"
       style={{ textDecoration: 'underline', color: '#373e47' }}
     >
-    Lern-Fair Fokus
+      Lern-Fair Fokus
     </a>
     gibt es ein buntes Programm für interessierte Schüler:innen rund um ein
     bestimmtes Themengebiet. Für 2022 sind folgende Themenschwerpunkte geplant:

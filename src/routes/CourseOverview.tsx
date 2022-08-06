@@ -299,13 +299,15 @@ export const CourseOverview: React.FC<Props> = ({
           {bannerType === 'student' && <Text>{projectWeekStudentText}</Text>}
         </div>
       )}
-      {revisionOnly && (<CourseHeader
-        courses={courses}
-        onChange={(courseList) => {
-          setFilteredCourses(courseList);
-        }}
-        backButtonRoute={backButtonRoute}
-      />)}
+      {revisionOnly && (
+        <CourseHeader
+          courses={courses}
+          onChange={(courseList) => {
+            setFilteredCourses(courseList);
+          }}
+          backButtonRoute={backButtonRoute}
+        />
+      )}
       {loading && (
         <Spinner message="Kursübersicht wird geladen..." color="#f4486d" />
       )}
