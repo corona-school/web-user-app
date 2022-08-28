@@ -385,16 +385,18 @@ const CourseDetail = (props: Props) => {
   };
 
   const hasEnded = () => {
-    if (getLastLectureEnd) {
-      return moment().isAfter(getLastLectureEnd());
+    const end = getLastLectureEnd();
+    if (end) {
+      return moment().isAfter(end);
     }
 
     return false;
   };
 
   const canContact = () => {
-    if (getLastLectureEnd) {
-      return !moment().isAfter(getLastLectureEnd().add(14, 'days'));
+    const end = getLastLectureEnd();
+    if (end) {
+      return !moment().isAfter(end.add(14, 'days'));
     }
     return false;
   };
