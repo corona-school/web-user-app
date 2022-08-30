@@ -12,7 +12,7 @@ export const MatomoScript = () => {
   const paq = window._paq;
 
   /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  paq.push(['setDomains', ['*.www.lern-fair.de', '*.www.my.lern-fair.de']]);
+  paq.push(['setDomains', ['*.lern-fair.de']]);
   paq.push(['enableCrossDomainLinking']);
   paq.push(['trackPageView']);
   paq.push(['enableLinkTracking']);
@@ -32,8 +32,13 @@ export const MatomoScript = () => {
 };
 
 export const MatomoTrackRegistration = () => {
-  window._paq = window._paq ?? [];
-  const paq = window._paq;
+  // old method
+  window._paq.push([
+    'trackEvent',
+    'Formular Interaktion',
+    'Registrierung Abschluss',
+  ]);
 
-  paq.push(['trackEvent', 'Formular Interaktion', 'Registrierung Abschluss']);
+  // testing new method
+  window._paq.push(['trackGoal', 2]);
 };
