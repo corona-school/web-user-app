@@ -2,13 +2,13 @@ import React from 'react';
 
 export const projectWeekTitle = (
   <>
-    Unsere Fokuswoche: <b>Kommunikation</b>
+    Unsere Fokuswoche: <b>Nachhaltigkeit</b>
   </>
 );
 
 export const projectWeekPupilText = (
   <>
-    Vom 27.06.-01.07. findet die nächste{' '}
+    Vom 12.09.2022 - 16.09.2022 findet die nächste{' '}
     <a
       href="https://www.lern-fair.de/schueler/fokus"
       rel="noopener noreferrer"
@@ -17,12 +17,12 @@ export const projectWeekPupilText = (
     >
       Fokuswoche
     </a>{' '}
-    zum Thema „Kommunikation“ statt. An jedem Tag steht ein spannender
-    Themenschwerpunkt an. Wir starten in die Woche mit einem Tag rund um die
-    digitale Kommunikation, in der es unter anderem um Social Media geht. Auch
-    in den folgenden Tagen bieten wir ein vielfältiges Programm. Stöbere einfach
-    durch das Angebot der anstehenden Woche und melde dich kostenlos zu den
-    digitalen Angeboten an!
+    zum Thema „Nachhaltigkeit“ statt. In dieser Woche kannst du dich über die
+    diversen Folgen des Klimawandels informieren. Darüber hinaus erfährst du,
+    wie du selbst zu einer nachhaltigen Zukunft beitragen kannst und wie du
+    andere auf die Klimakrise aufmerksam machst. Stöbere einfach durch das
+    Angebot der anstehenden Woche und melde dich kostenlos zu den digitalen
+    Angeboten an!
   </>
 );
 
