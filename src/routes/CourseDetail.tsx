@@ -309,7 +309,14 @@ const CourseDetail = (props: Props) => {
         setIsLoadingVideoChat(false);
         // use window.location to not have problems with popup blocking
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        window.location.href = (res as any).url;
+        const url = (res as any).url as string;
+        if (url.includes("zoom")) {
+          if (!confirm("Dieser Kurs nutzt den US-Anbieter Zoom für Video-Meetings. Ist das Okay?")) {
+            return;
+          }
+        }
+
+        window.location.href = url;
       })
       .catch((err) => {
         setIsLoadingVideoChat(false);
