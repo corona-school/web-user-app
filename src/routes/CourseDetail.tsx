@@ -303,35 +303,35 @@ const CourseDetail = (props: Props) => {
 
   const joinBBBmeeting = () => {
     setIsLoadingVideoChat(true);
-    /* api
+    api
       .joinBBBmeeting(course.id, course.subcourse.id)
-      .then((res) => { */
-    setIsLoadingVideoChat(false);
-    // use window.location to not have problems with popup blocking
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const url = 'https://example.org'; // (res as any).url as string;
-    if (true /* url.includes("zoom") */) {
-      if (
-        // eslint-disable-next-line
-        !window.confirm(
-          'Ich und meine Erziehungsberechtigten haben die Datenschutzbestimmungen (lern-fair.de/datenschutz) zur Kenntnis genommen und sind damit einverstanden, ' +
-            'dass meine persönlichen Daten für die Nutzung von Zoom verarbeitet werden. ' +
-            'Für die Durchführung des Kurses setzen wir Zoom ein. ' +
-            'Zoom hat seinen Sitz in den USA, was seinen Geheimdiensten und Behörden erlaubt auf jegliche Daten zuzugreifen, ' +
-            'damit potenziell auch auf Deine durch die Verwendung von Zoom anfallenden Daten. ' +
-            'Diese Erlaubnis, die die USA ihren Behörden gibt, ist nicht mit Europäischem Datenschutzrecht vereinbar. ' +
-            'Wir bemühen uns aber gemeinsam mit Zoom um den Schutz deiner Daten. ' +
-            'Mehr dazu kannst du in unserer Datenschutzerklärung nachlesen. ' +
-            'Wenn Du mit der Nutzung von Zoom nicht einverstanden bist oder sie dir (technisch) nicht möglich ist, ' +
-            'kontaktiere uns unter support@lern-fair.de'
-        )
-      ) {
-        return;
-      }
-    }
+      .then((res) => {
+        setIsLoadingVideoChat(false);
+        // use window.location to not have problems with popup blocking
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const url = (res as any).url as string;
+        if (url.includes('zoom')) {
+          if (
+            // eslint-disable-next-line
+            !window.confirm(
+              'Ich und meine Erziehungsberechtigten haben die Datenschutzbestimmungen (lern-fair.de/datenschutz) zur Kenntnis genommen und sind damit einverstanden, ' +
+                'dass meine persönlichen Daten für die Nutzung von Zoom verarbeitet werden. ' +
+                'Für die Durchführung des Kurses setzen wir Zoom ein. ' +
+                'Zoom hat seinen Sitz in den USA, was seinen Geheimdiensten und Behörden erlaubt auf jegliche Daten zuzugreifen, ' +
+                'damit potenziell auch auf Deine durch die Verwendung von Zoom anfallenden Daten. ' +
+                'Diese Erlaubnis, die die USA ihren Behörden gibt, ist nicht mit Europäischem Datenschutzrecht vereinbar. ' +
+                'Wir bemühen uns aber gemeinsam mit Zoom um den Schutz deiner Daten. ' +
+                'Mehr dazu kannst du in unserer Datenschutzerklärung nachlesen. ' +
+                'Wenn Du mit der Nutzung von Zoom nicht einverstanden bist oder sie dir (technisch) nicht möglich ist, ' +
+                'kontaktiere uns unter support@lern-fair.de'
+            )
+          ) {
+            return;
+          }
+        }
 
-    window.location.href = url;
-    /* })
+        window.location.href = url;
+      })
       .catch((err) => {
         setIsLoadingVideoChat(false);
         if (err?.response?.status === 400) {
@@ -343,7 +343,7 @@ const CourseDetail = (props: Props) => {
             'Ein unerwarter Fehler ist aufgetreten. Versuche, die Seite neuzuladen.'
           );
         }
-      }); */
+      });
   };
 
   const joinTestMeeting = () => {
