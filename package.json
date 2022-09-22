@@ -39,7 +39,7 @@
     "express-favicon": "^2.0.1",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "qs": "^6.10.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
