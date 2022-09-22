@@ -2,13 +2,13 @@ import React from 'react';
 
 export const projectWeekTitle = (
   <>
-    Unsere Fokuswoche: <b>Nachhaltigkeit</b>
+    Unsere Fokuswoche: <b>Abschluss und dann?</b>
   </>
 );
 
 export const projectWeekPupilText = (
   <>
-    Vom 12.09.2022 - 16.09.2022 findet die nächste{' '}
+    Vom 03.10.2022 -07.10.2022 findet die nächste{' '}
     <a
       href="https://www.lern-fair.de/schueler/fokus"
       rel="noopener noreferrer"
@@ -17,12 +17,12 @@ export const projectWeekPupilText = (
     >
       Fokuswoche
     </a>{' '}
-    zum Thema „Nachhaltigkeit“ statt. In dieser Woche kannst du dich über die
-    diversen Folgen des Klimawandels informieren. Darüber hinaus erfährst du,
-    wie du selbst zu einer nachhaltigen Zukunft beitragen kannst und wie du
-    andere auf die Klimakrise aufmerksam machst. Stöbere einfach durch das
-    Angebot der anstehenden Woche und melde dich kostenlos zu den digitalen
-    Angeboten an!
+    zum Thema „Abschluss und dann?“ statt. In dieser Woche kannst du dich über 
+    die diversen Wege informieren, die du nach deiner Schulzeit einschlagen kannst. 
+    Dabei geht es sowohl um Ausbildungsplätze, Studiengänge und Auslandsaufenthalten 
+    als auch um Studienfinanzierung und Bewerbungen. 
+    Stöbere einfach durch das Angebot der anstehenden Woche und melde dich kostenlos 
+    zu den digitalen Angeboten an!
   </>
 );
 
