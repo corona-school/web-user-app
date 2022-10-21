@@ -2,13 +2,13 @@ import React from 'react';
 
 export const projectWeekTitle = (
   <>
-    Unsere Fokuswoche: <b>Abschluss und dann?</b>
+    Unsere Fokuswoche: <b>MINT und KI</b>
   </>
 );
 
 export const projectWeekPupilText = (
   <>
-    Vom 03.10.2022 -07.10.2022 findet die nächste{' '}
+    Vom 07.11.2022 - 11.11.2022 findet die nächste{' '}
     <a
       href="https://www.lern-fair.de/schueler/fokus"
       rel="noopener noreferrer"
@@ -17,12 +17,10 @@ export const projectWeekPupilText = (
     >
       Fokuswoche
     </a>{' '}
-    zum Thema „Abschluss und dann?“ statt. In dieser Woche kannst du dich über 
-    die diversen Wege informieren, die du nach deiner Schulzeit einschlagen kannst. 
-    Dabei geht es sowohl um Ausbildungsplätze, Studiengänge und Auslandsaufenthalten 
-    als auch um Studienfinanzierung und Bewerbungen. 
-    Stöbere einfach durch das Angebot der anstehenden Woche und melde dich kostenlos 
-    zu den digitalen Angeboten an!
+    zum Thema &quot;MINT und KI&quot; statt. In dieser Woche kannst du dich mit Themen wie
+    Programmieren, Experimentieren oder MINT-Themen im Allgemeinen
+    auseinandersetzen. Stöbere einfach durch das Angebot der anstehenden Woche
+    und melde dich kostenlos zu den digitalen Angeboten an!
   </>
 );
 
