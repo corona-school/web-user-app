@@ -11,6 +11,7 @@ import CancelMatchModal from '../components/Modals/CancelMatchModal';
 import { CoursesPersonalList } from '../components/course/CoursesPersonalList';
 import { CourseBanner } from '../components/course/CourseBanner';
 import { ScreeningStatus } from '../types';
+import { GroupSupportBanner } from '../components/course/GroupSupportBanner';
 
 /* NOTE: In case you're rewriting this code in the new GraphQL based frontend,
     the Me entity will hopefully contain a boolean "canRequestMatch" indicating whether the user can request further matches,
@@ -224,6 +225,7 @@ const Matches: React.FC = () => {
             }
             revisionsOnly
           />
+          {user.type === 'student' && <GroupSupportBanner />}
           <CoursesPersonalList revisionsOnly />
         </div>
       )}
