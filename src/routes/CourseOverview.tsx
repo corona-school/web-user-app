@@ -300,13 +300,28 @@ export const CourseOverview: React.FC<Props> = ({
         </div>
       )}
       {revisionOnly && (
-        <CourseHeader
-          courses={courses}
-          onChange={(courseList) => {
-            setFilteredCourses(courseList);
-          }}
-          backButtonRoute={backButtonRoute}
-        />
+        <>
+          <CourseHeader
+            courses={courses}
+            onChange={(courseList) => {
+              setFilteredCourses(courseList);
+            }}
+            backButtonRoute={backButtonRoute}
+          />
+          {bannerType === 'student' && (
+            <Button
+              type="button"
+              onClick={() =>
+                window.open(
+                  'https://drive.google.com/file/d/10qwQ6ZzPqyZax6olgB9YlcgX2l1tA208/view',
+                  '_blank'
+                )
+              }
+            >
+              So funktioniert‘s
+            </Button>
+          )}
+        </>
       )}
       {loading && (
         <Spinner message="Kursübersicht wird geladen..." color="#f4486d" />
