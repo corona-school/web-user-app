@@ -34,6 +34,7 @@ import { getDomainComponents } from './utils/DomainUtils';
 import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
 import RegisterTutee from './routes/RegisterTutee';
 import { AuthContext } from './context/AuthContext';
+import { Spinner } from './components/loading/Spinner';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -59,15 +60,21 @@ const GlobalStyle = createGlobalStyle`
 
 function RedirectToUserApp() {
   const authContext = useContext(AuthContext);
+  const url = new URL(window.location.href);
 
-  const {
+  let {
     credentials: { token },
   } = authContext;
 
-  if (token)
-    return <Redirect to={`https://app.lern-fair.de/start?token=${token}`} />;
+  if (!token) {
+    token = url.searchParams.get('token');
+  }
 
-  return <Redirect to="https://app.lern-fair.de/welcome" />;
+  window.location.href = token
+    ? `https://app.lern-fair.de/start?token=${token}`
+    : `https://app.lern-fair.de/welcome`;
+
+  return <Spinner message="Die Zukunft ist jetzt" />;
 }
 
 const App: React.FC = () => {
@@ -100,6 +107,9 @@ const App: React.FC = () => {
       <GlobalStyle />
       <Modals />
       <Switch>
+        <Route path="/beta">
+          <RedirectToUserApp />
+        </Route>
         <Route path="/login">
           <Login mode="login" />
         </Route>
@@ -214,9 +224,6 @@ const App: React.FC = () => {
             <RemissionRequest />
           </PrivateRoute>
         </PageComponent>
-        <Route path="/beta">
-          <RedirectToUserApp />
-        </Route>
         <Route component={NotFound} />
       </Switch>
     </>
