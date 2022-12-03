@@ -33,6 +33,7 @@ import RemissionRequest from './routes/RemissionRequest';
 import { getDomainComponents } from './utils/DomainUtils';
 import { getCooperationModeForSubdomain } from './utils/RegistrationCooperationUtils';
 import RegisterTutee from './routes/RegisterTutee';
+import { AuthContext } from './context/AuthContext';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -55,6 +56,19 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
 `;
+
+function RedirectToUserApp() {
+  const authContext = useContext(AuthContext);
+
+  const {
+    credentials: { token },
+  } = authContext;
+
+  if (token)
+    return <Redirect to={`https://app.lern-fair.de/start?token=${token}`} />;
+
+  return <Redirect to="https://app.lern-fair.de/welcome" />;
+}
 
 const App: React.FC = () => {
   const userContext = useContext(UserContext);
@@ -200,6 +214,9 @@ const App: React.FC = () => {
             <RemissionRequest />
           </PrivateRoute>
         </PageComponent>
+        <Route path="/beta">
+          <RedirectToUserApp />
+        </Route>
         <Route component={NotFound} />
       </Switch>
     </>
