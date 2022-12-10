@@ -149,20 +149,19 @@ const ProjectCoach: React.FC = () => {
           <br />
           {userContext.user.type !== 'student' ? (
             <>
-              Erfahre <a href=" lern-fair.de/schueler/projektcoaching">hier</a>{' '}
+              Erfahre{' '}
+              <a href="https://lern-fair.de/schueler/projektcoaching">hier</a>{' '}
               mehr zu den Fokuswochen von Lern-Fair Fokus, dem Nachfolger des
-              1:1-Projektcoachings. Im Rahmen der Fokuswoche “MINT und
-              Künstliche Intelligenz” vom 07. bis 11. November 2022 kannst du
-              dich dort auch für die Unterstützung deines Projektes anmelden.
+              1:1-Projektcoachings.
             </>
           ) : (
             <>
               Erfahre{' '}
               <a href="https://lern-fair.de/helfer/projektcoaching">hier</a>{' '}
               mehr zu den Fokuswochen von Lern-Fair Fokus, dem Nachfolger des
-              1:1-Projektcoachings. Im Rahmen der Fokuswoche “MINT und
-              Künstliche Intelligenz” vom 07. bis 11. November 2022 kannst du
-              dort Schüler:innen bei ihrem Projekt unterstützen.
+              1:1-Projektcoachings. Bis März 2023 kannst du dort Schüler:innen
+              bei ihrem Projekt unterstützen. Melde dich bei Interesse an{' '}
+              <a href="mailto:fokus@lern-fair.de">fokus@lern-fair.de</a>
             </>
           )}
         </div>
