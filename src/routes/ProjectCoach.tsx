@@ -143,28 +143,20 @@ const ProjectCoach: React.FC = () => {
         <div style={{ margin: '10px' }}>
           Das 1:1-Projektcoaching wird überarbeitet und in ein neues Angebot
           überführt. Daher ist keine weitere Anfrage für ein Matching mehr
-          möglich. <br />
-          Die Zusammenarbeit in deinem bisherigen Team ist davon nicht
+          möglich. Die Zusammenarbeit in deinem bisherigen Team ist davon nicht
           betroffen, ihr könnt sehr gerne gemeinsam weitertüfteln wie bisher.
-          <br />
-          {userContext.user.type !== 'student' ? (
-            <>
-              Erfahre <a href=" lern-fair.de/schueler/projektcoaching">hier</a>{' '}
-              mehr zu den Fokuswochen von Lern-Fair Fokus, dem Nachfolger des
-              1:1-Projektcoachings. Im Rahmen der Fokuswoche “MINT und
-              Künstliche Intelligenz” vom 07. bis 11. November 2022 kannst du
-              dich dort auch für die Unterstützung deines Projektes anmelden.
-            </>
-          ) : (
-            <>
-              Erfahre{' '}
-              <a href="https://lern-fair.de/helfer/projektcoaching">hier</a>{' '}
-              mehr zu den Fokuswochen von Lern-Fair Fokus, dem Nachfolger des
-              1:1-Projektcoachings. Im Rahmen der Fokuswoche “MINT und
-              Künstliche Intelligenz” vom 07. bis 11. November 2022 kannst du
-              dort Schüler:innen bei ihrem Projekt unterstützen.
-            </>
-          )}
+          Erfahre{' '}
+          <a
+            href="https://lern-fair.de/helfer/projektcoaching"
+            rel="noreferrer"
+            target="_blank"
+          >
+            hier
+          </a>{' '}
+          mehr zu den Fokuswochen von Lern-Fair Fokus, dem Nachfolger des
+          1:1-Projektcoachings. Bis März 2023 kannst du dort Schüler:innen bei
+          ihrem Projekt unterstützen. Melde dich bei Interesse an{' '}
+          <a href="mailto:fokus@lern-fair.de">fokus@lern-fair.de</a>.
         </div>
       </CardBase>
       {((user.isProjectCoach &&
