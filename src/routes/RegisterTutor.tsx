@@ -21,7 +21,10 @@ import { env } from '../api/config';
 import { NoRegistration } from '../components/NoService';
 import { languageOptions } from '../assets/languages';
 import YouTubeVideo from '../components/misc/YouTubeVideo';
-import { MatomoTrackRegistration } from '../components/misc/MatomoSupport';
+import {
+  MatomoTrackRegistration,
+  MatomoTrackTutorRegistration,
+} from '../components/misc/MatomoSupport';
 import { DeclarationOfSelfCommitment } from '../components/forms/registration/DeclarationOfSelfCommitment';
 // import { introductionText } from '../assets/coDuAssets';
 
@@ -787,6 +790,7 @@ const RegisterTutor: React.FC<Props> = (props) => {
         setLoading(false);
         setFormState('done');
         MatomoTrackRegistration();
+        MatomoTrackTutorRegistration();
       })
       .catch((err) => {
         if (err?.response?.status === 401) {

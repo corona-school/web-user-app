@@ -32,13 +32,17 @@ export const MatomoScript = () => {
 };
 
 export const MatomoTrackRegistration = () => {
-  // old method
   window._paq.push([
     'trackEvent',
     'Formular Interaktion',
     'Registrierung Abschluss',
   ]);
+};
 
-  // testing new method
-  window._paq.push(['trackGoal', 2]);
+export const MatomoTrackTuteeRegistration = () => {
+  window._paq.push(['trackEvent', '3']);
+};
+
+export const MatomoTrackTutorRegistration = () => {
+  window._paq.push(['trackEvent', '4']);
 };
