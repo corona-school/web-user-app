@@ -2,7 +2,7 @@ import React from 'react';
 
 export const disadvantageAdvice = (
   <>
-    Unsere Angebote richten sich an bildungsbenachteiligten Schüler:innen. Du
+    Unsere Angebote richten sich an bildungsbenachteiligte Schüler:innen. Du
     weißt nicht genau, ob du zu dieser Zielgruppe gehörst? Dann schaue dir die
     nachfolgenden Punkte an. Kannst du zwei oder mehr von ihnen mit “ja”
     beantworten? Dann darfst du gerne alle Angebote von Lern-Fair nutzen.

@@ -111,7 +111,7 @@ const MeetUsStep: Step = {
   image: <Images.StepsMeetUs width="160px" height="160px" />,
   texts: [
     'Wir möchten dich gerne persönlich kennenlernen und zu einem digitalen Gespräch einladen, in welchem du auch deine Frage loswerden kannst.',
-    'Du benötigst etwa 10 Minuten, einen Computer mit Kamera und einen Studierendenausweis.',
+    'Du benötigst etwa 10 Minuten, einen Computer mit Kamera und deinen Personal- oder Studierenden-Ausweis.',
     'Für einen reibungslosen Ablauf benutze bitte Google Chrome.',
   ],
   action: (
@@ -148,8 +148,8 @@ const ContactMatchStep: Step = {
   image: <Images.StepsContact width="160px" height="160px" />,
   texts: [
     'Überlege dir zunächst, wie viel Zeit du in das gemeinsame Lernen investieren möchtest und zu welchen Uhrzeiten du verfügbar bist.',
-    'Kontaktiere anschließend deine:n Lernpartner:in und schlag ihm/ihr einen Termin per E-Mail vor.',
-    ' Gerne könnt ihr genaue Inhalte schon vor dem ersten Gespräch abstimmen.',
+    'Kontaktiere anschließend deine:n Lernpartner:in und schlag ihm:ihr einen Termin per E-Mail vor.',
+    'Gerne könnt ihr genaue Inhalte schon vor dem ersten Gespräch abstimmen.',
   ],
   action: (
     <AccentColorLinkButton
@@ -205,7 +205,7 @@ const FeedbackStep: Step = {
   texts: [
     'Wir würden uns sehr freuen, wenn du unseren Fragebogen ausfüllst, damit wir unsere Plattform für euch weiter verbessern können.',
     'Der Fragebogen ist anonymisiert und dauert nicht länger als 5 Minuten.',
-    'Falls du differenziertes Feedback an uns richten möchtest, schreibe eine Mail an feedback@lern-fair.de',
+    'Falls du differenziertes Feedback an uns richten möchtest, schreibe eine Mail an support@lern-fair.de',
   ],
   action: (
     <AccentColorLinkButton
@@ -222,7 +222,7 @@ const RequestMatchStep: Step = {
   title: 'Mehr Schüler:innen helfen',
   image: <Images.StepsRequest width="160px" height="160px" />,
   texts: [
-    'Durch die Schulschließungen benötigen immer mehr Schüler:innen Unterstützung beim Lernen.',
+    'Durch die Schulschließungen benötigen viele Schüler:innen Unterstützung beim Lernen oder haben dramatische Lernlücken.',
     'Wir würden uns wahnsinnig freuen, wenn du weiteren Schüler:innen unter die Arme greifen möchtest.',
     'Ganz nach deinen zeitlichen Kapazitäten kannst du jederzeit mehr oder auch weniger helfen.',
   ],
@@ -262,7 +262,7 @@ const StudentNews = [
   {
     headline: 'Campus Representative',
     text:
-      'Du möchtest Lern-Fair an deiner Universität/Hochschule vertreten? Schreibe eine Mail an campusrep@lern-fair.de.',
+      'Du studierst und möchtest Lern-Fair an deiner Universität/Hochschule vertreten? Schreibe eine Mail an campusrep@lern-fair.de.',
   },
   {
     headline: 'Mentoring Programm',
@@ -280,15 +280,15 @@ const StudentNews = [
 
 const PupilNews = [
   {
-    headline: 'Sommer AGs',
+    headline: 'Fokus-Kurse',
     text:
-      'Der Sommerurlaub fällt aus? Wir bieten spannende digitale und kostenfreie AGs in den Sommerferien an.',
+      'Wir bieten in unseren Fokusmonaten spannende digitale und kostenfreie Kurse an.',
     withLink: false,
   },
   {
-    headline: 'Repetitorien',
+    headline: 'Wiederholungs-Kurse',
     text:
-      'Dir wurden wichtige Unterrichtsinhalte während der Corona-Krise nicht erklärt? Unsere Repetitorien sind deine Rettung!',
+      'Dir wurden wichtige Unterrichtsinhalte während der Corona-Krise nicht erklärt? Unsere Wiederholungs-Kurse sind deine Rettung!',
   },
 ];
 
