@@ -31,7 +31,10 @@ import SignupContainer from '../components/container/SignupContainer';
 import AccentColorButton from '../components/button/AccentColorButton';
 import { ReactComponent as ClockIcon } from '../assets/icons/clock-regular.svg';
 import { ReactComponent as MagicIcon } from '../assets/icons/magic-solid.svg';
-import { MatomoTrackRegistration } from '../components/misc/MatomoSupport';
+import {
+  MatomoTrackRegistration,
+  MatomoTrackTuteeRegistration,
+} from '../components/misc/MatomoSupport';
 import { disadvantageAdvice } from '../assets/registrationAssets';
 
 const { Option } = Select;
@@ -716,6 +719,7 @@ const RegisterTutee: React.FC<Props> = ({
         });
         form.resetFields();
         MatomoTrackRegistration();
+        MatomoTrackTuteeRegistration();
       })
       .catch((err) => {
         if (err.response?.status === 401) {
