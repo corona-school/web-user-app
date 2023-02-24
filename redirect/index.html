@@ -199,7 +199,7 @@
 
 
         function openNewUserApp() {
-            let url = "https://app.lern-fair.de/";
+            let token = "";
             try {
                 const credentials = localStorage.getItem('credentials');
                 if (credentials) {
@@ -210,6 +210,12 @@
                 // Okay, then we don't have token ...
             }
 
+            // Token in URL takes precedence
+            const urlToken = new URL(window.location.href).searchParams.get("token");
+            if (urlToken) token = urlToken;
+
+            let url = "https://app.lern-fair.de/";
+            if (token) url += `?token=${token}`;
             window.location.href = url;
         }
     </script>
