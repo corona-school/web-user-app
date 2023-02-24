@@ -1,0 +1,7 @@
+{
+    "root": "redirect/",
+    "root_OLD": "build/",
+    "routes": {
+      "/**": "index.html"
+    }
+  }

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, shrink-to-fit=no" />
+
+    <title>Lern-Fair</title>
+
+    <style>
+        @font-face {
+            font-display: swap;
+            font-family: Montserrat;
+            font-weight: 100;
+            src: url(./fonts/Montserrat-Light.ttf) format("truetype")
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: Montserrat;
+            font-weight: 200;
+            src: url(./fonts/Montserrat-Light.ttf) format("truetype")
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: Montserrat;
+            font-weight: 300;
+            src: url(./fonts/Montserrat-Light.ttf) format("truetype")
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: Montserrat;
+            font-weight: 400;
+            src: url(./fonts/Montserrat-Regular.ttf) format("truetype")
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: Montserrat;
+            font-weight: 500;
+            src: url(./fonts/Montserrat-Medium.ttf) format("truetype")
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: Montserrat;
+            font-weight: 600;
+            src: url(./fonts/Montserrat-SemiBold.ttf) format("truetype")
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: Montserrat;
+            font-weight: 700;
+            src: url(./fonts/Montserrat-Bold.ttf) format("truetype")
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: Montserrat;
+            font-weight: 800;
+            src: url(./fonts/Montserrat-Bold.ttf) format("truetype")
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: Montserrat;
+            font-weight: 900;
+            src: url(./fonts/Montserrat-Bold.ttf) format("truetype")
+        }
+
+        body {
+            font-family: Montserrat !important;
+            font-size: 30px;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            overflow: hidden;
+        }
+
+        #before {
+            background-color: white;
+            color: rgb(55, 62, 71);
+            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            transition: all ease 1s;
+            max-height: 1000px;
+            min-height: 0px;
+        }
+
+
+        #after {
+            background-color: rgb(43, 75, 81);
+            color: white;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-grow: 1;
+        }
+
+        #old-image {
+            margin: 30px;
+            width: 100%;
+            max-width: 600px;
+            transition: all ease 1s;
+        }
+
+        #new-image {
+            margin: 30px;
+            width: 100%;
+            max-width: 600px;
+            transition: all ease 1s;
+        }
+
+        #change {
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(177deg, white 50%, rgb(43, 75, 81) 51%);
+            transition: all ease 1s;
+            max-height: 100px;
+        }
+
+        @media (min-width: 600px) {
+            #change {
+                background: linear-gradient(179deg, white 50%, rgb(43, 75, 81) 51%);
+            }
+        }
+
+        #change-button {
+            all: unset;
+            cursor: pointer;
+            background-color: rgb(254, 218, 80);
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: #2b4b51;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        /* ---- Transitions ---- */
+        .activated #old-image {
+            opacity: 0;
+        }
+
+        .activated #new-image {
+            opacity: 0;
+        }
+
+        .activated-2 #before {
+            min-height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="before">
+        <img id="old-image" src="./old_user_area.png" />
+    </div>
+    <div id="change">
+        <a id="change-button" href="https://app.lern-fair.de">
+            ↓ Zum neuen Userbereich
+        </a>
+    </div>
+    <div id="after">
+        <img id="new-image" src="./new_user_area.png" />
+    </div>
+    <script>
+        // Start the animation when the button is clicked ...
+        const btn = document.getElementById('change-button');
+        btn.onclick = (event) => {
+            event.preventDefault();
+            doAnimation();
+        };
+
+        // ... or alternatively after 20 seconds
+        setTimeout(doAnimation, 1000 * 20);
+
+        function doAnimation() {
+            document.body.classList.add('activated');
+            setTimeout(() => {
+                document.body.classList.add('activated-2');
+                setTimeout(openNewUserApp, 1000);
+            }, 1000);
+        }
+
+
+        function openNewUserApp() {
+            let url = "https://app.lern-fair.de/";
+            try {
+                if (localStorage.hasItem('credentials')) {
+                    const credentials = localStorage.getItem('credentials');
+                    const ({ token } = JSON.parse(credentials));
+                    url += `?token=${token}`;
+                }
+            } catch (error) {
+                // Okay, then we don't have token ...
+            }
+
+            window.location.href = url;
+        }
+    </script>
+</body>
+
+</html>
