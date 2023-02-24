@@ -199,8 +199,8 @@
         function openNewUserApp() {
             let url = "https://app.lern-fair.de/";
             try {
-                if (localStorage.hasItem('credentials')) {
-                    const credentials = localStorage.getItem('credentials');
+                const credentials = localStorage.getItem('credentials');
+                if (credentials) {
                     const { token } = JSON.parse(credentials);
                     url += `?token=${token}`;
                 }
