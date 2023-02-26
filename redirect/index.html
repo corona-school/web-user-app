@@ -201,8 +201,7 @@
             try {
                 const credentials = localStorage.getItem('credentials');
                 if (credentials) {
-                    const { token } = JSON.parse(credentials);
-                    url += `?token=${token}`;
+                    ({ token } = JSON.parse(credentials));
                 }
             } catch (error) {
                 // Okay, then we don't have token ...
