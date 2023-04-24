@@ -35,7 +35,7 @@
     "axios": "^0.21.2",
     "classnames": "^2.2.6",
     "create-react-app": "^4.0.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-favicon": "^2.0.1",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
