@@ -53,7 +53,10 @@ export const CreateLecture: React.FC<Props> = (props) => {
           <DatePicker
             disabledDate={(date) => {
               return props.edit
-                ? moment(date).isBefore(moment(), 'day')
+                ? moment(date).isBefore(
+                    moment(new Date()).startOf('day').add(5, 'days'),
+                    'day'
+                  )
                 : moment(new Date())
                     .startOf('day')
                     .add(7, 'days')
