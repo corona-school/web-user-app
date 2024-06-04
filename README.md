@@ -1,3 +1,6 @@
+Farewell, Web User App! This was the first (or rather the first one that lived longer than a few weeks) user facing application of Corona-School (now Lern-Fair).
+In the meantime, replaced by https://github.com/corona-school/user-app
+
 ![GitHub License](https://img.shields.io/github/license/corona-school/web-user-app)
 
 # web-user-app
